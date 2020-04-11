@@ -37,11 +37,11 @@ import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
 import org.openhab.core.config.core.ConfigConstants;
-import org.openhab.core.model.core.ModelParser;
-import org.openhab.core.model.core.ModelRepository;
-import org.openhab.core.model.core.ModelRepositoryChangeListener;
 import org.openhab.core.service.AbstractWatchService;
 import org.openhab.core.test.java.JavaOSGiTest;
+import org.opensmarthouse.core.model.core.ModelParser;
+import org.opensmarthouse.core.model.core.ModelRepository;
+import org.opensmarthouse.core.model.core.ModelRepositoryChangeListener;
 import org.osgi.service.component.ComponentContext;
 
 /**

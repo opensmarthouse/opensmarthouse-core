@@ -1,0 +1,2 @@
+Bundle-SymbolicName: ${project.artifactId}
+Bundle-Activator: org.opensmarthouse.core.internal.CoreActivator

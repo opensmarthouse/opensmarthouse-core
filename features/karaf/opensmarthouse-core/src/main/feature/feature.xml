@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
 
-	Copyright (c) 2010-2020 Contributors to the opensmarthouse project
+	Copyright (c) 2020-2020 Contributors to the OpenSmartHouse project
+	Copyright (c) 2010-2020 Contributors to the openHAB project
 
 	See the NOTICE file(s) distributed with this work for additional
 	information.
@@ -40,7 +41,6 @@
 		<bundle start-level="75">mvn:org.opensmarthouse.core.bundles/org.opensmarthouse.core.config.xml/${project.version}</bundle>
 		<bundle>mvn:org.opensmarthouse.core.bundles/org.opensmarthouse.core/${project.version}</bundle>
 		<feature dependency="true">opensmarthouse-core-storage-mapdb</feature>
-		<bundle>mvn:org.opensmarthouse.core.bundles/org.opensmarthouse.core.binding.xml/${project.version}</bundle>
 		<bundle>mvn:org.opensmarthouse.core.bundles/org.opensmarthouse.core.id/${project.version}</bundle>
 		<bundle>mvn:org.opensmarthouse.core.bundles/org.opensmarthouse.core.persistence/${project.version}</bundle>
 		<bundle>mvn:org.opensmarthouse.core.bundles/org.opensmarthouse.core.semantics/${project.version}</bundle>

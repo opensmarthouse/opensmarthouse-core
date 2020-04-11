@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ecore:EPackage xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" name="script" nsURI="https://openhab.org/model/Script" nsPrefix="script">
+  <eClassifiers xsi:type="ecore:EClass" name="AbstractUnit">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="value" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="StringUnit" eSuperTypes="#//AbstractUnit"/>
+  <eClassifiers xsi:type="ecore:EClass" name="IDUnit" eSuperTypes="#//AbstractUnit"/>
+  <eClassifiers xsi:type="ecore:EClass" name="SpecificUnit" eSuperTypes="#//AbstractUnit"/>
+  <eClassifiers xsi:type="ecore:EClass" name="Script" eSuperTypes="platform:/resource/org.eclipse.xtext.xbase/model/Xbase.ecore#//XBlockExpression"/>
+  <eClassifiers xsi:type="ecore:EClass" name="QuantityLiteral" eSuperTypes="platform:/resource/org.eclipse.xtext.xbase/model/Xbase.ecore#//XExpression">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="value" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="unit" eType="#//AbstractUnit"
+        containment="true"/>
+  </eClassifiers>
+</ecore:EPackage>

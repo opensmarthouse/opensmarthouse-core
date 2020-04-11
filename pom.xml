@@ -1,6 +1,5 @@
-<?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
   <modelVersion>4.0.0</modelVersion>
 
   <parent>
@@ -11,7 +10,7 @@
 
   <groupId>org.opensmarthouse.core</groupId>
   <artifactId>org.opensmarthouse.core.reactor</artifactId>
-  <version>1-SNAPSHOT</version>
+  <version>1.0.0-SNAPSHOT</version>
 
   <packaging>pom</packaging>
 
@@ -21,41 +20,51 @@
   <modules>
     <module>bom</module>
     <module>bundles</module>
-<!--    <module>features</module> -->
-<!--    <module>tools</module> -->
-    <module>itests</module>
+    <module>features</module>
+    <!--    <module>tools</module> -->
+    <!--    <module>itests</module> -->
   </modules>
 
   <scm>
-    <connection>scm:git:https://github.com/openhab/openhab-core.git</connection>
-    <developerConnection>scm:git:https://github.com/openhab/openhab-core.git</developerConnection>
+    <connection>scm:git:https://github.com/opensmarthouse/opensmarthouse-core.git</connection>
+    <developerConnection>scm:git:https://github.com/opensmarthouse/opensmarthouse-core.git</developerConnection>
     <tag>HEAD</tag>
-    <url>https://github.com/openhab/openhab-core</url>
+    <url>https://github.com/opensmarthouse/opensmarthouse-core</url>
   </scm>
 
   <issueManagement>
     <system>GitHub</system>
-    <url>https://github.com/openhab/openhab-core/issues</url>
+    <url>https://github.com/opensmarthouse/opensmarthouse-core/issues</url>
   </issueManagement>
 
   <distributionManagement>
     <repository>
-      <id>bintray</id>
-      <url>${oh.repo.distBaseUrl}/openhab-core/;publish=1</url>
+      <id>${release.repository-id}</id>
+      <name>${release.repository-name}</name>
+      <url>${release.repository-url}</url>
     </repository>
     <snapshotRepository>
-      <id>jfrog</id>
-      <url>${oh.repo.snapshotBaseUrl}/libs-snapshot-local</url>
+      <id>${snapshot.repository-id}</id>
+      <name>${snapshot.repository-name}</name>
+      <url>${snapshot.repository-url}</url>
     </snapshotRepository>
   </distributionManagement>
 
   <properties>
+    <snapshot.repository-id>zss-snapshots</snapshot.repository-id>
+    <snapshot.repository-name>Z-SmartSystems Snapshots</snapshot.repository-name>
+    <snapshot.repository-url>http://repo.cd-jackson.com/repository/maven-snapshots/</snapshot.repository-url>
+
+    <release.repository-id>zss-releases</release.repository-id>
+    <release.repository-name>Z-SmartSystems Releases</release.repository-name>
+    <release.repository-url>http://repo.cd-jackson.com/repository/maven-releases/</release.repository-url>
+
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
-    <oh.java.version>11</oh.java.version>
-    <maven.compiler.source>${oh.java.version}</maven.compiler.source>
-    <maven.compiler.target>${oh.java.version}</maven.compiler.target>
-    <maven.compiler.compilerVersion>${oh.java.version}</maven.compiler.compilerVersion>
+    <osh.java.version>11</osh.java.version>
+    <maven.compiler.source>${osh.java.version}</maven.compiler.source>
+    <maven.compiler.target>${osh.java.version}</maven.compiler.target>
+    <maven.compiler.compilerVersion>${osh.java.version}</maven.compiler.compilerVersion>
 
     <bnd.version>4.3.0</bnd.version>
     <karaf.compile.version>4.2.1</karaf.compile.version>
@@ -64,7 +73,8 @@
     <slf4j.version>1.7.21</slf4j.version>
     <xtext.version>2.19.0</xtext.version>
     <spotless.version>1.24.3</spotless.version>
-    <spotless.check.skip>true</spotless.check.skip> <!-- Spotless disabled for now -->
+    <spotless.check.skip>true</spotless.check.skip>
+    <!-- Spotless disabled for now -->
   </properties>
 
   <dependencyManagement>
@@ -415,7 +425,7 @@ Import-Package: \\
             </excludes>
             <useDefaultExcludes>true</useDefaultExcludes>
             <properties>
-              <year>2020</year>
+              <year>${license.year}</year>
             </properties>
             <encoding>UTF-8</encoding>
           </configuration>

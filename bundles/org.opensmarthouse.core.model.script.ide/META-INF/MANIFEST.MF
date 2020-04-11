@@ -1,0 +1,11 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: org.opensmarthouse.core.model.script.ide
+Bundle-SymbolicName: org.opensmarthouse.core.model.script.ide;singleton:=true
+Bundle-Version: 0.0.1.qualifier
+Bundle-RequiredExecutionEnvironment: JavaSE-1.8
+Bundle-ActivationPolicy: lazy
+Export-Package: org.openhab.core.model.script.ide.contentassist.antlr,
+ org.openhab.core.model.script.ide.contentassist.antlr.internal
+Require-Bundle: org.antlr.runtime;bundle-version="[3.2.0,3.2.1)"
+Automatic-Module-Name: org.opensmarthouse.core.model.script.ide

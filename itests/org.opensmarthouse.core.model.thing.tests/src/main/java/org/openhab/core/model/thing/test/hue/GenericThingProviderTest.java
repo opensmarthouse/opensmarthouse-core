@@ -32,7 +32,6 @@ import org.junit.Test;
 import org.openhab.core.events.Event;
 import org.openhab.core.events.EventFilter;
 import org.openhab.core.events.EventSubscriber;
-import org.openhab.core.model.core.ModelRepository;
 import org.openhab.core.test.java.JavaOSGiTest;
 import org.openhab.core.thing.Bridge;
 import org.openhab.core.thing.Channel;
@@ -44,6 +43,7 @@ import org.openhab.core.thing.events.ThingRemovedEvent;
 import org.openhab.core.thing.events.ThingUpdatedEvent;
 import org.openhab.core.thing.type.ChannelKind;
 import org.openhab.core.thing.type.ChannelTypeUID;
+import org.opensmarthouse.core.model.core.ModelRepository;
 
 /**
  * @author Henning Treu - Initial contribution

@@ -54,12 +54,12 @@ import org.openhab.core.library.items.NumberItem;
 import org.openhab.core.library.items.SwitchItem;
 import org.openhab.core.library.types.ArithmeticGroupFunction;
 import org.openhab.core.library.types.OnOffType;
-import org.openhab.core.model.core.EventType;
-import org.openhab.core.model.core.ModelRepository;
-import org.openhab.core.model.core.ModelRepositoryChangeListener;
 import org.openhab.core.test.java.JavaOSGiTest;
 import org.openhab.core.types.StateDescription;
 import org.openhab.core.types.UnDefType;
+import org.opensmarthouse.core.model.core.EventType;
+import org.opensmarthouse.core.model.core.ModelRepository;
+import org.opensmarthouse.core.model.core.ModelRepositoryChangeListener;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

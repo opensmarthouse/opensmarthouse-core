@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
 
-	Copyright (c) 2010-2020 Contributors to the opensmarthouse project
+	Copyright (c) 2020-2020 Contributors to the OpenSmartHouse project
+	Copyright (c) 2010-2020 Contributors to the openHAB project
 
 	See the NOTICE file(s) distributed with this work for additional
 	information.
@@ -55,12 +56,12 @@
 	</feature>
 
 	<feature name="opensmarthouse.tp-hivemqclient" description="MQTT Client" version="${project.version}">
-		<capability>opensmarthouse.tp;feature=hivemqclient;version=1.1.1</capability>
+		<capability>opensmarthouse.tp;feature=hivemqclient;version=1.1.4</capability>
 		<feature dependency="true">opensmarthouse.tp-netty</feature>
 		<bundle dependency="true">mvn:org.jctools/jctools-core/2.1.2</bundle>
 		<bundle dependency="true">mvn:io.reactivex.rxjava2/rxjava/2.2.5</bundle>
 		<bundle dependency="true">mvn:org.reactivestreams/reactive-streams/1.0.2</bundle>
-		<bundle dependency="true">mvn:org.opensmarthouse.osgiify/com.google.dagger/2.20</bundle>
+		<bundle dependency="true">mvn:org.openhab.osgiify/com.google.dagger/2.20</bundle>
 		<bundle dependency="true">mvn:org.apache.servicemix.bundles/org.apache.servicemix.bundles.javax-inject/1_2</bundle>
 		<bundle>mvn:com.hivemq/hivemq-mqtt-client/1.1.2</bundle>
 	</feature>
@@ -109,7 +110,7 @@
 
 	<feature name="opensmarthouse.tp-jbbp" description="Java Binary Block Parser library" version="${project.version}">
 		<capability>opensmarthouse.tp;feature=jbbp;version=1.4.1</capability>
-		<bundle dependency="true">mvn:org.opensmarthouse.osgiify/com.igormaznitsa.jbbp/1.4.1</bundle>
+		<bundle dependency="true">mvn:org.openhab.osgiify/com.igormaznitsa.jbbp/1.4.1</bundle>
 	</feature>
 
 	<feature name="opensmarthouse.tp-kat.cpy-jersey-min-2.22.2" version="${project.version}">
@@ -219,7 +220,7 @@
 		<!-- See: https://github.com/opensmarthouse/opensmarthouse-core/pull/761 -->
 		<!-- See: https://github.com/opensmarthouse/opensmarthouse-core/issues/750 -->
 		<!-- <bundle>mvn:com.neuronrobotics/nrjavaserial/3.15.0</bundle> -->
-		<bundle>mvn:org.opensmarthouse/nrjavaserial/3.15.0.OH2</bundle>
+		<bundle>mvn:org.openhab/nrjavaserial/3.15.0.OH2</bundle>
 	</feature>
 
 	<feature name="opensmarthouse.tp-xtext" description="Xtext - Language Engineering Made Easy"

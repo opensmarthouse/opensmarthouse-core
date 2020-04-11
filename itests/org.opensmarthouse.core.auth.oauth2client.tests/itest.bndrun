@@ -1,9 +1,9 @@
 -include: ../itest-common.bndrun
 
 Bundle-SymbolicName: ${project.artifactId}
-Fragment-Host: org.openhab.core.auth.oauth2client
+Fragment-Host: org.opensmarthouse.core.auth.oauth2client
 
--runrequires: bnd.identity;id='org.openhab.core.auth.oauth2client.tests'
+-runrequires: bnd.identity;id='org.opensmarthouse.core.auth.oauth2client.tests'
 
 #
 # done
@@ -44,9 +44,9 @@ Fragment-Host: org.openhab.core.auth.oauth2client
 	org.eclipse.jetty.websocket.client;version='[9.4.20,9.4.21)',\
 	org.eclipse.jetty.websocket.common;version='[9.4.20,9.4.21)',\
 	org.eclipse.jetty.xml;version='[9.4.20,9.4.21)',\
-	org.openhab.core;version='[3.0.0,3.0.1)',\
-	org.openhab.core.auth.oauth2client;version='[3.0.0,3.0.1)',\
-	org.openhab.core.auth.oauth2client.tests;version='[3.0.0,3.0.1)',\
-	org.openhab.core.io.console;version='[3.0.0,3.0.1)',\
-	org.openhab.core.io.net;version='[3.0.0,3.0.1)',\
-	org.openhab.core.test;version='[3.0.0,3.0.1)'
+	org.opensmarthouse.core;version='[1.0.0,1.0.1)',\
+	org.opensmarthouse.core.auth.oauth2client;version='[1.0.0,1.0.1)',\
+	org.opensmarthouse.core.auth.oauth2client.tests;version='[1.0.0,1.0.1)',\
+	org.opensmarthouse.core.io.console;version='[1.0.0,1.0.1)',\
+	org.opensmarthouse.core.io.net;version='[1.0.0,1.0.1)',\
+	org.opensmarthouse.core.test;version='[1.0.0,1.0.1)'

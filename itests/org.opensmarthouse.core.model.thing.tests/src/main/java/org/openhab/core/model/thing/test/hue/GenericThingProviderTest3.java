@@ -32,7 +32,6 @@ import org.openhab.core.config.core.ConfigDescription;
 import org.openhab.core.config.core.ConfigDescriptionParameter;
 import org.openhab.core.config.core.ConfigDescriptionParameterBuilder;
 import org.openhab.core.config.core.ConfigDescriptionProvider;
-import org.openhab.core.model.core.ModelRepository;
 import org.openhab.core.model.thing.testsupport.hue.DumbThingHandlerFactory;
 import org.openhab.core.test.java.JavaOSGiTest;
 import org.openhab.core.thing.Thing;
@@ -42,6 +41,7 @@ import org.openhab.core.thing.type.ChannelType;
 import org.openhab.core.thing.type.ChannelTypeBuilder;
 import org.openhab.core.thing.type.ChannelTypeProvider;
 import org.openhab.core.thing.type.ChannelTypeUID;
+import org.opensmarthouse.core.model.core.ModelRepository;
 import org.osgi.service.component.ComponentContext;
 
 /**

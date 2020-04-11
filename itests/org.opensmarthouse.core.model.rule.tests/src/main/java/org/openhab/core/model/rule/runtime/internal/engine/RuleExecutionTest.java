@@ -34,11 +34,11 @@ import org.openhab.core.items.events.ItemCommandEvent;
 import org.openhab.core.items.events.ItemEventFactory;
 import org.openhab.core.library.CoreItemFactory;
 import org.openhab.core.library.types.OnOffType;
-import org.openhab.core.model.core.ModelRepository;
 import org.openhab.core.model.rule.rules.Rule;
 import org.openhab.core.model.rule.runtime.RuleEngine;
 import org.openhab.core.model.rule.runtime.internal.engine.RuleTriggerManager.TriggerTypes;
 import org.openhab.core.test.java.JavaOSGiTest;
+import org.opensmarthouse.core.model.core.ModelRepository;
 
 /**
  * @author Kai Kreuzer - Initial contribution
