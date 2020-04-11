@@ -5,26 +5,26 @@
   <modelVersion>4.0.0</modelVersion>
 
   <parent>
-    <groupId>org.openhab.core</groupId>
-    <artifactId>org.openhab.core.reactor</artifactId>
-    <version>3.0.0-SNAPSHOT</version>
+    <groupId>org.opensmarthouse.core</groupId>
+    <artifactId>org.opensmarthouse.core.reactor</artifactId>
+    <version>1-SNAPSHOT</version>
   </parent>
 
-  <groupId>org.openhab.core.features</groupId>
-  <artifactId>org.openhab.core.reactor.features</artifactId>
+  <groupId>org.opensmarthouse.core.features</groupId>
+  <artifactId>org.opensmarthouse.core.reactor.features</artifactId>
   <packaging>pom</packaging>
 
-  <name>openHAB Core :: Features</name>
+  <name>OpenSmartHouse Core | Features</name>
 
   <modules>
     <module>karaf</module>
   </modules>
 
   <dependencies>
-    <!-- BOM, so features are build after bundles in parallel builds -->
+    <!-- BOM, so features are built after bundles in parallel builds -->
     <dependency>
-      <groupId>org.openhab.core.bom</groupId>
-      <artifactId>org.openhab.core.bom.openhab-core</artifactId>
+      <groupId>org.opensmarthouse.core.bom</groupId>
+      <artifactId>org.opensmarthouse.core.bom.opensmarthouse-core</artifactId>
       <version>${project.version}</version>
       <type>pom</type>
     </dependency>

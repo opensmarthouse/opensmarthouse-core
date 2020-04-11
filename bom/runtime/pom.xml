@@ -5,15 +5,15 @@
   <modelVersion>4.0.0</modelVersion>
 
   <parent>
-    <groupId>org.openhab.core.bom</groupId>
-    <artifactId>org.openhab.core.reactor.bom</artifactId>
-    <version>3.0.0-SNAPSHOT</version>
+    <groupId>org.opensmarthouse.core.bom</groupId>
+    <artifactId>org.opensmarthouse.core.reactor.bom</artifactId>
+    <version>1-SNAPSHOT</version>
   </parent>
 
-  <artifactId>org.openhab.core.bom.runtime</artifactId>
+  <artifactId>org.opensmarthouse.core.bom.runtime</artifactId>
   <packaging>pom</packaging>
 
-  <name>openHAB Core :: BOM :: Runtime</name>
+  <name>OpenSmartHouse Core | BOM | Runtime</name>
 
   <properties>
     <pax.web.version>7.2.11</pax.web.version>
@@ -469,8 +469,8 @@
       <groupId>org.openhab</groupId>
       <artifactId>nrjavaserial</artifactId>
       <!-- Use "no liblockdev" version -->
-      <!-- See: https://github.com/openhab/openhab-core/pull/761 -->
-      <!-- See: https://github.com/openhab/openhab-core/issues/750 -->
+      <!-- See: https://github.com/opensmarthouse/opensmarthouse-core/pull/761 -->
+      <!-- See: https://github.com/opensmarthouse/opensmarthouse-core/issues/750 -->
       <!-- <groupId>com.neuronrobotics</groupId> -->
       <!-- <version>3.15.0</version> -->
       <version>3.15.0.OH2</version>

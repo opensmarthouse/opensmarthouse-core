@@ -5,19 +5,19 @@
   <modelVersion>4.0.0</modelVersion>
 
   <parent>
-    <groupId>org.openhab.core.bom</groupId>
-    <artifactId>org.openhab.core.reactor.bom</artifactId>
-    <version>3.0.0-SNAPSHOT</version>
+    <groupId>org.opensmarthouse.core.bom</groupId>
+    <artifactId>org.opensmarthouse.core.reactor.bom</artifactId>
+    <version>1-SNAPSHOT</version>
   </parent>
 
-  <artifactId>org.openhab.core.bom.runtime-index</artifactId>
+  <artifactId>org.opensmarthouse.core.bom.runtime-index</artifactId>
 
-  <name>openHAB Core :: BOM :: Runtime Index</name>
+  <name>OpenSmartHouse Core | BOM | Runtime Index</name>
 
   <dependencies>
     <dependency>
-      <groupId>org.openhab.core.bom</groupId>
-      <artifactId>org.openhab.core.bom.runtime</artifactId>
+      <groupId>org.opensmarthouse.core.bom</groupId>
+      <artifactId>org.opensmarthouse.core.bom.runtime</artifactId>
       <type>pom</type>
       <scope>compile</scope>
       <optional>true</optional>

@@ -5,15 +5,15 @@
   <modelVersion>4.0.0</modelVersion>
 
   <parent>
-    <groupId>org.openhab.core.bom</groupId>
-    <artifactId>org.openhab.core.reactor.bom</artifactId>
-    <version>3.0.0-SNAPSHOT</version>
+    <groupId>org.opensmarthouse.core.bom</groupId>
+    <artifactId>org.opensmarthouse.core.reactor.bom</artifactId>
+    <version>1-SNAPSHOT</version>
   </parent>
 
-  <artifactId>org.openhab.core.bom.compile-model</artifactId>
+  <artifactId>org.opensmarthouse.core.bom.compile-model</artifactId>
   <packaging>pom</packaging>
 
-  <name>openHAB Core :: BOM :: Compile Model</name>
+  <name>OpenSmartHouse Core | BOM | Compile Model</name>
 
   <properties>
     <classgraph.version>4.8.35.v20190528-1517</classgraph.version>

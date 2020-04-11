@@ -5,20 +5,20 @@
   <modelVersion>4.0.0</modelVersion>
 
   <parent>
-    <groupId>org.openhab.core.features</groupId>
-    <artifactId>org.openhab.core.reactor.features</artifactId>
-    <version>3.0.0-SNAPSHOT</version>
+    <groupId>org.opensmarthouse.core.features</groupId>
+    <artifactId>org.opensmarthouse.core.reactor.features</artifactId>
+    <version>1-SNAPSHOT</version>
   </parent>
 
-  <groupId>org.openhab.core.features.karaf</groupId>
-  <artifactId>org.openhab.core.reactor.features.karaf</artifactId>
+  <groupId>org.opensmarthouse.core.features.karaf</groupId>
+  <artifactId>org.opensmarthouse.core.reactor.features.karaf</artifactId>
   <packaging>pom</packaging>
 
-  <name>openHAB Core :: Features :: Karaf</name>
+  <name>OpenSmartHouse Core | Features | Core</name>
 
   <modules>
-    <module>openhab-tp</module>
-    <module>openhab-core</module>
+    <module>opensmarthouse-tp</module>
+    <module>opensmarthouse-core</module>
   </modules>
 
   <dependencies>
@@ -93,8 +93,8 @@
                   <feature>framework</feature>
                 </framework>
                 <features>
-                  <feature>openhab.tp-*</feature>
-                  <feature>openhab-core-*</feature>
+                  <feature>opensmarthouse.tp-*</feature>
+                  <feature>opensmarthouse-core-*</feature>
                 </features>
                 <verifyTransitive>false</verifyTransitive>
                 <ignoreMissingConditions>true</ignoreMissingConditions>

@@ -4,37 +4,25 @@
   <modelVersion>4.0.0</modelVersion>
 
   <parent>
-    <groupId>org.openhab</groupId>
-    <artifactId>openhab-super-pom</artifactId>
-    <version>1.0.2</version>
+    <groupId>org.opensmarthouse</groupId>
+    <artifactId>parent</artifactId>
+    <version>1-SNAPSHOT</version>
   </parent>
 
-  <groupId>org.openhab.core</groupId>
-  <artifactId>org.openhab.core.reactor</artifactId>
-  <version>3.0.0-SNAPSHOT</version>
+  <groupId>org.opensmarthouse.core</groupId>
+  <artifactId>org.opensmarthouse.core.reactor</artifactId>
+  <version>1-SNAPSHOT</version>
 
   <packaging>pom</packaging>
 
-  <name>openHAB Core</name>
-  <description>This project contains the core components of openHAB</description>
-
-  <organization>
-    <name>openHAB.org</name>
-    <url>http://www.openhab.org</url>
-  </organization>
-
-  <licenses>
-    <license>
-      <name>Eclipse Public License 2.0</name>
-      <url>https://www.eclipse.org/legal/epl-2.0/</url>
-    </license>
-  </licenses>
+  <name>OpenSmartHouse Core</name>
+  <description>This project contains the core elements of OpenSmartHouse</description>
 
   <modules>
     <module>bom</module>
     <module>bundles</module>
-    <module>features</module>
-    <module>tools</module>
+<!--    <module>features</module> -->
+<!--    <module>tools</module> -->
     <module>itests</module>
   </modules>
 
@@ -82,29 +70,29 @@
   <dependencyManagement>
     <dependencies>
       <dependency>
-        <groupId>org.openhab.core.bom</groupId>
-        <artifactId>org.openhab.core.bom.compile</artifactId>
+        <groupId>org.opensmarthouse.core.bom</groupId>
+        <artifactId>org.opensmarthouse.core.bom.compile</artifactId>
         <version>${project.version}</version>
         <type>pom</type>
         <scope>provided</scope>
       </dependency>
       <dependency>
-        <groupId>org.openhab.core.bom</groupId>
-        <artifactId>org.openhab.core.bom.compile-model</artifactId>
+        <groupId>org.opensmarthouse.core.bom</groupId>
+        <artifactId>org.opensmarthouse.core.bom.compile-model</artifactId>
         <version>${project.version}</version>
         <type>pom</type>
         <scope>provided</scope>
       </dependency>
       <dependency>
-        <groupId>org.openhab.core.bom</groupId>
-        <artifactId>org.openhab.core.bom.runtime</artifactId>
+        <groupId>org.opensmarthouse.core.bom</groupId>
+        <artifactId>org.opensmarthouse.core.bom.runtime</artifactId>
         <version>${project.version}</version>
         <type>pom</type>
         <scope>runtime</scope>
       </dependency>
       <dependency>
-        <groupId>org.openhab.core.bom</groupId>
-        <artifactId>org.openhab.core.bom.test</artifactId>
+        <groupId>org.opensmarthouse.core.bom</groupId>
+        <artifactId>org.opensmarthouse.core.bom.test</artifactId>
         <version>${project.version}</version>
         <type>pom</type>
         <scope>test</scope>
@@ -130,14 +118,14 @@ Import-Package: \\
   io.swagger.annotations.*;resolution:=optional,\\
   javax.annotation.security.*;resolution:=optional,\\
   org.eclipse.jdt.annotation.*;resolution:=optional,\\
-  org.openhab.core.automation.annotation.*;resolution:=optional,\\
+  org.opensmarthouse.core.automation.annotation.*;resolution:=optional,\\
   com.google.common.*;version="14.0",\\
   *
 -exportcontents: \\
   !*.internal.*,\\
   !*.impl.*, \\
-  org.openhab.*,\\
-  org.openhab.core.*
+  org.opensmarthouse.*,\\
+  org.opensmarthouse.core.*
 -sources: false
 -contract: *
 -includeresource: -${.}/NOTICE, -${.}/*.xsd]]></bnd>
@@ -412,11 +400,11 @@ Import-Package: \\
               <headerDefinition>licenses/epl-2.0/xml-header-style.xml</headerDefinition>
             </headerDefinitions>
             <includes>
-              <include>**/org/openhab/core/**/*.java</include>
-              <include>**/org/openhab/core/**/*.mwe2</include>
-              <include>**/org/openhab/core/**/*.xtend</include>
-              <include>**/org/openhab/**/*.java</include>
-              <include>**/org.openhab.core.semantics/**/*.groovy</include>
+              <include>**/org/opensmarthouse/core/**/*.java</include>
+              <include>**/org/opensmarthouse/core/**/*.mwe2</include>
+              <include>**/org/opensmarthouse/core/**/*.xtend</include>
+              <include>**/org/opensmarthouse/**/*.java</include>
+              <include>**/org.opensmarthouse.core.semantics/**/*.groovy</include>
               <include>**/feature.xml</include>
               <include>**/OSGI-INF/*.xml</include>
             </includes>

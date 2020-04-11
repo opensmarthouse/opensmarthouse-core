@@ -4,16 +4,16 @@
   <modelVersion>4.0.0</modelVersion>
 
   <parent>
-    <groupId>org.openhab.core.tools.archetypes</groupId>
-    <artifactId>org.openhab.core.reactor.tools.archetypes</artifactId>
-    <version>3.0.0-SNAPSHOT</version>
+    <groupId>org.opensmarthouse.core.tools.archetypes</groupId>
+    <artifactId>org.opensmarthouse.core.reactor.tools.archetypes</artifactId>
+    <version>1-SNAPSHOT</version>
   </parent>
 
-  <artifactId>org.openhab.core.tools.archetypes.binding</artifactId>
+  <artifactId>org.opensmarthouse.core.tools.archetypes.binding</artifactId>
   <packaging>maven-archetype</packaging>
 
-  <name>openHAB Core :: Tools :: Archetypes :: Binding</name>
-  <description>This is the Maven-Archetype for building new bindings for openHAB.</description>
+  <name>OpenSmartHouse Core | Tools | Binding Archetypes</name>
+  <description>This is the Maven-Archetype for building new bindings for OpenSmartHome.</description>
 
   <build>
     <resources>
