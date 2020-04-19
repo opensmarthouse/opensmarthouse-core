@@ -37,6 +37,7 @@ import java.util.function.Function;
 import org.eclipse.jdt.annotation.Nullable;
 import org.openhab.core.common.SafeCaller;
 import org.openhab.core.common.ThreadPoolManager;
+import org.openhab.core.common.osgi.BundleResolver;
 import org.openhab.core.common.registry.Identifiable;
 import org.openhab.core.common.registry.ManagedProvider;
 import org.openhab.core.common.registry.Provider;
@@ -88,7 +89,7 @@ import org.openhab.core.thing.type.ThingTypeRegistry;
 import org.openhab.core.thing.util.ThingHandlerHelper;
 import org.openhab.core.types.Command;
 import org.openhab.core.types.State;
-import org.openhab.core.common.osgi.BundleResolver;
+import org.openhab.core.types.UnDefType;
 import org.osgi.service.component.ComponentContext;
 import org.osgi.service.component.annotations.Activate;
 import org.osgi.service.component.annotations.Component;
@@ -120,6 +121,7 @@ import org.slf4j.LoggerFactory;
  * @author Henning Sudbrock - Consider thing type properties when migrating to new thing type
  * @author Christoph Weitkamp - Added preconfigured ChannelGroupBuilder
  * @author Yordan Zhelev - Added thing disabling mechanism
+ * @author Chris Jackson - Set channels to UnDef when thing is OFFLINE
  */
 @Component(immediate = true, service = { ThingTypeMigrationService.class, ThingManager.class })
 public class ThingManagerImpl
@@ -196,6 +198,14 @@ public class ThingManagerImpl
 
             // update thing status and send event about new status
             setThingStatus(thing, statusInfo);
+
+            // Set all channels to Undefined state if the thing changes to OFFLINE
+            if (oldStatusInfo.getStatus().equals(ThingStatus.ONLINE)
+                    && statusInfo.getStatus().equals(ThingStatus.OFFLINE)) {
+                for (Channel channel : thing.getChannels()) {
+                    communicationManager.stateUpdated(channel.getUID(), UnDefType.UNDEF);
+                }
+            }
 
             // if thing is a bridge
             if (isBridge(thing)) {
