@@ -16,6 +16,11 @@
   <name>OpenSmartHouse Core | BOM</name>
 
   <modules>
+    <!-- bom bom bom -->
+    <module>opensmarthouse</module>
+    <module>opensmarthouse-test</module>
+    <module>opensmarthouse-dependencies</module>
+    <!-- below are bnd related -->
     <module>compile</module>
     <module>compile-model</module>
     <module>runtime</module>

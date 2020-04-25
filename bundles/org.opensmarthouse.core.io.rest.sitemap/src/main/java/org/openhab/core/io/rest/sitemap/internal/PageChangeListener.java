@@ -38,6 +38,7 @@ import org.openhab.core.model.sitemap.sitemap.VisibilityRule;
 import org.openhab.core.model.sitemap.sitemap.Widget;
 import org.openhab.core.types.State;
 import org.openhab.core.ui.items.ItemUIRegistry;
+import org.osgi.framework.BundleContext;
 
 /**
  * This is a class that listens on item state change events and creates sitemap events for a dedicated sitemap page.
@@ -49,6 +50,7 @@ public class PageChangeListener implements StateChangeListener {
     private static final int REVERT_INTERVAL = 300;
     private final ScheduledExecutorService scheduler = ThreadPoolManager
             .getScheduledPool(ThreadPoolManager.THREAD_POOL_NAME_COMMON);
+    private final BundleContext bundleContext;
     private final String sitemapName;
     private final String pageId;
     private final ItemUIRegistry itemUIRegistry;
@@ -65,7 +67,8 @@ public class PageChangeListener implements StateChangeListener {
      * @param itemUIRegistry the ItemUIRegistry which is needed for the functionality
      * @param widgets the list of widgets that are part of the page.
      */
-    public PageChangeListener(String sitemapName, String pageId, ItemUIRegistry itemUIRegistry, EList<Widget> widgets) {
+    public PageChangeListener(BundleContext bundleContext, String sitemapName, String pageId, ItemUIRegistry itemUIRegistry, EList<Widget> widgets) {
+        this.bundleContext = bundleContext;
         this.sitemapName = sitemapName;
         this.pageId = pageId;
         this.itemUIRegistry = itemUIRegistry;
@@ -238,7 +241,7 @@ public class PageChangeListener implements StateChangeListener {
                             .substring(w.eClass().getInstanceTypeName().lastIndexOf(".") + 1);
                     boolean drillDown = "mapview".equalsIgnoreCase(widgetTypeName);
                     Predicate<Item> itemFilter = (i -> CoreItemFactory.LOCATION.equals(i.getType()));
-                    event.item = EnrichedItemDTOMapper.map(itemToBeSent, drillDown, itemFilter, null, null);
+                    event.item = EnrichedItemDTOMapper.map(bundleContext, itemToBeSent, drillDown, itemFilter, null, null);
 
                     // event.state is an adjustment of the item state to the widget type.
                     final State stateToBeSent = itemBelongsToWidget ? state : itemToBeSent.getState();

@@ -29,6 +29,23 @@
       <artifactId>org.opensmarthouse.core.config.core</artifactId>
       <version>${project.version}</version>
     </dependency>
+
+    <dependency>
+      <groupId>javax.annotation</groupId>
+      <artifactId>javax.annotation-api</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.bitbucket.b_c</groupId>
+      <artifactId>jose4j</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>io.swagger</groupId>
+      <artifactId>swagger-annotations</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>com.eclipsesource.jaxrs</groupId>
+      <artifactId>publisher</artifactId>
+    </dependency>
   </dependencies>
 
 </project>

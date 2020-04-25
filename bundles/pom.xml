@@ -16,13 +16,17 @@
   <name>OpenSmartHouse Core | Bundles</name>
 
   <modules>
+    <module>org.opensmarthouse.core.auth</module>
+    <module>org.opensmarthouse.core.auth.core</module>
     <module>org.opensmarthouse.core.auth.jaas</module>
     <module>org.opensmarthouse.core.auth.oauth2client</module>
+    <module>org.opensmarthouse.core.auth.oauth2client.api</module>
     <module>org.opensmarthouse.core.automation</module>
     <module>org.opensmarthouse.core.automation.module.media</module>
     <module>org.opensmarthouse.core.automation.module.script</module>
     <module>org.opensmarthouse.core.automation.module.script.rulesupport</module>
     <module>org.opensmarthouse.core.automation.rest</module>
+    <module>org.opensmarthouse.core.binding</module>
     <module>org.opensmarthouse.core.config.core</module>
     <module>org.opensmarthouse.core.config.discovery</module>
     <module>org.opensmarthouse.core.config.discovery.mdns</module>
@@ -36,11 +40,18 @@
     <module>org.opensmarthouse.core.audio</module>
     <module>org.opensmarthouse.core.binding.xml</module>
     <module>org.opensmarthouse.core.ephemeris</module>
+    <module>org.opensmarthouse.core.event</module>
+    <module>org.opensmarthouse.core.extension</module>
     <module>org.opensmarthouse.core.extension.sample</module>
+    <module>org.opensmarthouse.core.i18n</module>
     <module>org.opensmarthouse.core.id</module>
     <module>org.opensmarthouse.core.persistence</module>
+    <module>org.opensmarthouse.core.registry</module>
     <module>org.opensmarthouse.core.scheduler</module>
+    <module>org.opensmarthouse.core.scheduler.api</module>
     <module>org.opensmarthouse.core.semantics</module>
+    <module>org.opensmarthouse.core.service</module>
+    <module>org.opensmarthouse.core.storage</module>
     <module>org.opensmarthouse.core.thing</module>
     <module>org.opensmarthouse.core.thing.xml</module>
     <module>org.opensmarthouse.core.transform</module>
@@ -60,12 +71,22 @@
     <module>org.opensmarthouse.core.io.rest</module>
     <module>org.opensmarthouse.core.io.rest.audio</module>
     <module>org.opensmarthouse.core.io.rest.auth</module>
+    <module>org.opensmarthouse.core.io.rest.binding</module>
+    <module>org.opensmarthouse.core.io.rest.channel</module>
+    <module>org.opensmarthouse.core.io.rest.config</module>
     <module>org.opensmarthouse.core.io.rest.core</module>
+    <module>org.opensmarthouse.core.io.rest.discovery</module>
+    <module>org.opensmarthouse.core.io.rest.extensions</module>
+    <module>org.opensmarthouse.core.io.rest.id</module>
+    <module>org.opensmarthouse.core.io.rest.item</module>
     <module>org.opensmarthouse.core.io.rest.log</module>
     <module>org.opensmarthouse.core.io.rest.mdns</module>
     <module>org.opensmarthouse.core.io.rest.optimize</module>
+    <module>org.opensmarthouse.core.io.rest.persistence</module>
+    <module>org.opensmarthouse.core.io.rest.service</module>
     <module>org.opensmarthouse.core.io.rest.sitemap</module>
     <module>org.opensmarthouse.core.io.rest.sse</module>
+    <module>org.opensmarthouse.core.io.rest.thing</module>
     <module>org.opensmarthouse.core.io.rest.ui</module>
     <module>org.opensmarthouse.core.io.rest.voice</module>
     <module>org.opensmarthouse.core.io.transport.dbus</module>
@@ -76,6 +97,7 @@
     <module>org.opensmarthouse.core.io.transport.serial.rxtx</module>
     <module>org.opensmarthouse.core.io.transport.serial.rxtx.rfc2217</module>
     <module>org.opensmarthouse.core.io.transport.upnp</module>
+    <module>org.opensmarthouse.core.item</module>
     <module>org.opensmarthouse.core.io.jetty.certificate</module>
     <module>org.opensmarthouse.core.model.lazygen</module>
     <module>org.opensmarthouse.core.model.core</module>
@@ -106,19 +128,31 @@
     <module>org.opensmarthouse.core.ui.icon</module>
   </modules>
 
-  <dependencies>
-    <dependency>
-      <groupId>org.opensmarthouse.core.bom</groupId>
-      <artifactId>org.opensmarthouse.core.bom.compile</artifactId>
-      <type>pom</type>
-    </dependency>
-    <dependency>
-      <groupId>org.opensmarthouse.core.bom</groupId>
-      <artifactId>org.opensmarthouse.core.bom.test</artifactId>
-      <type>pom</type>
-      <scope>test</scope>
-    </dependency>
-  </dependencies>
+  <dependencyManagement>
+    <dependencies>
+      <dependency>
+        <groupId>org.opensmarthouse.core.bom</groupId>
+        <artifactId>opensmarthouse</artifactId>
+        <version>${project.version}</version>
+        <type>pom</type>
+        <scope>import</scope>
+      </dependency>
+      <dependency>
+        <groupId>org.opensmarthouse.core.bom</groupId>
+        <artifactId>opensmarthouse-dependencies</artifactId>
+        <version>${project.version}</version>
+        <type>pom</type>
+        <scope>import</scope>
+      </dependency>
+      <dependency>
+        <groupId>org.opensmarthouse.core.bom</groupId>
+        <artifactId>opensmarthouse-test</artifactId>
+        <version>${project.version}</version>
+        <type>pom</type>
+        <scope>import</scope>
+      </dependency>
+    </dependencies>
+  </dependencyManagement>
 
   <build>
     <pluginManagement>

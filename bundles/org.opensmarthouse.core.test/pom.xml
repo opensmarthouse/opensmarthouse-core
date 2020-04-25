@@ -15,23 +15,28 @@
 
   <dependencies>
     <dependency>
-      <groupId>org.opensmarthouse.core.bom</groupId>
-      <artifactId>org.opensmarthouse.core.bom.compile</artifactId>
-      <type>pom</type>
-    </dependency>
-    <dependency>
-      <groupId>org.opensmarthouse.core.bom</groupId>
-      <artifactId>org.opensmarthouse.core.bom.test</artifactId>
-      <type>pom</type>
-      <scope>compile</scope>
-    </dependency>
-    <dependency>
       <groupId>org.opensmarthouse.core.bundles</groupId>
       <artifactId>org.opensmarthouse.core</artifactId>
       <version>${project.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>org.eclipse.jetty</groupId>
+      <artifactId>jetty-servlet</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>commons-io</groupId>
+      <artifactId>commons-io</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.mockito</groupId>
+      <artifactId>mockito-core</artifactId>
       <scope>compile</scope>
     </dependency>
-
+    <dependency>
+      <groupId>junit</groupId>
+      <artifactId>junit</artifactId>
+      <scope>compile</scope>
+    </dependency>
   </dependencies>
 
 </project>

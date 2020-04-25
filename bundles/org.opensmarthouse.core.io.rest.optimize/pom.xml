@@ -13,4 +13,19 @@
 
   <name>OpenSmartHouse Core | Bundles | REST JAX-RS Optimizations</name>
 
+  <dependencies>
+    <dependency>
+      <groupId>org.osgi</groupId>
+      <artifactId>osgi.core</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.slf4j</groupId>
+      <artifactId>slf4j-api</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>com.eclipsesource.jaxrs</groupId>
+      <artifactId>publisher</artifactId>
+    </dependency>
+  </dependencies>
+
 </project>

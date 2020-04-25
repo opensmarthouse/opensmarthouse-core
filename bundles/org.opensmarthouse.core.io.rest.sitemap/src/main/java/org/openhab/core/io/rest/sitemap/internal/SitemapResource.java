@@ -87,6 +87,7 @@ import org.openhab.core.model.sitemap.sitemap.Webview;
 import org.openhab.core.model.sitemap.sitemap.Widget;
 import org.openhab.core.types.State;
 import org.openhab.core.ui.items.ItemUIRegistry;
+import org.osgi.framework.BundleContext;
 import org.osgi.service.component.annotations.Activate;
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Deactivate;
@@ -152,9 +153,11 @@ public class SitemapResource implements RESTResource, SitemapSubscriptionCallbac
             .getScheduledPool(ThreadPoolManager.THREAD_POOL_NAME_COMMON);
 
     private ScheduledFuture<?> cleanSubscriptionsJob;
+    private BundleContext bundleContext;
 
     @Activate
-    protected void activate() {
+    protected void activate(BundleContext bundleContext) {
+        this.bundleContext = bundleContext;
         broadcaster = new SseBroadcaster();
         broadcaster.add(this);
 
@@ -181,6 +184,7 @@ public class SitemapResource implements RESTResource, SitemapSubscriptionCallbac
         }
         broadcaster.remove(this);
         broadcaster = null;
+        bundleContext = null;
     }
 
     @Reference(cardinality = ReferenceCardinality.OPTIONAL, policy = ReferencePolicy.DYNAMIC)
@@ -491,7 +495,7 @@ public class SitemapResource implements RESTResource, SitemapSubscriptionCallbac
                         .substring(widget.eClass().getInstanceTypeName().lastIndexOf(".") + 1);
                 boolean isMapview = "mapview".equalsIgnoreCase(widgetTypeName);
                 Predicate<Item> itemFilter = (i -> CoreItemFactory.LOCATION.equals(i.getType()));
-                bean.item = EnrichedItemDTOMapper.map(item, isMapview, itemFilter, UriBuilder.fromUri(uri).build(),
+                bean.item = EnrichedItemDTOMapper.map(bundleContext, item, isMapview, itemFilter, UriBuilder.fromUri(uri).build(),
                         locale);
                 bean.state = itemUIRegistry.getState(widget).toFullString();
                 // In case the widget state is identical to the item state, its value is set to null.

@@ -19,6 +19,10 @@
       <artifactId>org.opensmarthouse.core.config.discovery</artifactId>
       <version>${project.version}</version>
     </dependency>
+    <dependency>
+      <groupId>org.jupnp</groupId>
+      <artifactId>org.jupnp</artifactId>
+    </dependency>
   </dependencies>
 
 </project>

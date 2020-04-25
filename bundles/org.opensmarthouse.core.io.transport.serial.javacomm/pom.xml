@@ -18,6 +18,10 @@
       <artifactId>org.opensmarthouse.core.io.transport.serial</artifactId>
       <version>${project.version}</version>
     </dependency>
+    <dependency>
+      <groupId>org.vesalainen.comm</groupId>
+      <artifactId>javaxcomm</artifactId>
+    </dependency>
   </dependencies>
 
 </project>

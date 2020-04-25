@@ -44,6 +44,12 @@
       <artifactId>org.opensmarthouse.core.model.thing.ide</artifactId>
       <version>${project.version}</version>
     </dependency>
+
+    <dependency>
+      <groupId>junit</groupId>
+      <artifactId>junit</artifactId>
+      <scope>test</scope>
+    </dependency>
   </dependencies>
 
 </project>

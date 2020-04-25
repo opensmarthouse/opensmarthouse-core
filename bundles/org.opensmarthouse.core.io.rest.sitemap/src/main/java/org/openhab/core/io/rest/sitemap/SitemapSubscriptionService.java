@@ -41,6 +41,7 @@ import org.openhab.core.model.sitemap.sitemap.LinkableWidget;
 import org.openhab.core.model.sitemap.sitemap.Sitemap;
 import org.openhab.core.model.sitemap.sitemap.Widget;
 import org.openhab.core.ui.items.ItemUIRegistry;
+import org.osgi.framework.BundleContext;
 import org.osgi.service.component.annotations.Activate;
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Deactivate;
@@ -78,7 +79,9 @@ public class SitemapSubscriptionService implements ModelRepositoryChangeListener
         void onRelease(String subscriptionId);
     }
 
+    private BundleContext bundleContext;
     private ItemUIRegistry itemUIRegistry;
+
     private final List<SitemapProvider> sitemapProviders = new ArrayList<>();
 
     /* subscription id -> sitemap+page */
@@ -100,7 +103,8 @@ public class SitemapSubscriptionService implements ModelRepositoryChangeListener
     }
 
     @Activate
-    protected void activate(Map<String, Object> config) {
+    protected void activate(BundleContext bundleContext, Map<String, Object> config) {
+        this.bundleContext = bundleContext;
         applyConfig(config);
     }
 
@@ -112,6 +116,7 @@ public class SitemapSubscriptionService implements ModelRepositoryChangeListener
             listener.dispose();
         }
         pageChangeListeners.clear();
+        bundleContext = null;
     }
 
     @Modified
@@ -259,7 +264,7 @@ public class SitemapSubscriptionService implements ModelRepositoryChangeListener
         PageChangeListener listener = pageChangeListeners.get(getValue(sitemapName, pageId));
         if (listener == null) {
             // there is no listener for this page yet, so let's try to create one
-            listener = new PageChangeListener(sitemapName, pageId, itemUIRegistry, collectWidgets(sitemapName, pageId));
+            listener = new PageChangeListener(bundleContext, sitemapName, pageId, itemUIRegistry, collectWidgets(sitemapName, pageId));
             pageChangeListeners.put(getValue(sitemapName, pageId), listener);
         }
         if (listener != null) {

@@ -21,6 +21,7 @@
 	<feature name="opensmarthouse-core-base" description="opensmarthouse Core" version="${project.version}">
 		<details>Open SmartHouse Core Bundles</details>
 
+		<!--
 		<requirement>opensmarthouse.tp;filter:="(feature=base)"</requirement>
 		<feature dependency="true">opensmarthouse.tp-base</feature>
 
@@ -59,6 +60,7 @@
 		<bundle>mvn:org.opensmarthouse.core.bundles/org.opensmarthouse.core.io.rest.optimize/${project.version}</bundle>
 		<bundle>mvn:org.opensmarthouse.core.bundles/org.opensmarthouse.core.io.rest.core/${project.version}</bundle>
 		<bundle>mvn:org.opensmarthouse.core.bundles/org.opensmarthouse.core.io.rest.sse/${project.version}</bundle>
+		-->
 	</feature>
 
 	<feature name="opensmarthouse-core-auth-jaas" version="${project.version}">
