@@ -43,8 +43,8 @@ public class ItemStateConverterImplTest {
 
     @Before
     public void setup() {
-        UnitProvider unitProvider = Mockito.mock(UnitProvider.class);
-        Mockito.when(unitProvider.getUnit(Temperature.class)).thenReturn(ImperialUnits.FAHRENHEIT);
+        UnitProvider unitProvider = mock(UnitProvider.class);
+        when(unitProvider.getUnit(Temperature.class)).thenReturn(ImperialUnits.FAHRENHEIT);
         itemStateConverter = new ItemStateConverterImpl(unitProvider);
     }
 
@@ -52,7 +52,7 @@ public class ItemStateConverterImplTest {
     public void testNullState() {
         State undef = itemStateConverter.convertToAcceptedState(null, null);
 
-        Assert.assertThat(undef, CoreMatchers.is(UnDefType.NULL));
+        assertThat(undef, is(UnDefType.NULL));
     }
 
     @Test
@@ -61,7 +61,7 @@ public class ItemStateConverterImplTest {
         State originalState = new DecimalType(12.34);
         State state = itemStateConverter.convertToAcceptedState(originalState, item);
 
-        Assert.assertTrue(originalState == state);
+        assertTrue(originalState == state);
     }
 
     @Test
@@ -70,7 +70,7 @@ public class ItemStateConverterImplTest {
         State originalState = new PercentType("42");
         State convertedState = itemStateConverter.convertToAcceptedState(originalState, item);
 
-        Assert.assertThat(convertedState, CoreMatchers.is(new DecimalType("0.42")));
+        assertThat(convertedState, is(new DecimalType("0.42")));
     }
 
     @Test
@@ -79,38 +79,38 @@ public class ItemStateConverterImplTest {
         State originalState = new QuantityType<>("12.34 °C");
         State convertedState = itemStateConverter.convertToAcceptedState(originalState, item);
 
-        Assert.assertThat(convertedState, CoreMatchers.is(new DecimalType("12.34")));
+        assertThat(convertedState, is(new DecimalType("12.34")));
     }
 
     @Test
     public void numberItemWitDimensionShouldConvertToItemStateDescriptionUnit() {
-        NumberItem item = Mockito.mock(NumberItem.class);
-        StateDescription stateDescription = Mockito.mock(StateDescription.class);
-        Mockito.when(item.getStateDescription()).thenReturn(stateDescription);
-        Mockito.doReturn(Temperature.class).when(item).getDimension();
-        Mockito.when(stateDescription.getPattern()).thenReturn("%.1f K");
+        NumberItem item = mock(NumberItem.class);
+        StateDescription stateDescription = mock(StateDescription.class);
+        when(item.getStateDescription()).thenReturn(stateDescription);
+        doReturn(Temperature.class).when(item).getDimension();
+        when(stateDescription.getPattern()).thenReturn("%.1f K");
 
         State originalState = new QuantityType<>("12.34 °C");
         State convertedState = itemStateConverter.convertToAcceptedState(originalState, item);
 
-        Assert.assertThat(convertedState, CoreMatchers.is(new QuantityType<>("285.49 K")));
+        assertThat(convertedState, is(new QuantityType<>("285.49 K")));
     }
 
     @Test
     public void numberItemWitDimensionShouldConvertToLocaleBasedUnit() {
-        NumberItem item = Mockito.mock(NumberItem.class);
-        Mockito.doReturn(Temperature.class).when(item).getDimension();
+        NumberItem item = mock(NumberItem.class);
+        doReturn(Temperature.class).when(item).getDimension();
 
         State originalState = new QuantityType<>("12.34 °C");
         State convertedState = itemStateConverter.convertToAcceptedState(originalState, item);
 
-        Assert.assertThat(convertedState, CoreMatchers.is(new QuantityType<>("54.212 °F")));
+        assertThat(convertedState, is(new QuantityType<>("54.212 °F")));
     }
 
     @Test
     public void numberItemShouldNotConvertUnitsWhereMeasurmentSystemEquals() {
-        NumberItem item = Mockito.mock(NumberItem.class);
-        Mockito.doReturn(Length.class).when(item).getDimension();
+        NumberItem item = mock(NumberItem.class);
+        doReturn(Length.class).when(item).getDimension();
 
         QuantityType<Length> originalState = new QuantityType<>("100 cm");
 
@@ -118,7 +118,7 @@ public class ItemStateConverterImplTest {
         QuantityType<Length> convertedState = (QuantityType<Length>) itemStateConverter
                 .convertToAcceptedState(originalState, item);
 
-        Assert.assertThat(convertedState.getUnit(), CoreMatchers.is(originalState.getUnit()));
+        assertThat(convertedState.getUnit(), is(originalState.getUnit()));
     }
 
 }

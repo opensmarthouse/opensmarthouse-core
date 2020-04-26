@@ -18,9 +18,8 @@ import static org.junit.Assert.*;
 import org.junit.Test;
 import org.openhab.core.events.Event;
 import org.openhab.core.items.Item;
+import org.openhab.core.items.TestSwitchItem;
 import org.openhab.core.items.dto.ItemDTOMapper;
-import org.openhab.core.library.CoreItemFactory;
-import org.openhab.core.library.items.SwitchItem;
 import org.openhab.core.library.types.OnOffType;
 import org.openhab.core.library.types.RawType;
 import org.openhab.core.types.Command;
@@ -36,10 +35,12 @@ import com.google.gson.Gson;
  * @author Stefan Bußweiler - Initial contribution
  */
 public class ItemEventFactoryTest {
+
+
     private final ItemEventFactory factory = new ItemEventFactory();
 
     private static final String ITEM_NAME = "ItemA";
-    private static final Item ITEM = new SwitchItem(ITEM_NAME);
+    private static final Item ITEM = new TestSwitchItem(ITEM_NAME);
     private static final String GROUP_NAME = "GroupA";
     private static final String SOURCE = "binding:type:id:channel";
 
@@ -205,7 +206,7 @@ public class ItemEventFactoryTest {
         assertEquals(ITEM_ADDED_EVENT_PAYLOAD, itemAddedEvent.getPayload());
         assertNotNull(itemAddedEvent.getItem());
         assertEquals(ITEM_NAME, itemAddedEvent.getItem().name);
-        assertEquals(CoreItemFactory.SWITCH, itemAddedEvent.getItem().type);
+        assertEquals(TestSwitchItem.TEST_SWITCH, itemAddedEvent.getItem().type);
     }
 
     @Test
@@ -216,7 +217,7 @@ public class ItemEventFactoryTest {
         assertEquals(ITEM_ADDED_EVENT_TOPIC, event.getTopic());
         assertNotNull(event.getItem());
         assertEquals(ITEM_NAME, event.getItem().name);
-        assertEquals(CoreItemFactory.SWITCH, event.getItem().type);
+        assertEquals(TestSwitchItem.TEST_SWITCH, event.getItem().type);
     }
 
     @Test

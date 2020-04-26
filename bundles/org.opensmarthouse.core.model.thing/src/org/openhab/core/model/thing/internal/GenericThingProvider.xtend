@@ -46,7 +46,7 @@ import org.openhab.core.thing.type.ChannelTypeRegistry
 import org.openhab.core.thing.type.ChannelTypeUID
 import org.openhab.core.thing.type.ThingTypeRegistry
 import org.openhab.core.thing.util.ThingHelper
-import org.openhab.core.util.BundleResolver
+import org.openhab.core.common.osgi.BundleResolver
 import org.openhab.core.model.core.ModelRepository
 import org.openhab.core.model.core.ModelRepositoryChangeListener
 import org.openhab.core.model.thing.thing.ModelBridge

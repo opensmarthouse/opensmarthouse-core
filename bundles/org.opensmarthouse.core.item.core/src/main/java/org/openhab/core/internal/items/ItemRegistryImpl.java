@@ -16,6 +16,7 @@ import static java.util.stream.Collectors.toList;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
 
@@ -28,6 +29,7 @@ import org.openhab.core.i18n.UnitProvider;
 import org.openhab.core.items.GenericItem;
 import org.openhab.core.items.GroupItem;
 import org.openhab.core.items.Item;
+import org.openhab.core.items.ItemBuilder;
 import org.openhab.core.items.ItemNotFoundException;
 import org.openhab.core.items.ItemNotUniqueException;
 import org.openhab.core.items.ItemProvider;
@@ -38,6 +40,7 @@ import org.openhab.core.items.ManagedItemProvider;
 import org.openhab.core.items.MetadataRegistry;
 import org.openhab.core.items.RegistryHook;
 import org.openhab.core.items.events.ItemEventFactory;
+import org.openhab.core.library.CoreItemFactory;
 import org.openhab.core.service.CommandDescriptionService;
 import org.openhab.core.service.StateDescriptionService;
 import org.osgi.service.component.ComponentContext;
@@ -139,6 +142,18 @@ public class ItemRegistryImpl extends AbstractRegistry<Item, String, ItemProvide
         }
 
         return matchedItems;
+    }
+
+    @Override
+    public ItemBuilder newItemBuilder(Item item) {
+        logger.warn("Deprecation: You are using a deprecated API. Please use the ItemBuilder OSGi service instead.");
+        return new ItemBuilderImpl(Collections.singleton(new CoreItemFactory()), item);
+    }
+
+   @Override
+    public ItemBuilder newItemBuilder(String itemType, String itemName) {
+        logger.warn("Deprecation: You are using a deprecated API. Please use the ItemBuilder OSGi service instead.");
+        return new ItemBuilderImpl(Collections.singleton(new CoreItemFactory()), itemType, itemName);
     }
 
     private void addToGroupItems(Item item, List<String> groupItemNames) {

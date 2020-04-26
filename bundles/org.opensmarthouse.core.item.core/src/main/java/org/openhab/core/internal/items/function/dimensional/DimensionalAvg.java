@@ -18,6 +18,7 @@ import java.util.Set;
 
 import javax.measure.Quantity;
 
+import org.eclipse.jdt.annotation.NonNullByDefault;
 import org.eclipse.jdt.annotation.Nullable;
 import org.openhab.core.items.Item;
 import org.openhab.core.library.types.QuantityType;
@@ -27,7 +28,10 @@ import org.openhab.core.types.UnDefType;
 
 /**
  * This calculates the numeric average over all item states of {@link QuantityType}.
+ *
+ * @author Henning Treu - Initial contribution
  */
+@NonNullByDefault
 public class DimensionalAvg extends DimensionalGroupFunction {
 
     public DimensionalAvg(Class<? extends Quantity<?>> dimension) {

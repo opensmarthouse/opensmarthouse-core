@@ -57,11 +57,11 @@ public class MetadataCommandDescriptionProviderTest {
     @Before
     @SuppressWarnings("unchecked")
     public void setup() throws Exception {
-        MockitoAnnotations.initMocks(this);
+        initMocks(this);
 
-        Mockito.when(bundleContext.getService(ArgumentMatchers.same(managedProviderRef))).thenReturn(managedProvider);
+        when(bundleContext.getService(same(managedProviderRef))).thenReturn(managedProvider);
 
-        Mockito.when(item.getName()).thenReturn(ITEM_NAME);
+        when(item.getName()).thenReturn(ITEM_NAME);
 
         metadataRegistry = new MetadataRegistryImpl();
 
@@ -69,7 +69,7 @@ public class MetadataCommandDescriptionProviderTest {
         metadataRegistry.activate(bundleContext);
 
         ArgumentCaptor<ServiceListener> captor = ArgumentCaptor.forClass(ServiceListener.class);
-        Mockito.verify(bundleContext).addServiceListener(captor.capture(), ArgumentMatchers.any());
+        verify(bundleContext).addServiceListener(captor.capture(), any());
         providerTracker = captor.getValue();
         providerTracker.serviceChanged(new ServiceEvent(ServiceEvent.REGISTERED, managedProviderRef));
 
@@ -79,7 +79,7 @@ public class MetadataCommandDescriptionProviderTest {
     @Test
     public void testEmpty() throws Exception {
         CommandDescription commandDescription = commandDescriptionProvider.getCommandDescription(ITEM_NAME, null);
-        Assert.assertNull(commandDescription);
+        assertNull(commandDescription);
     }
 
     @Test
@@ -90,7 +90,7 @@ public class MetadataCommandDescriptionProviderTest {
 
         metadataRegistry.added(managedProvider, metadata);
         CommandDescription commandDescription = commandDescriptionProvider.getCommandDescription(ITEM_NAME, null);
-        Assert.assertNull(commandDescription);
+        assertNull(commandDescription);
     }
 
     @Test
@@ -102,19 +102,19 @@ public class MetadataCommandDescriptionProviderTest {
 
         metadataRegistry.added(managedProvider, metadata);
         CommandDescription commandDescription = commandDescriptionProvider.getCommandDescription(ITEM_NAME, null);
-        Assert.assertNotNull(commandDescription);
-        Assert.assertNotNull(commandDescription.getCommandOptions());
-        Assert.assertEquals(3, commandDescription.getCommandOptions().size());
+        assertNotNull(commandDescription);
+        assertNotNull(commandDescription.getCommandOptions());
+        assertEquals(3, commandDescription.getCommandOptions().size());
 
         Iterator<CommandOption> it = commandDescription.getCommandOptions().iterator();
         CommandOption commandOption = it.next();
-        Assert.assertEquals("OPTION1", commandOption.getCommand());
-        Assert.assertEquals(null, commandOption.getLabel());
+        assertEquals("OPTION1", commandOption.getCommand());
+        assertEquals(null, commandOption.getLabel());
         commandOption = it.next();
-        Assert.assertEquals("OPTION2", commandOption.getCommand());
-        Assert.assertEquals(null, commandOption.getLabel());
+        assertEquals("OPTION2", commandOption.getCommand());
+        assertEquals(null, commandOption.getLabel());
         commandOption = it.next();
-        Assert.assertEquals("3", commandOption.getCommand());
-        Assert.assertEquals("Option 3", commandOption.getLabel());
+        assertEquals("3", commandOption.getCommand());
+        assertEquals("Option 3", commandOption.getLabel());
     }
 }

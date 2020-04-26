@@ -30,7 +30,7 @@ import org.openhab.core.events.EventPublisher;
 import org.openhab.core.i18n.LocaleProvider;
 import org.openhab.core.i18n.TranslationProvider;
 import org.openhab.core.test.java.JavaTest;
-import org.openhab.core.service.BundleResolver;
+import org.openhab.core.common.osgi.BundleResolver;
 
 /**
  * Testing the {@link ConfigStatusService} OSGi service.

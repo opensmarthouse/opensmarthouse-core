@@ -10,7 +10,7 @@
  *
  * SPDX-License-Identifier: EPL-2.0
  */
-package org.openhab.core.library.types;
+package org.openhab.core.internal.items.function;
 
 import static org.junit.Assert.assertEquals;
 
@@ -21,12 +21,23 @@ import java.util.Set;
 
 import org.junit.Before;
 import org.junit.Test;
+import org.openhab.core.internal.items.function.And;
+import org.openhab.core.internal.items.function.Count;
+import org.openhab.core.internal.items.function.NAnd;
+import org.openhab.core.internal.items.function.NOr;
+import org.openhab.core.internal.items.function.Or;
+import org.openhab.core.internal.items.function.Sum;
 import org.openhab.core.items.ArithmeticGroupFunction;
 import org.openhab.core.items.GenericItem;
 import org.openhab.core.items.GroupFunction;
 import org.openhab.core.items.Item;
 import org.openhab.core.library.items.DimmerItem;
 import org.openhab.core.library.items.SwitchItem;
+import org.openhab.core.library.types.DecimalType;
+import org.openhab.core.library.types.OnOffType;
+import org.openhab.core.library.types.OpenClosedType;
+import org.openhab.core.library.types.PercentType;
+import org.openhab.core.library.types.StringType;
 import org.openhab.core.types.Command;
 import org.openhab.core.types.State;
 import org.openhab.core.types.UnDefType;
@@ -52,7 +63,7 @@ public class ArithmeticGroupFunctionTest {
         items.add(new TestItem("TestItem4", OpenClosedType.CLOSED));
         items.add(new TestItem("TestItem5", UnDefType.UNDEF));
 
-        function = new ArithmeticGroupFunction.Or(OpenClosedType.OPEN, OpenClosedType.CLOSED);
+        function = new Or(OpenClosedType.OPEN, OpenClosedType.CLOSED);
         State state = function.calculate(items);
 
         assertEquals(OpenClosedType.OPEN, state);
@@ -66,7 +77,7 @@ public class ArithmeticGroupFunctionTest {
         items.add(new TestItem("TestItem4", OpenClosedType.CLOSED));
         items.add(new TestItem("TestItem5", UnDefType.UNDEF));
 
-        function = new ArithmeticGroupFunction.Or(OpenClosedType.OPEN, OpenClosedType.CLOSED);
+        function = new Or(OpenClosedType.OPEN, OpenClosedType.CLOSED);
         State state = function.calculate(items);
 
         assertEquals(OpenClosedType.CLOSED, state);
@@ -76,7 +87,7 @@ public class ArithmeticGroupFunctionTest {
     public void testOrFunctionJustsOneItem() {
         items.add(new TestItem("TestItem1", UnDefType.UNDEF));
 
-        function = new ArithmeticGroupFunction.Or(OpenClosedType.OPEN, OpenClosedType.CLOSED);
+        function = new Or(OpenClosedType.OPEN, OpenClosedType.CLOSED);
         State state = function.calculate(items);
 
         assertEquals(OpenClosedType.CLOSED, state);
@@ -98,7 +109,7 @@ public class ArithmeticGroupFunctionTest {
         items.add(switch1);
         items.add(switch2);
 
-        function = new ArithmeticGroupFunction.Or(OnOffType.ON, OnOffType.OFF);
+        function = new Or(OnOffType.ON, OnOffType.OFF);
         State state = function.calculate(items);
         State decimalState = function.getStateAs(items, DecimalType.class);
 
@@ -114,7 +125,7 @@ public class ArithmeticGroupFunctionTest {
         items.add(new TestItem("TestItem4", OpenClosedType.CLOSED));
         items.add(new TestItem("TestItem5", UnDefType.UNDEF));
 
-        function = new ArithmeticGroupFunction.NOr(OpenClosedType.OPEN, OpenClosedType.CLOSED);
+        function = new NOr(OpenClosedType.OPEN, OpenClosedType.CLOSED);
         State state = function.calculate(items);
 
         assertEquals(OpenClosedType.CLOSED, state);
@@ -128,7 +139,7 @@ public class ArithmeticGroupFunctionTest {
         items.add(new TestItem("TestItem4", OpenClosedType.CLOSED));
         items.add(new TestItem("TestItem5", UnDefType.UNDEF));
 
-        function = new ArithmeticGroupFunction.NOr(OpenClosedType.OPEN, OpenClosedType.CLOSED);
+        function = new NOr(OpenClosedType.OPEN, OpenClosedType.CLOSED);
         State state = function.calculate(items);
 
         assertEquals(OpenClosedType.OPEN, state);
@@ -140,7 +151,7 @@ public class ArithmeticGroupFunctionTest {
         items.add(new TestItem("TestItem2", OpenClosedType.OPEN));
         items.add(new TestItem("TestItem3", OpenClosedType.OPEN));
 
-        function = new ArithmeticGroupFunction.And(OpenClosedType.OPEN, OpenClosedType.CLOSED);
+        function = new And(OpenClosedType.OPEN, OpenClosedType.CLOSED);
         State state = function.calculate(items);
 
         assertEquals(OpenClosedType.OPEN, state);
@@ -154,7 +165,7 @@ public class ArithmeticGroupFunctionTest {
         items.add(new TestItem("TestItem4", OpenClosedType.OPEN));
         items.add(new TestItem("TestItem5", UnDefType.UNDEF));
 
-        function = new ArithmeticGroupFunction.And(OpenClosedType.OPEN, OpenClosedType.CLOSED);
+        function = new And(OpenClosedType.OPEN, OpenClosedType.CLOSED);
         State state = function.calculate(items);
 
         assertEquals(OpenClosedType.CLOSED, state);
@@ -164,7 +175,7 @@ public class ArithmeticGroupFunctionTest {
     public void testAndFunctionJustsOneItem() {
         items.add(new TestItem("TestItem1", UnDefType.UNDEF));
 
-        function = new ArithmeticGroupFunction.And(OpenClosedType.OPEN, OpenClosedType.CLOSED);
+        function = new And(OpenClosedType.OPEN, OpenClosedType.CLOSED);
         State state = function.calculate(items);
 
         assertEquals(OpenClosedType.CLOSED, state);
@@ -176,7 +187,7 @@ public class ArithmeticGroupFunctionTest {
         items.add(new TestItem("TestItem2", OpenClosedType.OPEN));
         items.add(new TestItem("TestItem3", OpenClosedType.OPEN));
 
-        function = new ArithmeticGroupFunction.NAnd(OpenClosedType.OPEN, OpenClosedType.CLOSED);
+        function = new NAnd(OpenClosedType.OPEN, OpenClosedType.CLOSED);
         State state = function.calculate(items);
 
         assertEquals(OpenClosedType.CLOSED, state);
@@ -188,7 +199,7 @@ public class ArithmeticGroupFunctionTest {
         items.add(new TestItem("TestItem2", OpenClosedType.OPEN));
         items.add(new TestItem("TestItem3", OpenClosedType.CLOSED));
 
-        function = new ArithmeticGroupFunction.NAnd(OpenClosedType.OPEN, OpenClosedType.CLOSED);
+        function = new NAnd(OpenClosedType.OPEN, OpenClosedType.CLOSED);
         State state = function.calculate(items);
 
         assertEquals(OpenClosedType.OPEN, state);
@@ -202,7 +213,7 @@ public class ArithmeticGroupFunctionTest {
         items.add(new TestItem("TestItem4", UnDefType.UNDEF));
         items.add(new TestItem("TestItem5", new DecimalType("122.41")));
 
-        function = new ArithmeticGroupFunction.Sum();
+        function = new Sum();
         State state = function.calculate(items);
 
         assertEquals(new DecimalType("234.95"), state);
@@ -214,7 +225,7 @@ public class ArithmeticGroupFunctionTest {
         items.add(new TestItem("TestItem2", new StringType("world")));
         items.add(new TestItem("TestItem3", new StringType("foo bar")));
 
-        function = new ArithmeticGroupFunction.Count(new StringType(".*world.*"));
+        function = new Count(new StringType(".*world.*"));
         State state = function.calculate(items);
 
         assertEquals(new DecimalType("2"), state);

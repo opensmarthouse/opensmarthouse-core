@@ -17,10 +17,9 @@ import java.util.function.Consumer;
 import org.hamcrest.core.IsEqual;
 import org.junit.Assert;
 import org.junit.Test;
-import org.openhab.core.common.AbstractUID;
 
 /**
- * Tests for {@link AbstractUID}.
+ * Tests for {@link org.openhab.core.common.AbstractUID}.
  *
  * @author Markus Rathgeb - Initial contribution
  */

@@ -71,7 +71,8 @@ import com.igormaznitsa.jbbp.model.JBBPFieldUShort;
  * @author Pauli Anttila - Initial contribution
  */
 @NonNullByDefault
-public class Bin2Json {
+public class
+Bin2Json {
 
     private final Logger logger = LoggerFactory.getLogger(Bin2Json.class);
 

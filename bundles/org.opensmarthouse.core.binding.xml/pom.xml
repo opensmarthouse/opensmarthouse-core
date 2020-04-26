@@ -16,8 +16,11 @@
   <dependencies>
     <dependency>
       <groupId>org.opensmarthouse.core.bundles</groupId>
+      <artifactId>org.opensmarthouse.core.binding</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.opensmarthouse.core.bundles</groupId>
       <artifactId>org.opensmarthouse.core.config.xml</artifactId>
-      <version>${project.version}</version>
     </dependency>
   </dependencies>
 

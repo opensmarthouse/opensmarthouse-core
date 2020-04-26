@@ -16,8 +16,15 @@
   <dependencies>
     <dependency>
       <groupId>org.opensmarthouse.core.bundles</groupId>
-      <artifactId>org.opensmarthouse.core</artifactId>
-      <version>${project.version}</version>
+      <artifactId>org.opensmarthouse.core.event</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.slf4j</groupId>
+      <artifactId>slf4j-api</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.osgi</groupId>
+      <artifactId>osgi.cmpn</artifactId>
     </dependency>
   </dependencies>
 

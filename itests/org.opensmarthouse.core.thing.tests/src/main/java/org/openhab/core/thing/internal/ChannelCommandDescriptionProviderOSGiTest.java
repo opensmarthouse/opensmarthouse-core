@@ -70,7 +70,7 @@ import org.openhab.core.types.CommandOption;
 import org.openhab.core.types.StateDescription;
 import org.openhab.core.types.StateDescriptionFragmentBuilder;
 import org.openhab.core.types.StateOption;
-import org.openhab.core.util.BundleResolver;
+import org.openhab.core.common.osgi.BundleResolver;
 import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleException;
 import org.osgi.framework.FrameworkUtil;

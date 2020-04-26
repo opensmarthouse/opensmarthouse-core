@@ -10,7 +10,7 @@
  *
  * SPDX-License-Identifier: EPL-2.0
  */
-package org.openhab.core.library.types;
+package org.openhab.core.internal.items.function;
 
 import static org.junit.Assert.assertTrue;
 
@@ -22,10 +22,13 @@ import java.util.Set;
 
 import org.junit.Before;
 import org.junit.Test;
+import org.openhab.core.internal.items.function.Earliest;
+import org.openhab.core.internal.items.function.Latest;
 import org.openhab.core.items.DateTimeGroupFunction;
 import org.openhab.core.items.GenericItem;
 import org.openhab.core.items.GroupFunction;
 import org.openhab.core.items.Item;
+import org.openhab.core.library.types.DateTimeType;
 import org.openhab.core.types.Command;
 import org.openhab.core.types.State;
 import org.openhab.core.types.UnDefType;
@@ -53,7 +56,7 @@ public class DateTimeGroupFunctionTest {
         items.add(new TestItem("TestItem5", UnDefType.UNDEF));
         items.add(new TestItem("TestItem6", new DateTimeType(expectedDateTime.minusSeconds(1))));
 
-        function = new DateTimeGroupFunction.Latest();
+        function = new Latest();
         State state = function.calculate(items);
 
         assertTrue(expectedDateTime.isEqual(((DateTimeType) state).getZonedDateTime()));
@@ -69,7 +72,7 @@ public class DateTimeGroupFunctionTest {
         items.add(new TestItem("TestItem5", UnDefType.UNDEF));
         items.add(new TestItem("TestItem6", new DateTimeType(expectedDateTime.plusSeconds(1))));
 
-        function = new DateTimeGroupFunction.Earliest();
+        function = new Earliest();
         State state = function.calculate(items);
 
         assertTrue(expectedDateTime.isEqual(((DateTimeType) state).getZonedDateTime()));

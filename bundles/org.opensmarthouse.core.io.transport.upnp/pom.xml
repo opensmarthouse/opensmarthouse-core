@@ -15,8 +15,7 @@
   <dependencies>
     <dependency>
       <groupId>org.opensmarthouse.core.bundles</groupId>
-      <artifactId>org.opensmarthouse.core</artifactId>
-      <version>${project.version}</version>
+      <artifactId>org.opensmarthouse.core.common</artifactId>
     </dependency>
     <dependency>
       <groupId>org.jupnp</groupId>
@@ -26,12 +25,10 @@
     <dependency>
       <groupId>junit</groupId>
       <artifactId>junit</artifactId>
-      <scope>test</scope>
     </dependency>
     <dependency>
       <groupId>org.mockito</groupId>
       <artifactId>mockito-core</artifactId>
-      <scope>test</scope>
     </dependency>
   </dependencies>
 

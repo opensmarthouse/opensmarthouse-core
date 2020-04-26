@@ -40,7 +40,7 @@ import org.openhab.core.thing.binding.builder.ThingBuilder;
 import org.openhab.core.thing.binding.builder.ThingStatusInfoBuilder;
 import org.openhab.core.thing.testutil.i18n.DefaultLocaleSetter;
 import org.openhab.core.types.Command;
-import org.openhab.core.util.BundleResolver;
+import org.openhab.core.common.osgi.BundleResolver;
 import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleException;
 import org.osgi.framework.FrameworkUtil;

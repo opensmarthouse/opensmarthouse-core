@@ -87,7 +87,7 @@ import org.openhab.core.thing.type.ThingTypeRegistry;
 import org.openhab.core.thing.util.ThingHandlerHelper;
 import org.openhab.core.types.Command;
 import org.openhab.core.types.State;
-import org.openhab.core.service.BundleResolver;
+import org.openhab.core.common.osgi.BundleResolver;
 import org.osgi.service.component.ComponentContext;
 import org.osgi.service.component.annotations.Activate;
 import org.osgi.service.component.annotations.Component;

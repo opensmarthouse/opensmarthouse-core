@@ -16,10 +16,12 @@ import java.util.Set;
 import java.util.concurrent.CopyOnWriteArraySet;
 
 import org.eclipse.jdt.annotation.NonNullByDefault;
+import org.openhab.core.items.GroupFunction;
 import org.openhab.core.items.Item;
 import org.openhab.core.items.ItemBuilder;
 import org.openhab.core.items.ItemBuilderFactory;
 import org.openhab.core.items.ItemFactory;
+import org.openhab.core.items.dto.GroupFunctionDTO;
 import org.openhab.core.library.CoreItemFactory;
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Reference;
@@ -46,6 +48,11 @@ public class ItemBuilderFactoryImpl implements ItemBuilderFactory {
     @Override
     public ItemBuilder newItemBuilder(String itemType, String itemName) {
         return new ItemBuilderImpl(itemFactories, itemType, itemName);
+    }
+
+    @Override
+    public GroupFunction newFunctionBuilder(Item baseItem, GroupFunctionDTO function) {
+        throw new AbstractMethodError("Not implemented yet");
     }
 
     @Reference(cardinality = ReferenceCardinality.MULTIPLE, policy = ReferencePolicy.DYNAMIC)

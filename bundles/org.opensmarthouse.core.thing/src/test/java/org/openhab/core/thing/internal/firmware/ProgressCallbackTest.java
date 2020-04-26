@@ -39,7 +39,7 @@ import org.openhab.core.thing.binding.firmware.ProgressStep;
 import org.openhab.core.thing.firmware.FirmwareUpdateProgressInfoEvent;
 import org.openhab.core.thing.firmware.FirmwareUpdateResult;
 import org.openhab.core.thing.firmware.FirmwareUpdateResultInfoEvent;
-import org.openhab.core.service.BundleResolver;
+import org.openhab.core.common.osgi.BundleResolver;
 import org.osgi.framework.Bundle;
 
 /**

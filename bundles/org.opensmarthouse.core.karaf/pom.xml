@@ -16,14 +16,15 @@
   <dependencies>
     <dependency>
       <groupId>org.opensmarthouse.core.bundles</groupId>
-      <artifactId>org.opensmarthouse.core</artifactId>
-      <version>${project.version}</version>
+      <artifactId>org.opensmarthouse.core.extension</artifactId>
     </dependency>
-
+    <dependency>
+      <groupId>org.opensmarthouse.core.bundles</groupId>
+      <artifactId>org.opensmarthouse.core.auth</artifactId>
+    </dependency>
     <dependency>
       <groupId>org.opensmarthouse.core.bundles</groupId>
       <artifactId>org.opensmarthouse.core.boot</artifactId>
-      <version>${project.version}</version>
     </dependency>
 
     <dependency>

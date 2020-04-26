@@ -55,7 +55,7 @@ import org.openhab.core.thing.firmware.FirmwareRegistry;
 import org.openhab.core.thing.firmware.FirmwareStatus;
 import org.openhab.core.thing.firmware.FirmwareStatusInfo;
 import org.openhab.core.thing.firmware.FirmwareUpdateService;
-import org.openhab.core.service.BundleResolver;
+import org.openhab.core.common.osgi.BundleResolver;
 import org.osgi.service.component.annotations.Activate;
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Deactivate;

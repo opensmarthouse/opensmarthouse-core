@@ -14,7 +14,10 @@
   <name>OpenSmartHouse Core | Bundles | Scheduler API</name>
 
   <dependencies>
-
+    <dependency>
+      <groupId>org.eclipse.jdt</groupId>
+      <artifactId>org.eclipse.jdt.annotation</artifactId>
+    </dependency>
   </dependencies>
 
 </project>

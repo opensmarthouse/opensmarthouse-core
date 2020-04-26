@@ -58,11 +58,11 @@ public class MetadataStateDescriptionFragmentProviderTest {
     @Before
     @SuppressWarnings("unchecked")
     public void setup() throws Exception {
-        MockitoAnnotations.initMocks(this);
+        initMocks(this);
 
-        Mockito.when(bundleContext.getService(ArgumentMatchers.same(managedProviderRef))).thenReturn(managedProvider);
+        when(bundleContext.getService(same(managedProviderRef))).thenReturn(managedProvider);
 
-        Mockito.when(item.getName()).thenReturn(ITEM_NAME);
+        when(item.getName()).thenReturn(ITEM_NAME);
 
         metadataRegistry = new MetadataRegistryImpl();
 
@@ -70,7 +70,7 @@ public class MetadataStateDescriptionFragmentProviderTest {
         metadataRegistry.activate(bundleContext);
 
         ArgumentCaptor<ServiceListener> captor = ArgumentCaptor.forClass(ServiceListener.class);
-        Mockito.verify(bundleContext).addServiceListener(captor.capture(), ArgumentMatchers.any());
+        verify(bundleContext).addServiceListener(captor.capture(), any());
         providerTracker = captor.getValue();
         providerTracker.serviceChanged(new ServiceEvent(ServiceEvent.REGISTERED, managedProviderRef));
 
@@ -82,7 +82,7 @@ public class MetadataStateDescriptionFragmentProviderTest {
     public void testEmpty() throws Exception {
         StateDescriptionFragment stateDescriptionFragment = stateDescriptionFragmentProvider
                 .getStateDescriptionFragment(ITEM_NAME, null);
-        Assert.assertNull(stateDescriptionFragment);
+        assertNull(stateDescriptionFragment);
     }
 
     @SuppressWarnings("null")
@@ -101,22 +101,22 @@ public class MetadataStateDescriptionFragmentProviderTest {
 
         StateDescriptionFragment stateDescriptionFragment = stateDescriptionFragmentProvider
                 .getStateDescriptionFragment(ITEM_NAME, null);
-        Assert.assertNotNull(stateDescriptionFragment);
-        Assert.assertEquals("%.1f %unit%", stateDescriptionFragment.getPattern());
-        Assert.assertEquals(new BigDecimal(18.5), stateDescriptionFragment.getMinimum());
-        Assert.assertEquals(new BigDecimal(34), stateDescriptionFragment.getMaximum());
-        Assert.assertEquals(new BigDecimal(3), stateDescriptionFragment.getStep());
-        Assert.assertEquals(true, stateDescriptionFragment.isReadOnly());
-        Assert.assertNotNull(stateDescriptionFragment.getOptions());
+        assertNotNull(stateDescriptionFragment);
+        assertEquals("%.1f %unit%", stateDescriptionFragment.getPattern());
+        assertEquals(new BigDecimal(18.5), stateDescriptionFragment.getMinimum());
+        assertEquals(new BigDecimal(34), stateDescriptionFragment.getMaximum());
+        assertEquals(new BigDecimal(3), stateDescriptionFragment.getStep());
+        assertEquals(true, stateDescriptionFragment.isReadOnly());
+        assertNotNull(stateDescriptionFragment.getOptions());
         Iterator<StateOption> it = stateDescriptionFragment.getOptions().iterator();
         StateOption stateOption = it.next();
-        Assert.assertEquals("OPTION1", stateOption.getValue());
-        Assert.assertEquals(null, stateOption.getLabel());
+        assertEquals("OPTION1", stateOption.getValue());
+        assertEquals(null, stateOption.getLabel());
         stateOption = it.next();
-        Assert.assertEquals("OPTION2", stateOption.getValue());
-        Assert.assertEquals(null, stateOption.getLabel());
+        assertEquals("OPTION2", stateOption.getValue());
+        assertEquals(null, stateOption.getLabel());
         stateOption = it.next();
-        Assert.assertEquals("3", stateOption.getValue());
-        Assert.assertEquals("Option 3", stateOption.getLabel());
+        assertEquals("3", stateOption.getValue());
+        assertEquals("Option 3", stateOption.getLabel());
     }
 }

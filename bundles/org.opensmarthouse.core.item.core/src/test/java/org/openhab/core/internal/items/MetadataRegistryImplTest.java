@@ -51,11 +51,11 @@ public class MetadataRegistryImplTest {
     @Before
     @SuppressWarnings("unchecked")
     public void setup() throws Exception {
-        MockitoAnnotations.initMocks(this);
+        initMocks(this);
 
-        Mockito.when(bundleContext.getService(ArgumentMatchers.same(managedProviderRef))).thenReturn(managedProvider);
+        when(bundleContext.getService(same(managedProviderRef))).thenReturn(managedProvider);
 
-        Mockito.when(item.getName()).thenReturn(ITEM_NAME);
+        when(item.getName()).thenReturn(ITEM_NAME);
 
         registry = new MetadataRegistryImpl();
 
@@ -63,7 +63,7 @@ public class MetadataRegistryImplTest {
         registry.activate(bundleContext);
 
         ArgumentCaptor<ServiceListener> captor = ArgumentCaptor.forClass(ServiceListener.class);
-        Mockito.verify(bundleContext).addServiceListener(captor.capture(), ArgumentMatchers.any());
+        verify(bundleContext).addServiceListener(captor.capture(), any());
         providerTracker = captor.getValue();
         providerTracker.serviceChanged(new ServiceEvent(ServiceEvent.REGISTERED, managedProviderRef));
 
@@ -74,7 +74,7 @@ public class MetadataRegistryImplTest {
         MetadataKey key = new MetadataKey("namespace", "itemName");
 
         Metadata res = registry.get(key);
-        Assert.assertNull(res);
+        assertNull(res);
     }
 
     @Test
@@ -87,10 +87,10 @@ public class MetadataRegistryImplTest {
                 new Metadata(new MetadataKey("namespace", "other"), "other", Collections.emptyMap()));
 
         Metadata res = registry.get(key);
-        Assert.assertNotNull(res);
-        Assert.assertEquals("value", res.getValue());
-        Assert.assertEquals("namespace", res.getUID().getNamespace());
-        Assert.assertEquals("itemName", res.getUID().getItemName());
+        assertNotNull(res);
+        assertEquals("value", res.getValue());
+        assertEquals("namespace", res.getUID().getNamespace());
+        assertEquals("itemName", res.getUID().getItemName());
     }
 
     @Test
@@ -99,8 +99,8 @@ public class MetadataRegistryImplTest {
 
         registry.removeItemMetadata("itemName");
 
-        Mockito.verify(managedProvider).removeItemMetadata(captor.capture());
-        Assert.assertEquals("itemName", captor.getValue());
+        verify(managedProvider).removeItemMetadata(captor.capture());
+        assertEquals("itemName", captor.getValue());
     }
 
 }
