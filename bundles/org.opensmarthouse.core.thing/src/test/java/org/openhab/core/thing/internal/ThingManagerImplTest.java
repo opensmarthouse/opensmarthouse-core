@@ -26,7 +26,7 @@ import org.openhab.core.storage.StorageService;
 import org.openhab.core.thing.Thing;
 import org.openhab.core.thing.ThingUID;
 import org.openhab.core.thing.binding.ThingHandlerFactory;
-import org.openhab.core.util.BundleResolver;
+import org.openhab.core.service.BundleResolver;
 import org.osgi.framework.Bundle;
 import org.osgi.service.component.ComponentContext;
 

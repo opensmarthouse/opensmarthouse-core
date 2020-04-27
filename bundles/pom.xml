@@ -16,6 +16,8 @@
   <name>OpenSmartHouse Core | Bundles</name>
 
   <modules>
+    <module>org.opensmarthouse.core</module>
+    <module>org.opensmarthouse.core.audio</module>
     <module>org.opensmarthouse.core.auth</module>
     <module>org.opensmarthouse.core.auth.core</module>
     <module>org.opensmarthouse.core.auth.jaas</module>
@@ -27,37 +29,27 @@
     <module>org.opensmarthouse.core.automation.module.script.rulesupport</module>
     <module>org.opensmarthouse.core.automation.rest</module>
     <module>org.opensmarthouse.core.binding</module>
+    <module>org.opensmarthouse.core.binding.xml</module>
+    <module>org.opensmarthouse.core.boot</module>
+    <module>org.opensmarthouse.core.cache</module>
+    <module>org.opensmarthouse.core.common</module>
     <module>org.opensmarthouse.core.config.core</module>
     <module>org.opensmarthouse.core.config.discovery</module>
     <module>org.opensmarthouse.core.config.discovery.mdns</module>
+    <module>org.opensmarthouse.core.config.discovery.upnp</module>
     <module>org.opensmarthouse.core.config.discovery.usbserial</module>
     <module>org.opensmarthouse.core.config.discovery.usbserial.linuxsysfs</module>
-    <module>org.opensmarthouse.core.config.discovery.upnp</module>
     <module>org.opensmarthouse.core.config.dispatch</module>
     <module>org.opensmarthouse.core.config.serial</module>
     <module>org.opensmarthouse.core.config.xml</module>
-    <module>org.opensmarthouse.core</module>
-    <module>org.opensmarthouse.core.audio</module>
-    <module>org.opensmarthouse.core.binding.xml</module>
     <module>org.opensmarthouse.core.ephemeris</module>
     <module>org.opensmarthouse.core.event</module>
+    <module>org.opensmarthouse.core.event.core</module>
     <module>org.opensmarthouse.core.extension</module>
     <module>org.opensmarthouse.core.extension.sample</module>
     <module>org.opensmarthouse.core.i18n</module>
+    <module>org.opensmarthouse.core.i18n.core</module>
     <module>org.opensmarthouse.core.id</module>
-    <module>org.opensmarthouse.core.persistence</module>
-    <module>org.opensmarthouse.core.registry</module>
-    <module>org.opensmarthouse.core.scheduler</module>
-    <module>org.opensmarthouse.core.scheduler.api</module>
-    <module>org.opensmarthouse.core.semantics</module>
-    <module>org.opensmarthouse.core.service</module>
-    <module>org.opensmarthouse.core.storage</module>
-    <module>org.opensmarthouse.core.thing</module>
-    <module>org.opensmarthouse.core.thing.xml</module>
-    <module>org.opensmarthouse.core.transform</module>
-    <module>org.opensmarthouse.core.voice</module>
-    <module>org.opensmarthouse.core.boot</module>
-    <module>org.opensmarthouse.core.karaf</module>
     <module>org.opensmarthouse.core.io.bin2json</module>
     <module>org.opensmarthouse.core.io.console</module>
     <module>org.opensmarthouse.core.io.console.eclipse</module>
@@ -66,6 +58,7 @@
     <module>org.opensmarthouse.core.io.http</module>
     <module>org.opensmarthouse.core.io.http.auth</module>
     <module>org.opensmarthouse.core.io.http.auth.basic</module>
+    <module>org.opensmarthouse.core.io.jetty.certificate</module>
     <module>org.opensmarthouse.core.io.monitor</module>
     <module>org.opensmarthouse.core.io.net</module>
     <module>org.opensmarthouse.core.io.rest</module>
@@ -98,16 +91,23 @@
     <module>org.opensmarthouse.core.io.transport.serial.rxtx.rfc2217</module>
     <module>org.opensmarthouse.core.io.transport.upnp</module>
     <module>org.opensmarthouse.core.item</module>
-    <module>org.opensmarthouse.core.io.jetty.certificate</module>
-    <module>org.opensmarthouse.core.model.lazygen</module>
+    <module>org.opensmarthouse.core.item.core</module>
+    <module>org.opensmarthouse.core.karaf</module>
+    <module>org.opensmarthouse.core.library.dimension</module>
+    <module>org.opensmarthouse.core.library.items</module>
+    <module>org.opensmarthouse.core.library.types</module>
+    <module>org.opensmarthouse.core.library.unit</module>
+    <!-- org.opensmarthouse.core.model.codegen -->
     <module>org.opensmarthouse.core.model.core</module>
     <module>org.opensmarthouse.core.model.item</module>
     <module>org.opensmarthouse.core.model.item.ide</module>
     <module>org.opensmarthouse.core.model.item.runtime</module>
+    <module>org.opensmarthouse.core.model.lazygen</module>
     <module>org.opensmarthouse.core.model.lsp</module>
     <module>org.opensmarthouse.core.model.persistence</module>
     <module>org.opensmarthouse.core.model.persistence.ide</module>
     <module>org.opensmarthouse.core.model.persistence.runtime</module>
+    <module>org.opensmarthouse.core.net</module>
     <module>org.opensmarthouse.core.model.rule</module>
     <module>org.opensmarthouse.core.model.rule.ide</module>
     <module>org.opensmarthouse.core.model.rule.runtime</module>
@@ -120,12 +120,26 @@
     <module>org.opensmarthouse.core.model.thing</module>
     <module>org.opensmarthouse.core.model.thing.ide</module>
     <module>org.opensmarthouse.core.model.thing.runtime</module>
+    <module>org.opensmarthouse.core.persistence</module>
+    <module>org.opensmarthouse.core.registry</module>
+    <module>org.opensmarthouse.core.scheduler</module>
+    <module>org.opensmarthouse.core.scheduler.api</module>
+    <module>org.opensmarthouse.core.semantics</module>
+    <module>org.opensmarthouse.core.service</module>
+    <module>org.opensmarthouse.core.service.core</module>
+    <module>org.opensmarthouse.core.storage</module>
     <module>org.opensmarthouse.core.storage.json</module>
     <module>org.opensmarthouse.core.storage.mapdb</module>
     <module>org.opensmarthouse.core.test</module>
     <module>org.opensmarthouse.core.test.magic</module>
+    <module>org.opensmarthouse.core.thing</module>
+    <module>org.opensmarthouse.core.thing.xml</module>
+    <module>org.opensmarthouse.core.transform</module>
+    <module>org.opensmarthouse.core.types</module>
     <module>org.opensmarthouse.core.ui</module>
     <module>org.opensmarthouse.core.ui.icon</module>
+    <module>org.opensmarthouse.core.util</module>
+    <module>org.opensmarthouse.core.voice</module>
   </modules>
 
   <dependencyManagement>

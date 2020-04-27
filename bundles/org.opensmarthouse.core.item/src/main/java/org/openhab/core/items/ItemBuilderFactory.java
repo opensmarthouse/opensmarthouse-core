@@ -13,6 +13,7 @@
 package org.openhab.core.items;
 
 import org.eclipse.jdt.annotation.NonNullByDefault;
+import org.openhab.core.items.dto.GroupFunctionDTO;
 
 /**
  * Creates a new {@link ItemBuilder} which is based on all available {@link ItemFactory}s.
@@ -38,4 +39,7 @@ public interface ItemBuilderFactory {
      * @return an ItemBuilder instance
      */
     ItemBuilder newItemBuilder(String itemType, String itemName);
+
+    // FIXME verify if that's valid approach
+    GroupFunction newFunctionBuilder(Item baseItem, GroupFunctionDTO function);
 }

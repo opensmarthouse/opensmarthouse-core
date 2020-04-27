@@ -39,7 +39,37 @@
       </dependency>
       <dependency>
         <groupId>org.opensmarthouse.core.bundles</groupId>
+        <artifactId>org.opensmarthouse.core.common</artifactId>
+        <version>${project.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.opensmarthouse.core.bundles</groupId>
+        <artifactId>org.opensmarthouse.core.item.core</artifactId>
+        <version>${project.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.opensmarthouse.core.bundles</groupId>
         <artifactId>org.opensmarthouse.core.karaf</artifactId>
+        <version>${project.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.opensmarthouse.core.bundles</groupId>
+        <artifactId>org.opensmarthouse.core.library.dimension</artifactId>
+        <version>${project.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.opensmarthouse.core.bundles</groupId>
+        <artifactId>org.opensmarthouse.core.library.items</artifactId>
+        <version>${project.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.opensmarthouse.core.bundles</groupId>
+        <artifactId>org.opensmarthouse.core.library.types</artifactId>
+        <version>${project.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.opensmarthouse.core.bundles</groupId>
+        <artifactId>org.opensmarthouse.core.library.unit</artifactId>
         <version>${project.version}</version>
       </dependency>
       <dependency>
@@ -135,6 +165,11 @@
       <dependency>
         <groupId>org.opensmarthouse.core.bundles</groupId>
         <artifactId>org.opensmarthouse.core.transform</artifactId>
+        <version>${project.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.opensmarthouse.core.bundles</groupId>
+        <artifactId>org.opensmarthouse.core.types</artifactId>
         <version>${project.version}</version>
       </dependency>
       <dependency>

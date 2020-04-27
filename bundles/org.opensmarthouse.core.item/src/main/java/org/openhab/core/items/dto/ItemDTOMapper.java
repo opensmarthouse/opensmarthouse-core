@@ -15,18 +15,14 @@ package org.openhab.core.items.dto;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.measure.Quantity;
-
 import org.apache.commons.lang.StringUtils;
 import org.eclipse.jdt.annotation.NonNullByDefault;
 import org.eclipse.jdt.annotation.Nullable;
-import org.openhab.core.internal.items.GroupFunctionHelper;
 import org.openhab.core.items.GroupFunction;
 import org.openhab.core.items.GroupItem;
 import org.openhab.core.items.Item;
 import org.openhab.core.items.ItemBuilder;
 import org.openhab.core.items.ItemBuilderFactory;
-import org.openhab.core.library.items.NumberItem;
 import org.openhab.core.types.State;
 import org.openhab.core.types.TypeParser;
 import org.slf4j.LoggerFactory;
@@ -40,8 +36,6 @@ import org.slf4j.LoggerFactory;
  */
 @NonNullByDefault
 public class ItemDTOMapper {
-
-    private static final GroupFunctionHelper GROUP_FUNCTION_HELPER = new GroupFunctionHelper();
 
     /**
      * Maps item DTO into item object.
@@ -70,7 +64,7 @@ public class ItemDTOMapper {
                 }
                 GroupFunction function = new GroupFunction.Equality();
                 if (groupItemDTO.function != null) {
-                    function = mapFunction(baseItem, groupItemDTO.function);
+                    function = itemBuilderFactory.newFunctionBuilder(baseItem, groupItemDTO.function);
                 }
                 builder.withGroupFunction(function);
             }
@@ -92,16 +86,17 @@ public class ItemDTOMapper {
     public static GroupFunction mapFunction(@Nullable Item baseItem, GroupFunctionDTO function) {
         List<State> args = parseStates(baseItem, function.params);
 
-        return GROUP_FUNCTION_HELPER.createGroupFunction(function, args, getDimension(baseItem));
+        //return GROUP_FUNCTION_HELPER.createGroupFunction(function, args, getDimension(baseItem));
+        throw new AbstractMethodError("This method has been moved!");
     }
-
-    private static @Nullable Class<? extends Quantity<?>> getDimension(@Nullable Item baseItem) {
-        if (baseItem instanceof NumberItem) {
-            return ((NumberItem) baseItem).getDimension();
-        }
-
-        return null;
-    }
+//
+//    private static @Nullable Class<? extends Quantity<?>> getDimension(@Nullable Item baseItem) {
+//        if (baseItem instanceof NumberItem) {
+//            return ((NumberItem) baseItem).getDimension();
+//        }
+//
+//        return null;
+//    }
 
     private static List<State> parseStates(@Nullable Item baseItem, String @Nullable [] params) {
         List<State> states = new ArrayList<>();
