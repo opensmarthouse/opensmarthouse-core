@@ -11,16 +11,17 @@
 
   <artifactId>org.opensmarthouse.core.auth.oauth2client</artifactId>
 
-  <name>OpenSmartHouse Core | Bundles | OAuth2Client</name>
+  <name>OpenSmartHouse Core | Bundles | Core | Auth | OAuth 2 Client</name>
 
   <dependencies>
     <dependency>
       <groupId>org.opensmarthouse.core.bundles</groupId>
-      <artifactId>org.opensmarthouse.core.auth.oauth2client.api</artifactId>
+      <artifactId>org.opensmarthouse.core.auth</artifactId>
     </dependency>
+
     <dependency>
-      <groupId>org.opensmarthouse.core.bundles</groupId>
-      <artifactId>org.opensmarthouse.core.io.net</artifactId>
+      <groupId>junit</groupId>
+      <artifactId>junit</artifactId>
     </dependency>
   </dependencies>
 

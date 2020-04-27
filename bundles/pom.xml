@@ -22,7 +22,7 @@
     <module>org.opensmarthouse.core.auth.core</module>
     <module>org.opensmarthouse.core.auth.jaas</module>
     <module>org.opensmarthouse.core.auth.oauth2client</module>
-    <module>org.opensmarthouse.core.auth.oauth2client.api</module>
+    <module>org.opensmarthouse.core.auth.oauth2client.core</module>
     <module>org.opensmarthouse.core.automation</module>
     <module>org.opensmarthouse.core.automation.module.media</module>
     <module>org.opensmarthouse.core.automation.module.script</module>
@@ -123,7 +123,7 @@
     <module>org.opensmarthouse.core.persistence</module>
     <module>org.opensmarthouse.core.registry</module>
     <module>org.opensmarthouse.core.scheduler</module>
-    <module>org.opensmarthouse.core.scheduler.api</module>
+    <module>org.opensmarthouse.core.scheduler.core</module>
     <module>org.opensmarthouse.core.semantics</module>
     <module>org.opensmarthouse.core.service</module>
     <module>org.opensmarthouse.core.service.core</module>

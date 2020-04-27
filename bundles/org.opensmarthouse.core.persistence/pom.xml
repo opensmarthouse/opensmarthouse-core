@@ -28,7 +28,7 @@
     </dependency>
     <dependency>
       <groupId>org.opensmarthouse.core.bundles</groupId>
-      <artifactId>org.opensmarthouse.core.scheduler.api</artifactId>
+      <artifactId>org.opensmarthouse.core.scheduler</artifactId>
     </dependency>
   </dependencies>
 

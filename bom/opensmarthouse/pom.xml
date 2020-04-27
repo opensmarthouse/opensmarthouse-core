@@ -149,7 +149,7 @@
       </dependency>
       <dependency>
         <groupId>org.opensmarthouse.core.bundles</groupId>
-        <artifactId>org.opensmarthouse.core.scheduler.api</artifactId>
+        <artifactId>org.opensmarthouse.core.scheduler.core</artifactId>
         <version>${project.version}</version>
       </dependency>
       <dependency>
@@ -189,12 +189,12 @@
       </dependency>
       <dependency>
         <groupId>org.opensmarthouse.core.bundles</groupId>
-        <artifactId>org.opensmarthouse.core.auth.oauth2client.api</artifactId>
+        <artifactId>org.opensmarthouse.core.auth.oauth2client</artifactId>
         <version>${project.version}</version>
       </dependency>
       <dependency>
         <groupId>org.opensmarthouse.core.bundles</groupId>
-        <artifactId>org.opensmarthouse.core.auth.oauth2client</artifactId>
+        <artifactId>org.opensmarthouse.core.auth.oauth2client.core</artifactId>
         <version>${project.version}</version>
       </dependency>
       <dependency>
