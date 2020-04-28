@@ -59,12 +59,12 @@
       </dependency>
       <dependency>
         <groupId>org.opensmarthouse.core.bundles</groupId>
-        <artifactId>org.opensmarthouse.core.library.items</artifactId>
+        <artifactId>org.opensmarthouse.core.library.item</artifactId>
         <version>${project.version}</version>
       </dependency>
       <dependency>
         <groupId>org.opensmarthouse.core.bundles</groupId>
-        <artifactId>org.opensmarthouse.core.library.types</artifactId>
+        <artifactId>org.opensmarthouse.core.library.type</artifactId>
         <version>${project.version}</version>
       </dependency>
       <dependency>
@@ -174,7 +174,12 @@
       </dependency>
       <dependency>
         <groupId>org.opensmarthouse.core.bundles</groupId>
-        <artifactId>org.opensmarthouse.core.types</artifactId>
+        <artifactId>org.opensmarthouse.core.type</artifactId>
+        <version>${project.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.opensmarthouse.core.bundles</groupId>
+        <artifactId>org.opensmarthouse.core.type.core</artifactId>
         <version>${project.version}</version>
       </dependency>
       <dependency>
@@ -299,7 +304,7 @@
       </dependency>
       <dependency>
         <groupId>org.opensmarthouse.core.bundles</groupId>
-        <artifactId>org.opensmarthouse.core.io.rest.extensions</artifactId>
+        <artifactId>org.opensmarthouse.core.io.rest.extension</artifactId>
         <version>${project.version}</version>
       </dependency>
       <dependency>

@@ -69,7 +69,7 @@
     <module>org.opensmarthouse.core.io.rest.config</module>
     <module>org.opensmarthouse.core.io.rest.core</module>
     <module>org.opensmarthouse.core.io.rest.discovery</module>
-    <module>org.opensmarthouse.core.io.rest.extensions</module>
+    <module>org.opensmarthouse.core.io.rest.extension</module>
     <module>org.opensmarthouse.core.io.rest.id</module>
     <module>org.opensmarthouse.core.io.rest.item</module>
     <module>org.opensmarthouse.core.io.rest.log</module>
@@ -94,8 +94,8 @@
     <module>org.opensmarthouse.core.item.core</module>
     <module>org.opensmarthouse.core.karaf</module>
     <module>org.opensmarthouse.core.library.dimension</module>
-    <module>org.opensmarthouse.core.library.items</module>
-    <module>org.opensmarthouse.core.library.types</module>
+    <module>org.opensmarthouse.core.library.item</module>
+    <module>org.opensmarthouse.core.library.type</module>
     <module>org.opensmarthouse.core.library.unit</module>
     <!-- org.opensmarthouse.core.model.codegen -->
     <module>org.opensmarthouse.core.model.core</module>
@@ -135,7 +135,8 @@
     <module>org.opensmarthouse.core.thing</module>
     <module>org.opensmarthouse.core.thing.xml</module>
     <module>org.opensmarthouse.core.transform</module>
-    <module>org.opensmarthouse.core.types</module>
+    <module>org.opensmarthouse.core.type</module>
+    <module>org.opensmarthouse.core.type.core</module>
     <module>org.opensmarthouse.core.ui</module>
     <module>org.opensmarthouse.core.ui.icon</module>
     <module>org.opensmarthouse.core.util</module>

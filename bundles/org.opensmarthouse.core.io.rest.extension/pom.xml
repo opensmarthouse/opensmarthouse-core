@@ -9,36 +9,30 @@
     <version>1.0.0-SNAPSHOT</version>
   </parent>
 
-  <artifactId>org.opensmarthouse.core.thing</artifactId>
+  <artifactId>org.opensmarthouse.core.io.rest.extension</artifactId>
 
-  <name>OpenSmartHouse Core | Bundles | Thing</name>
+  <name>OpenSmartHouse Core | Bundles | REST | Extensions</name>
 
   <dependencies>
     <dependency>
       <groupId>org.opensmarthouse.core.bundles</groupId>
-      <artifactId>org.opensmarthouse.core.library.item</artifactId>
+      <artifactId>org.opensmarthouse.core.extension</artifactId>
     </dependency>
     <dependency>
       <groupId>org.opensmarthouse.core.bundles</groupId>
-      <artifactId>org.opensmarthouse.core.config.core</artifactId>
+      <artifactId>org.opensmarthouse.core.auth</artifactId>
     </dependency>
     <dependency>
       <groupId>org.opensmarthouse.core.bundles</groupId>
-      <artifactId>org.opensmarthouse.core.io.console</artifactId>
-    </dependency>
-
-    <dependency>
-      <groupId>commons-io</groupId>
-      <artifactId>commons-io</artifactId>
-    </dependency>
-
-    <dependency>
-      <groupId>org.opensmarthouse.core.bundles</groupId>
-      <artifactId>org.opensmarthouse.core.test</artifactId>
+      <artifactId>org.opensmarthouse.core.io.rest.core</artifactId>
     </dependency>
     <dependency>
-      <groupId>org.osgi</groupId>
-      <artifactId>osgi.enroute.hamcrest.wrapper</artifactId>
+      <groupId>javax.annotation</groupId>
+      <artifactId>javax.annotation-api</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>io.swagger</groupId>
+      <artifactId>swagger-annotations</artifactId>
     </dependency>
   </dependencies>
 

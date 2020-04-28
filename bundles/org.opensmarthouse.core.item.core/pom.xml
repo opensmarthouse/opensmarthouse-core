@@ -19,7 +19,7 @@
     </dependency>
     <dependency>
       <groupId>org.opensmarthouse.core.bundles</groupId>
-      <artifactId>org.opensmarthouse.core.library.items</artifactId>
+      <artifactId>org.opensmarthouse.core.library.item</artifactId>
     </dependency>
 
     <dependency>

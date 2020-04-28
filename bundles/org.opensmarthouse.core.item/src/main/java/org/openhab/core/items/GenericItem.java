@@ -36,17 +36,19 @@ import org.openhab.core.service.StateDescriptionService;
 import org.openhab.core.types.Command;
 import org.openhab.core.types.CommandDescription;
 import org.openhab.core.types.CommandDescriptionBuilder;
+import org.openhab.core.types.CommandDescriptionBuilderFactory;
 import org.openhab.core.types.CommandOption;
 import org.openhab.core.types.RefreshType;
 import org.openhab.core.types.State;
 import org.openhab.core.types.StateDescription;
+import org.openhab.core.types.StateDescriptionFragmentBuilderFactory;
 import org.openhab.core.types.UnDefType;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
  * The abstract base class for all items. It provides all relevant logic
- * for the infrastructure, such as publishing updates to the event bus
+ * for the infra, such as publishing updates to the event bus
  * or notifying listeners.
  *
  * @author Kai Kreuzer - Initial contribution
@@ -82,6 +84,10 @@ public abstract class GenericItem implements ActiveItem {
     private @Nullable StateDescriptionService stateDescriptionService;
 
     private @Nullable CommandDescriptionService commandDescriptionService;
+
+    private @Nullable CommandDescriptionBuilderFactory commandDescriptionBuilderFactory;
+
+    protected @Nullable StateDescriptionFragmentBuilderFactory stateDescriptionFragmentBuilderFactory;
 
     protected @Nullable UnitProvider unitProvider;
 
@@ -176,6 +182,8 @@ public abstract class GenericItem implements ActiveItem {
         this.eventPublisher = null;
         this.stateDescriptionService = null;
         this.commandDescriptionService = null;
+        this.commandDescriptionBuilderFactory = null;
+        this.stateDescriptionFragmentBuilderFactory = null;
         this.unitProvider = null;
         this.itemStateConverter = null;
     }
@@ -190,6 +198,14 @@ public abstract class GenericItem implements ActiveItem {
 
     public void setCommandDescriptionService(@Nullable CommandDescriptionService commandDescriptionService) {
         this.commandDescriptionService = commandDescriptionService;
+    }
+
+    public void setCommandDescriptionBuilderFactory(@Nullable CommandDescriptionBuilderFactory commandDescriptionBuilderFactory) {
+        this.commandDescriptionBuilderFactory = commandDescriptionBuilderFactory;
+    }
+
+    public void setStateDescriptionFragmentBuilderFactory(StateDescriptionFragmentBuilderFactory stateDescriptionFragmentBuilderFactory) {
+        this.stateDescriptionFragmentBuilderFactory = stateDescriptionFragmentBuilderFactory;
     }
 
     public void setUnitProvider(@Nullable UnitProvider unitProvider) {
@@ -447,10 +463,12 @@ public abstract class GenericItem implements ActiveItem {
     }
 
     private @Nullable CommandDescription stateOptions2CommandOptions(StateDescription stateDescription) {
-        CommandDescriptionBuilder builder = CommandDescriptionBuilder.create();
-        stateDescription.getOptions()
-                .forEach(so -> builder.withCommandOption(new CommandOption(so.getValue(), so.getLabel())));
-        return builder.build();
+        if (commandDescriptionBuilderFactory != null) {
+            CommandDescriptionBuilder builder = commandDescriptionBuilderFactory.create();
+            stateDescription.getOptions().forEach(so -> builder.withCommandOption(new CommandOption(so.getValue(), so.getLabel())));
+            return builder.build();
+        }
+        return null;
     }
 
 }

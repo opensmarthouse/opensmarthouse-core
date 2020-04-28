@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-
   <modelVersion>4.0.0</modelVersion>
 
   <parent>
@@ -9,36 +8,28 @@
     <version>1.0.0-SNAPSHOT</version>
   </parent>
 
-  <artifactId>org.opensmarthouse.core.thing</artifactId>
+  <artifactId>org.opensmarthouse.core.library.type</artifactId>
 
-  <name>OpenSmartHouse Core | Bundles | Thing</name>
+  <name>OpenSmartHouse Core | Bundles | Library | Types</name>
 
   <dependencies>
     <dependency>
       <groupId>org.opensmarthouse.core.bundles</groupId>
-      <artifactId>org.opensmarthouse.core.library.item</artifactId>
+      <artifactId>org.opensmarthouse.core.type</artifactId>
     </dependency>
     <dependency>
       <groupId>org.opensmarthouse.core.bundles</groupId>
-      <artifactId>org.opensmarthouse.core.config.core</artifactId>
+      <artifactId>org.opensmarthouse.core.library.unit</artifactId>
     </dependency>
     <dependency>
-      <groupId>org.opensmarthouse.core.bundles</groupId>
-      <artifactId>org.opensmarthouse.core.io.console</artifactId>
+      <groupId>tec.uom</groupId>
+      <artifactId>uom-se</artifactId>
     </dependency>
 
     <dependency>
-      <groupId>commons-io</groupId>
-      <artifactId>commons-io</artifactId>
-    </dependency>
-
-    <dependency>
-      <groupId>org.opensmarthouse.core.bundles</groupId>
-      <artifactId>org.opensmarthouse.core.test</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>org.osgi</groupId>
-      <artifactId>osgi.enroute.hamcrest.wrapper</artifactId>
+      <groupId>junit</groupId>
+      <artifactId>junit</artifactId>
+      <scope>test</scope>
     </dependency>
   </dependencies>
 

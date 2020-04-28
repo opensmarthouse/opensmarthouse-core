@@ -34,9 +34,14 @@ import org.openhab.core.library.types.StringType;
 import org.openhab.core.service.CommandDescriptionService;
 import org.openhab.core.service.StateDescriptionService;
 import org.openhab.core.types.CommandDescription;
+import org.openhab.core.types.CommandDescriptionBuilder;
+import org.openhab.core.types.CommandDescriptionBuilderFactory;
 import org.openhab.core.types.CommandOption;
 import org.openhab.core.types.State;
+import org.openhab.core.types.StateDescription;
+import org.openhab.core.types.StateDescriptionFragment;
 import org.openhab.core.types.StateDescriptionFragmentBuilder;
+import org.openhab.core.types.StateDescriptionFragmentBuilderFactory;
 import org.openhab.core.types.StateOption;
 
 /**
@@ -182,15 +187,31 @@ public class GenericItemTest {
     @Test
     public void commandDescriptionShouldHaveStateOptionsAsCommands() {
         TestItem item = new TestItem("test");
+        CommandDescriptionBuilder commandDescriptionBuilder = mock(CommandDescriptionBuilder.class);
+        CommandDescriptionBuilderFactory commandDescriptionBuilderFactory = mock(CommandDescriptionBuilderFactory.class);
+        when(commandDescriptionBuilderFactory.create()).thenReturn(commandDescriptionBuilder);
 
         StateDescriptionService stateDescriptionService = mock(StateDescriptionService.class);
         List<StateOption> stateOptions = Arrays.asList(new StateOption("STATE1", "State 1"),
                 new StateOption("STATE2", "State 2"));
-        when(stateDescriptionService.getStateDescription("test", null)).thenReturn(
-                StateDescriptionFragmentBuilder.create().withOptions(stateOptions).build().toStateDescription());
-        item.setStateDescriptionService(stateDescriptionService);
 
-        assertThat(item.getCommandDescription().getCommandOptions(), hasSize(2));
+        StateDescription stateDescription = mock(StateDescription.class);
+        when(stateDescription.getOptions()).thenReturn(stateOptions);
+        when(stateDescriptionService.getStateDescription("test", null)).thenReturn(stateDescription);
+
+        CommandDescription commandDescription = mock(CommandDescription.class);
+        when(commandDescriptionBuilder.build()).thenReturn(commandDescription);
+
+        item.setStateDescriptionService(stateDescriptionService);
+        item.setCommandDescriptionBuilderFactory(commandDescriptionBuilderFactory);
+
+        // lets call mocks
+        item.getCommandDescription();
+
+        verify(commandDescriptionBuilder).withCommandOption(new CommandOption("STATE1", "State 1"));
+        verify(commandDescriptionBuilder).withCommandOption(new CommandOption("STATE2", "State 2"));
+        verify(commandDescriptionBuilder).build();
+        verify(commandDescriptionBuilderFactory).create();
     }
 
     /**
