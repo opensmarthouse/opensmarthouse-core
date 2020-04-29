@@ -12,16 +12,28 @@
  */
 package org.openhab.core.types;
 
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
 import java.util.List;
 
+import org.eclipse.jdt.annotation.Nullable;
+import org.openhab.core.types.registry.TypeFactory;
+import org.osgi.service.component.annotations.Reference;
+import org.osgi.service.component.annotations.ReferenceCardinality;
+import org.osgi.service.component.annotations.ReferencePolicy;
+
 /**
- * This is a helper class that helps parsing a string into an openHAB type (state or command).
+ * This is a helper class that helps parsing a string into an OpenSmartHouse type (state or command).
+ * This class uses the {@link TypeFactory} service to create {@link Type}s.
+ * <p>
+ * OpenSmartHouse bundles should not use this static factory class and should instead use the {@link TypeFactory}
+ * directly.
  *
  * @author Kai Kreuzer - Initial contribution
+ * @author Chris Jackson - Refactor for OpenSmartHouse to use {@link TypeFactory}
+ * @deprecated OpenSmartHouse users should use the {@link TypeFactory}
  */
+@Deprecated
 public final class TypeParser {
+    private @Nullable static TypeFactory typeRegistry;
 
     /**
      * No instances allowed.
@@ -29,7 +41,14 @@ public final class TypeParser {
     private TypeParser() {
     }
 
-    private static final String CORE_LIBRARY_PACKAGE = "org.openhab.core.library.types.";
+    @Reference(cardinality = ReferenceCardinality.MANDATORY, policy = ReferencePolicy.DYNAMIC)
+    public void setTypeProvider(TypeFactory typeRegistry) {
+        TypeParser.typeRegistry = typeRegistry;
+    }
+
+    public void unsetTypeProvider(TypeFactory typeRegistry) {
+        TypeParser.typeRegistry = null;
+    }
 
     /**
      * Parses a string into a type.
@@ -39,75 +58,45 @@ public final class TypeParser {
      * @return Parsed type or null, if the type couldn't be parsed.
      */
     public static Type parseType(String typeName, String input) {
-        try {
-            Class<?> stateClass = Class.forName(CORE_LIBRARY_PACKAGE + typeName);
-            Method valueOfMethod = stateClass.getMethod("valueOf", String.class);
-            return (Type) valueOfMethod.invoke(stateClass, input);
-        } catch (ClassNotFoundException e) {
-        } catch (NoSuchMethodException e) {
-        } catch (IllegalAccessException e) {
-        } catch (InvocationTargetException e) {
+        if (typeRegistry == null) {
+            return null;
         }
-        return null;
+        return typeRegistry.parseType(typeName, input);
     }
 
     /**
-     * <p>
      * Determines a state from a string. Possible state types are passed as a parameter. Note that the order matters
      * here; the first type that accepts the string as a valid value, will be used for the state.
-     * 
      * <p>
      * Example: The type list is OnOffType.class,StringType.class. The string "ON" is now accepted by the OnOffType and
      * thus OnOffType.ON will be returned (and not a StringType with value "ON").
      *
      * @param types possible types of the state to consider
-     * @param s the string to parse
+     * @param input the string to parse
      * @return the corresponding State instance or <code>null</code>
      */
-    public static State parseState(List<Class<? extends State>> types, String s) {
-        for (Class<? extends Type> type : types) {
-            try {
-                Method valueOf = type.getMethod("valueOf", String.class);
-                State state = (State) valueOf.invoke(type, s);
-                if (state != null) {
-                    return state;
-                }
-            } catch (NoSuchMethodException e) {
-            } catch (IllegalArgumentException e) {
-            } catch (IllegalAccessException e) {
-            } catch (InvocationTargetException e) {
-            }
+    public static State parseState(List<Class<? extends State>> types, String input) {
+        if (typeRegistry == null) {
+            return null;
         }
-        return null;
+        return typeRegistry.parseState(types, input);
     }
 
     /**
-     * <p>
      * Determines a command from a string. Possible command types are passed as a parameter. Note that the order matters
      * here; the first type that accepts the string as a valid value, will be used for the command.
-     * 
      * <p>
      * Example: The type list is OnOffType.class,StringType.class. The string "ON" is now accepted by the OnOffType and
      * thus OnOffType.ON will be returned (and not a StringType with value "ON").
      *
      * @param types possible types of the command to consider
-     * @param s the string to parse
+     * @param input the string to parse
      * @return the corresponding Command instance or <code>null</code>
      */
-    public static Command parseCommand(List<Class<? extends Command>> types, String s) {
-        for (Class<? extends Command> type : types) {
-            try {
-                Method valueOf = type.getMethod("valueOf", String.class);
-                Command value = (Command) valueOf.invoke(type, s);
-                if (value != null) {
-                    return value;
-                }
-            } catch (NoSuchMethodException e) {
-            } catch (IllegalArgumentException e) {
-            } catch (IllegalAccessException e) {
-            } catch (InvocationTargetException e) {
-            }
+    public static Command parseCommand(List<Class<? extends Command>> types, String input) {
+        if (typeRegistry == null) {
+            return null;
         }
-        return null;
+        return typeRegistry.parseCommand(types, input);
     }
 }

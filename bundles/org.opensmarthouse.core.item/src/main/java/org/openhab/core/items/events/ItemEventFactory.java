@@ -12,8 +12,6 @@
  */
 package org.openhab.core.items.events;
 
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -26,24 +24,24 @@ import org.openhab.core.items.Item;
 import org.openhab.core.items.dto.ItemDTO;
 import org.openhab.core.items.dto.ItemDTOMapper;
 import org.openhab.core.types.Command;
-import org.openhab.core.types.RefreshType;
 import org.openhab.core.types.State;
 import org.openhab.core.types.Type;
-import org.openhab.core.types.UnDefType;
+import org.openhab.core.types.registry.TypeFactory;
 import org.osgi.service.component.annotations.Component;
+import org.osgi.service.component.annotations.ReferenceCardinality;
+import org.osgi.service.component.annotations.ReferencePolicy;
 
 /**
  * An {@link ItemEventFactory} is responsible for creating item event instances, e.g. {@link ItemCommandEvent}s and
  * {@link ItemStateEvent}s.
  *
  * @author Stefan Bußweiler - Initial contribution
+ * @author Chris Jackson - Refactor for OpenSmartHouse to use {@link TypeFactory}
  */
 @Component(immediate = true, service = EventFactory.class)
 public class ItemEventFactory extends AbstractEventFactory {
 
     private static final String TYPE_POSTFIX = "Type";
-
-    private static final String CORE_LIBRARY_PACKAGE = "org.openhab.core.library.types.";
 
     private static final String ITEM_COMAND_EVENT_TOPIC = "smarthome/items/{itemName}/command";
 
@@ -61,6 +59,8 @@ public class ItemEventFactory extends AbstractEventFactory {
 
     private static final String ITEM_UPDATED_EVENT_TOPIC = "smarthome/items/{itemName}/updated";
 
+    private TypeFactory typeRegistry = null;
+
     /**
      * Constructs a new ItemEventFactory.
      */
@@ -68,6 +68,15 @@ public class ItemEventFactory extends AbstractEventFactory {
         super(Stream.of(ItemCommandEvent.TYPE, ItemStateEvent.TYPE, ItemStatePredictedEvent.TYPE,
                 ItemStateChangedEvent.TYPE, ItemAddedEvent.TYPE, ItemUpdatedEvent.TYPE, ItemRemovedEvent.TYPE,
                 GroupItemStateChangedEvent.TYPE).collect(Collectors.toSet()));
+    }
+
+    @org.osgi.service.component.annotations.Reference(cardinality = ReferenceCardinality.MANDATORY, policy = ReferencePolicy.DYNAMIC)
+    public void addTypeRegistry(TypeFactory typeRegistry) {
+        this.typeRegistry = typeRegistry;
+    }
+
+    public void removeTypeRegistry(TypeFactory typeRegistry) {
+        typeRegistry = null;
     }
 
     @Override
@@ -151,9 +160,13 @@ public class ItemEventFactory extends AbstractEventFactory {
     }
 
     private <T> T parseType(String typeName, String valueToParse, Class<T> desiredClass) {
+        if (typeRegistry == null) {
+            throw new IllegalStateException("TypeRegistry not registered with ItemEventFactory");
+        }
+
         Object parsedObject = null;
         String simpleClassName = typeName + TYPE_POSTFIX;
-        parsedObject = parseSimpleClassName(simpleClassName, valueToParse);
+        parsedObject = typeRegistry.parseType(simpleClassName, valueToParse);
 
         if (parsedObject == null || !desiredClass.isAssignableFrom(parsedObject.getClass())) {
             String parsedObjectClassName = parsedObject != null ? parsedObject.getClass().getName() : "<undefined>";
@@ -163,31 +176,6 @@ public class ItemEventFactory extends AbstractEventFactory {
         }
 
         return desiredClass.cast(parsedObject);
-    }
-
-    private Object parseSimpleClassName(String simpleClassName, String valueToParse) {
-        if (simpleClassName.equals(UnDefType.class.getSimpleName())) {
-            return UnDefType.valueOf(valueToParse);
-        }
-        if (simpleClassName.equals(RefreshType.class.getSimpleName())) {
-            return RefreshType.valueOf(valueToParse);
-        }
-
-        try {
-            Class<?> stateClass = Class.forName(CORE_LIBRARY_PACKAGE + simpleClassName);
-            Method valueOfMethod = stateClass.getMethod("valueOf", String.class);
-            return valueOfMethod.invoke(null, valueToParse);
-        } catch (ClassNotFoundException e) {
-            throw new IllegalArgumentException("Error getting class for simple name: '" + simpleClassName
-                    + "' using package name '" + CORE_LIBRARY_PACKAGE + "'.", e);
-        } catch (NoSuchMethodException | SecurityException e) {
-            throw new IllegalStateException(
-                    "Error getting method #valueOf(String) of class '" + CORE_LIBRARY_PACKAGE + simpleClassName + "'.",
-                    e);
-        } catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
-            throw new IllegalStateException("Error invoking #valueOf(String) on class '" + CORE_LIBRARY_PACKAGE
-                    + simpleClassName + "' with value '" + valueToParse + "'.", e);
-        }
     }
 
     private Event createAddedEvent(String topic, String payload) {
