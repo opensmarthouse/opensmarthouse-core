@@ -74,7 +74,7 @@ public abstract class BaseBridgeHandler extends BaseThingHandler implements Brid
      */
     @Override
     protected BridgeBuilder editThing() {
-        return BridgeBuilder.create(this.thing.getThingTypeUID(), this.thing.getUID())
+        return thingBuilderFactory.createBridge(this.thing.getThingTypeUID(), this.thing.getUID())
                 .withBridge(this.thing.getBridgeUID()).withChannels(this.thing.getChannels())
                 .withConfiguration(this.thing.getConfiguration()).withLabel(this.thing.getLabel())
                 .withLocation(this.thing.getLocation()).withProperties(this.thing.getProperties());

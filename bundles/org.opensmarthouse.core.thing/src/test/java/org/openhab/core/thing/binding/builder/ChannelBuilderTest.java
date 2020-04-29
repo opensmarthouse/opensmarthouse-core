@@ -56,16 +56,16 @@ public class ChannelBuilderTest {
         ThingType thingType = ThingTypeBuilder.instance(new ThingTypeUID("bindingId", "thingTypeId"), "thingLabel")
                 .build();
         ChannelUID channelUID = new ChannelUID(new ThingUID(thingType.getUID(), "thingId"), "temperature");
-        builder = ChannelBuilder.create(channelUID, SYSTEM_OUTDOOR_TEMPERATURE.getItemType()).withLabel("Test")
-                .withDescription("My test channel").withType(SYSTEM_OUTDOOR_TEMPERATURE.getUID())
+        builder = ChannelBuilder.create(channelUID, "Number:Temperature").withLabel("Test")
+                .withDescription("My test channel").withType(SYSTEM_OUTDOOR_TEMPERATURE)
                 .withProperties(properties);
         channel = builder.build();
     }
 
     @Test
     public void testChannelBuilder() {
-        assertThat(channel.getAcceptedItemType(), is(SYSTEM_OUTDOOR_TEMPERATURE.getItemType()));
-        assertThat(channel.getChannelTypeUID(), is(SYSTEM_OUTDOOR_TEMPERATURE.getUID()));
+        assertThat(channel.getAcceptedItemType(), is("Number:Temperature"));
+        assertThat(channel.getChannelTypeUID(), is(SYSTEM_OUTDOOR_TEMPERATURE));
         assertThat(channel.getDefaultTags().size(), is(0));
         assertThat(channel.getDescription(), is("My test channel"));
         assertThat(channel.getKind(), is(ChannelKind.STATE));

@@ -27,6 +27,7 @@ import org.openhab.core.items.MetadataKey;
 import org.openhab.core.items.MetadataRegistry;
 import org.openhab.core.types.StateDescriptionFragment;
 import org.openhab.core.types.StateDescriptionFragmentBuilder;
+import org.openhab.core.types.StateDescriptionFragmentBuilderFactory;
 import org.openhab.core.types.StateDescriptionFragmentProvider;
 import org.openhab.core.types.StateOption;
 import org.osgi.framework.Constants;
@@ -50,13 +51,16 @@ public class MetadataStateDescriptionFragmentProvider implements StateDescriptio
 
     public static final String STATEDESCRIPTION_METADATA_NAMESPACE = "stateDescription";
 
+    private final StateDescriptionFragmentBuilderFactory stateDescriptionFragmentBuilderFactory;
     private final MetadataRegistry metadataRegistry;
 
     private final Integer rank;
 
     @Activate
-    public MetadataStateDescriptionFragmentProvider(final @Reference MetadataRegistry metadataRegistry,
+    public MetadataStateDescriptionFragmentProvider(
+            final @Reference StateDescriptionFragmentBuilderFactory stateDescriptionFragmentBuilderFactory, final @Reference MetadataRegistry metadataRegistry,
             Map<String, Object> properties) {
+        this.stateDescriptionFragmentBuilderFactory = stateDescriptionFragmentBuilderFactory;
         this.metadataRegistry = metadataRegistry;
 
         Object serviceRanking = properties.get(Constants.SERVICE_RANKING);
@@ -73,7 +77,7 @@ public class MetadataStateDescriptionFragmentProvider implements StateDescriptio
 
         if (metadata != null) {
             try {
-                StateDescriptionFragmentBuilder builder = StateDescriptionFragmentBuilder.create();
+                StateDescriptionFragmentBuilder builder = stateDescriptionFragmentBuilderFactory.create();
                 if (metadata.getConfiguration().containsKey("pattern")) {
                     builder.withPattern((String) metadata.getConfiguration().get("pattern"));
                 }

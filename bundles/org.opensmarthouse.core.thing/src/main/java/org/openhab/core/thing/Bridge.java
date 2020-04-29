@@ -53,4 +53,7 @@ public interface Bridge extends Thing {
     @Override
     @Nullable
     BridgeHandler getHandler();
+
+    // experimental - added as part of refacotring
+    void addThing(Thing child);
 }

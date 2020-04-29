@@ -17,8 +17,11 @@ import static org.mockito.Mockito.*;
 
 import org.eclipse.emf.common.util.BasicEList;
 import org.eclipse.emf.common.util.EList;
+import org.eclipse.jdt.annotation.Nullable;
 import org.openhab.core.config.core.Configuration;
 import org.openhab.core.service.ReadyMarker;
+import org.openhab.core.thing.Bridge;
+import org.openhab.core.thing.Thing;
 import org.openhab.core.thing.ThingTypeUID;
 import org.openhab.core.thing.ThingUID;
 import org.openhab.core.thing.binding.ThingHandlerFactory;
@@ -76,17 +79,25 @@ public class GenericThingProviderMultipleBundlesTest {
         thingProvider.setModelRepository(modelRepository);
 
         // configure bridgeHandlerFactory to accept the bridge type UID and create a bridge:
+        Bridge bridge = mock(Bridge.class);
+        when(bridge.getUID()).thenReturn(BRIDGE_UID);
+        when(bridge.getThingTypeUID()).thenReturn(BRIDGE_TYPE_UID);
+
         bridgeHandlerFactory = mock(ThingHandlerFactory.class);
         when(bridgeHandlerFactory.supportsThingType(BRIDGE_TYPE_UID)).thenReturn(true);
         when(bridgeHandlerFactory.createThing(eq(BRIDGE_TYPE_UID), any(Configuration.class), eq(BRIDGE_UID), eq(null)))
-                .thenReturn(BridgeBuilder.create(BRIDGE_TYPE_UID, BRIDGE_ID).build());
+                .thenReturn(bridge);
         thingProvider.addThingHandlerFactory(bridgeHandlerFactory);
 
         // configure thingHandlerFactory to accept the thing type UID and create a thing:
+        Thing thing = mock(Thing.class);
+        when(thing.getUID()).thenReturn(THING_UID);
+        when(thing.getThingTypeUID()).thenReturn(THING_TYPE_UID);
+
         thingHandlerFactory = mock(ThingHandlerFactory.class);
         when(thingHandlerFactory.supportsThingType(THING_TYPE_UID)).thenReturn(true);
         when(thingHandlerFactory.createThing(eq(THING_TYPE_UID), any(Configuration.class), eq(THING_UID),
-                eq(BRIDGE_UID))).thenReturn(ThingBuilder.create(THING_TYPE_UID, THING_ID).build());
+                eq(BRIDGE_UID))).thenReturn(thing);
         thingProvider.addThingHandlerFactory(thingHandlerFactory);
     }
 

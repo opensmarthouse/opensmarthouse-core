@@ -230,4 +230,8 @@ public interface Thing extends Identifiable<ThingUID> {
      * @return Returns {@code true} if the thing is enabled. Return {@code false} otherwise.
      */
     boolean isEnabled();
+
+    // experimental - added as part of refactoring
+    void addChannel(Channel channel);
+
 }

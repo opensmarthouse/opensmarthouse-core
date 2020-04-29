@@ -28,7 +28,7 @@ import org.openhab.core.items.dto.ItemDTOMapper;
 import org.openhab.core.transform.TransformationException;
 import org.openhab.core.transform.TransformationHelper;
 import org.openhab.core.types.StateDescription;
-import org.openhab.core.types.StateDescriptionFragmentBuilder;
+import org.openhab.core.types.StateDescriptionFragmentBuilderFactory;
 import org.osgi.framework.BundleContext;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -47,6 +47,8 @@ public class EnrichedItemDTOMapper {
     /**
      * Maps item into enriched item DTO object.
      *
+     *
+     * @param stateDescriptionFragmentBuilderFactory
      * @param item the item
      * @param drillDown defines whether the whole tree should be traversed or only direct members are considered
      * @param itemFilter a predicate that filters items while traversing the tree (true means that an item is
@@ -55,20 +57,21 @@ public class EnrichedItemDTOMapper {
      * @param locale locale (can be null)
      * @return item DTO object
      */
-    public static EnrichedItemDTO map(BundleContext bundleContext, Item item, boolean drillDown, @Nullable Predicate<Item> itemFilter,
-            @Nullable URI uri, @Nullable Locale locale) {
+    public static EnrichedItemDTO map(BundleContext bundleContext, @Nullable StateDescriptionFragmentBuilderFactory stateDescriptionFragmentBuilderFactory,
+            Item item, boolean drillDown, @Nullable Predicate<Item> itemFilter, @Nullable URI uri, @Nullable Locale locale) {
         ItemDTO itemDTO = ItemDTOMapper.map(item);
-        return map(bundleContext, item, itemDTO, uri, drillDown, itemFilter, locale);
+        return map(bundleContext, item, itemDTO, uri, stateDescriptionFragmentBuilderFactory, drillDown, itemFilter, locale);
     }
 
-    private static EnrichedItemDTO map(BundleContext bundleContext, Item item, ItemDTO itemDTO, @Nullable URI uri, boolean drillDown,
+    private static EnrichedItemDTO map(BundleContext bundleContext, Item item, ItemDTO itemDTO, @Nullable URI uri,
+            @Nullable StateDescriptionFragmentBuilderFactory stateDescriptionFragmentBuilderFactory, boolean drillDown,
             @Nullable Predicate<Item> itemFilter, @Nullable Locale locale) {
         String state = item.getState().toFullString();
         String transformedState = considerTransformation(bundleContext, state, item, locale);
         if (transformedState != null && transformedState.equals(state)) {
             transformedState = null;
         }
-        StateDescription stateDescription = considerTransformation(item.getStateDescription(locale));
+        StateDescription stateDescription = considerTransformation(stateDescriptionFragmentBuilderFactory, item.getStateDescription(locale));
         String link = null != uri ? uri.toASCIIString() + ItemResource.PATH_ITEMS + "/" + itemDTO.name : null;
 
         EnrichedItemDTO enrichedItemDTO = null;
@@ -80,7 +83,7 @@ public class EnrichedItemDTOMapper {
                 Collection<EnrichedItemDTO> members = new LinkedHashSet<>();
                 for (Item member : groupItem.getMembers()) {
                     if (itemFilter == null || itemFilter.test(member)) {
-                        members.add(map(bundleContext, member, drillDown, itemFilter, uri, locale));
+                        members.add(map(bundleContext, stateDescriptionFragmentBuilderFactory, member, drillDown, itemFilter, uri, locale));
                     }
                 }
                 memberDTOs = members.toArray(new EnrichedItemDTO[members.size()]);
@@ -97,15 +100,14 @@ public class EnrichedItemDTOMapper {
         return enrichedItemDTO;
     }
 
-    private static @Nullable StateDescription considerTransformation(@Nullable StateDescription stateDescription) {
+    private static @Nullable StateDescription considerTransformation(@Nullable StateDescriptionFragmentBuilderFactory stateDescriptionFragmentBuilderFactory, @Nullable StateDescription stateDescription) {
         if (stateDescription != null) {
             String pattern = stateDescription.getPattern();
             if (pattern != null) {
                 try {
-                    return TransformationHelper.isTransform(pattern)
-                            ? StateDescriptionFragmentBuilder.create(stateDescription).withPattern(pattern).build()
-                                    .toStateDescription()
-                            : stateDescription;
+                    if (TransformationHelper.isTransform(pattern) && stateDescriptionFragmentBuilderFactory != null) {
+                        return stateDescriptionFragmentBuilderFactory.create().withPattern(pattern).build().toStateDescription();
+                    }
                 } catch (NoClassDefFoundError ex) {
                     // TransformationHelper is optional dependency, so ignore if class not found
                     // return state description as it is without transformation

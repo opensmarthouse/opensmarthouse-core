@@ -30,13 +30,11 @@ import org.openhab.core.thing.Channel;
 import org.openhab.core.thing.Thing;
 import org.openhab.core.thing.ThingUID;
 import org.openhab.core.thing.UID;
-import org.openhab.core.thing.binding.builder.BridgeBuilder;
+import org.openhab.core.thing.binding.ThingBuilderFactory;
 import org.openhab.core.thing.binding.builder.ThingBuilder;
 import org.openhab.core.thing.dto.ChannelDTO;
 import org.openhab.core.thing.dto.ChannelDTOMapper;
 import org.openhab.core.thing.dto.ThingDTO;
-import org.openhab.core.thing.internal.BridgeImpl;
-import org.openhab.core.thing.internal.ThingImpl;
 
 /**
  * {@link ThingHelper} provides a utility method to create and bind items.
@@ -104,7 +102,7 @@ public class ThingHelper {
         Collection<Channel> mutableChannels = thing.getChannels();
         ensureUniqueChannels(mutableChannels, channels);
         for (Channel channel : channels) {
-            ((ThingImpl) thing).addChannel(channel);
+            thing.addChannel(channel);
         }
     }
 
@@ -175,17 +173,18 @@ public class ThingHelper {
      * In consequence, care must be taken when the content of a list (like configuration, properties or channels) is to
      * be updated - the DTO must contain the full list, otherwise entries will be deleted.
      *
+     * @param thingFactory Factory used to create thing builders.
      * @param thing the Thing instance to merge the new content into
      * @param updatedContents a DTO which carries the updated content
      * @return A Thing instance, which is the result of the merge
      */
-    public static Thing merge(Thing thing, ThingDTO updatedContents) {
+    public static Thing merge(ThingBuilderFactory thingFactory, Thing thing, ThingDTO updatedContents) {
         ThingBuilder builder;
 
         if (thing instanceof Bridge) {
-            builder = BridgeBuilder.create(thing.getThingTypeUID(), thing.getUID());
+            builder = thingFactory.createBridge(thing.getThingTypeUID(), thing.getUID());
         } else {
-            builder = ThingBuilder.create(thing.getThingTypeUID(), thing.getUID());
+            builder = thingFactory.createThing(thing.getThingTypeUID(), thing.getUID());
         }
 
         // Update the label
@@ -241,9 +240,9 @@ public class ThingHelper {
         Thing mergedThing = builder.build();
 
         // keep all child things in place on a merged bridge
-        if (mergedThing instanceof BridgeImpl && thing instanceof Bridge) {
+        if (mergedThing instanceof Bridge && thing instanceof Bridge) {
             Bridge bridge = (Bridge) thing;
-            BridgeImpl mergedBridge = (BridgeImpl) mergedThing;
+            Bridge mergedBridge = (Bridge) mergedThing;
             for (Thing child : bridge.getThings()) {
                 mergedBridge.addThing(child);
             }

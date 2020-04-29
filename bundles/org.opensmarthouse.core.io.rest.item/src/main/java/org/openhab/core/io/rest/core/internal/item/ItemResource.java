@@ -75,6 +75,7 @@ import org.openhab.core.library.types.OnOffType;
 import org.openhab.core.library.types.UpDownType;
 import org.openhab.core.types.Command;
 import org.openhab.core.types.State;
+import org.openhab.core.types.StateDescriptionFragmentBuilderFactory;
 import org.openhab.core.types.TypeParser;
 import org.osgi.framework.BundleContext;
 import org.osgi.service.component.annotations.Activate;
@@ -139,6 +140,7 @@ public class ItemResource implements RESTResource {
     private @NonNullByDefault({}) ItemBuilderFactory itemBuilderFactory;
     private @NonNullByDefault({}) LocaleService localeService;
     private @NonNullByDefault({}) BundleContext bundleContext;
+    private @NonNullByDefault({}) StateDescriptionFragmentBuilderFactory stateDescriptionFragmentBuilderFactory;
 
     @Activate
     public void activate(BundleContext bundleContext) {
@@ -222,6 +224,15 @@ public class ItemResource implements RESTResource {
         this.itemBuilderFactory = null;
     }
 
+    @Reference(cardinality = ReferenceCardinality.OPTIONAL, policy = ReferencePolicy.DYNAMIC)
+    public void setStateDescriptionFragmentBuilderFactory(StateDescriptionFragmentBuilderFactory stateDescriptionFragmentBuilderFactory) {
+        this.stateDescriptionFragmentBuilderFactory = stateDescriptionFragmentBuilderFactory;
+    }
+
+    public void unsetStateDescriptionFragmentBuilderFactory(StateDescriptionFragmentBuilderFactory stateDescriptionFragmentBuilderFactory) {
+        this.stateDescriptionFragmentBuilderFactory = null;
+    }
+
     @GET
     @RolesAllowed({ Role.USER, Role.ADMIN })
     @Produces(MediaType.APPLICATION_JSON)
@@ -240,7 +251,7 @@ public class ItemResource implements RESTResource {
         logger.debug("Received HTTP GET request at '{}'", uriInfo.getPath());
 
         Stream<EnrichedItemDTO> itemStream = getItems(type, tags).stream() //
-                .map(item -> EnrichedItemDTOMapper.map(bundleContext, item, recursive, null, uriInfo.getBaseUri(), locale)) //
+                .map(item -> EnrichedItemDTOMapper.map(bundleContext, stateDescriptionFragmentBuilderFactory, item, recursive, null, uriInfo.getBaseUri(), locale)) //
                 .peek(dto -> addMetadata(dto, namespaces, null)) //
                 .peek(dto -> dto.editable = isEditable(dto.name));
         itemStream = dtoMapper.limitToFields(itemStream, fields);
@@ -268,7 +279,7 @@ public class ItemResource implements RESTResource {
         // if it exists
         if (item != null) {
             logger.debug("Received HTTP GET request at '{}'.", uriInfo.getPath());
-            EnrichedItemDTO dto = EnrichedItemDTOMapper.map(bundleContext, item, true, null, uriInfo.getBaseUri(), locale);
+            EnrichedItemDTO dto = EnrichedItemDTOMapper.map(bundleContext, stateDescriptionFragmentBuilderFactory, item, true, null, uriInfo.getBaseUri(), locale);
             addMetadata(dto, namespaces, null);
             dto.editable = isEditable(dto.name);
             return JSONResponse.createResponse(Status.OK, dto, null);
@@ -768,7 +779,8 @@ public class ItemResource implements RESTResource {
      * @return Response configured to represent the Item in depending on the status
      */
     private Response getItemResponse(Status status, @Nullable Item item, Locale locale, @Nullable String errormessage) {
-        Object entity = null != item ? EnrichedItemDTOMapper.map(bundleContext, item, true, null, uriInfo.getBaseUri(), locale) : null;
+        Object entity = null != item ? EnrichedItemDTOMapper.map(bundleContext, stateDescriptionFragmentBuilderFactory,
+                item, true, null, uriInfo.getBaseUri(), locale) : null;
         return JSONResponse.createResponse(status, entity, errormessage);
     }
 
@@ -833,6 +845,6 @@ public class ItemResource implements RESTResource {
     public boolean isSatisfied() {
         return itemRegistry != null && managedItemProvider != null && eventPublisher != null
                 && itemBuilderFactory != null && dtoMapper != null && metadataRegistry != null
-                && metadataSelectorMatcher != null && localeService != null;
+                && metadataSelectorMatcher != null && localeService != null && stateDescriptionFragmentBuilderFactory != null;
     }
 }

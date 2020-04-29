@@ -37,6 +37,7 @@ import org.openhab.core.model.sitemap.sitemap.Frame;
 import org.openhab.core.model.sitemap.sitemap.VisibilityRule;
 import org.openhab.core.model.sitemap.sitemap.Widget;
 import org.openhab.core.types.State;
+import org.openhab.core.types.StateDescriptionFragmentBuilderFactory;
 import org.openhab.core.ui.items.ItemUIRegistry;
 import org.osgi.framework.BundleContext;
 
@@ -54,6 +55,7 @@ public class PageChangeListener implements StateChangeListener {
     private final String sitemapName;
     private final String pageId;
     private final ItemUIRegistry itemUIRegistry;
+    private final StateDescriptionFragmentBuilderFactory stateDescriptionFragmentBuilderFactory;
     private EList<Widget> widgets;
     private Set<Item> items;
     private final List<SitemapSubscriptionCallback> callbacks = Collections.synchronizedList(new ArrayList<>());
@@ -61,17 +63,19 @@ public class PageChangeListener implements StateChangeListener {
 
     /**
      * Creates a new instance.
-     *
-     * @param sitemapName the sitemap name of the page
+     *  @param sitemapName the sitemap name of the page
      * @param pageId the id of the page for which events are created
      * @param itemUIRegistry the ItemUIRegistry which is needed for the functionality
+     * @param stateDescriptionFragmentBuilderFactory
      * @param widgets the list of widgets that are part of the page.
      */
-    public PageChangeListener(BundleContext bundleContext, String sitemapName, String pageId, ItemUIRegistry itemUIRegistry, EList<Widget> widgets) {
+    public PageChangeListener(BundleContext bundleContext, String sitemapName, String pageId, ItemUIRegistry itemUIRegistry,
+            StateDescriptionFragmentBuilderFactory stateDescriptionFragmentBuilderFactory, EList<Widget> widgets) {
         this.bundleContext = bundleContext;
         this.sitemapName = sitemapName;
         this.pageId = pageId;
         this.itemUIRegistry = itemUIRegistry;
+        this.stateDescriptionFragmentBuilderFactory = stateDescriptionFragmentBuilderFactory;
 
         updateItemsAndWidgets(widgets);
     }
@@ -241,7 +245,8 @@ public class PageChangeListener implements StateChangeListener {
                             .substring(w.eClass().getInstanceTypeName().lastIndexOf(".") + 1);
                     boolean drillDown = "mapview".equalsIgnoreCase(widgetTypeName);
                     Predicate<Item> itemFilter = (i -> CoreItemFactory.LOCATION.equals(i.getType()));
-                    event.item = EnrichedItemDTOMapper.map(bundleContext, itemToBeSent, drillDown, itemFilter, null, null);
+                    event.item = EnrichedItemDTOMapper.map(bundleContext, stateDescriptionFragmentBuilderFactory,
+                            itemToBeSent, drillDown, itemFilter, null, null);
 
                     // event.state is an adjustment of the item state to the widget type.
                     final State stateToBeSent = itemBelongsToWidget ? state : itemToBeSent.getState();

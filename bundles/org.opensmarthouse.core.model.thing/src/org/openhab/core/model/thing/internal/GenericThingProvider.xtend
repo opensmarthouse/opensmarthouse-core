@@ -36,7 +36,7 @@ import org.openhab.core.thing.ThingProvider
 import org.openhab.core.thing.ThingTypeUID
 import org.openhab.core.thing.ThingUID
 import org.openhab.core.thing.binding.ThingHandlerFactory
-import org.openhab.core.thing.binding.builder.BridgeBuilder
+import org.openhab.core.thing.binding.ThingBuilderFactory
 import org.openhab.core.thing.binding.builder.ChannelBuilder
 import org.openhab.core.thing.binding.builder.ThingBuilder
 import org.openhab.core.thing.type.AutoUpdatePolicy
@@ -82,6 +82,7 @@ class GenericThingProvider extends AbstractProvider<Thing> implements ThingProvi
     private ModelRepository modelRepository
 
     private ThingTypeRegistry thingTypeRegistry
+    private ThingBuilderFactory thingBuilderFactory
     private ChannelTypeRegistry channelTypeRegistry
 
     private BundleResolver bundleResolver;
@@ -221,9 +222,9 @@ class GenericThingProvider extends AbstractProvider<Thing> implements ThingProvi
             bridgeUID, thingHandlerFactory)
 
         val thingBuilder = if (modelThing instanceof ModelBridge) {
-                BridgeBuilder.create(thingTypeUID, thingUID)
+                thingBuilderFactory.createBridge(thingTypeUID, thingUID)
             } else {
-                ThingBuilder.create(thingTypeUID, thingUID)
+                thingBuilderFactory.createThing(thingTypeUID, thingUID)
             }
 
         thingBuilder.withConfiguration(configuration)
@@ -518,6 +519,15 @@ class GenericThingProvider extends AbstractProvider<Thing> implements ThingProvi
 
     def protected void unsetChannelTypeRegistry(ChannelTypeRegistry channelTypeRegistry) {
         this.channelTypeRegistry = null
+    }
+
+    @Reference
+    def protected void setThingBuilderFactory(ThingBuilderFactory thingBuilderFactory) {
+        this.thingBuilderFactory = thingBuilderFactory
+    }
+
+    def protected void unsetThingBuilderFactory(ThingBuilderFactory thingBuilderFactory) {
+        this.thingBuilderFactory = null
     }
 
     @Reference(cardinality=MULTIPLE, policy=DYNAMIC)

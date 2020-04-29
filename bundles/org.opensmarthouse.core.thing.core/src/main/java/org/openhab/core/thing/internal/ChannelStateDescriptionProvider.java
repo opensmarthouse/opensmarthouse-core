@@ -32,6 +32,7 @@ import org.openhab.core.thing.type.ThingTypeRegistry;
 import org.openhab.core.types.StateDescription;
 import org.openhab.core.types.StateDescriptionFragment;
 import org.openhab.core.types.StateDescriptionFragmentBuilder;
+import org.openhab.core.types.StateDescriptionFragmentBuilderFactory;
 import org.openhab.core.types.StateDescriptionFragmentProvider;
 import org.osgi.framework.Constants;
 import org.osgi.service.component.annotations.Activate;
@@ -58,14 +59,17 @@ public class ChannelStateDescriptionProvider implements StateDescriptionFragment
     private final ItemChannelLinkRegistry itemChannelLinkRegistry;
     private final ThingTypeRegistry thingTypeRegistry;
     private final ThingRegistry thingRegistry;
-    private Integer rank = 0;
+    private final StateDescriptionFragmentBuilderFactory stateDescriptionFragmentBuilderFactory;
+    private Integer rank = 0;;
 
     @Activate
     public ChannelStateDescriptionProvider(final @Reference ItemChannelLinkRegistry itemChannelLinkRegistry,
-            final @Reference ThingTypeRegistry thingTypeRegistry, final @Reference ThingRegistry thingRegistry) {
+            final @Reference ThingTypeRegistry thingTypeRegistry, final @Reference ThingRegistry thingRegistry,
+            final @Reference StateDescriptionFragmentBuilderFactory stateDescriptionFragmentBuilderFactory) {
         this.itemChannelLinkRegistry = itemChannelLinkRegistry;
         this.thingTypeRegistry = thingTypeRegistry;
         this.thingRegistry = thingRegistry;
+        this.stateDescriptionFragmentBuilderFactory = stateDescriptionFragmentBuilderFactory;
     }
 
     @Activate
@@ -85,7 +89,7 @@ public class ChannelStateDescriptionProvider implements StateDescriptionFragment
     public @Nullable StateDescriptionFragment getStateDescriptionFragment(String itemName, @Nullable Locale locale) {
         StateDescription stateDescription = getStateDescription(itemName, locale);
         if (stateDescription != null) {
-            return StateDescriptionFragmentBuilder.create(stateDescription).build();
+            return stateDescriptionFragmentBuilderFactory.create(stateDescription).build();
         }
         return null;
     }
@@ -111,8 +115,8 @@ public class ChannelStateDescriptionProvider implements StateDescriptionFragment
                         if (pattern != null) {
                             logger.trace("Provide a default pattern {} for item {}", pattern, itemName);
                             StateDescriptionFragmentBuilder builder = (stateDescription == null)
-                                    ? StateDescriptionFragmentBuilder.create()
-                                    : StateDescriptionFragmentBuilder.create(stateDescription);
+                                    ? stateDescriptionFragmentBuilderFactory.create()
+                                    : stateDescriptionFragmentBuilderFactory.create(stateDescription);
                             stateDescription = builder.withPattern(pattern).build().toStateDescription();
                         }
                     }

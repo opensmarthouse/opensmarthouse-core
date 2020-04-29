@@ -27,11 +27,15 @@ import java.util.Map;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+import org.eclipse.jdt.annotation.Nullable;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.mockito.ArgumentMatcher;
 import org.mockito.Mock;
+import org.mockito.junit.MockitoJUnitRunner;
 import org.openhab.core.config.core.ConfigDescriptionRegistry;
 import org.openhab.core.config.core.Configuration;
 import org.openhab.core.config.discovery.DiscoveryResult;
@@ -47,8 +51,8 @@ import org.openhab.core.thing.ThingStatusDetail;
 import org.openhab.core.thing.ThingStatusInfo;
 import org.openhab.core.thing.ThingTypeUID;
 import org.openhab.core.thing.ThingUID;
+import org.openhab.core.thing.binding.ThingFactory;
 import org.openhab.core.thing.binding.ThingHandlerFactory;
-import org.openhab.core.thing.binding.builder.ThingBuilder;
 import org.openhab.core.thing.events.ThingStatusInfoChangedEvent;
 import org.openhab.core.thing.type.ThingType;
 import org.openhab.core.thing.type.ThingTypeBuilder;
@@ -115,6 +119,9 @@ public class AutomaticInboxProcessorTest {
     private ThingHandlerFactory thingHandlerFactory;
 
     @Mock
+    private ThingFactory thingFactory;
+
+    @Mock
     private ManagedThingProvider thingProvider;
 
     @Before
@@ -139,23 +146,25 @@ public class AutomaticInboxProcessorTest {
         when(thing3.getStatus()).thenReturn(ThingStatus.ONLINE);
         when(thing3.getUID()).thenReturn(THING_UID3);
 
+        when(thingFactory.createThing(eq(THING_UID), any(Configuration.class), any(Map.class), nullable(ThingUID.class), eq(THING_TYPE_UID), anyList())).thenReturn(thing);
+        when(thingFactory.createThing(eq(THING_UID2), any(Configuration.class), any(Map.class), nullable(ThingUID.class), eq(THING_TYPE_UID), anyList())).thenReturn(thing2);
+        when(thingFactory.createThing(eq(THING_UID3), any(Configuration.class), any(Map.class), nullable(ThingUID.class), eq(THING_TYPE_UID3), anyList())).thenReturn(thing3);
+
         when(thingRegistry.stream()).thenReturn(Stream.empty());
 
         when(thingTypeRegistry.getThingType(THING_TYPE_UID)).thenReturn(THING_TYPE);
         when(thingTypeRegistry.getThingType(THING_TYPE_UID2)).thenReturn(THING_TYPE2);
         when(thingTypeRegistry.getThingType(THING_TYPE_UID3)).thenReturn(THING_TYPE3);
 
+        Thing thing = mock(Thing.class);
+
         when(thingHandlerFactory.supportsThingType(eq(THING_TYPE_UID))).thenReturn(true);
         when(thingHandlerFactory.supportsThingType(eq(THING_TYPE_UID3))).thenReturn(true);
         when(thingHandlerFactory.createThing(any(ThingTypeUID.class), any(Configuration.class), any(ThingUID.class),
-                nullable(ThingUID.class)))
-                        .then(invocation -> ThingBuilder
-                                .create((ThingTypeUID) invocation.getArguments()[0],
-                                        (ThingUID) invocation.getArguments()[2])
-                                .withConfiguration((Configuration) invocation.getArguments()[1]).build());
+                nullable(ThingUID.class))).thenAnswer(new MockedThingAnswer(thing));
 
         inbox = new PersistentInbox(new VolatileStorageService(), mock(DiscoveryServiceRegistry.class), thingRegistry,
-                thingProvider, thingTypeRegistry, configDescriptionRegistry);
+                thingFactory, thingProvider, thingTypeRegistry, configDescriptionRegistry);
         inbox.addThingHandlerFactory(thingHandlerFactory);
         inbox.activate();
 
@@ -395,11 +404,11 @@ public class AutomaticInboxProcessorTest {
 
         // The following discovery result is automatically approved, as it has matching thing type UID
         inbox.add(DiscoveryResultBuilder.create(THING_UID).build());
-        verify(thingRegistry, times(1)).add(argThat(thing -> THING_UID.equals(thing.getUID())));
+        verify(thingRegistry, times(1)).add(argThat(new ThingMatcher(THING_UID)));
 
         // The following discovery result is not automatically approved, as it does not have matching thing type UID
         inbox.add(DiscoveryResultBuilder.create(THING_UID3).build());
-        verify(thingRegistry, never()).add(argThat(thing -> THING_UID3.equals(thing.getUID())));
+        verify(thingRegistry, never()).add(argThat(new ThingMatcher(THING_UID3)));
     }
 
     @Test
@@ -413,18 +422,18 @@ public class AutomaticInboxProcessorTest {
         automaticInboxProcessor.addInboxAutoApprovePredicate(
                 discoveryResult -> THING_TYPE_UID.equals(discoveryResult.getThingTypeUID()));
 
-        verify(thingRegistry, times(1)).add(argThat(thing -> THING_UID.equals(thing.getUID())));
-        verify(thingRegistry, times(1)).add(argThat(thing -> THING_UID2.equals(thing.getUID())));
-        verify(thingRegistry, never()).add(argThat(thing -> THING_UID3.equals(thing.getUID())));
+        verify(thingRegistry, times(1)).add(argThat(new ThingMatcher(THING_UID)));
+        verify(thingRegistry, times(1)).add(argThat(new ThingMatcher(THING_UID2)));
+        verify(thingRegistry, never()).add(argThat(new ThingMatcher(THING_UID3)));
 
         // Adding this inboxAutoApprovePredicate will auto-approve the third discovery results as it has matching
         // thing type UID.
         automaticInboxProcessor.addInboxAutoApprovePredicate(
                 discoveryResult -> THING_TYPE_UID3.equals(discoveryResult.getThingTypeUID()));
 
-        verify(thingRegistry, times(1)).add(argThat(thing -> THING_UID.equals(thing.getUID())));
-        verify(thingRegistry, times(1)).add(argThat(thing -> THING_UID2.equals(thing.getUID())));
-        verify(thingRegistry, times(1)).add(argThat(thing -> THING_UID3.equals(thing.getUID())));
+        verify(thingRegistry, times(1)).add(argThat(new ThingMatcher(THING_UID)));
+        verify(thingRegistry, times(1)).add(argThat(new ThingMatcher(THING_UID2)));
+        verify(thingRegistry, times(1)).add(argThat(new ThingMatcher(THING_UID3)));
     }
 
     @Test
@@ -460,7 +469,24 @@ public class AutomaticInboxProcessorTest {
 
         // The discovery result is auto-approved in the presence of the evil predicates
         inbox.add(DiscoveryResultBuilder.create(THING_UID).build());
-        verify(thingRegistry, times(1)).add(argThat(thing -> THING_UID.equals(thing.getUID())));
+        verify(thingRegistry, times(1)).add(argThat(new ThingMatcher(THING_UID)));
     }
 
+    static class ThingMatcher implements ArgumentMatcher<Thing> {
+        private final ThingUID thingUID;
+
+        ThingMatcher(ThingUID thingUID) {
+            this.thingUID = thingUID;
+        }
+
+        @Override
+        public boolean matches(Thing thing) {
+            return thingUID.equals(thing.getUID());
+        }
+
+        public String toString() {
+            return "<Thing with UID [" + thingUID + "]>";
+        }
+
+    }
 }

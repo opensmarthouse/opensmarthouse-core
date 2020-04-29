@@ -39,7 +39,7 @@ import org.openhab.core.items.ItemProvider;
 import org.openhab.core.items.dto.GroupFunctionDTO;
 import org.openhab.core.items.dto.ItemDTOMapper;
 import org.openhab.core.types.StateDescriptionFragment;
-import org.openhab.core.types.StateDescriptionFragmentBuilder;
+import org.openhab.core.types.StateDescriptionFragmentBuilderFactory;
 import org.openhab.core.types.StateDescriptionFragmentProvider;
 import org.openhab.core.model.core.EventType;
 import org.openhab.core.model.core.ModelRepository;
@@ -81,6 +81,8 @@ public class GenericItemProvider extends AbstractProvider<Item>
 
     private final GenericMetadataProvider genericMetaDataProvider;
 
+    private final StateDescriptionFragmentBuilderFactory stateDescriptionFragmentBuilderFactory;
+
     private final Map<String, Collection<Item>> itemsMap = new ConcurrentHashMap<>();
 
     private final Collection<ItemFactory> itemFactorys = new ArrayList<>();
@@ -91,9 +93,12 @@ public class GenericItemProvider extends AbstractProvider<Item>
 
     @Activate
     public GenericItemProvider(final @Reference ModelRepository modelRepository,
-            final @Reference GenericMetadataProvider genericMetadataProvider, Map<String, Object> properties) {
+            final @Reference GenericMetadataProvider genericMetadataProvider,
+            final @Reference StateDescriptionFragmentBuilderFactory stateDescriptionFragmentBuilderFactory,
+            Map<String, Object> properties) {
         this.modelRepository = modelRepository;
         this.genericMetaDataProvider = genericMetadataProvider;
+        this.stateDescriptionFragmentBuilderFactory = stateDescriptionFragmentBuilderFactory;
 
         Object serviceRanking = properties.get(Constants.SERVICE_RANKING);
         if (serviceRanking instanceof Integer) {
@@ -252,8 +257,8 @@ public class GenericItemProvider extends AbstractProvider<Item>
             String format = extractFormat(label);
             if (format != null) {
                 label = label.substring(0, label.indexOf("[")).trim();
-                stateDescriptionFragments.put(modelItem.getName(),
-                        StateDescriptionFragmentBuilder.create().withPattern(format).build());
+                stateDescriptionFragments.put(modelItem.getName(), stateDescriptionFragmentBuilderFactory.create()
+                    .withPattern(format).build());
             }
             ((ActiveItem) item).setLabel(label);
             ((ActiveItem) item).setCategory(modelItem.getIcon());

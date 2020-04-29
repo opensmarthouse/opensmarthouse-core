@@ -32,6 +32,7 @@ import org.openhab.core.thing.ThingStatusDetail;
 import org.openhab.core.thing.ThingStatusInfo;
 import org.openhab.core.thing.ThingTypeUID;
 import org.openhab.core.thing.ThingUID;
+import org.openhab.core.thing.binding.builder.ChannelBuilder;
 import org.openhab.core.thing.binding.builder.ThingBuilder;
 import org.openhab.core.thing.binding.builder.ThingStatusInfoBuilder;
 import org.openhab.core.thing.util.ThingHandlerHelper;
@@ -70,6 +71,7 @@ public abstract class BaseThingHandler implements ThingHandler {
     protected Thing thing;
 
     private @Nullable ThingHandlerCallback callback;
+    protected @NonNullByDefault({}) ThingBuilderFactory thingBuilderFactory;
 
     /**
      * Creates a new instance of this class for the {@link Thing}.
@@ -389,7 +391,7 @@ public abstract class BaseThingHandler implements ThingHandler {
      * @return {@link ThingBuilder} which builds an exact copy of the thing (not null)
      */
     protected ThingBuilder editThing() {
-        return ThingBuilder.create(this.thing.getThingTypeUID(), this.thing.getUID())
+        return thingBuilderFactory.createThing(this.thing.getThingTypeUID(), this.thing.getUID())
                 .withBridge(this.thing.getBridgeUID()).withChannels(this.thing.getChannels())
                 .withConfiguration(this.thing.getConfiguration()).withLabel(this.thing.getLabel())
                 .withLocation(this.thing.getLocation()).withProperties(this.thing.getProperties());

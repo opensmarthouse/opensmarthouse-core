@@ -21,14 +21,17 @@ import static org.mockito.MockitoAnnotations.initMocks;
 import java.math.BigDecimal;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
 import org.junit.Before;
 import org.junit.Test;
+import org.junit.runner.RunWith;
 import org.mockito.ArgumentCaptor;
 import org.mockito.Mock;
+import org.mockito.junit.MockitoJUnitRunner;
 import org.openhab.core.config.core.ConfigDescription;
 import org.openhab.core.config.core.ConfigDescriptionParameter;
 import org.openhab.core.config.core.ConfigDescriptionParameter.Type;
@@ -48,6 +51,7 @@ import org.openhab.core.thing.Thing;
 import org.openhab.core.thing.ThingRegistry;
 import org.openhab.core.thing.ThingTypeUID;
 import org.openhab.core.thing.ThingUID;
+import org.openhab.core.thing.binding.ThingFactory;
 import org.openhab.core.thing.binding.ThingHandlerFactory;
 import org.openhab.core.thing.binding.builder.ThingBuilder;
 import org.openhab.core.thing.type.ThingType;
@@ -86,19 +90,25 @@ public class PersistentInboxTest {
     @Mock
     private ThingHandlerFactory thingHandlerFactory;
 
+    @Mock
+    private Thing thing;
+
+    @Mock
+    private ThingFactory thingFactory;
+
     @Before
     public void setup() {
         initMocks(this);
         when(storageService.getStorage(any(String.class), any(ClassLoader.class))).thenReturn(storage);
         doAnswer(invocation -> lastAddedThing = (Thing) invocation.getArguments()[0]).when(thingRegistry)
                 .add(any(Thing.class));
+
         when(thingHandlerFactory.supportsThingType(eq(THING_TYPE_UID))).thenReturn(true);
         when(thingHandlerFactory.createThing(eq(THING_TYPE_UID), any(Configuration.class), eq(THING_UID), any()))
-                .then(invocation -> ThingBuilder.create(THING_TYPE_UID, "test")
-                        .withConfiguration((Configuration) invocation.getArguments()[1]).build());
+                .thenAnswer(new MockedThingAnswer(thing));
 
-        inbox = new PersistentInbox(storageService, mock(DiscoveryServiceRegistry.class), thingRegistry, thingProvider,
-                thingTypeRegistry, configDescriptionRegistry);
+        inbox = new PersistentInbox(storageService, mock(DiscoveryServiceRegistry.class), thingRegistry, thingFactory,
+                thingProvider, thingTypeRegistry, configDescriptionRegistry);
         inbox.addThingHandlerFactory(thingHandlerFactory);
     }
 
@@ -107,7 +117,10 @@ public class PersistentInboxTest {
         Map<String, Object> props = new HashMap<>();
         props.put("foo", 1);
         Configuration config = new Configuration(props);
-        Thing thing = ThingBuilder.create(THING_TYPE_UID, THING_UID).withConfiguration(config).build();
+        Thing thing = mock(Thing.class);
+        when(thing.getUID()).thenReturn(THING_UID);
+        when(thing.getThingTypeUID()).thenReturn(THING_TYPE_UID);
+        when(thing.getConfiguration()).thenReturn(config);
 
         when(thingRegistry.get(eq(THING_UID))).thenReturn(thing);
 
@@ -125,7 +138,10 @@ public class PersistentInboxTest {
         Map<String, Object> props = new HashMap<>();
         props.put("foo", "1");
         Configuration config = new Configuration(props);
-        Thing thing = ThingBuilder.create(THING_TYPE_UID, THING_UID).withConfiguration(config).build();
+        Thing thing = mock(Thing.class);
+        when(thing.getUID()).thenReturn(THING_UID);
+        when(thing.getThingTypeUID()).thenReturn(THING_TYPE_UID);
+        when(thing.getConfiguration()).thenReturn(config);
         configureConfigDescriptionRegistryMock("foo", Type.TEXT);
         when(thingRegistry.get(eq(THING_UID))).thenReturn(thing);
 
@@ -143,6 +159,9 @@ public class PersistentInboxTest {
         DiscoveryResult result = DiscoveryResultBuilder.create(THING_UID).withProperty("foo", 3).build();
         configureConfigDescriptionRegistryMock("foo", Type.TEXT);
         when(storage.getValues()).thenReturn(Collections.singletonList(result));
+
+        when(thingFactory.createThing(eq(THING_UID), any(Configuration.class), any(Map.class), nullable(ThingUID.class),
+                eq(THING_TYPE_UID), anyList())).thenAnswer(new MockedThingAnswer(thing));
 
         inbox.activate();
         inbox.approve(THING_UID, "Test");

@@ -95,9 +95,12 @@ public class NumberItem extends GenericItem {
         StateDescription stateDescription = super.getStateDescription(locale);
         if (getDimension() == null && stateDescription != null && stateDescription.getPattern() != null
                 && stateDescription.getPattern().contains(UnitUtils.UNIT_PLACEHOLDER)) {
-            return stateDescriptionFragmentBuilderFactory.create(stateDescription)
+            if (stateDescriptionFragmentBuilderFactory != null) {
+                return stateDescriptionFragmentBuilderFactory.create(stateDescription)
                     .withPattern(stateDescription.getPattern().replaceAll(UnitUtils.UNIT_PLACEHOLDER, "").trim())
-                    .build().toStateDescription();
+                    .build()
+                    .toStateDescription();
+            }
         }
 
         return stateDescription;

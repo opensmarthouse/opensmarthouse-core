@@ -32,7 +32,6 @@ import org.openhab.core.thing.ThingTypeUID;
 import org.openhab.core.thing.ThingUID;
 import org.openhab.core.thing.binding.builder.ThingBuilder;
 import org.openhab.core.thing.binding.firmware.Firmware;
-import org.openhab.core.thing.binding.firmware.FirmwareBuilder;
 import org.openhab.core.thing.binding.firmware.FirmwareUpdateHandler;
 import org.openhab.core.thing.binding.firmware.ProgressCallback;
 import org.openhab.core.thing.binding.firmware.ProgressStep;
@@ -67,7 +66,7 @@ public final class ProgressCallbackTest {
     public void setUp() {
         ThingTypeUID thingType = new ThingTypeUID("thing:type");
         expectedThingUID = new ThingUID(thingType, "thingid");
-        expectedFirmware = FirmwareBuilder.create(thingType, "1").build();
+        expectedFirmware = FirmwareBuilderFactory.create(thingType, "1").build();
         postedEvents = new LinkedList<>();
 
         EventPublisher publisher = new EventPublisher() {

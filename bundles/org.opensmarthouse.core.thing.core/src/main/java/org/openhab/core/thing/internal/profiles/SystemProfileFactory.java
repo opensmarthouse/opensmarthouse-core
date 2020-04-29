@@ -20,6 +20,7 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -36,8 +37,12 @@ import org.openhab.core.thing.profiles.ProfileCallback;
 import org.openhab.core.thing.profiles.ProfileContext;
 import org.openhab.core.thing.profiles.ProfileFactory;
 import org.openhab.core.thing.profiles.ProfileType;
+import org.openhab.core.thing.profiles.ProfileTypeBuilder;
+import org.openhab.core.thing.profiles.ProfileTypeBuilderFactory;
 import org.openhab.core.thing.profiles.ProfileTypeProvider;
 import org.openhab.core.thing.profiles.ProfileTypeUID;
+import org.openhab.core.thing.profiles.StateProfileType;
+import org.openhab.core.thing.profiles.TriggerProfileType;
 import org.openhab.core.thing.profiles.i18n.ProfileTypeI18nLocalizationService;
 import org.openhab.core.thing.type.ChannelType;
 import org.openhab.core.thing.type.ChannelTypeRegistry;
@@ -64,14 +69,77 @@ public class SystemProfileFactory implements ProfileFactory, ProfileAdvisor, Pro
 
     private final ChannelTypeRegistry channelTypeRegistry;
 
-    private static final Set<ProfileType> SUPPORTED_PROFILE_TYPES = Collections
-            .unmodifiableSet(Stream
-                    .of(DEFAULT_TYPE, FOLLOW_TYPE, OFFSET_TYPE, RAWBUTTON_ON_OFF_SWITCH_TYPE,
-                            RAWBUTTON_TOGGLE_PLAYER_TYPE, RAWBUTTON_TOGGLE_PLAYER_TYPE, RAWBUTTON_TOGGLE_SWITCH_TYPE,
-                            RAWROCKER_DIMMER_TYPE, RAWROCKER_NEXT_PREVIOUS_TYPE, RAWROCKER_ON_OFF_TYPE,
-                            RAWROCKER_PLAY_PAUSE_TYPE, RAWROCKER_REWIND_FASTFORWARD_TYPE, RAWROCKER_STOP_MOVE_TYPE,
-                            RAWROCKER_UP_DOWN_TYPE, TIMESTAMP_CHANGE_TYPE, TIMESTAMP_UPDATE_TYPE)
-                    .collect(Collectors.toSet()));
+    Function<ProfileTypeBuilderFactory, StateProfileType> DEFAULT_TYPE = profileTypeBuilderFactory -> profileTypeBuilderFactory.newState(DEFAULT, "Default").build();
+
+    Function<ProfileTypeBuilderFactory, StateProfileType> FOLLOW_TYPE = profileTypeBuilderFactory -> profileTypeBuilderFactory.newState(FOLLOW, "Follow").build();
+
+    Function<ProfileTypeBuilderFactory, StateProfileType> OFFSET_TYPE = profileTypeBuilderFactory -> profileTypeBuilderFactory.newState(OFFSET, "Offset")
+            .withSupportedItemTypes(CoreItemFactory.NUMBER).withSupportedItemTypesOfChannel(CoreItemFactory.NUMBER)
+            .build();
+
+    Function<ProfileTypeBuilderFactory, ProfileType> RAWBUTTON_ON_OFF_SWITCH_TYPE = profileTypeBuilderFactory -> profileTypeBuilderFactory
+            .newTrigger(RAWBUTTON_ON_OFF_SWITCH, "Raw Button To On Off")
+            .withSupportedItemTypes(CoreItemFactory.SWITCH, CoreItemFactory.DIMMER, CoreItemFactory.COLOR)
+            .withSupportedChannelTypeUIDs(DefaultSystemChannelTypeProvider.SYSTEM_RAWBUTTON).build();
+
+    Function<ProfileTypeBuilderFactory, TriggerProfileType> RAWBUTTON_TOGGLE_PLAYER_TYPE = profileTypeBuilderFactory -> profileTypeBuilderFactory
+            .newTrigger(RAWBUTTON_TOGGLE_PLAYER, "Raw Button Toggle Player")
+            .withSupportedItemTypes(CoreItemFactory.PLAYER)
+            .withSupportedChannelTypeUIDs(DefaultSystemChannelTypeProvider.SYSTEM_RAWBUTTON).build();
+
+    Function<ProfileTypeBuilderFactory, TriggerProfileType> RAWBUTTON_TOGGLE_ROLLERSHUTTER_TYPE = profileTypeBuilderFactory -> profileTypeBuilderFactory
+            .newTrigger(RAWBUTTON_TOGGLE_ROLLERSHUTTER, "Raw Button Toggle Rollershutter")
+            .withSupportedItemTypes(CoreItemFactory.ROLLERSHUTTER)
+            .withSupportedChannelTypeUIDs(DefaultSystemChannelTypeProvider.SYSTEM_RAWBUTTON).build();
+
+    Function<ProfileTypeBuilderFactory, TriggerProfileType> RAWBUTTON_TOGGLE_SWITCH_TYPE = profileTypeBuilderFactory -> profileTypeBuilderFactory
+            .newTrigger(RAWBUTTON_TOGGLE_SWITCH, "Raw Button Toggle Switch")
+            .withSupportedItemTypes(CoreItemFactory.SWITCH, CoreItemFactory.DIMMER, CoreItemFactory.COLOR)
+            .withSupportedChannelTypeUIDs(DefaultSystemChannelTypeProvider.SYSTEM_RAWBUTTON).build();
+
+    Function<ProfileTypeBuilderFactory, TriggerProfileType> RAWROCKER_ON_OFF_TYPE = profileTypeBuilderFactory -> profileTypeBuilderFactory
+            .newTrigger(RAWROCKER_ON_OFF, "Raw Rocker To On Off")
+            .withSupportedItemTypes(CoreItemFactory.SWITCH, CoreItemFactory.DIMMER, CoreItemFactory.COLOR)
+            .withSupportedChannelTypeUIDs(DefaultSystemChannelTypeProvider.SYSTEM_RAWROCKER).build();
+
+    Function<ProfileTypeBuilderFactory, TriggerProfileType> RAWROCKER_DIMMER_TYPE = profileTypeBuilderFactory -> profileTypeBuilderFactory
+            .newTrigger(RAWROCKER_DIMMER, "Raw Rocker To Dimmer")
+            .withSupportedItemTypes(CoreItemFactory.DIMMER)
+            .withSupportedChannelTypeUIDs(DefaultSystemChannelTypeProvider.SYSTEM_RAWROCKER).build();
+
+    Function<ProfileTypeBuilderFactory, TriggerProfileType> RAWROCKER_NEXT_PREVIOUS_TYPE = profileTypeBuilderFactory -> profileTypeBuilderFactory
+            .newTrigger(RAWROCKER_NEXT_PREVIOUS, "Raw Rocker To Next/Previous")
+            .withSupportedItemTypes(CoreItemFactory.PLAYER)
+            .withSupportedChannelTypeUIDs(DefaultSystemChannelTypeProvider.SYSTEM_RAWROCKER).build();
+
+    Function<ProfileTypeBuilderFactory, TriggerProfileType> RAWROCKER_PLAY_PAUSE_TYPE = profileTypeBuilderFactory -> profileTypeBuilderFactory
+            .newTrigger(RAWROCKER_PLAY_PAUSE, "Raw Rocker To Play/Pause").withSupportedItemTypes(CoreItemFactory.PLAYER)
+            .withSupportedChannelTypeUIDs(DefaultSystemChannelTypeProvider.SYSTEM_RAWROCKER).build();
+
+    Function<ProfileTypeBuilderFactory, TriggerProfileType> RAWROCKER_REWIND_FASTFORWARD_TYPE = profileTypeBuilderFactory -> profileTypeBuilderFactory
+            .newTrigger(RAWROCKER_REWIND_FASTFORWARD, "Raw Rocker To Rewind/Fastforward")
+            .withSupportedItemTypes(CoreItemFactory.PLAYER)
+            .withSupportedChannelTypeUIDs(DefaultSystemChannelTypeProvider.SYSTEM_RAWROCKER).build();
+
+    Function<ProfileTypeBuilderFactory, TriggerProfileType> RAWROCKER_STOP_MOVE_TYPE = profileTypeBuilderFactory -> profileTypeBuilderFactory
+            .newTrigger(RAWROCKER_STOP_MOVE, "Raw Rocker To Stop/Move")
+            .withSupportedItemTypes(CoreItemFactory.ROLLERSHUTTER)
+            .withSupportedChannelTypeUIDs(DefaultSystemChannelTypeProvider.SYSTEM_RAWROCKER).build();
+
+    Function<ProfileTypeBuilderFactory, TriggerProfileType> RAWROCKER_UP_DOWN_TYPE = profileTypeBuilderFactory -> profileTypeBuilderFactory
+            .newTrigger(RAWROCKER_UP_DOWN, "Raw Rocker To Up/Down")
+            .withSupportedItemTypes(CoreItemFactory.ROLLERSHUTTER)
+            .withSupportedChannelTypeUIDs(DefaultSystemChannelTypeProvider.SYSTEM_RAWROCKER).build();
+
+    Function<ProfileTypeBuilderFactory, StateProfileType> TIMESTAMP_CHANGE_TYPE = profileTypeBuilderFactory -> profileTypeBuilderFactory
+            .newState(TIMESTAMP_CHANGE, "Timestamp on change")
+            .withSupportedItemTypes(CoreItemFactory.DATETIME).build();
+
+    Function<ProfileTypeBuilderFactory, StateProfileType> TIMESTAMP_UPDATE_TYPE = profileTypeBuilderFactory -> profileTypeBuilderFactory
+            .newState(TIMESTAMP_UPDATE, "Timestamp on update")
+            .withSupportedItemTypes(CoreItemFactory.DATETIME).build();
+
+    private final Set<ProfileType> SUPPORTED_PROFILE_TYPES;
 
     private static final Set<ProfileTypeUID> SUPPORTED_PROFILE_TYPE_UIDS = Collections
             .unmodifiableSet(Stream.of(DEFAULT, FOLLOW, OFFSET, RAWBUTTON_ON_OFF_SWITCH, RAWBUTTON_TOGGLE_PLAYER,
@@ -86,11 +154,20 @@ public class SystemProfileFactory implements ProfileFactory, ProfileAdvisor, Pro
 
     @Activate
     public SystemProfileFactory(final @Reference ChannelTypeRegistry channelTypeRegistry,
+            final @Reference ProfileTypeBuilderFactory profileTypeBuilderFactory,
             final @Reference ProfileTypeI18nLocalizationService profileTypeI18nLocalizationService,
             final @Reference BundleResolver bundleResolver) {
         this.channelTypeRegistry = channelTypeRegistry;
         this.profileTypeI18nLocalizationService = profileTypeI18nLocalizationService;
         this.bundle = bundleResolver.resolveBundle(SystemProfileFactory.class);
+
+        SUPPORTED_PROFILE_TYPES = Stream.of(DEFAULT_TYPE, FOLLOW_TYPE, OFFSET_TYPE, RAWBUTTON_ON_OFF_SWITCH_TYPE,
+                RAWBUTTON_TOGGLE_PLAYER_TYPE, RAWBUTTON_TOGGLE_PLAYER_TYPE, RAWBUTTON_TOGGLE_SWITCH_TYPE,
+                RAWROCKER_DIMMER_TYPE, RAWROCKER_NEXT_PREVIOUS_TYPE, RAWROCKER_ON_OFF_TYPE,
+                RAWROCKER_PLAY_PAUSE_TYPE, RAWROCKER_REWIND_FASTFORWARD_TYPE, RAWROCKER_STOP_MOVE_TYPE,
+                RAWROCKER_UP_DOWN_TYPE, TIMESTAMP_CHANGE_TYPE, TIMESTAMP_UPDATE_TYPE)
+            .map(function -> function.apply(profileTypeBuilderFactory))
+            .collect(Collectors.toSet());
     }
 
     @Override
@@ -143,7 +220,7 @@ public class SystemProfileFactory implements ProfileFactory, ProfileAdvisor, Pro
             case STATE:
                 return DEFAULT;
             case TRIGGER:
-                if (DefaultSystemChannelTypeProvider.SYSTEM_RAWBUTTON.getUID().equals(channelType.getUID())) {
+                if (DefaultSystemChannelTypeProvider.SYSTEM_RAWBUTTON.equals(channelType.getUID())) {
                     if (CoreItemFactory.PLAYER.equalsIgnoreCase(itemType)) {
                         return RAWBUTTON_TOGGLE_PLAYER;
                     } else if (CoreItemFactory.ROLLERSHUTTER.equalsIgnoreCase(itemType)) {
@@ -151,7 +228,7 @@ public class SystemProfileFactory implements ProfileFactory, ProfileAdvisor, Pro
                     } else if (CoreItemFactory.SWITCH.equalsIgnoreCase(itemType)) {
                         return RAWBUTTON_TOGGLE_SWITCH;
                     }
-                } else if (DefaultSystemChannelTypeProvider.SYSTEM_RAWROCKER.getUID().equals(channelType.getUID())) {
+                } else if (DefaultSystemChannelTypeProvider.SYSTEM_RAWROCKER.equals(channelType.getUID())) {
                     if (CoreItemFactory.DIMMER.equalsIgnoreCase(itemType)) {
                         return RAWROCKER_DIMMER;
                     } else if (CoreItemFactory.PLAYER.equalsIgnoreCase(itemType)) {

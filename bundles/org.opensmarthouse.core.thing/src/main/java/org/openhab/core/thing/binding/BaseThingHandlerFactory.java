@@ -65,6 +65,7 @@ public abstract class BaseThingHandlerFactory implements ThingHandlerFactory {
 
     private @NonNullByDefault({}) ServiceTracker<ThingTypeRegistry, ThingTypeRegistry> thingTypeRegistryServiceTracker;
     private @NonNullByDefault({}) ServiceTracker<ConfigDescriptionRegistry, ConfigDescriptionRegistry> configDescriptionRegistryServiceTracker;
+    private @NonNullByDefault({}) ThingFactory thingFactory;
 
     /**
      * Initializes the {@link BaseThingHandlerFactory}. If this method is overridden by a sub class, the implementing
@@ -326,10 +327,10 @@ public abstract class BaseThingHandlerFactory implements ThingHandlerFactory {
     @Override
     public @Nullable Thing createThing(ThingTypeUID thingTypeUID, Configuration configuration,
             @Nullable ThingUID thingUID, @Nullable ThingUID bridgeUID) {
-        ThingUID effectiveUID = thingUID != null ? thingUID : ThingFactory.generateRandomThingUID(thingTypeUID);
+        ThingUID effectiveUID = thingUID != null ? thingUID : thingFactory.generateRandomThingUID(thingTypeUID);
         ThingType thingType = getThingTypeByUID(thingTypeUID);
         if (thingType != null) {
-            Thing thing = ThingFactory.createThing(thingType, effectiveUID, configuration, bridgeUID,
+            Thing thing = thingFactory.createThing(thingType, effectiveUID, configuration, bridgeUID,
                     getConfigDescriptionRegistry());
             return thing;
         } else {

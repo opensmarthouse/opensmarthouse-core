@@ -31,7 +31,10 @@ import org.openhab.core.library.unit.ImperialUnits;
 import org.openhab.core.library.unit.SIUnits;
 import org.openhab.core.service.StateDescriptionService;
 import org.openhab.core.types.State;
+import org.openhab.core.types.StateDescription;
+import org.openhab.core.types.StateDescriptionFragment;
 import org.openhab.core.types.StateDescriptionFragmentBuilder;
+import org.openhab.core.types.StateDescriptionFragmentBuilderFactory;
 import org.openhab.core.types.UnDefType;
 import org.openhab.core.types.util.UnitUtils;
 
@@ -45,13 +48,19 @@ public class NumberItemTest {
 
     @Mock
     private StateDescriptionService stateDescriptionService;
+    @Mock
+    private StateDescriptionFragmentBuilder stateDescriptionFragmentBuilder;
+    @Mock
+    private StateDescriptionFragmentBuilderFactory stateDescriptionFragmentBuilderFactory;
+
+    @Mock
+    private StateDescription stateDescription;
 
     @Before
     public void setup() {
         initMocks(this);
-
-        when(stateDescriptionService.getStateDescription(ITEM_NAME, null)).thenReturn(StateDescriptionFragmentBuilder
-                .create().withPattern("%.1f " + UnitUtils.UNIT_PLACEHOLDER).build().toStateDescription());
+        when(stateDescription.getPattern()).thenReturn("%.1f " + UnitUtils.UNIT_PLACEHOLDER);
+        when(stateDescriptionService.getStateDescription(ITEM_NAME, null)).thenReturn(stateDescription);
     }
 
     @Test
@@ -122,8 +131,22 @@ public class NumberItemTest {
     public void testStripUnitPlaceholderFromPlainNumberItem() {
         NumberItem item = new NumberItem("Number", ITEM_NAME);
         item.setStateDescriptionService(stateDescriptionService);
+        item.setStateDescriptionFragmentBuilderFactory(stateDescriptionFragmentBuilderFactory);
 
-        assertThat(item.getStateDescription().getPattern(), is("%.1f"));
+        StateDescriptionFragment fragment = mock(StateDescriptionFragment.class);
+        StateDescription description = mock(StateDescription.class);
+
+        String pattern = "%.1f";
+        when(stateDescriptionFragmentBuilderFactory.create(stateDescription)).thenReturn(stateDescriptionFragmentBuilder);
+        when(stateDescriptionFragmentBuilder.withPattern(pattern)).thenReturn(stateDescriptionFragmentBuilder);
+        when(stateDescriptionFragmentBuilder.build()).thenReturn(fragment);
+        when(fragment.toStateDescription()).thenReturn(description);
+        when(description.getPattern()).thenReturn(pattern);
+
+        assertThat(item.getStateDescription().getPattern(), is(pattern));
+
+        verify(fragment).toStateDescription();
+        verify(stateDescriptionFragmentBuilder).withPattern(pattern);
     }
 
     @SuppressWarnings("null")

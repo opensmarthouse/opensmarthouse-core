@@ -14,16 +14,12 @@ package org.openhab.core.thing.binding.builder;
 
 import java.util.List;
 import java.util.Map;
-
-import org.eclipse.jdt.annotation.NonNullByDefault;
 import org.eclipse.jdt.annotation.Nullable;
 import org.openhab.core.config.core.Configuration;
 import org.openhab.core.thing.Bridge;
 import org.openhab.core.thing.Channel;
 import org.openhab.core.thing.ChannelUID;
-import org.openhab.core.thing.ThingTypeUID;
 import org.openhab.core.thing.ThingUID;
-import org.openhab.core.thing.internal.BridgeImpl;
 
 /**
  * This class allows the easy construction of a {@link Bridge} instance using the builder pattern.
@@ -31,82 +27,44 @@ import org.openhab.core.thing.internal.BridgeImpl;
  * @author Dennis Nobel - Initial contribution
  * @author Kai Kreuzer - Refactoring to make BridgeBuilder a subclass of ThingBuilder
  * @author Markus Rathgeb - Override methods to return BridgeBuidler instead of ThingBuidler
+ * @author Łukasz Dywicki - Refactoring to interface
  */
-@NonNullByDefault
-public class BridgeBuilder extends ThingBuilder {
-
-    private BridgeBuilder(ThingTypeUID thingTypeUID, ThingUID thingUID) {
-        super(thingTypeUID, thingUID);
-    }
-
-    public static BridgeBuilder create(ThingTypeUID thingTypeUID, String bridgeId) {
-        return new BridgeBuilder(thingTypeUID,
-                new ThingUID(thingTypeUID.getBindingId(), thingTypeUID.getId(), bridgeId));
-    }
-
-    public static BridgeBuilder create(ThingTypeUID thingTypeUID, ThingUID thingUID) {
-        return new BridgeBuilder(thingTypeUID, thingUID);
-    }
+public interface BridgeBuilder extends ThingBuilder {
 
     @Override
-    public Bridge build() {
-        final BridgeImpl bridge = new BridgeImpl(thingTypeUID, thingUID);
-        return (Bridge) super.populate(bridge);
-    }
+    Bridge build();
 
     @Override
-    public BridgeBuilder withLabel(@Nullable String label) {
-        return (BridgeBuilder) super.withLabel(label);
-    }
+    BridgeBuilder withLabel(@Nullable String label);
 
     @Override
-    public BridgeBuilder withChannel(Channel channel) {
-        return (BridgeBuilder) super.withChannel(channel);
-    }
+    BridgeBuilder withChannel(Channel channel);
 
     @Override
-    public BridgeBuilder withChannels(Channel... channels) {
-        return (BridgeBuilder) super.withChannels(channels);
-    }
+    BridgeBuilder withChannels(Channel... channels);
 
     @Override
-    public BridgeBuilder withChannels(List<Channel> channels) {
-        return (BridgeBuilder) super.withChannels(channels);
-    }
+    BridgeBuilder withChannels(List<Channel> channels);
 
     @Override
-    public BridgeBuilder withoutChannel(ChannelUID channelUID) {
-        return (BridgeBuilder) super.withoutChannel(channelUID);
-    }
+    BridgeBuilder withoutChannel(ChannelUID channelUID);
 
     @Override
-    public BridgeBuilder withoutChannels(Channel... channels) {
-        return (BridgeBuilder) super.withoutChannels(channels);
-    }
+    BridgeBuilder withoutChannels(Channel... channels);
 
     @Override
-    public BridgeBuilder withoutChannels(List<Channel> channels) {
-        return (BridgeBuilder) super.withoutChannels(channels);
-    }
+    BridgeBuilder withoutChannels(List<Channel> channels);
 
     @Override
-    public BridgeBuilder withConfiguration(Configuration thingConfiguration) {
-        return (BridgeBuilder) super.withConfiguration(thingConfiguration);
-    }
+    BridgeBuilder withConfiguration(Configuration thingConfiguration);
 
     @Override
-    public BridgeBuilder withBridge(@Nullable ThingUID bridgeUID) {
-        return (BridgeBuilder) super.withBridge(bridgeUID);
-    }
+    BridgeBuilder withBridge(@Nullable ThingUID bridgeUID);
 
     @Override
-    public BridgeBuilder withProperties(Map<String, String> properties) {
-        return (BridgeBuilder) super.withProperties(properties);
-    }
+    BridgeBuilder withProperties(Map<String, String> properties);
 
     @Override
-    public BridgeBuilder withLocation(@Nullable String location) {
-        return (BridgeBuilder) super.withLocation(location);
-    }
+    BridgeBuilder withLocation(@Nullable String location);
 
 }

@@ -31,6 +31,8 @@ import org.openhab.core.items.ManagedMetadataProvider;
 import org.openhab.core.items.Metadata;
 import org.openhab.core.items.MetadataKey;
 import org.openhab.core.types.StateDescriptionFragment;
+import org.openhab.core.types.StateDescriptionFragmentBuilder;
+import org.openhab.core.types.StateDescriptionFragmentBuilderFactory;
 import org.openhab.core.types.StateOption;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.ServiceEvent;
@@ -43,10 +45,21 @@ import org.osgi.framework.ServiceReference;
 public class MetadataStateDescriptionFragmentProviderTest {
 
     private static final String ITEM_NAME = "itemName";
+    public static final String PATTERN = "%.1f %unit%";
+    public static final double MIN = 18.5;
+    public static final String MAX = "34";
+    public static final int STEP = 3;
+    public static final String READ_ONLY = "true";
+    public static final String OPTION_1 = "OPTION1";
+    public static final String OPTION_2 = "OPTION2";
+    public static final String OPTION_3_LABEL = "Option 3";
+    public static final String OPTION_3_VALUE = "3";
+    public static final String THREE_OPTIONS = OPTION_1 + "," + OPTION_2 + " , " + OPTION_3_VALUE + " =" + OPTION_3_LABEL + " ";
 
     @SuppressWarnings("rawtypes")
     private @Mock ServiceReference managedProviderRef;
     private @Mock BundleContext bundleContext;
+    private @Mock StateDescriptionFragmentBuilderFactory stateDescriptionFragmentBuilderFactory;
     private @Mock ManagedMetadataProvider managedProvider;
     private @Mock Item item;
 
@@ -74,8 +87,8 @@ public class MetadataStateDescriptionFragmentProviderTest {
         providerTracker = captor.getValue();
         providerTracker.serviceChanged(new ServiceEvent(ServiceEvent.REGISTERED, managedProviderRef));
 
-        stateDescriptionFragmentProvider = new MetadataStateDescriptionFragmentProvider(metadataRegistry,
-                new HashMap<>());
+        stateDescriptionFragmentProvider = new MetadataStateDescriptionFragmentProvider(
+                stateDescriptionFragmentBuilderFactory, metadataRegistry, new HashMap<>());
     }
 
     @Test
@@ -90,33 +103,39 @@ public class MetadataStateDescriptionFragmentProviderTest {
     public void testFragment() throws Exception {
         MetadataKey metadataKey = new MetadataKey("stateDescription", ITEM_NAME);
         Map<String, Object> metadataConfig = new HashMap<>();
-        metadataConfig.put("pattern", "%.1f %unit%");
-        metadataConfig.put("min", 18.5);
-        metadataConfig.put("max", "34");
-        metadataConfig.put("step", 3);
-        metadataConfig.put("readOnly", "true");
-        metadataConfig.put("options", "OPTION1,OPTION2 , 3 =Option 3 ");
+        metadataConfig.put("pattern", PATTERN);
+        metadataConfig.put("min", MIN);
+        metadataConfig.put("max", MAX);
+        metadataConfig.put("step", STEP);
+        metadataConfig.put("readOnly", READ_ONLY);
+        metadataConfig.put("options", THREE_OPTIONS);
         Metadata metadata = new Metadata(metadataKey, "N/A", metadataConfig);
         metadataRegistry.added(managedProvider, metadata);
 
-        StateDescriptionFragment stateDescriptionFragment = stateDescriptionFragmentProvider
-                .getStateDescriptionFragment(ITEM_NAME, null);
-        assertNotNull(stateDescriptionFragment);
-        assertEquals("%.1f %unit%", stateDescriptionFragment.getPattern());
-        assertEquals(new BigDecimal(18.5), stateDescriptionFragment.getMinimum());
-        assertEquals(new BigDecimal(34), stateDescriptionFragment.getMaximum());
-        assertEquals(new BigDecimal(3), stateDescriptionFragment.getStep());
-        assertEquals(true, stateDescriptionFragment.isReadOnly());
-        assertNotNull(stateDescriptionFragment.getOptions());
-        Iterator<StateOption> it = stateDescriptionFragment.getOptions().iterator();
-        StateOption stateOption = it.next();
-        assertEquals("OPTION1", stateOption.getValue());
-        assertEquals(null, stateOption.getLabel());
-        stateOption = it.next();
-        assertEquals("OPTION2", stateOption.getValue());
-        assertEquals(null, stateOption.getLabel());
-        stateOption = it.next();
-        assertEquals("3", stateOption.getValue());
-        assertEquals("Option 3", stateOption.getLabel());
+        StateDescriptionFragmentBuilder mock = mock(StateDescriptionFragmentBuilder.class);
+        when(stateDescriptionFragmentBuilderFactory.create()).thenReturn(mock);
+
+        stateDescriptionFragmentProvider.getStateDescriptionFragment(ITEM_NAME, null);
+
+        verify(mock).withPattern("%.1f %unit%");
+        verify(mock).withMinimum(new BigDecimal(MIN));
+        verify(mock).withMaximum(new BigDecimal(MAX));
+        verify(mock).withStep(new BigDecimal(STEP));
+        verify(mock).withReadOnly(true);
+        verify(mock).withOptions(argThat(list -> {
+            assertEquals(3, list.size());
+            assertOption(list.get(0), OPTION_1, null);
+            assertOption(list.get(1), OPTION_2, null);
+            assertOption(list.get(2), OPTION_3_VALUE, OPTION_3_LABEL);
+            return true;
+        }));
+
+        verify(mock).build();
+        verifyNoMoreInteractions(mock);
+    }
+
+    private void assertOption(StateOption stateOption, String value, String label) {
+        assertEquals(value, stateOption.getValue());
+        assertEquals(label, stateOption.getLabel());
     }
 }

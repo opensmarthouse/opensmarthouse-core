@@ -20,12 +20,11 @@ import org.openhab.core.common.registry.Registry;
 import org.openhab.core.config.core.Configuration;
 import org.openhab.core.config.core.validation.ConfigValidationException;
 import org.openhab.core.thing.binding.ThingHandler;
-import org.openhab.core.thing.internal.ThingTracker;
 
 /**
  * {@link ThingRegistry} tracks all {@link Thing}s from different {@link ThingProvider}s and provides access to them.
- * The {@link ThingRegistry} supports adding of listeners (see {@link ThingsChangeListener}) and trackers
- * (see {@link ThingTracker}).
+ * The {@link ThingRegistry} supports adding of listeners (see {@link ThingRegistryChangeListener}) and trackers
+ * (see {@link org.openhab.core.thing.internal.ThingTracker}).
  *
  * @author Dennis Nobel - Initial contribution
  * @author Oliver Libutzki - Extracted ManagedThingProvider

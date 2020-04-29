@@ -26,12 +26,13 @@ import org.openhab.core.thing.type.ChannelType;
 import org.openhab.core.thing.type.ChannelTypeUID;
 import org.openhab.core.thing.type.DynamicCommandDescriptionProvider;
 import org.openhab.core.types.CommandDescription;
-import org.openhab.core.types.CommandDescriptionBuilder;
+import org.openhab.core.types.CommandDescriptionBuilderFactory;
 import org.openhab.core.types.CommandOption;
 import org.osgi.framework.BundleContext;
 import org.osgi.service.component.ComponentContext;
 import org.osgi.service.component.annotations.Activate;
 import org.osgi.service.component.annotations.Deactivate;
+import org.osgi.service.component.annotations.Reference;
 
 /**
  * The {@link BaseDynamicCommandDescriptionProvider} provides a base implementation for the
@@ -46,6 +47,7 @@ import org.osgi.service.component.annotations.Deactivate;
 public abstract class BaseDynamicCommandDescriptionProvider implements DynamicCommandDescriptionProvider {
 
     private @NonNullByDefault({}) BundleContext bundleContext;
+    private @NonNullByDefault({}) CommandDescriptionBuilderFactory commandDescriptionBuilderFactory;
     protected @NonNullByDefault({}) ChannelTypeI18nLocalizationService channelTypeI18nLocalizationService;
 
     protected final Map<ChannelUID, @Nullable List<CommandOption>> channelOptionsMap = new ConcurrentHashMap<>();
@@ -69,7 +71,7 @@ public abstract class BaseDynamicCommandDescriptionProvider implements DynamicCo
             return null;
         }
 
-        return CommandDescriptionBuilder.create().withCommandOptions(localizedCommandOptions(options, channel, locale))
+        return commandDescriptionBuilderFactory.create().withCommandOptions(localizedCommandOptions(options, channel, locale))
                 .build();
     }
 
@@ -93,7 +95,8 @@ public abstract class BaseDynamicCommandDescriptionProvider implements DynamicCo
     }
 
     @Activate
-    protected void activate(ComponentContext componentContext) {
+    protected void activate(@Reference CommandDescriptionBuilderFactory commandDescriptionBuilderFactory, ComponentContext componentContext) {
+        this.commandDescriptionBuilderFactory = commandDescriptionBuilderFactory;
         bundleContext = componentContext.getBundleContext();
     }
 

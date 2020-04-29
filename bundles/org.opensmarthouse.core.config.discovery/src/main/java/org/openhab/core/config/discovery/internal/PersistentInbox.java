@@ -131,6 +131,7 @@ public final class PersistentInbox implements Inbox, DiscoveryListener, ThingReg
     private final Set<InboxListener> listeners = new CopyOnWriteArraySet<>();
     private final DiscoveryServiceRegistry discoveryServiceRegistry;
     private final ThingRegistry thingRegistry;
+    private final ThingFactory thingFactory;
     private final ManagedThingProvider managedThingProvider;
     private final ThingTypeRegistry thingTypeRegistry;
     private final ConfigDescriptionRegistry configDescRegistry;
@@ -143,7 +144,8 @@ public final class PersistentInbox implements Inbox, DiscoveryListener, ThingReg
     @Activate
     public PersistentInbox(final @Reference StorageService storageService,
             final @Reference DiscoveryServiceRegistry discoveryServiceRegistry,
-            final @Reference ThingRegistry thingRegistry, final @Reference ManagedThingProvider thingProvider,
+            final @Reference ThingRegistry thingRegistry, final @Reference ThingFactory thingFactory,
+            final @Reference ManagedThingProvider thingProvider,
             final @Reference ThingTypeRegistry thingTypeRegistry,
             final @Reference ConfigDescriptionRegistry configDescriptionRegistry) {
         // First set all member variables to ensure the object itself is initialized (as most as possible).
@@ -151,6 +153,7 @@ public final class PersistentInbox implements Inbox, DiscoveryListener, ThingReg
                 this.getClass().getClassLoader());
         this.discoveryServiceRegistry = discoveryServiceRegistry;
         this.thingRegistry = thingRegistry;
+        this.thingFactory = thingFactory;
         this.managedThingProvider = thingProvider;
         this.thingTypeRegistry = thingTypeRegistry;
         this.configDescRegistry = configDescriptionRegistry;
@@ -187,7 +190,7 @@ public final class PersistentInbox implements Inbox, DiscoveryListener, ThingReg
         getPropsAndConfigParams(result, properties, configParams);
         final Configuration config = new Configuration(configParams);
         ThingTypeUID thingTypeUID = result.getThingTypeUID();
-        Thing newThing = ThingFactory.createThing(thingUID, config, properties, result.getBridgeUID(), thingTypeUID,
+        Thing newThing = thingFactory.createThing(thingUID, config, properties, result.getBridgeUID(), thingTypeUID,
                 this.thingHandlerFactories);
         if (newThing == null) {
             logger.warn("Cannot create thing. No binding found that supports creating a thing" + " of type {}.",
@@ -424,8 +427,7 @@ public final class PersistentInbox implements Inbox, DiscoveryListener, ThingReg
      * Returns the {@link DiscoveryResult} in this {@link Inbox} associated with
      * the specified {@code Thing} ID, or {@code null}, if no {@link DiscoveryResult} could be found.
      *
-     * @param thingId
-     *            the Thing ID to which the discovery result should be returned
+     * @param thingUID the Thing ID to which the discovery result should be returned
      *
      * @return the discovery result associated with the specified Thing ID, or
      *         null, if no discovery result could be found

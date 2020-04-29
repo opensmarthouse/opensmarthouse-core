@@ -21,8 +21,10 @@ import static org.openhab.core.thing.util.ThingHandlerHelper.isHandlerInitialize
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
+import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnit;
+import org.mockito.junit.MockitoJUnitRunner;
 import org.mockito.junit.MockitoRule;
 import org.openhab.core.thing.Thing;
 import org.openhab.core.thing.ThingStatus;
@@ -37,18 +39,14 @@ import org.openhab.core.thing.binding.builder.ThingBuilder;
  * @author Simon Kaufmann - Initial contribution
  * @author Wouter Born - Migrate tests from Groovy to Java
  */
+@RunWith(MockitoJUnitRunner.class)
 public class ThingHandlerHelperTest {
 
+    @Mock
     private Thing thing;
 
-    private @Mock ThingHandler thingHandler;
-
-    public @Rule MockitoRule rule = MockitoJUnit.rule();
-
-    @Before
-    public void setup() {
-        thing = ThingBuilder.create(new ThingTypeUID("test:test"), new ThingUID("test:test:test")).build();
-    }
+    @Mock
+    private ThingHandler thingHandler;
 
     @Test
     public void assertIsHandlerInitializedWorksCorrectlyForAThingStatus() {
@@ -63,25 +61,25 @@ public class ThingHandlerHelperTest {
 
     @Test
     public void assertIsHandlerInitializedWorksCorrectlyForAThing() {
-        thing.setStatusInfo(create(ThingStatus.UNINITIALIZED).build());
+        when(thing.getStatus()).thenReturn(ThingStatus.UNINITIALIZED);
         assertThat(isHandlerInitialized(thing), is(false));
 
-        thing.setStatusInfo(create(ThingStatus.INITIALIZING).build());
+        when(thing.getStatus()).thenReturn(ThingStatus.INITIALIZING);
         assertThat(isHandlerInitialized(thing), is(false));
 
-        thing.setStatusInfo(create(ThingStatus.REMOVING).build());
+        when(thing.getStatus()).thenReturn(ThingStatus.REMOVING);
         assertThat(isHandlerInitialized(thing), is(false));
 
-        thing.setStatusInfo(create(ThingStatus.REMOVED).build());
+        when(thing.getStatus()).thenReturn(ThingStatus.REMOVED);
         assertThat(isHandlerInitialized(thing), is(false));
 
-        thing.setStatusInfo(create(ThingStatus.UNKNOWN).build());
+        when(thing.getStatus()).thenReturn(ThingStatus.UNKNOWN);
         assertThat(isHandlerInitialized(thing), is(true));
 
-        thing.setStatusInfo(create(ThingStatus.ONLINE).build());
+        when(thing.getStatus()).thenReturn(ThingStatus.ONLINE);
         assertThat(isHandlerInitialized(thing), is(true));
 
-        thing.setStatusInfo(create(ThingStatus.OFFLINE).build());
+        when(thing.getStatus()).thenReturn(ThingStatus.OFFLINE);
         assertThat(isHandlerInitialized(thing), is(true));
     }
 
@@ -89,25 +87,25 @@ public class ThingHandlerHelperTest {
     public void assertIsHandlerInitializedWorksCorrectlyForAThingHandler() {
         when(thingHandler.getThing()).thenReturn(thing);
 
-        thing.setStatusInfo(create(ThingStatus.UNINITIALIZED).build());
+        when(thing.getStatus()).thenReturn(ThingStatus.UNINITIALIZED);
         assertThat(isHandlerInitialized(thingHandler), is(false));
 
-        thing.setStatusInfo(create(ThingStatus.INITIALIZING).build());
+        when(thing.getStatus()).thenReturn(ThingStatus.INITIALIZING);
         assertThat(isHandlerInitialized(thingHandler), is(false));
 
-        thing.setStatusInfo(create(ThingStatus.REMOVING).build());
+        when(thing.getStatus()).thenReturn(ThingStatus.REMOVING);
         assertThat(isHandlerInitialized(thingHandler), is(false));
 
-        thing.setStatusInfo(create(ThingStatus.REMOVED).build());
+        when(thing.getStatus()).thenReturn(ThingStatus.REMOVED);
         assertThat(isHandlerInitialized(thingHandler), is(false));
 
-        thing.setStatusInfo(create(ThingStatus.UNKNOWN).build());
+        when(thing.getStatus()).thenReturn(ThingStatus.UNKNOWN);
         assertThat(isHandlerInitialized(thingHandler), is(true));
 
-        thing.setStatusInfo(create(ThingStatus.ONLINE).build());
+        when(thing.getStatus()).thenReturn(ThingStatus.ONLINE);
         assertThat(isHandlerInitialized(thingHandler), is(true));
 
-        thing.setStatusInfo(create(ThingStatus.OFFLINE).build());
+        when(thing.getStatus()).thenReturn(ThingStatus.OFFLINE);
         assertThat(isHandlerInitialized(thingHandler), is(true));
     }
 }

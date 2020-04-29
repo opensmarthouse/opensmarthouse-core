@@ -47,7 +47,6 @@ import org.openhab.core.model.sitemap.sitemap.Switch;
 import org.openhab.core.model.sitemap.sitemap.Widget;
 import org.openhab.core.types.State;
 import org.openhab.core.types.StateDescription;
-import org.openhab.core.types.StateDescriptionFragmentBuilder;
 import org.openhab.core.types.StateOption;
 import org.openhab.core.types.UnDefType;
 import org.openhab.core.types.util.UnitUtils;
@@ -133,8 +132,8 @@ public class ItemUIRegistryImplTest {
         when(widget.getLabel()).thenReturn(testLabel);
         when(item.getState()).thenReturn(new DecimalType(20));
         when(item.getStateAs(DecimalType.class)).thenReturn(new DecimalType(20));
-        when(item.getStateDescription())
-                .thenReturn(StateDescriptionFragmentBuilder.create().withPattern("%d").build().toStateDescription());
+        StateDescription value = stateDescription("%d");
+        when(item.getStateDescription()).thenReturn(value);
         String label = uiRegistry.getLabel(widget);
         assertEquals("Label [20]", label);
     }
@@ -146,10 +145,16 @@ public class ItemUIRegistryImplTest {
         when(widget.getLabel()).thenReturn(testLabel);
         when(item.getState()).thenReturn(new DecimalType(20.5));
         when(item.getStateAs(DecimalType.class)).thenReturn(new DecimalType(20.5));
-        when(item.getStateDescription())
-                .thenReturn(StateDescriptionFragmentBuilder.create().withPattern("%d").build().toStateDescription());
+        StateDescription value = stateDescription("%d");
+        when(item.getStateDescription()).thenReturn(value);
         String label = uiRegistry.getLabel(widget);
         assertEquals("Label [21]", label);
+    }
+
+    private StateDescription stateDescription(String pattern) {
+        StateDescription description = mock(StateDescription.class);
+        when(description.getPattern()).thenReturn(pattern);
+        return description;
     }
 
     @Test

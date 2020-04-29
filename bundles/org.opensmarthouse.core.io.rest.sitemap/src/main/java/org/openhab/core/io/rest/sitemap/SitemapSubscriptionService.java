@@ -40,6 +40,7 @@ import org.openhab.core.model.sitemap.SitemapProvider;
 import org.openhab.core.model.sitemap.sitemap.LinkableWidget;
 import org.openhab.core.model.sitemap.sitemap.Sitemap;
 import org.openhab.core.model.sitemap.sitemap.Widget;
+import org.openhab.core.types.StateDescriptionFragmentBuilderFactory;
 import org.openhab.core.ui.items.ItemUIRegistry;
 import org.osgi.framework.BundleContext;
 import org.osgi.service.component.annotations.Activate;
@@ -81,6 +82,7 @@ public class SitemapSubscriptionService implements ModelRepositoryChangeListener
 
     private BundleContext bundleContext;
     private ItemUIRegistry itemUIRegistry;
+    private StateDescriptionFragmentBuilderFactory stateDescriptionFragmentBuilderFactory;
 
     private final List<SitemapProvider> sitemapProviders = new ArrayList<>();
 
@@ -157,6 +159,16 @@ public class SitemapSubscriptionService implements ModelRepositoryChangeListener
         sitemapProviders.remove(provider);
         provider.removeModelChangeListener(this);
     }
+
+    @Reference
+    protected void setStateDescriptionFragmentBuilderFactory(StateDescriptionFragmentBuilderFactory stateDescriptionFragmentBuilderFactory) {
+        this.stateDescriptionFragmentBuilderFactory = stateDescriptionFragmentBuilderFactory;
+    }
+
+    protected void unsetStateDescriptionFragmentBuilderFactory(StateDescriptionFragmentBuilderFactory stateDescriptionFragmentBuilderFactory) {
+        this.stateDescriptionFragmentBuilderFactory = null;
+    }
+
 
     /**
      * Creates a new subscription with the given id.
@@ -264,7 +276,8 @@ public class SitemapSubscriptionService implements ModelRepositoryChangeListener
         PageChangeListener listener = pageChangeListeners.get(getValue(sitemapName, pageId));
         if (listener == null) {
             // there is no listener for this page yet, so let's try to create one
-            listener = new PageChangeListener(bundleContext, sitemapName, pageId, itemUIRegistry, collectWidgets(sitemapName, pageId));
+            listener = new PageChangeListener(bundleContext, sitemapName, pageId, itemUIRegistry,
+                    stateDescriptionFragmentBuilderFactory, collectWidgets(sitemapName, pageId));
             pageChangeListeners.put(getValue(sitemapName, pageId), listener);
         }
         if (listener != null) {

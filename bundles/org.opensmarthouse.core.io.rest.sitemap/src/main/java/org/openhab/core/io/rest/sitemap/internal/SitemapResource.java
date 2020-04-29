@@ -86,6 +86,8 @@ import org.openhab.core.model.sitemap.sitemap.VisibilityRule;
 import org.openhab.core.model.sitemap.sitemap.Webview;
 import org.openhab.core.model.sitemap.sitemap.Widget;
 import org.openhab.core.types.State;
+import org.openhab.core.types.StateDescriptionFragmentBuilder;
+import org.openhab.core.types.StateDescriptionFragmentBuilderFactory;
 import org.openhab.core.ui.items.ItemUIRegistry;
 import org.osgi.framework.BundleContext;
 import org.osgi.service.component.annotations.Activate;
@@ -154,6 +156,7 @@ public class SitemapResource implements RESTResource, SitemapSubscriptionCallbac
 
     private ScheduledFuture<?> cleanSubscriptionsJob;
     private BundleContext bundleContext;
+    private StateDescriptionFragmentBuilderFactory stateDescriptionFragmentBuilderFactory;
 
     @Activate
     protected void activate(BundleContext bundleContext) {
@@ -221,6 +224,15 @@ public class SitemapResource implements RESTResource, SitemapSubscriptionCallbac
 
     protected void unsetLocaleService(LocaleService localeService) {
         this.localeService = null;
+    }
+
+    @Reference(cardinality = ReferenceCardinality.OPTIONAL, policy = ReferencePolicy.DYNAMIC)
+    protected void setStateDescriptionFragmentBuilderFactory(StateDescriptionFragmentBuilderFactory stateDescriptionFragmentBuilderFactory) {
+        this.stateDescriptionFragmentBuilderFactory = stateDescriptionFragmentBuilderFactory;
+    }
+
+    protected void unsetStateDescriptionFragmentBuilderFactory(StateDescriptionFragmentBuilderFactory localeService) {
+        this.stateDescriptionFragmentBuilderFactory = null;
     }
 
     @GET
@@ -495,7 +507,7 @@ public class SitemapResource implements RESTResource, SitemapSubscriptionCallbac
                         .substring(widget.eClass().getInstanceTypeName().lastIndexOf(".") + 1);
                 boolean isMapview = "mapview".equalsIgnoreCase(widgetTypeName);
                 Predicate<Item> itemFilter = (i -> CoreItemFactory.LOCATION.equals(i.getType()));
-                bean.item = EnrichedItemDTOMapper.map(bundleContext, item, isMapview, itemFilter, UriBuilder.fromUri(uri).build(),
+                bean.item = EnrichedItemDTOMapper.map(bundleContext, stateDescriptionFragmentBuilderFactory, item, isMapview, itemFilter, UriBuilder.fromUri(uri).build(),
                         locale);
                 bean.state = itemUIRegistry.getState(widget).toFullString();
                 // In case the widget state is identical to the item state, its value is set to null.

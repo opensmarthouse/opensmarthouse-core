@@ -13,131 +13,145 @@
 package org.openhab.core.thing.util;
 
 import static java.util.Collections.singletonList;
-import static java.util.stream.Collectors.toList;
 import static org.junit.Assert.*;
+import static org.mockito.Mockito.when;
 
-import java.util.stream.Stream;
-
+import java.util.Arrays;
 import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.mockito.Mock;
+import org.mockito.junit.MockitoJUnitRunner;
 import org.openhab.core.config.core.Configuration;
 import org.openhab.core.thing.ChannelUID;
 import org.openhab.core.thing.Thing;
 import org.openhab.core.thing.ThingTypeUID;
 import org.openhab.core.thing.ThingUID;
 import org.openhab.core.thing.binding.builder.ChannelBuilder;
-import org.openhab.core.thing.binding.builder.ThingBuilder;
-import org.openhab.core.thing.internal.ThingImpl;
 
 /**
  * @author Alex Tugarev - Initial contribution
  */
+@RunWith(MockitoJUnitRunner.class)
 public class ThingHelperTest {
 
     private static final ThingTypeUID THING_TYPE_UID = new ThingTypeUID("binding:type");
     private static final ThingUID THING_UID = new ThingUID(THING_TYPE_UID, "thingId");
 
+    @Mock
+    private Thing thingA;
+
+    @Mock
+    private Thing thingB;
+
     @Test
     public void twoTechnicalEqualThingInstancesAreDetectedAsEqual() {
-        Thing thingA = ThingBuilder.create(THING_TYPE_UID, THING_UID)
-                .withChannels(
-                        ChannelBuilder.create(new ChannelUID("binding:type:thingId:channel1"), "itemType").build(),
-                        ChannelBuilder.create(new ChannelUID("binding:type:thingId:channel2"), "itemType").build())
-                .withConfiguration(new Configuration()).build();
+        Configuration configurationA = new Configuration();
+        configurationA.put("prop1", "value1");
+        configurationA.put("prop2", "value2");
 
-        thingA.getConfiguration().put("prop1", "value1");
-        thingA.getConfiguration().put("prop2", "value2");
+        when(thingA.getUID()).thenReturn(THING_UID);
+        when(thingA.getChannels()).thenReturn(Arrays.asList(
+                ChannelBuilder.create(new ChannelUID("binding:type:thingId:channel1"), "itemType").build(),
+                ChannelBuilder.create(new ChannelUID("binding:type:thingId:channel2"), "itemType").build())
+        );
+        when(thingA.getConfiguration()).thenReturn(configurationA);
 
         assertTrue(ThingHelper.equals(thingA, thingA));
 
-        Thing thingB = ThingBuilder.create(THING_TYPE_UID, THING_UID)
-                .withChannels(
-                        ChannelBuilder.create(new ChannelUID("binding:type:thingId:channel2"), "itemType").build(),
-                        ChannelBuilder.create(new ChannelUID("binding:type:thingId:channel1"), "itemType").build())
-                .withConfiguration(new Configuration()).build();
-        thingB.getConfiguration().put("prop2", "value2");
-        thingB.getConfiguration().put("prop1", "value1");
+        Configuration configurationB = new Configuration();
+        configurationB.put("prop1", "value1");
+        configurationB.put("prop2", "value2");
+        when(thingB.getUID()).thenReturn(THING_UID);
+        when(thingB.getChannels()).thenReturn(Arrays.asList(
+                ChannelBuilder.create(new ChannelUID("binding:type:thingId:channel2"), "itemType").build(),
+                ChannelBuilder.create(new ChannelUID("binding:type:thingId:channel1"), "itemType").build())
+        );
+        when(thingB.getConfiguration()).thenReturn(configurationB);
 
         assertTrue(ThingHelper.equals(thingA, thingB));
     }
 
     @Test
     public void twoThingsAreDifferentAfterPropertiesWereModified() {
-        Thing thingA = ThingBuilder.create(THING_TYPE_UID, THING_UID)
-                .withChannels(
-                        ChannelBuilder.create(new ChannelUID("binding:type:thingId:channel1"), "itemType").build(),
-                        ChannelBuilder.create(new ChannelUID("binding:type:thingId:channel2"), "itemType").build())
-                .withConfiguration(new Configuration()).build();
-        thingA.getConfiguration().put("prop1", "value1");
+        // first thing
+        Configuration configurationA = new Configuration();
+        configurationA.put("prop1", "value1");
 
-        Thing thingB = ThingBuilder.create(THING_TYPE_UID, THING_UID)
-                .withChannels(
-                        ChannelBuilder.create(new ChannelUID("binding:type:thingId:channel2"), "itemType").build(),
-                        ChannelBuilder.create(new ChannelUID("binding:type:thingId:channel1"), "itemType").build())
-                .withConfiguration(new Configuration()).build();
-        thingB.getConfiguration().put("prop1", "value1");
+        when(thingA.getUID()).thenReturn(THING_UID);
+        when(thingA.getChannels()).thenReturn(Arrays.asList(
+                ChannelBuilder.create(new ChannelUID("binding:type:thingId:channel1"), "itemType").build(),
+                ChannelBuilder.create(new ChannelUID("binding:type:thingId:channel2"), "itemType").build())
+        );
+        when(thingA.getConfiguration()).thenReturn(configurationA);
 
+        // second thing
+        Configuration configurationB = new Configuration();
+        configurationB.put("prop1", "value1");
+
+        when(thingB.getUID()).thenReturn(THING_UID);
+        when(thingB.getChannels()).thenReturn(Arrays.asList(
+                ChannelBuilder.create(new ChannelUID("binding:type:thingId:channel2"), "itemType").build(),
+                ChannelBuilder.create(new ChannelUID("binding:type:thingId:channel1"), "itemType").build())
+        );
+        when(thingB.getConfiguration()).thenReturn(configurationB);
+
+        // actual test
         assertTrue(ThingHelper.equals(thingA, thingB));
 
-        thingB.getConfiguration().put("prop3", "value3");
+        configurationB.put("prop3", "value3");
 
         assertFalse(ThingHelper.equals(thingA, thingB));
     }
 
     @Test
     public void twoThingsAreDifferentAfterChannelsWereModified() {
-        Thing thingA = ThingBuilder.create(THING_TYPE_UID, THING_UID).withConfiguration(new Configuration()).build();
-        Thing thingB = ThingBuilder.create(THING_TYPE_UID, THING_UID).withConfiguration(new Configuration()).build();
+        when(thingA.getUID()).thenReturn(THING_UID);
+        when(thingA.getConfiguration()).thenReturn(new Configuration());
+
+        when(thingB.getUID()).thenReturn(THING_UID);
+        when(thingB.getConfiguration()).thenReturn(new Configuration());
 
         assertTrue(ThingHelper.equals(thingA, thingB));
 
-        ((ThingImpl) thingB).setChannels(singletonList(
-                ChannelBuilder.create(new ChannelUID("binding:type:thingId:channel3"), "itemType3").build()));
+        when(thingB.getChannels()).thenReturn(singletonList(
+                ChannelBuilder.create(new ChannelUID("binding:type:thingId:channel3"), "itemType3").build())
+        );
 
         assertFalse(ThingHelper.equals(thingA, thingB));
     }
 
     @Test
     public void twoThingsAreDifferentAfterLabelWasModified() {
-        Thing thingA = ThingBuilder.create(THING_TYPE_UID, THING_UID).withConfiguration(new Configuration())
-                .withLabel("foo").build();
-        Thing thingB = ThingBuilder.create(THING_TYPE_UID, THING_UID).withConfiguration(new Configuration())
-                .withLabel("foo").build();
+        when(thingA.getUID()).thenReturn(THING_UID);
+        when(thingA.getConfiguration()).thenReturn(new Configuration());
+        when(thingA.getLabel()).thenReturn("foo");
+
+        when(thingB.getUID()).thenReturn(THING_UID);
+        when(thingB.getConfiguration()).thenReturn(new Configuration());
+        when(thingB.getLabel()).thenReturn("foo");
 
         assertTrue(ThingHelper.equals(thingA, thingB));
 
-        thingB.setLabel("bar");
+        when(thingB.getLabel()).thenReturn("bar");
 
         assertFalse(ThingHelper.equals(thingA, thingB));
     }
 
     @Test
     public void twoThingsAreDifferentAfterLocationWasModified() {
-        Thing thingA = ThingBuilder.create(THING_TYPE_UID, THING_UID).withConfiguration(new Configuration())
-                .withLocation("foo").build();
-        Thing thingB = ThingBuilder.create(THING_TYPE_UID, THING_UID).withConfiguration(new Configuration())
-                .withLocation("foo").build();
+        when(thingA.getUID()).thenReturn(THING_UID);
+        when(thingA.getConfiguration()).thenReturn(new Configuration());
+        when(thingA.getLocation()).thenReturn("foo");
+
+        when(thingB.getUID()).thenReturn(THING_UID);
+        when(thingB.getConfiguration()).thenReturn(new Configuration());
+        when(thingB.getLocation()).thenReturn("foo");
 
         assertTrue(ThingHelper.equals(thingA, thingB));
 
-        thingB.setLocation("bar");
+        when(thingB.getLocation()).thenReturn("bar");
 
         assertFalse(ThingHelper.equals(thingA, thingB));
     }
 
-    @Test(expected = IllegalArgumentException.class)
-    public void assertThatNoDuplicateChannelsCanBeAdded() {
-        ThingTypeUID thingTypeUID = new ThingTypeUID("test", "test");
-        ThingUID thingUID = new ThingUID(thingTypeUID, "test");
-
-        Thing thing = ThingBuilder.create(thingTypeUID, thingUID)
-                .withChannels(ChannelBuilder.create(new ChannelUID(thingUID, "channel1"), "").build(),
-                        ChannelBuilder.create(new ChannelUID(thingUID, "channel2"), "").build())
-                .build();
-
-        ThingHelper
-                .addChannelsToThing(thing,
-                        Stream.of(ChannelBuilder.create(new ChannelUID(thingUID, "channel2"), "").build(),
-                                ChannelBuilder.create(new ChannelUID(thingUID, "channel3"), "").build())
-                                .collect(toList()));
-    }
 }

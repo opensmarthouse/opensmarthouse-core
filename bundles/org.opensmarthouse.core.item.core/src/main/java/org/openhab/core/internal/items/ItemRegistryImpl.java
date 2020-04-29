@@ -30,6 +30,7 @@ import org.openhab.core.items.GenericItem;
 import org.openhab.core.items.GroupItem;
 import org.openhab.core.items.Item;
 import org.openhab.core.items.ItemBuilder;
+import org.openhab.core.items.ItemFactory;
 import org.openhab.core.items.ItemNotFoundException;
 import org.openhab.core.items.ItemNotUniqueException;
 import org.openhab.core.items.ItemProvider;
@@ -72,13 +73,15 @@ public class ItemRegistryImpl extends AbstractRegistry<Item, String, ItemProvide
     private @Nullable StateDescriptionService stateDescriptionService;
     private @Nullable CommandDescriptionService commandDescriptionService;
     private final MetadataRegistry metadataRegistry;
+    private final ItemFactory itemFactory;
     private @Nullable UnitProvider unitProvider;
     private @Nullable ItemStateConverter itemStateConverter;
 
     @Activate
-    public ItemRegistryImpl(final @Reference MetadataRegistry metadataRegistry) {
+    public ItemRegistryImpl(final @Reference ItemFactory itemFactory, final @Reference MetadataRegistry metadataRegistry) {
         super(ItemProvider.class);
         this.metadataRegistry = metadataRegistry;
+        this.itemFactory = itemFactory;
     }
 
     @Override
@@ -147,13 +150,13 @@ public class ItemRegistryImpl extends AbstractRegistry<Item, String, ItemProvide
     @Override
     public ItemBuilder newItemBuilder(Item item) {
         logger.warn("Deprecation: You are using a deprecated API. Please use the ItemBuilder OSGi service instead.");
-        return new ItemBuilderImpl(Collections.singleton(new CoreItemFactory()), item);
+        return new ItemBuilderImpl(Collections.singleton(itemFactory), item);
     }
 
    @Override
     public ItemBuilder newItemBuilder(String itemType, String itemName) {
         logger.warn("Deprecation: You are using a deprecated API. Please use the ItemBuilder OSGi service instead.");
-        return new ItemBuilderImpl(Collections.singleton(new CoreItemFactory()), itemType, itemName);
+        return new ItemBuilderImpl(Collections.singleton(itemFactory), itemType, itemName);
     }
 
     private void addToGroupItems(Item item, List<String> groupItemNames) {

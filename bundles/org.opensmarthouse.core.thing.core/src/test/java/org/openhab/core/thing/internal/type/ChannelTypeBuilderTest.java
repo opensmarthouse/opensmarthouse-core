@@ -10,7 +10,7 @@
  *
  * SPDX-License-Identifier: EPL-2.0
  */
-package org.openhab.core.thing.type;
+package org.openhab.core.thing.internal.type;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.collection.IsCollectionWithSize.hasSize;
@@ -22,9 +22,17 @@ import java.net.URISyntaxException;
 import java.util.Arrays;
 import java.util.List;
 
+import org.hamcrest.CoreMatchers;
 import org.junit.Before;
 import org.junit.Test;
 import org.openhab.core.thing.CommonTriggerEvents;
+import org.openhab.core.thing.type.ChannelKind;
+import org.openhab.core.thing.type.ChannelType;
+import org.openhab.core.thing.type.ChannelTypeBuilder;
+import org.openhab.core.thing.type.ChannelTypeBuilderFactory;
+import org.openhab.core.thing.type.ChannelTypeUID;
+import org.openhab.core.thing.type.StateChannelTypeBuilder;
+import org.openhab.core.thing.type.TriggerChannelTypeBuilder;
 import org.openhab.core.types.EventDescription;
 import org.openhab.core.types.EventOption;
 import org.openhab.core.types.StateDescription;
@@ -57,23 +65,23 @@ public class ChannelTypeBuilderTest {
     public void setup() throws URISyntaxException {
         configDescriptionUri = new URI("config:dummy");
         // set up a valid basic ChannelTypeBuilder
-        stateBuilder = ChannelTypeBuilder.state(CHANNEL_TYPE_UID, LABEL, ITEM_TYPE);
-        triggerBuilder = ChannelTypeBuilder.trigger(CHANNEL_TYPE_UID, LABEL);
+        stateBuilder = new ChannelTypeBuilderFactoryImpl().state(CHANNEL_TYPE_UID, LABEL, ITEM_TYPE);
+        triggerBuilder = new ChannelTypeBuilderFactoryImpl().trigger(CHANNEL_TYPE_UID, LABEL);
     }
 
     @Test(expected = IllegalArgumentException.class)
     public void whenLabelIsBlankForStateShouldFail() {
-        ChannelTypeBuilder.state(CHANNEL_TYPE_UID, "", ITEM_TYPE);
+        new ChannelTypeBuilderFactoryImpl().state(CHANNEL_TYPE_UID, "", ITEM_TYPE);
     }
 
     @Test(expected = IllegalArgumentException.class)
     public void whenItemTypeIsBlankForStateShouldFail() {
-        ChannelTypeBuilder.state(CHANNEL_TYPE_UID, LABEL, "");
+        new ChannelTypeBuilderFactoryImpl().state(CHANNEL_TYPE_UID, LABEL, "");
     }
 
     @Test(expected = IllegalArgumentException.class)
     public void whenLabelIsBlankForTriggerShouldFail() {
-        ChannelTypeBuilder.trigger(CHANNEL_TYPE_UID, "");
+        new ChannelTypeBuilderFactoryImpl().trigger(CHANNEL_TYPE_UID, "");
     }
 
     @Test
@@ -83,7 +91,7 @@ public class ChannelTypeBuilderTest {
         assertThat(channelType.getUID(), is(CHANNEL_TYPE_UID));
         assertThat(channelType.getItemType(), is(ITEM_TYPE));
         assertThat(channelType.getLabel(), is(LABEL));
-        assertThat(channelType.getKind(), is(ChannelKind.STATE));
+        assertThat(channelType.getKind(), CoreMatchers.is(ChannelKind.STATE));
     }
 
     @Test

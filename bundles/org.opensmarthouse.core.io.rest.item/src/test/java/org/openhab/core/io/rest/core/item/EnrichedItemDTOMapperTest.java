@@ -14,16 +14,22 @@ package org.openhab.core.io.rest.core.item;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
+import static org.mockito.Mockito.when;
+import static org.mockito.MockitoAnnotations.initMocks;
 
 import java.net.URI;
 
 import org.junit.Before;
 import org.junit.Test;
+import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.openhab.core.items.GenericItem;
 import org.openhab.core.items.GroupItem;
+import org.openhab.core.items.ItemFactory;
 import org.openhab.core.library.CoreItemFactory;
 import org.openhab.core.test.java.JavaTest;
+import org.openhab.core.types.StateDescriptionFragmentBuilderFactory;
+import org.openhab.core.types.UnDefType;
 import org.osgi.framework.BundleContext;
 
 /**
@@ -31,53 +37,75 @@ import org.osgi.framework.BundleContext;
  */
 public class EnrichedItemDTOMapperTest extends JavaTest {
 
-    private CoreItemFactory itemFactory;
+    @Mock
+    private ItemFactory itemFactory;
 
-    private BundleContext bundleContext = Mockito.mock(BundleContext.class);
+    @Mock
+    private BundleContext bundleContext;
+
+    @Mock
+    private StateDescriptionFragmentBuilderFactory stateDescriptionFragmentBuilderFactory;
+
+    @Mock
+    GenericItem switchItem;// = itemFactory.createItem(CoreItemFactory.SWITCH, "TestSwitch");
+
+    @Mock
+    GenericItem numberItem;// = itemFactory.createItem(CoreItemFactory.NUMBER, "");
+
+    @Mock
+    GenericItem stringItem;// = itemFactory.createItem(CoreItemFactory.STRING, "");
 
     @Before
     public void setup() {
-        itemFactory = new CoreItemFactory();
+        initMocks(this);
+
+        when(switchItem.getState()).thenReturn(UnDefType.NULL);
+        when(switchItem.getType()).thenReturn(CoreItemFactory.SWITCH);
+        when(numberItem.getState()).thenReturn(UnDefType.NULL);
+        when(numberItem.getType()).thenReturn(CoreItemFactory.NUMBER);
+        when(stringItem.getState()).thenReturn(UnDefType.NULL);
+        when(stringItem.getType()).thenReturn(CoreItemFactory.STRING);
     }
 
     @Test
     public void testFiltering() {
         GroupItem group = new GroupItem("TestGroup");
         GroupItem subGroup = new GroupItem("TestSubGroup");
-        GenericItem switchItem = itemFactory.createItem(CoreItemFactory.SWITCH, "TestSwitch");
-        GenericItem numberItem = itemFactory.createItem(CoreItemFactory.NUMBER, "TestNumber");
-        GenericItem stringItem = itemFactory.createItem(CoreItemFactory.STRING, "TestString");
 
-        if (switchItem != null && numberItem != null && stringItem != null) {
-            group.addMember(subGroup);
-            group.addMember(switchItem);
-            group.addMember(numberItem);
-            subGroup.addMember(stringItem);
-        }
+        group.addMember(subGroup);
+        group.addMember(switchItem);
+        group.addMember(numberItem);
+        subGroup.addMember(stringItem);
 
-        EnrichedGroupItemDTO dto = (EnrichedGroupItemDTO) EnrichedItemDTOMapper.map(bundleContext, group, false, null, URI.create(""),
+        EnrichedGroupItemDTO dto = (EnrichedGroupItemDTO) EnrichedItemDTOMapper.map(bundleContext,
+                stateDescriptionFragmentBuilderFactory, group, false, null, URI.create(""),
                 null);
         assertThat(dto.members.length, is(0));
 
-        dto = (EnrichedGroupItemDTO) EnrichedItemDTOMapper.map(bundleContext, group, true, null, URI.create(""), null);
+        dto = (EnrichedGroupItemDTO) EnrichedItemDTOMapper.map(bundleContext, stateDescriptionFragmentBuilderFactory,
+                group, true, null, URI.create(""), null);
         assertThat(dto.members.length, is(3));
         assertThat(((EnrichedGroupItemDTO) dto.members[0]).members.length, is(1));
 
-        dto = (EnrichedGroupItemDTO) EnrichedItemDTOMapper.map(bundleContext, group, true,
+        dto = (EnrichedGroupItemDTO) EnrichedItemDTOMapper.map(bundleContext, stateDescriptionFragmentBuilderFactory,
+                group, true,
                 i -> CoreItemFactory.NUMBER.equals(i.getType()), URI.create(""), null);
         assertThat(dto.members.length, is(1));
 
-        dto = (EnrichedGroupItemDTO) EnrichedItemDTOMapper.map(bundleContext, group, true,
+        dto = (EnrichedGroupItemDTO) EnrichedItemDTOMapper.map(bundleContext, stateDescriptionFragmentBuilderFactory,
+                group, true,
                 i -> CoreItemFactory.NUMBER.equals(i.getType()) || i instanceof GroupItem, URI.create(""), null);
         assertThat(dto.members.length, is(2));
         assertThat(((EnrichedGroupItemDTO) dto.members[0]).members.length, is(0));
 
-        dto = (EnrichedGroupItemDTO) EnrichedItemDTOMapper.map(bundleContext, group, true,
+        dto = (EnrichedGroupItemDTO) EnrichedItemDTOMapper.map(bundleContext, stateDescriptionFragmentBuilderFactory,
+                group, true,
                 i -> CoreItemFactory.NUMBER.equals(i.getType()) || i instanceof GroupItem, URI.create(""), null);
         assertThat(dto.members.length, is(2));
         assertThat(((EnrichedGroupItemDTO) dto.members[0]).members.length, is(0));
 
-        dto = (EnrichedGroupItemDTO) EnrichedItemDTOMapper.map(bundleContext, group, true,
+        dto = (EnrichedGroupItemDTO) EnrichedItemDTOMapper.map(bundleContext, stateDescriptionFragmentBuilderFactory,
+                group, true,
                 i -> CoreItemFactory.NUMBER.equals(i.getType()) || i.getType().equals(CoreItemFactory.STRING)
                         || i instanceof GroupItem,
                 URI.create(""), null);

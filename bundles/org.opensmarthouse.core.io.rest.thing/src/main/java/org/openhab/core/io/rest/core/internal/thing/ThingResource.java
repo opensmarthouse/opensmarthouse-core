@@ -73,6 +73,7 @@ import org.openhab.core.thing.ThingRegistry;
 import org.openhab.core.thing.ThingStatusInfo;
 import org.openhab.core.thing.ThingTypeUID;
 import org.openhab.core.thing.ThingUID;
+import org.openhab.core.thing.binding.ThingBuilderFactory;
 import org.openhab.core.thing.binding.firmware.Firmware;
 import org.openhab.core.thing.dto.ChannelDTO;
 import org.openhab.core.thing.dto.ChannelDTOMapper;
@@ -148,6 +149,7 @@ public class ThingResource implements RESTResource {
     private FirmwareUpdateService firmwareUpdateService;
     private FirmwareRegistry firmwareRegistry;
     private ThingManager thingManager;
+    private ThingBuilderFactory thingBuilderFactory;
 
     private LocaleService localeService;
 
@@ -228,7 +230,7 @@ public class ThingResource implements RESTResource {
             // we create the Thing exactly the way we received it, i.e. we
             // cannot take its thing type into account for automatically
             // populating channels and properties.
-            thing = ThingDTOMapper.map(thingBean, thingTypeRegistry.getThingType(thingTypeUID) instanceof BridgeType);
+            thing = ThingDTOMapper.map(thingBuilderFactory, thingBean, thingTypeRegistry.getThingType(thingTypeUID) instanceof BridgeType);
         } else {
             return getThingResponse(Status.BAD_REQUEST, thing, locale,
                     "A UID must be provided, since no binding can create the thing!");
@@ -376,7 +378,7 @@ public class ThingResource implements RESTResource {
                 thing.getUID());
         normalizeChannels(thingBean, thing.getUID());
 
-        thing = ThingHelper.merge(thing, thingBean);
+        thing = ThingHelper.merge(thingBuilderFactory, thing, thingBean);
 
         // update, returns null in case Thing cannot be found
         Thing oldthing = managedThingProvider.update(thing);
@@ -814,6 +816,15 @@ public class ThingResource implements RESTResource {
 
     protected void unsetThingManager(ThingManager thingManager) {
         this.thingManager = null;
+    }
+
+    @Reference(cardinality = ReferenceCardinality.OPTIONAL, policy = ReferencePolicy.DYNAMIC)
+    protected void setThingBuilderFactory(ThingBuilderFactory thingBuilderFactory) {
+        this.thingBuilderFactory = thingBuilderFactory;
+    }
+
+    protected void unsetThingBuilderFactory(ThingBuilderFactory thingBuilderFactory) {
+        this.thingBuilderFactory = null;
     }
 
     private Map<String, Object> normalizeConfiguration(Map<String, Object> properties, ThingTypeUID thingTypeUID,

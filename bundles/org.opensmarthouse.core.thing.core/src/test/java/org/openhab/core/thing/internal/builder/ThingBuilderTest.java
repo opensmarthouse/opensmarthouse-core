@@ -10,8 +10,9 @@
  *
  * SPDX-License-Identifier: EPL-2.0
  */
-package org.openhab.core.thing.binding.builder;
+package org.openhab.core.thing.internal.builder;
 
+import static java.util.stream.Collectors.toList;
 import static org.hamcrest.CoreMatchers.*;
 import static org.hamcrest.collection.IsCollectionWithSize.hasSize;
 import static org.junit.Assert.assertThat;
@@ -20,6 +21,7 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.stream.Stream;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -27,8 +29,12 @@ import org.openhab.core.thing.ChannelUID;
 import org.openhab.core.thing.Thing;
 import org.openhab.core.thing.ThingTypeUID;
 import org.openhab.core.thing.ThingUID;
+import org.openhab.core.thing.binding.builder.BridgeBuilder;
+import org.openhab.core.thing.binding.builder.ChannelBuilder;
+import org.openhab.core.thing.binding.builder.ThingBuilder;
 import org.openhab.core.thing.internal.BridgeImpl;
 import org.openhab.core.thing.internal.ThingImpl;
+import org.openhab.core.thing.util.ThingHelper;
 
 /**
  *
@@ -53,7 +59,7 @@ public class ThingBuilderTest {
 
     @Before
     public void setup() {
-        thingBuilder = ThingBuilder.create(THING_TYPE_UID, THING_UID);
+        thingBuilder = ThingBuilderImpl.create(THING_TYPE_UID, THING_UID);
     }
 
     @Test
@@ -62,7 +68,7 @@ public class ThingBuilderTest {
         assertThat(thingBuilder.withLabel("TEST"), is(instanceOf(ThingBuilder.class)));
         assertThat(thingBuilder.build(), is(instanceOf(ThingImpl.class)));
 
-        final BridgeBuilder bridgeBuilder = BridgeBuilder.create(THING_TYPE_UID, THING_UID);
+        final BridgeBuilder bridgeBuilder = BridgeBuilderImpl.create(THING_TYPE_UID, THING_UID);
         assertThat(bridgeBuilder, is(instanceOf(BridgeBuilder.class)));
         assertThat(bridgeBuilder.withLabel("TEST"), is(instanceOf(BridgeBuilder.class)));
         assertThat(bridgeBuilder.build(), is(instanceOf(BridgeImpl.class)));
@@ -123,5 +129,22 @@ public class ThingBuilderTest {
         assertThat(otherThing.getLabel(), is(not(thing.getLabel())));
         assertThat(otherThing.getLocation(), is(not(thing.getLocation())));
         assertThat(otherThing.getProperties().size(), is(not(thing.getProperties().size())));
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void assertThatNoDuplicateChannelsCanBeAdded() {
+        ThingTypeUID thingTypeUID = new ThingTypeUID("test", "test");
+        ThingUID thingUID = new ThingUID(thingTypeUID, "test");
+
+        Thing thing = ThingBuilderImpl.create(thingTypeUID, thingUID)
+                .withChannels(ChannelBuilder.create(new ChannelUID(thingUID, "channel1"), "").build(),
+                        ChannelBuilder.create(new ChannelUID(thingUID, "channel2"), "").build())
+                .build();
+
+        ThingHelper
+                .addChannelsToThing(thing,
+                        Stream.of(ChannelBuilder.create(new ChannelUID(thingUID, "channel2"), "").build(),
+                                ChannelBuilder.create(new ChannelUID(thingUID, "channel3"), "").build())
+                                .collect(toList()));
     }
 }

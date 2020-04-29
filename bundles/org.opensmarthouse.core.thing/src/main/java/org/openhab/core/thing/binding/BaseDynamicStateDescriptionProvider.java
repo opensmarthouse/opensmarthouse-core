@@ -27,11 +27,13 @@ import org.openhab.core.thing.type.ChannelTypeUID;
 import org.openhab.core.thing.type.DynamicStateDescriptionProvider;
 import org.openhab.core.types.StateDescription;
 import org.openhab.core.types.StateDescriptionFragmentBuilder;
+import org.openhab.core.types.StateDescriptionFragmentBuilderFactory;
 import org.openhab.core.types.StateOption;
 import org.osgi.framework.BundleContext;
 import org.osgi.service.component.ComponentContext;
 import org.osgi.service.component.annotations.Activate;
 import org.osgi.service.component.annotations.Deactivate;
+import org.osgi.service.component.annotations.Reference;
 
 /**
  * The {@link BaseDynamicStateDescriptionProvider} provides a base implementation for the
@@ -47,6 +49,7 @@ import org.osgi.service.component.annotations.Deactivate;
 public abstract class BaseDynamicStateDescriptionProvider implements DynamicStateDescriptionProvider {
 
     private @NonNullByDefault({}) BundleContext bundleContext;
+    private @NonNullByDefault({}) StateDescriptionFragmentBuilderFactory stateDescriptionFragmentBuilderFactory;
     protected @NonNullByDefault({}) ChannelTypeI18nLocalizationService channelTypeI18nLocalizationService;
 
     protected final Map<ChannelUID, @Nullable String> channelPatternMap = new ConcurrentHashMap<>();
@@ -85,8 +88,8 @@ public abstract class BaseDynamicStateDescriptionProvider implements DynamicStat
             return null;
         }
 
-        StateDescriptionFragmentBuilder builder = (original == null) ? StateDescriptionFragmentBuilder.create()
-                : StateDescriptionFragmentBuilder.create(original);
+        StateDescriptionFragmentBuilder builder = (original == null) ? stateDescriptionFragmentBuilderFactory.create()
+                : stateDescriptionFragmentBuilderFactory.create(original);
 
         if (pattern != null) {
             String localizedPattern = localizeStatePattern(pattern, channel, locale);
@@ -140,7 +143,9 @@ public abstract class BaseDynamicStateDescriptionProvider implements DynamicStat
     }
 
     @Activate
-    protected void activate(ComponentContext componentContext) {
+    protected void activate(@Reference StateDescriptionFragmentBuilderFactory stateDescriptionFragmentBuilderFactory,
+            ComponentContext componentContext) {
+        this.stateDescriptionFragmentBuilderFactory = stateDescriptionFragmentBuilderFactory;
         bundleContext = componentContext.getBundleContext();
     }
 
@@ -148,5 +153,6 @@ public abstract class BaseDynamicStateDescriptionProvider implements DynamicStat
     public void deactivate() {
         channelOptionsMap.clear();
         bundleContext = null;
+        stateDescriptionFragmentBuilderFactory = null;
     }
 }
