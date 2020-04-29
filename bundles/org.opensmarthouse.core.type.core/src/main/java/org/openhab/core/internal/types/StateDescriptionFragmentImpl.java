@@ -164,13 +164,7 @@ public class StateDescriptionFragmentImpl implements StateDescriptionFragment {
         return new StateDescription(minimum, maximum, step, pattern, ro == null ? false : ro.booleanValue(), options);
     }
 
-    /**
-     * Merge the given {@link StateDescriptionFragment}. Set all unset ({@code null}) fields of this instance to the
-     * values from the given {@link StateDescriptionFragment}.
-     *
-     * @param fragment a {@link StateDescriptionFragment} this instance should merge in.
-     * @return this instance with the fields merged.
-     */
+    @Override
     public StateDescriptionFragment merge(StateDescriptionFragment fragment) {
         if (this.minimum == null) {
             this.minimum = fragment.getMinimum();

@@ -22,6 +22,7 @@ import org.openhab.core.i18n.TranslationProvider;
 import org.openhab.core.thing.i18n.ChannelTypeI18nLocalizationService;
 import org.openhab.core.thing.type.ChannelType;
 import org.openhab.core.thing.type.ChannelTypeBuilder;
+import org.openhab.core.thing.type.ChannelTypeBuilderFactory;
 import org.openhab.core.thing.type.ChannelTypeUID;
 import org.openhab.core.thing.type.StateChannelTypeBuilder;
 import org.openhab.core.thing.type.TriggerChannelTypeBuilder;
@@ -48,14 +49,17 @@ import org.osgi.service.component.annotations.Reference;
 public class ChannelTypeI18nLocalizationServiceImpl implements ChannelTypeI18nLocalizationService {
 
     private final ThingTypeI18nUtil thingTypeI18nUtil;
+    private final ChannelTypeBuilderFactory channelTypeBuilderFactory;
     private final StateDescriptionFragmentBuilderFactory stateDescriptionFragmentBuilderFactory;
     private final CommandDescriptionBuilderFactory commandDescriptionBuilderFactory;
 
     @Activate
     public ChannelTypeI18nLocalizationServiceImpl(final @Reference TranslationProvider i18nProvider,
+            final @Reference ChannelTypeBuilderFactory channelTypeBuilderFactory,
             final @Reference StateDescriptionFragmentBuilderFactory stateDescriptionFragmentBuilderFactory,
             final @Reference CommandDescriptionBuilderFactory commandDescriptionBuilderFactory) {
         this.thingTypeI18nUtil = new ThingTypeI18nUtil(i18nProvider);
+        this.channelTypeBuilderFactory = channelTypeBuilderFactory;
         this.stateDescriptionFragmentBuilderFactory = stateDescriptionFragmentBuilderFactory;
         this.commandDescriptionBuilderFactory = commandDescriptionBuilderFactory;
     }
@@ -148,7 +152,7 @@ public class ChannelTypeI18nLocalizationServiceImpl implements ChannelTypeI18nLo
                 CommandDescription command = createLocalizedCommandDescription(bundle,
                         channelType.getCommandDescription(), channelTypeUID, locale);
 
-                StateChannelTypeBuilder stateBuilder = ChannelTypeBuilder
+                StateChannelTypeBuilder stateBuilder = channelTypeBuilderFactory
                         .state(channelTypeUID, label == null ? defaultLabel : label, channelType.getItemType())
                         .isAdvanced(channelType.isAdvanced()).withCategory(channelType.getCategory())
                         .withConfigDescriptionURI(channelType.getConfigDescriptionURI()).withTags(channelType.getTags())
@@ -159,7 +163,7 @@ public class ChannelTypeI18nLocalizationServiceImpl implements ChannelTypeI18nLo
                 }
                 return stateBuilder.build();
             case TRIGGER:
-                TriggerChannelTypeBuilder triggerBuilder = ChannelTypeBuilder
+                TriggerChannelTypeBuilder triggerBuilder = channelTypeBuilderFactory
                         .trigger(channelTypeUID, label == null ? defaultLabel : label)
                         .isAdvanced(channelType.isAdvanced()).withCategory(channelType.getCategory())
                         .withConfigDescriptionURI(channelType.getConfigDescriptionURI()).withTags(channelType.getTags())

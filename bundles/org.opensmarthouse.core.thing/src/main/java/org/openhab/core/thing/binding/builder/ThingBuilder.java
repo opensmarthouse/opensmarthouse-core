@@ -14,6 +14,7 @@ package org.openhab.core.thing.binding.builder;
 
 import java.util.List;
 import java.util.Map;
+import org.eclipse.jdt.annotation.NonNullByDefault;
 import org.eclipse.jdt.annotation.Nullable;
 import org.openhab.core.config.core.Configuration;
 import org.openhab.core.thing.Channel;
@@ -28,6 +29,7 @@ import org.openhab.core.thing.ThingUID;
  * @author Kai Kreuzer - Refactoring to make BridgeBuilder a subclass
  * @author Łukasz Dywicki - Refactoring to interface
  */
+@NonNullByDefault
 public interface ThingBuilder {
 
     Thing build();

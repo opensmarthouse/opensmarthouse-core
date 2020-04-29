@@ -14,6 +14,7 @@ package org.openhab.core.thing.i18n;
 
 import java.util.List;
 import java.util.Locale;
+import org.eclipse.jdt.annotation.NonNullByDefault;
 import org.eclipse.jdt.annotation.Nullable;
 import org.openhab.core.thing.type.ChannelType;
 import org.openhab.core.thing.type.ChannelTypeUID;
@@ -33,6 +34,7 @@ import org.osgi.framework.Bundle;
  * @author Christoph Weitkamp - factored out from {@link XmlChannelTypeProvider} and {@link XmlChannelGroupTypeProvider}
  * @author Henning Treu - factored out from {@link ThingTypeI18nLocalizationService}
  */
+@NonNullByDefault
 public interface ChannelTypeI18nLocalizationService {
 
     @Nullable

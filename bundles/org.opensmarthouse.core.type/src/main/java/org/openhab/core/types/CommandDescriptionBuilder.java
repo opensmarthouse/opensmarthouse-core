@@ -13,13 +13,15 @@
 package org.openhab.core.types;
 
 import java.util.List;
+import org.eclipse.jdt.annotation.NonNullByDefault;
 
 /**
  * Used to build instances of {@link CommandDescription}.
  *
  * @author Henning Treu - Initial contribution
- * @author Łukasz Dywicki - Refactoring to itnerface.
+ * @author Łukasz Dywicki - Refactoring to interface.
  */
+@NonNullByDefault
 public interface CommandDescriptionBuilder {
     /**
      * Build a {@link CommandDescription} from the values of this builder.

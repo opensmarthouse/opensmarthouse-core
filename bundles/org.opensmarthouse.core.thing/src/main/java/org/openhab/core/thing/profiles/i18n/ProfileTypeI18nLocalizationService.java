@@ -13,6 +13,7 @@
 package org.openhab.core.thing.profiles.i18n;
 
 import java.util.Locale;
+import org.eclipse.jdt.annotation.NonNullByDefault;
 import org.eclipse.jdt.annotation.Nullable;
 import org.openhab.core.thing.profiles.ProfileType;
 import org.osgi.framework.Bundle;
@@ -23,6 +24,7 @@ import org.osgi.framework.Bundle;
  * @author Christoph Weitkamp - Initial contribution
  * @author Łuaksz Dywicki - Refactoring to interface
  */
+@NonNullByDefault
 public interface ProfileTypeI18nLocalizationService {
 
     ProfileType createLocalizedProfileType(Bundle bundle, ProfileType profileType, @Nullable Locale locale);

@@ -35,7 +35,6 @@ import org.osgi.service.component.annotations.Reference;
  * @author Łukasz Dywicki - Initial contribution
  */
 @Component(service = ProfileTypeI18nLocalizationService.class)
-@NonNullByDefault
 public class ProfileTypeI18nLocalizationServiceImpl implements ProfileTypeI18nLocalizationService {
 
     private final ProfileTypeBuilderFactory profileTypeBuilderFactory;
@@ -48,7 +47,8 @@ public class ProfileTypeI18nLocalizationServiceImpl implements ProfileTypeI18nLo
         this.profileI18nUtil = new ProfileI18nUtil(i18nProvider);
     }
 
-    @Override public ProfileType createLocalizedProfileType(Bundle bundle, ProfileType profileType, @Nullable Locale locale) {
+    @Override
+    public ProfileType createLocalizedProfileType(Bundle bundle, ProfileType profileType, @Nullable Locale locale) {
         ProfileTypeUID profileTypeUID = profileType.getUID();
         String defaultLabel = profileType.getLabel();
         String label = profileI18nUtil.getProfileLabel(bundle, profileTypeUID, defaultLabel, locale);

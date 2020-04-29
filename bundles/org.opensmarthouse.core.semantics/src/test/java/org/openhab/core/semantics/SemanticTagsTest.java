@@ -18,9 +18,14 @@ import java.util.Locale;
 
 import org.junit.Before;
 import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.mockito.Mock;
+import org.mockito.junit.MockitoJUnitRunner;
 import org.openhab.core.items.GenericItem;
 import org.openhab.core.items.GroupItem;
+import org.openhab.core.items.ItemFactory;
 import org.openhab.core.library.CoreItemFactory;
+import org.openhab.core.library.items.NumberItem;
 import org.openhab.core.semantics.model.Location;
 import org.openhab.core.semantics.model.equipment.CleaningRobot;
 import org.openhab.core.semantics.model.location.Bathroom;
@@ -40,14 +45,13 @@ public class SemanticTagsTest {
 
     @Before
     public void setup() throws Exception {
-        CoreItemFactory itemFactory = new CoreItemFactory();
         locationItem = new GroupItem("TestBathRoom");
         locationItem.addTag("Bathroom");
 
         equipmentItem = new GroupItem("Test08");
         equipmentItem.addTag("CleaningRobot");
 
-        pointItem = itemFactory.createItem(CoreItemFactory.NUMBER, "TestTemperature");
+        pointItem = new NumberItem("TestTemperature");
         pointItem.addTag("Measurement");
         pointItem.addTag("Temperature");
     }

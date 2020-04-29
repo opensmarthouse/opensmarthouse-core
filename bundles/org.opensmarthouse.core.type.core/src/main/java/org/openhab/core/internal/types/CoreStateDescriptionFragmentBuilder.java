@@ -29,7 +29,6 @@ import org.openhab.core.types.StateOption;
  * @author Henning Treu - Initial contribution
  * @author Łukasz Dywicki - Refactoring to itnerface.
  */
-@NonNullByDefault
 public class CoreStateDescriptionFragmentBuilder implements StateDescriptionFragmentBuilder {
 
     private @Nullable BigDecimal minimum;

@@ -27,6 +27,7 @@ import org.openhab.core.thing.type.AutoUpdatePolicy;
 import org.openhab.core.thing.type.ChannelKind;
 import org.openhab.core.thing.type.ChannelType;
 import org.openhab.core.thing.type.ChannelTypeBuilder;
+import org.openhab.core.thing.type.ChannelTypeBuilderFactory;
 import org.openhab.core.thing.type.ChannelTypeUID;
 import org.openhab.core.types.CommandDescription;
 import org.openhab.core.types.EventDescription;
@@ -50,8 +51,11 @@ import com.thoughtworks.xstream.io.HierarchicalStreamReader;
  */
 public class ChannelTypeConverter extends AbstractDescriptionTypeConverter<ChannelTypeXmlResult> {
 
-    public ChannelTypeConverter() {
+    private final ChannelTypeBuilderFactory channelTypeBuilderFactory;
+
+    public ChannelTypeConverter(ChannelTypeBuilderFactory channelTypeBuilderFactory) {
         super(ChannelTypeXmlResult.class, "channel-type");
+        this.channelTypeBuilderFactory = channelTypeBuilderFactory;
 
         super.attributeMapValidator = new ConverterAttributeMapValidator(
                 new String[][] { { "id", "true" }, { "advanced", "false" }, { "system", "false" } });
@@ -188,12 +192,12 @@ public class ChannelTypeConverter extends AbstractDescriptionTypeConverter<Chann
         URI configDescriptionURI = (URI) configDescriptionObjects[0];
         final ChannelTypeBuilder<?> builder;
         if (cKind == ChannelKind.STATE) {
-            builder = ChannelTypeBuilder.state(channelTypeUID, label, itemType).isAdvanced(advanced)
+            builder = channelTypeBuilderFactory.state(channelTypeUID, label, itemType).isAdvanced(advanced)
                     .withCategory(category).withTags(tags).withConfigDescriptionURI(configDescriptionURI)
                     .withStateDescription(stateDescription).withAutoUpdatePolicy(autoUpdatePolicy)
                     .withCommandDescription(commandDescription);
         } else if (cKind == ChannelKind.TRIGGER) {
-            builder = ChannelTypeBuilder.trigger(channelTypeUID, label).isAdvanced(advanced).withCategory(category)
+            builder = channelTypeBuilderFactory.trigger(channelTypeUID, label).isAdvanced(advanced).withCategory(category)
                     .withTags(tags).withConfigDescriptionURI(configDescriptionURI)
                     .withEventDescription(eventDescription);
         } else {

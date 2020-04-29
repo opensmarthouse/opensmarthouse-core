@@ -84,4 +84,13 @@ public interface StateDescriptionFragment {
      */
     @Nullable
     StateDescription toStateDescription();
+
+    /**
+     * Merge the given {@link StateDescriptionFragment}. Set all unset ({@code null}) fields of this instance to the
+     * values from the given {@link StateDescriptionFragment}.
+     *
+     * @param fragment a {@link StateDescriptionFragment} this instance should merge in.
+     * @return this instance with the fields merged.
+     */
+    StateDescriptionFragment merge(StateDescriptionFragment fragment);
 }

@@ -33,8 +33,10 @@ import org.openhab.core.thing.UID;
 import org.openhab.core.thing.binding.ThingTypeProvider;
 import org.openhab.core.thing.i18n.ThingTypeI18nLocalizationService;
 import org.openhab.core.thing.type.ChannelGroupTypeProvider;
+import org.openhab.core.thing.type.ChannelTypeBuilderFactory;
 import org.openhab.core.thing.type.ChannelTypeProvider;
 import org.openhab.core.thing.type.ThingType;
+import org.openhab.core.types.CommandDescriptionBuilderFactory;
 import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleContext;
 import org.osgi.service.component.annotations.Activate;
@@ -66,6 +68,8 @@ public class XmlThingTypeProvider extends AbstractXmlBasedProvider<UID, ThingTyp
     private XmlChannelGroupTypeProvider channelGroupTypeProvider;
     private AbstractXmlConfigDescriptionProvider configDescriptionProvider;
     private @Nullable XmlDocumentBundleTracker<List<?>> thingTypeTracker;
+    private final ChannelTypeBuilderFactory channelTypeBuilderFactory;
+    private final CommandDescriptionBuilderFactory commandDescriptionBuilderFactory;
     private final ReadyService readyService;
     private final ScheduledExecutorService scheduler = ThreadPoolManager
             .getScheduledPool(XmlDocumentBundleTracker.THREAD_POOL_NAME);
@@ -73,14 +77,19 @@ public class XmlThingTypeProvider extends AbstractXmlBasedProvider<UID, ThingTyp
 
     @Activate
     public XmlThingTypeProvider(final @Reference ThingTypeI18nLocalizationService thingTypeI18nLocalizationService,
+            final @Reference ChannelTypeBuilderFactory channelTypeBuilderFactory,
+            final @Reference CommandDescriptionBuilderFactory commandDescriptionBuilderFactory,
             final @Reference ReadyService readyService) {
         this.thingTypeI18nLocalizationService = thingTypeI18nLocalizationService;
+        this.channelTypeBuilderFactory = channelTypeBuilderFactory;
+        this.commandDescriptionBuilderFactory = commandDescriptionBuilderFactory;
         this.readyService = readyService;
     }
 
     @Activate
     protected void activate(BundleContext bundleContext) {
-        XmlDocumentReader<List<?>> thingTypeReader = new ThingDescriptionReader();
+        XmlDocumentReader<List<?>> thingTypeReader = new ThingDescriptionReader(channelTypeBuilderFactory,
+                commandDescriptionBuilderFactory);
         thingTypeTracker = new XmlDocumentBundleTracker<>(bundleContext, XML_DIRECTORY, thingTypeReader, this,
                 READY_MARKER, readyService);
         trackerJob = scheduler.submit(() -> {

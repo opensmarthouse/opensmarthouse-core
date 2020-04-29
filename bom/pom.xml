@@ -29,7 +29,9 @@
     <module>runtime-index</module>
     <module>test</module>
     <module>test-index</module>
+    -->
     <module>opensmarthouse-core</module>
+    <!--
     <module>opensmarthouse-core-index</module>
     -->
   </modules>

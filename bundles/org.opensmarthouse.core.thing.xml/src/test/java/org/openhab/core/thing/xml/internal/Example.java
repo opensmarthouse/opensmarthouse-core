@@ -15,6 +15,8 @@ package org.openhab.core.thing.xml.internal;
 import java.net.URL;
 
 import org.junit.Test;
+import org.openhab.core.thing.type.ChannelTypeBuilderFactory;
+import org.openhab.core.types.CommandDescriptionBuilderFactory;
 
 /**
  * The {@link Example} test case is a usage example how the according {@code ThingType} parser
@@ -25,12 +27,15 @@ import org.junit.Test;
  */
 public class Example {
 
+    private ChannelTypeBuilderFactory channelTypeBuilderFactory;
+    private CommandDescriptionBuilderFactory commandDescriptionBuilderFactory;
+
     @SuppressWarnings("unchecked")
     @Test
     public void test() throws Exception {
         URL channelsURL = Example.class.getClassLoader().getResource("/example/example.xml");
 
-        ThingDescriptionReader reader = new ThingDescriptionReader();
+        ThingDescriptionReader reader = new ThingDescriptionReader(channelTypeBuilderFactory, commandDescriptionBuilderFactory);
         ThingDescriptionList thingList = (ThingDescriptionList) reader.readFromXML(channelsURL);
     }
 }

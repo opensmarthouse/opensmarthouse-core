@@ -20,6 +20,7 @@ import java.util.stream.Stream;
 import org.openhab.core.magic.binding.MagicBindingConstants;
 import org.openhab.core.thing.Thing;
 import org.openhab.core.thing.binding.firmware.Firmware;
+import org.openhab.core.thing.binding.firmware.FirmwareBuilderFactory;
 import org.openhab.core.thing.firmware.FirmwareProvider;
 import org.osgi.service.component.annotations.Component;
 
@@ -69,8 +70,9 @@ public class MagicFirmwareProvider implements FirmwareProvider {
     }
 
     private static Firmware createFirmware(final String model, final String version, boolean modelRestricted) {
-        Firmware firmware = FirmwareBuilderFactory.create(MagicBindingConstants.THING_TYPE_FIRMWARE_UPDATE, version)
-                .withModel(model).withModelRestricted(modelRestricted).build();
+        MagicFirmware firmware = new MagicFirmware(MagicBindingConstants.THING_TYPE_FIRMWARE_UPDATE, version);
+        firmware.setModel(model);
+        firmware.setModelRestricted(modelRestricted);
         return firmware;
     }
 }

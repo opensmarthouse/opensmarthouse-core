@@ -22,6 +22,7 @@ import org.openhab.core.thing.ThingTypeUID;
 import org.openhab.core.thing.ThingUID;
 import org.openhab.core.thing.binding.builder.ChannelBuilder;
 import org.openhab.core.thing.binding.builder.ThingBuilder;
+import org.openhab.core.thing.internal.builder.ThingBuilderImpl;
 
 /**
  *
@@ -38,7 +39,7 @@ public class ThingImplTest {
 
     @Test
     public void testGetChannelMethods() {
-        Thing thing = ThingBuilder.create(THING_TYPE_UID, THING_UID)
+        Thing thing = ThingBuilderImpl.create(THING_TYPE_UID, THING_UID)
                 .withChannel(ChannelBuilder.create(FIRST_CHANNEL_UID, CoreItemFactory.STRING).build()).build();
         assertEquals(1, thing.getChannels().size());
 
@@ -53,7 +54,7 @@ public class ThingImplTest {
 
     @Test
     public void testGetGroupChannels() {
-        Thing thing = ThingBuilder.create(THING_TYPE_UID, THING_UID)
+        Thing thing = ThingBuilderImpl.create(THING_TYPE_UID, THING_UID)
                 .withChannel(ChannelBuilder.create(FIRST_CHANNEL_UID, CoreItemFactory.STRING).build())
                 .withChannel(ChannelBuilder.create(SECOND_CHANNEL_UID, CoreItemFactory.STRING).build()).build();
         assertEquals(2, thing.getChannels().size());

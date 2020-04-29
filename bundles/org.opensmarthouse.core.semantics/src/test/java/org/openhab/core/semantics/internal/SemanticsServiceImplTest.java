@@ -30,6 +30,7 @@ import org.openhab.core.items.Item;
 import org.openhab.core.items.ItemRegistry;
 import org.openhab.core.items.MetadataRegistry;
 import org.openhab.core.library.CoreItemFactory;
+import org.openhab.core.library.items.NumberItem;
 import org.openhab.core.semantics.model.location.Bathroom;
 import org.openhab.core.semantics.model.location.LivingRoom;
 
@@ -51,7 +52,6 @@ public class SemanticsServiceImplTest {
     public void setup() throws Exception {
         initMocks(this);
 
-        CoreItemFactory itemFactory = new CoreItemFactory();
         locationItem = new GroupItem("TestBathRoom");
         locationItem.addTag("Bathroom");
         locationItem.setLabel("Joe's Room");
@@ -59,7 +59,7 @@ public class SemanticsServiceImplTest {
         equipmentItem = new GroupItem("Test08");
         equipmentItem.addTag("CleaningRobot");
 
-        pointItem = itemFactory.createItem(CoreItemFactory.NUMBER, "TestTemperature");
+        pointItem = new NumberItem("TestTemperature");
         pointItem.addTag("Sensor");
         pointItem.addTag("Temperature");
         pointItem.setLabel("my Test label");

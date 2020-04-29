@@ -13,6 +13,7 @@
 package org.openhab.core.thing.i18n;
 
 import java.util.Locale;
+import org.eclipse.jdt.annotation.NonNullByDefault;
 import org.eclipse.jdt.annotation.Nullable;
 import org.openhab.core.thing.type.ChannelGroupType;
 import org.osgi.framework.Bundle;
@@ -28,6 +29,7 @@ import org.osgi.framework.Bundle;
  * @author Henning Treu - factored out from {@link ThingTypeI18nLocalizationService}
  * @author Christoph Weitkamp - Removed "advanced" attribute
  */
+@NonNullByDefault
 public interface ChannelGroupTypeI18nLocalizationService {
 
     ChannelGroupType createLocalizedChannelGroupType(Bundle bundle, ChannelGroupType channelGroupType,

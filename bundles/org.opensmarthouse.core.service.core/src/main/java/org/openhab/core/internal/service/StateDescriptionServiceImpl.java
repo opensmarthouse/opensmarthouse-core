@@ -21,13 +21,14 @@ import java.util.TreeSet;
 
 import org.eclipse.jdt.annotation.NonNullByDefault;
 import org.eclipse.jdt.annotation.Nullable;
-import org.openhab.core.internal.types.StateDescriptionFragmentImpl;
 import org.openhab.core.service.StateDescriptionService;
 import org.openhab.core.types.StateDescription;
 import org.openhab.core.types.StateDescriptionFragment;
+import org.openhab.core.types.StateDescriptionFragmentBuilderFactory;
 import org.openhab.core.types.StateDescriptionFragmentProvider;
 import org.openhab.core.types.StateDescriptionProvider;
 import org.openhab.core.types.StateOption;
+import org.osgi.service.component.annotations.Activate;
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Reference;
 import org.osgi.service.component.annotations.ReferenceCardinality;
@@ -61,6 +62,12 @@ public class StateDescriptionServiceImpl implements StateDescriptionService {
                     return provider2.getRank().compareTo(provider1.getRank());
                 }
             }));
+    private final StateDescriptionFragmentBuilderFactory stateDescriptionFragmentBuilderFactory;
+
+    @Activate
+    public StateDescriptionServiceImpl(final @Reference StateDescriptionFragmentBuilderFactory stateDescriptionFragmentBuilderFactory) {
+        this.stateDescriptionFragmentBuilderFactory = stateDescriptionFragmentBuilderFactory;
+    }
 
     @Deprecated
     @Reference(cardinality = ReferenceCardinality.MULTIPLE, policy = ReferencePolicy.DYNAMIC)
@@ -89,7 +96,7 @@ public class StateDescriptionServiceImpl implements StateDescriptionService {
         StateDescriptionFragment stateDescriptionFragment = mergeStateDescriptionFragments(itemName, locale);
 
         if (legacy != null) {
-            result = new StateDescriptionFragmentImpl(legacy).merge(stateDescriptionFragment);
+            result = stateDescriptionFragmentBuilderFactory.create(legacy).build().merge(stateDescriptionFragment);
         } else {
             result = stateDescriptionFragment;
         }
@@ -98,7 +105,7 @@ public class StateDescriptionServiceImpl implements StateDescriptionService {
     }
 
     private StateDescriptionFragment mergeStateDescriptionFragments(String itemName, @Nullable Locale locale) {
-        StateDescriptionFragmentImpl result = new StateDescriptionFragmentImpl();
+        StateDescriptionFragment result = stateDescriptionFragmentBuilderFactory.create().build();
         for (StateDescriptionFragmentProvider provider : stateDescriptionFragmentProviders) {
             StateDescriptionFragment fragment = provider.getStateDescriptionFragment(itemName, locale);
             if (fragment == null) {

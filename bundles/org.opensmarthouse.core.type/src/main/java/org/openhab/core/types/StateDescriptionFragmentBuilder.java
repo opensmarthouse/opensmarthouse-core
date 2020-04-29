@@ -14,12 +14,14 @@ package org.openhab.core.types;
 
 import java.math.BigDecimal;
 import java.util.List;
+import org.eclipse.jdt.annotation.NonNullByDefault;
 
 /**
  * Builds a {@link StateDescriptionFragment} with the relevant parts only.
  *
  * @author Henning Treu - Initial contribution
  */
+@NonNullByDefault
 public interface StateDescriptionFragmentBuilder {
     /**
      * Build a {@link StateDescriptionFragment} from the values of this builder.

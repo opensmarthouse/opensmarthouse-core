@@ -29,7 +29,9 @@ import org.openhab.core.config.xml.util.NodeListConverter;
 import org.openhab.core.config.xml.util.NodeValue;
 import org.openhab.core.config.xml.util.NodeValueConverter;
 import org.openhab.core.config.xml.util.XmlDocumentReader;
+import org.openhab.core.thing.type.ChannelTypeBuilderFactory;
 import org.openhab.core.types.CommandDescription;
+import org.openhab.core.types.CommandDescriptionBuilderFactory;
 import org.openhab.core.types.EventDescription;
 import org.openhab.core.types.StateDescription;
 
@@ -50,10 +52,18 @@ import com.thoughtworks.xstream.XStream;
  */
 public class ThingDescriptionReader extends XmlDocumentReader<List<?>> {
 
+    private final ChannelTypeBuilderFactory channelTypeBuilderFactory;
+    private final CommandDescriptionBuilderFactory commandDescriptionBuilderFactory;
+
     /**
      * The default constructor of this class.
+     * @param channelTypeBuilderFactory
+     * @param commandDescriptionBuilderFactory
      */
-    public ThingDescriptionReader() {
+    public ThingDescriptionReader(ChannelTypeBuilderFactory channelTypeBuilderFactory,
+            CommandDescriptionBuilderFactory commandDescriptionBuilderFactory) {
+        this.channelTypeBuilderFactory = channelTypeBuilderFactory;
+        this.commandDescriptionBuilderFactory = commandDescriptionBuilderFactory;
         super.setClassLoader(ThingDescriptionReader.class.getClassLoader());
     }
 
@@ -66,10 +76,10 @@ public class ThingDescriptionReader extends XmlDocumentReader<List<?>> {
         xstream.registerConverter(new ThingTypeConverter());
         xstream.registerConverter(new BridgeTypeConverter());
         xstream.registerConverter(new ChannelConverter());
-        xstream.registerConverter(new ChannelTypeConverter());
+        xstream.registerConverter(new ChannelTypeConverter(channelTypeBuilderFactory));
         xstream.registerConverter(new ChannelGroupTypeConverter());
         xstream.registerConverter(new StateDescriptionConverter());
-        xstream.registerConverter(new CommandDescriptionConverter());
+        xstream.registerConverter(new CommandDescriptionConverter(commandDescriptionBuilderFactory));
         xstream.registerConverter(new EventDescriptionConverter());
         xstream.registerConverter(new ConfigDescriptionConverter());
         xstream.registerConverter(new ConfigDescriptionParameterConverter());

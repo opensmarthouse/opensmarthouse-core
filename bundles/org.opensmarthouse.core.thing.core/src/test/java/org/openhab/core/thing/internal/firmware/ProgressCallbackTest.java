@@ -39,6 +39,7 @@ import org.openhab.core.thing.firmware.FirmwareUpdateProgressInfoEvent;
 import org.openhab.core.thing.firmware.FirmwareUpdateResult;
 import org.openhab.core.thing.firmware.FirmwareUpdateResultInfoEvent;
 import org.openhab.core.common.osgi.BundleResolver;
+import org.openhab.core.thing.internal.builder.ThingBuilderImpl;
 import org.osgi.framework.Bundle;
 
 /**
@@ -66,7 +67,7 @@ public final class ProgressCallbackTest {
     public void setUp() {
         ThingTypeUID thingType = new ThingTypeUID("thing:type");
         expectedThingUID = new ThingUID(thingType, "thingid");
-        expectedFirmware = FirmwareBuilderFactory.create(thingType, "1").build();
+        expectedFirmware = new DefaultFirmwareBuilderFactory().create(thingType, "1").build();
         postedEvents = new LinkedList<>();
 
         EventPublisher publisher = new EventPublisher() {
@@ -382,7 +383,7 @@ public final class ProgressCallbackTest {
 
         @Override
         public Thing getThing() {
-            return ThingBuilder.create(THING_TYPE_UID1, THING1_ID).build();
+            return ThingBuilderImpl.create(THING_TYPE_UID1, THING1_ID).build();
         }
 
         @Override

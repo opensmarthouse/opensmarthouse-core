@@ -21,6 +21,7 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.function.BiFunction;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -33,6 +34,7 @@ import org.openhab.core.thing.UID;
 import org.openhab.core.thing.i18n.ChannelTypeI18nLocalizationService;
 import org.openhab.core.thing.type.ChannelType;
 import org.openhab.core.thing.type.ChannelTypeBuilder;
+import org.openhab.core.thing.type.ChannelTypeBuilderFactory;
 import org.openhab.core.thing.type.ChannelTypeProvider;
 import org.openhab.core.thing.type.ChannelTypeUID;
 import org.openhab.core.types.EventDescription;
@@ -59,7 +61,7 @@ import org.osgi.service.component.annotations.Reference;
  * @author Christoph Weitkamp - factored out common i18n aspects into ThingTypeI18nLocalizationService
  */
 @NonNullByDefault
-@Component
+@Component(service = ChannelTypeProvider.class)
 public class DefaultSystemChannelTypeProvider implements ChannelTypeProvider {
 
     static final String BINDING_ID = "system";
@@ -68,7 +70,7 @@ public class DefaultSystemChannelTypeProvider implements ChannelTypeProvider {
      * Signal strength default system wide {@link ChannelType}. Represents signal strength of a device as a number
      * with values 0, 1, 2, 3 or 4, 0 being worst strength and 4 being best strength.
      */
-    private final Function<StateDescriptionFragmentBuilderFactory, ChannelType> SYSTEM_CHANNEL_SIGNAL_STRENGTH = stateDescriptionFragmentBuilderFactory -> ChannelTypeBuilder
+    private final BiFunction<ChannelTypeBuilderFactory, StateDescriptionFragmentBuilderFactory, ChannelType> SYSTEM_CHANNEL_SIGNAL_STRENGTH = (channelTypeBuilder, stateDescriptionFragmentBuilderFactory) -> channelTypeBuilder
             .state(org.openhab.core.thing.DefaultSystemChannelTypeProvider.SYSTEM_CHANNEL_SIGNAL_STRENGTH, "Signal Strength", "Number")
             .withCategory("QualityOfService")
             .withStateDescription(new StateDescription(BigDecimal.ZERO, new BigDecimal(4), BigDecimal.ONE, null, true,
@@ -81,7 +83,7 @@ public class DefaultSystemChannelTypeProvider implements ChannelTypeProvider {
      * Low battery default system wide {@link ChannelType}. Represents a low battery warning with possible values
      * on (low battery) and off (battery ok).
      */
-    private final Function<StateDescriptionFragmentBuilderFactory, ChannelType> SYSTEM_CHANNEL_LOW_BATTERY = stateDescriptionFragmentBuilderFactory -> ChannelTypeBuilder
+    private final BiFunction<ChannelTypeBuilderFactory, StateDescriptionFragmentBuilderFactory, ChannelType> SYSTEM_CHANNEL_LOW_BATTERY = (channelTypeBuilder, stateDescriptionFragmentBuilderFactory) -> channelTypeBuilder
             .state(org.openhab.core.thing.DefaultSystemChannelTypeProvider.SYSTEM_CHANNEL_LOW_BATTERY, "Low Battery", "Switch").withCategory("Battery")
             .withStateDescription(new StateDescription(null, null, null, null, true, null))
                     //StateDescriptionFragmentBuilder.create().withReadOnly(true).build().toStateDescription())
@@ -90,7 +92,7 @@ public class DefaultSystemChannelTypeProvider implements ChannelTypeProvider {
     /**
      * Battery level default system wide {@link ChannelType}. Represents the battery level as a percentage.
      */
-    private final Function<StateDescriptionFragmentBuilderFactory, ChannelType> SYSTEM_CHANNEL_BATTERY_LEVEL = stateDescriptionFragmentBuilderFactory -> ChannelTypeBuilder
+    private final BiFunction<ChannelTypeBuilderFactory, StateDescriptionFragmentBuilderFactory, ChannelType> SYSTEM_CHANNEL_BATTERY_LEVEL = (channelTypeBuilder, stateDescriptionFragmentBuilderFactory) -> channelTypeBuilder
             .state(org.openhab.core.thing.DefaultSystemChannelTypeProvider.SYSTEM_CHANNEL_BATTERY_LEVEL, "Battery Level", "Number").withCategory("Battery")
             .withStateDescription(
                     new StateDescription(BigDecimal.ZERO, new BigDecimal(100), BigDecimal.ONE, "%.0f %%", true, null))
@@ -99,13 +101,13 @@ public class DefaultSystemChannelTypeProvider implements ChannelTypeProvider {
     /**
      * System wide trigger {@link ChannelType} without event options.
      */
-    private final Function<StateDescriptionFragmentBuilderFactory, ChannelType> SYSTEM_TRIGGER = stateDescriptionFragmentBuilderFactory -> ChannelTypeBuilder
+    private final BiFunction<ChannelTypeBuilderFactory, StateDescriptionFragmentBuilderFactory, ChannelType> SYSTEM_TRIGGER = (channelTypeBuilder, stateDescriptionFragmentBuilderFactory) -> channelTypeBuilder
             .trigger(org.openhab.core.thing.DefaultSystemChannelTypeProvider.SYSTEM_TRIGGER, "Trigger").build();
 
     /**
      * System wide trigger {@link ChannelType} which triggers "PRESSED" and "RELEASED" events.
      */
-    private final Function<StateDescriptionFragmentBuilderFactory, ChannelType> SYSTEM_RAWBUTTON = stateDescriptionFragmentBuilderFactory -> ChannelTypeBuilder
+    private final BiFunction<ChannelTypeBuilderFactory, StateDescriptionFragmentBuilderFactory, ChannelType> SYSTEM_RAWBUTTON = (channelTypeBuilder, stateDescriptionFragmentBuilderFactory) -> channelTypeBuilder
             .trigger(org.openhab.core.thing.DefaultSystemChannelTypeProvider.SYSTEM_RAWBUTTON, "Raw button")
             .withEventDescription(new EventDescription(Arrays.asList(new EventOption(CommonTriggerEvents.PRESSED, null),
                     new EventOption(CommonTriggerEvents.RELEASED, null))))
@@ -115,7 +117,7 @@ public class DefaultSystemChannelTypeProvider implements ChannelTypeProvider {
      * System wide trigger {@link ChannelType} which triggers "SHORT_PRESSED", "DOUBLE_PRESSED" and "LONG_PRESSED"
      * events.
      */
-    private final Function<StateDescriptionFragmentBuilderFactory, ChannelType> SYSTEM_BUTTON = stateDescriptionFragmentBuilderFactory -> ChannelTypeBuilder
+    private final BiFunction<ChannelTypeBuilderFactory, StateDescriptionFragmentBuilderFactory, ChannelType> SYSTEM_BUTTON = (channelTypeBuilder, stateDescriptionFragmentBuilderFactory) -> channelTypeBuilder
             .trigger(org.openhab.core.thing.DefaultSystemChannelTypeProvider.SYSTEM_BUTTON, "Button")
             .withEventDescription(
                     new EventDescription(Arrays.asList(new EventOption(CommonTriggerEvents.SHORT_PRESSED, null),
@@ -127,7 +129,7 @@ public class DefaultSystemChannelTypeProvider implements ChannelTypeProvider {
      * System wide trigger {@link ChannelType} which triggers "DIR1_PRESSED", "DIR1_RELEASED", "DIR2_PRESSED" and
      * "DIR2_RELEASED" events.
      */
-    private final Function<StateDescriptionFragmentBuilderFactory, ChannelType> SYSTEM_RAWROCKER = stateDescriptionFragmentBuilderFactory -> ChannelTypeBuilder
+    private final BiFunction<ChannelTypeBuilderFactory, StateDescriptionFragmentBuilderFactory, ChannelType> SYSTEM_RAWROCKER = (channelTypeBuilder, stateDescriptionFragmentBuilderFactory) -> channelTypeBuilder
             .trigger(org.openhab.core.thing.DefaultSystemChannelTypeProvider.SYSTEM_RAWROCKER, "Raw rocker button")
             .withEventDescription(
                     new EventDescription(Arrays.asList(new EventOption(CommonTriggerEvents.DIR1_PRESSED, null),
@@ -139,14 +141,14 @@ public class DefaultSystemChannelTypeProvider implements ChannelTypeProvider {
     /**
      * Power: default system wide {@link ChannelType} which allows turning off (potentially on) a device
      */
-    private final Function<StateDescriptionFragmentBuilderFactory, ChannelType> SYSTEM_POWER = stateDescriptionFragmentBuilderFactory -> ChannelTypeBuilder
+    private final BiFunction<ChannelTypeBuilderFactory, StateDescriptionFragmentBuilderFactory, ChannelType> SYSTEM_POWER = (channelTypeBuilder, stateDescriptionFragmentBuilderFactory) -> channelTypeBuilder
             .state(org.openhab.core.thing.DefaultSystemChannelTypeProvider.SYSTEM_POWER, "Power", "Switch")
             .withDescription("Device is operable when channel has state ON").build();
 
     /**
      * Location: default system wide {@link ChannelType} which displays a location
      */
-    private final Function<StateDescriptionFragmentBuilderFactory, ChannelType> SYSTEM_LOCATION = stateDescriptionFragmentBuilderFactory -> ChannelTypeBuilder
+    private final BiFunction<ChannelTypeBuilderFactory, StateDescriptionFragmentBuilderFactory, ChannelType> SYSTEM_LOCATION = (channelTypeBuilder, stateDescriptionFragmentBuilderFactory) -> channelTypeBuilder
             .state(org.openhab.core.thing.DefaultSystemChannelTypeProvider.SYSTEM_LOCATION, "Location", "Location")
             .withDescription("Location in lat./lon./height coordinates")
             .withStateDescription(stateDescriptionFragmentBuilderFactory.create().withReadOnly(true)
@@ -156,7 +158,7 @@ public class DefaultSystemChannelTypeProvider implements ChannelTypeProvider {
     /**
      * Motion: default system wide {@link ChannelType} which indications whether motion was detected (state ON)
      */
-    private final Function<StateDescriptionFragmentBuilderFactory, ChannelType> SYSTEM_MOTION = stateDescriptionFragmentBuilderFactory -> ChannelTypeBuilder
+    private final BiFunction<ChannelTypeBuilderFactory, StateDescriptionFragmentBuilderFactory, ChannelType> SYSTEM_MOTION = (channelTypeBuilder, stateDescriptionFragmentBuilderFactory) -> channelTypeBuilder
             .state(org.openhab.core.thing.DefaultSystemChannelTypeProvider.SYSTEM_MOTION, "Motion", "Switch")
             .withDescription("Motion detected by the device").withCategory("Motion").withStateDescription(
                     stateDescriptionFragmentBuilderFactory.create().withReadOnly(true).build().toStateDescription())
@@ -165,7 +167,7 @@ public class DefaultSystemChannelTypeProvider implements ChannelTypeProvider {
     /**
      * Brightness: default system wide {@link ChannelType} which allows changing the brightness from 0-100%
      */
-    private final Function<StateDescriptionFragmentBuilderFactory, ChannelType> SYSTEM_BRIGHTNESS = stateDescriptionFragmentBuilderFactory -> ChannelTypeBuilder
+    private final BiFunction<ChannelTypeBuilderFactory, StateDescriptionFragmentBuilderFactory, ChannelType> SYSTEM_BRIGHTNESS = (channelTypeBuilder, stateDescriptionFragmentBuilderFactory) -> channelTypeBuilder
             .state(org.openhab.core.thing.DefaultSystemChannelTypeProvider.SYSTEM_BRIGHTNESS, "Brightness", "Dimmer")
             .withDescription("Controls the brightness and switches the light on and off").withCategory("DimmableLight")
             .withStateDescription(
@@ -175,14 +177,14 @@ public class DefaultSystemChannelTypeProvider implements ChannelTypeProvider {
     /**
      * Color: default system wide {@link ChannelType} which allows changing the color
      */
-    private final Function<StateDescriptionFragmentBuilderFactory, ChannelType> SYSTEM_COLOR = stateDescriptionFragmentBuilderFactory -> ChannelTypeBuilder
+    private final BiFunction<ChannelTypeBuilderFactory, StateDescriptionFragmentBuilderFactory, ChannelType> SYSTEM_COLOR = (channelTypeBuilder, stateDescriptionFragmentBuilderFactory) -> channelTypeBuilder
             .state(org.openhab.core.thing.DefaultSystemChannelTypeProvider.SYSTEM_COLOR, "Color", "Color")
             .withDescription("Controls the color of the light").withCategory("ColorLight").build();
 
     /**
      * Color-temperature: default system wide {@link ChannelType} which allows changing the color temperature
      */
-    private final Function<StateDescriptionFragmentBuilderFactory, ChannelType> SYSTEM_COLOR_TEMPERATURE = stateDescriptionFragmentBuilderFactory -> ChannelTypeBuilder
+    private final BiFunction<ChannelTypeBuilderFactory, StateDescriptionFragmentBuilderFactory, ChannelType> SYSTEM_COLOR_TEMPERATURE = (channelTypeBuilder, stateDescriptionFragmentBuilderFactory) -> channelTypeBuilder
             .state(org.openhab.core.thing.DefaultSystemChannelTypeProvider.SYSTEM_COLOR_TEMPERATURE, "Color Temperature", "Dimmer")
             .withDescription("Controls the color temperature of the light").withCategory("ColorLight")
             .withStateDescription(new StateDescription(BigDecimal.ZERO, new BigDecimal(100), null, "%d", false, null))
@@ -193,7 +195,7 @@ public class DefaultSystemChannelTypeProvider implements ChannelTypeProvider {
     /**
      * Volume: default system wide {@link ChannelType} which allows changing the audio volume from 0-100%
      */
-    private final Function<StateDescriptionFragmentBuilderFactory, ChannelType> SYSTEM_VOLUME = stateDescriptionFragmentBuilderFactory -> ChannelTypeBuilder
+    private final BiFunction<ChannelTypeBuilderFactory, StateDescriptionFragmentBuilderFactory, ChannelType> SYSTEM_VOLUME = (channelTypeBuilder, stateDescriptionFragmentBuilderFactory) -> channelTypeBuilder
             .state(org.openhab.core.thing.DefaultSystemChannelTypeProvider.SYSTEM_VOLUME, "Volume", "Dimmer")
             .withDescription("Change the sound volume of a device")
             .withStateDescription(
@@ -203,21 +205,21 @@ public class DefaultSystemChannelTypeProvider implements ChannelTypeProvider {
     /**
      * Mute: default system wide {@link ChannelType} which allows muting and un-muting audio
      */
-    private final Function<StateDescriptionFragmentBuilderFactory, ChannelType> SYSTEM_MUTE = stateDescriptionFragmentBuilderFactory -> ChannelTypeBuilder
+    private final BiFunction<ChannelTypeBuilderFactory, StateDescriptionFragmentBuilderFactory, ChannelType> SYSTEM_MUTE = (channelTypeBuilder, stateDescriptionFragmentBuilderFactory) -> channelTypeBuilder
             .state(org.openhab.core.thing.DefaultSystemChannelTypeProvider.SYSTEM_MUTE, "Mute", "Switch").withDescription("Mute audio of the device")
             .withCategory("SoundVolume").build();
 
     /**
      * Media-control: system wide {@link ChannelType} which controls a media player
      */
-    private final Function<StateDescriptionFragmentBuilderFactory, ChannelType> SYSTEM_MEDIA_CONTROL = stateDescriptionFragmentBuilderFactory -> ChannelTypeBuilder
+    private final BiFunction<ChannelTypeBuilderFactory, StateDescriptionFragmentBuilderFactory, ChannelType> SYSTEM_MEDIA_CONTROL = (channelTypeBuilder, stateDescriptionFragmentBuilderFactory) -> channelTypeBuilder
             .state(org.openhab.core.thing.DefaultSystemChannelTypeProvider.SYSTEM_MEDIA_CONTROL, "Media Control", "Player")
             .withCategory("MediaControl").build();
 
     /**
      * Media-title: default system wide {@link ChannelType} which displays the title of a (played) song
      */
-    private final Function<StateDescriptionFragmentBuilderFactory, ChannelType> SYSTEM_MEDIA_TITLE = stateDescriptionFragmentBuilderFactory -> ChannelTypeBuilder
+    private final BiFunction<ChannelTypeBuilderFactory, StateDescriptionFragmentBuilderFactory, ChannelType> SYSTEM_MEDIA_TITLE = (channelTypeBuilder, stateDescriptionFragmentBuilderFactory) -> channelTypeBuilder
             .state(org.openhab.core.thing.DefaultSystemChannelTypeProvider.SYSTEM_MEDIA_TITLE, "Media Title", "String")
             .withDescription("Title of a (played) media file").withStateDescription(
                     stateDescriptionFragmentBuilderFactory.create().withReadOnly(true).build().toStateDescription())
@@ -226,7 +228,7 @@ public class DefaultSystemChannelTypeProvider implements ChannelTypeProvider {
     /**
      * Media-artist: default system wide {@link ChannelType} which displays the artist of a (played) song
      */
-    private final Function<StateDescriptionFragmentBuilderFactory, ChannelType> SYSTEM_MEDIA_ARTIST = stateDescriptionFragmentBuilderFactory -> ChannelTypeBuilder
+    private final BiFunction<ChannelTypeBuilderFactory, StateDescriptionFragmentBuilderFactory, ChannelType> SYSTEM_MEDIA_ARTIST = (channelTypeBuilder, stateDescriptionFragmentBuilderFactory) -> channelTypeBuilder
             .state(org.openhab.core.thing.DefaultSystemChannelTypeProvider.SYSTEM_MEDIA_ARTIST, "Media Artist", "String")
             .withDescription("Artist of a (played) media file").withStateDescription(
                     stateDescriptionFragmentBuilderFactory.create().withReadOnly(true).build().toStateDescription())
@@ -237,7 +239,7 @@ public class DefaultSystemChannelTypeProvider implements ChannelTypeProvider {
     /**
      * Wind-direction: system wide {@link ChannelType} which shows the wind direction in degrees 0-360
      */
-    private final Function<StateDescriptionFragmentBuilderFactory, ChannelType> SYSTEM_WIND_DIRECTION = stateDescriptionFragmentBuilderFactory -> ChannelTypeBuilder
+    private final BiFunction<ChannelTypeBuilderFactory, StateDescriptionFragmentBuilderFactory, ChannelType> SYSTEM_WIND_DIRECTION = (channelTypeBuilder, stateDescriptionFragmentBuilderFactory) -> channelTypeBuilder
             .state(org.openhab.core.thing.DefaultSystemChannelTypeProvider.SYSTEM_WIND_DIRECTION, "Wind Direction", "Number:Angle")
             .withDescription("Current wind direction expressed as an angle").withCategory("Wind")
             .withStateDescription(
@@ -247,7 +249,7 @@ public class DefaultSystemChannelTypeProvider implements ChannelTypeProvider {
     /**
      * Wind-speed: system wide {@link ChannelType} which shows the wind speed
      */
-    private final Function<StateDescriptionFragmentBuilderFactory, ChannelType> SYSTEM_WIND_SPEED = stateDescriptionFragmentBuilderFactory -> ChannelTypeBuilder
+    private final BiFunction<ChannelTypeBuilderFactory, StateDescriptionFragmentBuilderFactory, ChannelType> SYSTEM_WIND_SPEED = (channelTypeBuilder, stateDescriptionFragmentBuilderFactory) -> channelTypeBuilder
             .state(org.openhab.core.thing.DefaultSystemChannelTypeProvider.SYSTEM_WIND_SPEED, "Wind Speed", "Number:Speed")
             .withDescription("Current wind speed").withCategory("Wind")
             .withStateDescription(stateDescriptionFragmentBuilderFactory.create().withReadOnly(true).withPattern("%.1f %unit%")
@@ -257,7 +259,7 @@ public class DefaultSystemChannelTypeProvider implements ChannelTypeProvider {
     /**
      * Outdoor-temperature: system wide {@link ChannelType} which shows the outdoor temperature
      */
-    private final Function<StateDescriptionFragmentBuilderFactory, ChannelType> SYSTEM_OUTDOOR_TEMPERATURE = stateDescriptionFragmentBuilderFactory -> ChannelTypeBuilder
+    private final BiFunction<ChannelTypeBuilderFactory, StateDescriptionFragmentBuilderFactory, ChannelType> SYSTEM_OUTDOOR_TEMPERATURE = (channelTypeBuilder, stateDescriptionFragmentBuilderFactory) -> channelTypeBuilder
             .state(org.openhab.core.thing.DefaultSystemChannelTypeProvider.SYSTEM_OUTDOOR_TEMPERATURE, "Outdoor Temperature", "Number:Temperature")
             .withDescription("Current outdoor temperature").withCategory("Temperature")
             .withStateDescription(stateDescriptionFragmentBuilderFactory.create().withReadOnly(true).withPattern("%.1f %unit%")
@@ -267,7 +269,7 @@ public class DefaultSystemChannelTypeProvider implements ChannelTypeProvider {
     /**
      * Atmospheric-humidity: system wide {@link ChannelType} which shows the atmospheric humidity
      */
-    private final Function<StateDescriptionFragmentBuilderFactory, ChannelType> SYSTEM_ATMOSPHERIC_HUMIDITY = stateDescriptionFragmentBuilderFactory -> ChannelTypeBuilder
+    private final BiFunction<ChannelTypeBuilderFactory, StateDescriptionFragmentBuilderFactory, ChannelType> SYSTEM_ATMOSPHERIC_HUMIDITY = (channelTypeBuilder, stateDescriptionFragmentBuilderFactory) -> channelTypeBuilder
             .state(org.openhab.core.thing.DefaultSystemChannelTypeProvider.SYSTEM_ATMOSPHERIC_HUMIDITY, "Atmospheric Humidity",
                     "Number:Dimensionless")
             .withDescription("Current atmospheric relative humidity").withCategory("Humidity")
@@ -278,7 +280,7 @@ public class DefaultSystemChannelTypeProvider implements ChannelTypeProvider {
     /**
      * Barometric-pressure: system wide {@link ChannelType} which shows the barometric pressure
      */
-    private final Function<StateDescriptionFragmentBuilderFactory, ChannelType> SYSTEM_BAROMETRIC_PRESSURE = stateDescriptionFragmentBuilderFactory -> ChannelTypeBuilder
+    private final BiFunction<ChannelTypeBuilderFactory, StateDescriptionFragmentBuilderFactory, ChannelType> SYSTEM_BAROMETRIC_PRESSURE = (channelTypeBuilder, stateDescriptionFragmentBuilderFactory) -> channelTypeBuilder
             .state(org.openhab.core.thing.DefaultSystemChannelTypeProvider.SYSTEM_BAROMETRIC_PRESSURE, "Barometric Pressure", "Number:Pressure")
             .withDescription("Current barometric pressure").withCategory("Pressure")
             .withStateDescription(stateDescriptionFragmentBuilderFactory.create().withReadOnly(true).withPattern("%.3f %unit%")
@@ -291,23 +293,22 @@ public class DefaultSystemChannelTypeProvider implements ChannelTypeProvider {
 
     private final ChannelTypeI18nLocalizationService channelTypeI18nLocalizationService;
     private final BundleResolver bundleResolver;
-    private final StateDescriptionFragmentBuilderFactory stateDescriptionFragmentBuilderFactory;
 
     @Activate
     public DefaultSystemChannelTypeProvider(
             final @Reference ChannelTypeI18nLocalizationService channelTypeI18nLocalizationService,
             final @Reference BundleResolver bundleResolver,
+            final @Reference ChannelTypeBuilderFactory channelTypeBuilderFactory,
             final @Reference StateDescriptionFragmentBuilderFactory stateDescriptionFragmentBuilderFactory) {
         this.channelTypeI18nLocalizationService = channelTypeI18nLocalizationService;
         this.bundleResolver = bundleResolver;
-        this.stateDescriptionFragmentBuilderFactory = stateDescriptionFragmentBuilderFactory;
         CHANNEL_TYPES = Collections.unmodifiableList(Stream.of(SYSTEM_CHANNEL_SIGNAL_STRENGTH, SYSTEM_CHANNEL_LOW_BATTERY,
                 SYSTEM_CHANNEL_BATTERY_LEVEL, SYSTEM_TRIGGER, SYSTEM_RAWBUTTON, SYSTEM_BUTTON, SYSTEM_RAWROCKER,
                 SYSTEM_POWER, SYSTEM_LOCATION, SYSTEM_MOTION, SYSTEM_BRIGHTNESS, SYSTEM_COLOR,
                 SYSTEM_COLOR_TEMPERATURE, SYSTEM_VOLUME, SYSTEM_MUTE, SYSTEM_MEDIA_CONTROL, SYSTEM_MEDIA_TITLE,
                 SYSTEM_MEDIA_ARTIST, SYSTEM_WIND_DIRECTION, SYSTEM_WIND_SPEED, SYSTEM_OUTDOOR_TEMPERATURE,
                 SYSTEM_ATMOSPHERIC_HUMIDITY, SYSTEM_BAROMETRIC_PRESSURE)
-            .map(function -> function.apply(stateDescriptionFragmentBuilderFactory))
+            .map(function -> function.apply(channelTypeBuilderFactory, stateDescriptionFragmentBuilderFactory))
             .collect(Collectors.toList()));
     }
 

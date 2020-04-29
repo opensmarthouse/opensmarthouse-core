@@ -41,6 +41,7 @@ import org.openhab.core.thing.ThingRegistry;
 import org.openhab.core.thing.ThingTypeUID;
 import org.openhab.core.thing.binding.builder.ChannelBuilder;
 import org.openhab.core.thing.binding.builder.ThingBuilder;
+import org.openhab.core.thing.internal.builder.ThingBuilderImpl;
 import org.openhab.core.thing.link.ItemChannelLink;
 import org.openhab.core.thing.link.ItemChannelLinkRegistry;
 import org.openhab.core.thing.type.ChannelTypeRegistry;
@@ -54,7 +55,7 @@ public class ChannelItemProviderTest {
     private static final Channel CHANNEL = ChannelBuilder.create(CHANNEL_UID, CoreItemFactory.NUMBER).build();
 
     private static final ThingTypeUID THING_TYPE_UID = new ThingTypeUID("test:test");
-    private static final Thing THING = ThingBuilder.create(THING_TYPE_UID, "test").withChannel(CHANNEL).build();
+    private static final Thing THING = ThingBuilderImpl.create(THING_TYPE_UID, "test").withChannel(CHANNEL).build();
 
     private static final String ITEM_NAME = "test";
     private static final NumberItem ITEM = new NumberItem(ITEM_NAME);

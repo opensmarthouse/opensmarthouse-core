@@ -14,6 +14,7 @@ package org.openhab.core.thing.binding;
 
 import java.util.List;
 import java.util.Map;
+import org.eclipse.jdt.annotation.NonNullByDefault;
 import org.eclipse.jdt.annotation.Nullable;
 import org.openhab.core.config.core.ConfigDescriptionRegistry;
 import org.openhab.core.config.core.Configuration;
@@ -33,6 +34,7 @@ import org.openhab.core.thing.type.ThingType;
  * @author Chris Jackson - Added properties, label, description
  * @author Łukasz Dywicki - Refactoring to interface
  */
+@NonNullByDefault
 public interface ThingFactory {
 
     /**

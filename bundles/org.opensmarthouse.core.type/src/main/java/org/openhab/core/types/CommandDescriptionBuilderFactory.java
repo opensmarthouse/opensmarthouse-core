@@ -12,11 +12,14 @@
  */
 package org.openhab.core.types;
 
+import org.eclipse.jdt.annotation.NonNullByDefault;
+
 /**
  * A root entry point for creating custom command descriptions.
  *
  * @author Łukasz Dywicki - Initial contribution.
  */
+@NonNullByDefault
 public interface CommandDescriptionBuilderFactory {
 
     /**

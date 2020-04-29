@@ -21,6 +21,7 @@ import java.util.List;
 
 import org.junit.Before;
 import org.junit.Test;
+import org.openhab.core.internal.types.CoreCommandDescriptionBuilder;
 
 /**
  * Test the {@link CommandDescriptionBuilder}.
@@ -33,7 +34,7 @@ public class CommandDescriptionBuilderTest {
 
     @Before
     public void setup() {
-        builder = CommandDescriptionBuilder.create();
+        builder = CoreCommandDescriptionBuilder.create();
     }
 
     @Test

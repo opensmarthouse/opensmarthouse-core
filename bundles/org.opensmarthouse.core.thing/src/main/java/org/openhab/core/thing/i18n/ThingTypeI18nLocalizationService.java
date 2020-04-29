@@ -13,6 +13,7 @@
 package org.openhab.core.thing.i18n;
 
 import java.util.Locale;
+import org.eclipse.jdt.annotation.NonNullByDefault;
 import org.eclipse.jdt.annotation.Nullable;
 import org.openhab.core.thing.type.ThingType;
 import org.osgi.framework.Bundle;
@@ -27,6 +28,9 @@ import org.osgi.framework.Bundle;
  * @author Christoph Weitkamp - factored out from {@link org.openhab.core.thing.xml.internal.XmlChannelTypeProvider} and
  * {@link org.openhab.core.thing.xml.internal.XmlChannelGroupTypeProvider}
  */
+@NonNullByDefault
 public interface ThingTypeI18nLocalizationService {
+
     ThingType createLocalizedThingType(Bundle bundle, ThingType thingType, @Nullable Locale locale);
+
 }

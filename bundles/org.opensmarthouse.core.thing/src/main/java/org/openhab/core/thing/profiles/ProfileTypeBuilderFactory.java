@@ -12,6 +12,8 @@
  */
 package org.openhab.core.thing.profiles;
 
+import org.eclipse.jdt.annotation.NonNullByDefault;
+
 /**
  * Factory for {@link ProfileType} builder instances.
  *
@@ -19,6 +21,7 @@ package org.openhab.core.thing.profiles;
  *
  * @author Łukasz Dywicki - Initial contribution
  */
+@NonNullByDefault
 public interface ProfileTypeBuilderFactory {
 
     /**

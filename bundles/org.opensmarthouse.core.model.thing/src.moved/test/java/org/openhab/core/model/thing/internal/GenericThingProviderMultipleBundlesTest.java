@@ -15,15 +15,21 @@ package org.openhab.core.model.thing.internal;
 import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.*;
 
+import java.util.function.Function;
+import java.util.function.Supplier;
 import org.eclipse.emf.common.util.BasicEList;
 import org.eclipse.emf.common.util.EList;
-import org.eclipse.jdt.annotation.Nullable;
+import org.mockito.invocation.InvocationOnMock;
+import org.mockito.stubbing.Answer;
 import org.openhab.core.config.core.Configuration;
 import org.openhab.core.service.ReadyMarker;
+import org.openhab.core.test.mockito.MapArgument;
+import org.openhab.core.test.mockito.MapBuilderToMock;
 import org.openhab.core.thing.Bridge;
 import org.openhab.core.thing.Thing;
 import org.openhab.core.thing.ThingTypeUID;
 import org.openhab.core.thing.ThingUID;
+import org.openhab.core.thing.binding.ThingBuilderFactory;
 import org.openhab.core.thing.binding.ThingHandlerFactory;
 import org.openhab.core.thing.binding.builder.BridgeBuilder;
 import org.openhab.core.thing.binding.builder.ThingBuilder;
@@ -55,6 +61,7 @@ public class GenericThingProviderMultipleBundlesTest {
     private static final String BUNDLE_NAME = "myBundle";
     private static final String TEST_MODEL_THINGS = "testModel.things";
     private GenericThingProvider thingProvider;
+    private ThingBuilderFactory thingBuilderFactory;
     private ThingHandlerFactory bridgeHandlerFactory;
     private ThingHandlerFactory thingHandlerFactory;
 
@@ -82,6 +89,7 @@ public class GenericThingProviderMultipleBundlesTest {
         Bridge bridge = mock(Bridge.class);
         when(bridge.getUID()).thenReturn(BRIDGE_UID);
         when(bridge.getThingTypeUID()).thenReturn(BRIDGE_TYPE_UID);
+        when(bridge.getConfiguration()).thenReturn(new Configuration());
 
         bridgeHandlerFactory = mock(ThingHandlerFactory.class);
         when(bridgeHandlerFactory.supportsThingType(BRIDGE_TYPE_UID)).thenReturn(true);
@@ -93,12 +101,16 @@ public class GenericThingProviderMultipleBundlesTest {
         Thing thing = mock(Thing.class);
         when(thing.getUID()).thenReturn(THING_UID);
         when(thing.getThingTypeUID()).thenReturn(THING_TYPE_UID);
+        when(thing.getConfiguration()).thenReturn(new Configuration());
 
         thingHandlerFactory = mock(ThingHandlerFactory.class);
         when(thingHandlerFactory.supportsThingType(THING_TYPE_UID)).thenReturn(true);
         when(thingHandlerFactory.createThing(eq(THING_TYPE_UID), any(Configuration.class), eq(THING_UID),
                 eq(BRIDGE_UID))).thenReturn(thing);
         thingProvider.addThingHandlerFactory(thingHandlerFactory);
+
+        thingBuilderFactory = mock(ThingBuilderFactory.class);
+        thingProvider.setThingBuilderFactory(thingBuilderFactory);
     }
 
     private EList<ModelThing> createModelBridge() {
@@ -131,6 +143,26 @@ public class GenericThingProviderMultipleBundlesTest {
 
     @Test
     public void testDifferentHandlerFactoriesForBridgeAndThing() {
+        BridgeBuilder bridgeBuilder = mock(BridgeBuilder.class, "bridgeBuilder");
+        Bridge bridge = mock(Bridge.class, "bridge");
+        builder(bridgeBuilder, () -> bridgeBuilder.withConfiguration(any()), bridge::getConfiguration, new MapArgument<>());
+        builder(bridgeBuilder, () -> bridgeBuilder.withBridge(any()), bridge::getBridgeUID, new MapArgument<>());
+        builder(bridgeBuilder, () -> bridgeBuilder.withLabel(any()), bridge::getLabel, new MapArgument<>());
+        builder(bridgeBuilder, () -> bridgeBuilder.withLocation(any()), bridge::getLocation, new MapArgument<>());
+        builder(bridgeBuilder, () -> bridgeBuilder.withChannels(anyList()), bridge::getChannels, new MapArgument<>());
+        when(bridgeBuilder.build()).thenReturn(bridge);
+        when(thingBuilderFactory.createBridge(any(), any())).thenAnswer(new RetainIdentifiers<>(bridgeBuilder, bridge));
+
+        Thing thing = mock(Thing.class, "thing");
+        ThingBuilder thingBuilder = mock(ThingBuilder.class, "thingBuilder");
+        builder(thingBuilder, () -> thingBuilder.withConfiguration(any()), thing::getConfiguration, new MapArgument<>());
+        builder(thingBuilder, () -> thingBuilder.withBridge(any()), thing::getBridgeUID, new MapArgument<>());
+        builder(thingBuilder, () -> thingBuilder.withLabel(any()), thing::getLabel, new MapArgument<>());
+        builder(thingBuilder, () -> thingBuilder.withLocation(any()), thing::getLocation, new MapArgument<>());
+        builder(thingBuilder, () -> thingBuilder.withChannels(anyList()), thing::getChannels, new MapArgument<>());
+        when(thingBuilder.build()).thenReturn(thing);
+        when(thingBuilderFactory.createThing(any(), any())).thenAnswer(new RetainIdentifiers<>(thingBuilder, thing));
+
         thingProvider.onReadyMarkerAdded(new ReadyMarker("", BUNDLE_NAME));
         thingProvider.modelChanged(TEST_MODEL_THINGS, EventType.ADDED);
 
@@ -139,4 +171,26 @@ public class GenericThingProviderMultipleBundlesTest {
         verify(thingHandlerFactory).createThing(eq(THING_TYPE_UID), any(Configuration.class), eq(THING_UID),
                 eq(BRIDGE_UID));
     }
+
+    private <T, X> void builder(T mock, Supplier<T> builderCall, Supplier<X> getterCall, Function<InvocationOnMock, X> returnValue) {
+        when(builderCall.get()).thenAnswer(new MapBuilderToMock<>(mock, getterCall, returnValue));
+    }
+
+    public static class RetainIdentifiers<T extends ThingBuilder> implements Answer<T> {
+        private final T builder;
+        private final Thing mock;
+
+        RetainIdentifiers(T builder, Thing mock) {
+            this.builder = builder;
+            this.mock = mock;
+        }
+
+        @Override
+        public T answer(InvocationOnMock invocation) throws Throwable {
+            when(mock.getUID()).thenReturn(invocation.getArgument(1));
+            when(mock.getThingTypeUID()).thenReturn(invocation.getArgument(0));
+            return builder;
+        }
+    }
+
 }

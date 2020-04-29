@@ -13,6 +13,7 @@
 package org.openhab.core.thing.profiles;
 
 import java.util.Collection;
+import org.eclipse.jdt.annotation.NonNullByDefault;
 import org.openhab.core.thing.type.ChannelTypeUID;
 
 /**
@@ -25,6 +26,7 @@ import org.openhab.core.thing.type.ChannelTypeUID;
  *
  * @param <T> the concrete {@link ProfileType} sub-interface.
  */
+@NonNullByDefault
 public interface ProfileTypeBuilder<T extends ProfileType> {
 
     /**

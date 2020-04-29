@@ -30,7 +30,6 @@ import org.openhab.core.thing.binding.firmware.FirmwareRestriction;
  *
  * @author Łukasz Dywicki - Initial contribution
  */
-@NonNullByDefault
 public final class FirmwareBuilderImpl implements FirmwareBuilder {
 
     private final ThingTypeUID thingTypeUID;
