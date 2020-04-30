@@ -119,38 +119,4 @@ public interface ItemRegistry extends Registry<Item, String> {
      * @param hook
      */
     void removeRegistryHook(RegistryHook<Item> hook);
-
-    /**
-     * Create a new {@link ItemBuilder}, which is initialized by the given item.
-     *
-     * @param item the template to initialize the builder with
-     * @return an ItemBuilder instance
-     *
-     * @deprecated Use the {@link ItemBuilderFactory} service instead.
-     */
-    @Deprecated
-    ItemBuilder newItemBuilder(Item item);
-//    {
-//        LoggerFactory.getLogger(ItemRegistry.class)
-//                .warn("Deprecation: You are using a deprecated API. Please use the ItemBuilder OSGi service instead.");
-//        return new ItemBuilderImpl(Collections.singleton(new CoreItemFactory()), item);
-//    }
-
-    /**
-     * Create a new {@link ItemBuilder}, which is initialized by the given item.
-     *
-     * @param itemType the item type to create
-     * @param itemName the name of the item to create
-     * @return an ItemBuilder instance
-     *
-     * @deprecated Use the {@link ItemBuilderFactory} service instead.
-     */
-    @Deprecated
-    ItemBuilder newItemBuilder(String itemType, String itemName);
-//    {
-//        LoggerFactory.getLogger(ItemRegistry.class)
-//                .warn("Deprecation: You are using a deprecated API. Please use the ItemBuilder OSGi service instead.");
-//        return new ItemBuilderImpl(Collections.singleton(new CoreItemFactory()), itemType, itemName);
-//    }
-
 }

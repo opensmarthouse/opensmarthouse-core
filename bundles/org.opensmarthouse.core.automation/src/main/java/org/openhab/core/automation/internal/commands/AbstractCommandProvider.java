@@ -191,5 +191,4 @@ public abstract class AbstractCommandProvider<E> implements ServiceTrackerCustom
      */
     protected abstract Set<E> importData(URL url, Parser<E> parser, InputStreamReader inputStreamReader)
             throws ParsingException;
-
 }

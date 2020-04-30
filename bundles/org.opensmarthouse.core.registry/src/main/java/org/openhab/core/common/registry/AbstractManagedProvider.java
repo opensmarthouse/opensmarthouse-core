@@ -163,5 +163,4 @@ public abstract class AbstractManagedProvider<E extends Identifiable<K>, K, PE> 
      * @return persistable element
      */
     protected abstract PE toPersistableElement(E element);
-
 }

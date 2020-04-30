@@ -43,5 +43,4 @@ public abstract class DefaultAbstractManagedProvider<E extends Identifiable<K>, 
     protected E toPersistableElement(E element) {
         return element;
     }
-
 }

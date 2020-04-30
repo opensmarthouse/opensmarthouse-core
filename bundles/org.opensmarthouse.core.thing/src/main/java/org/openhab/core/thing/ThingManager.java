@@ -39,5 +39,4 @@ public interface ThingManager {
      * @param isEnabled a new <b>enabled / disabled</b> state of the {@link Thing}.
      */
     public void setEnabled(ThingUID thingUID, boolean isEnabled);
-
 }

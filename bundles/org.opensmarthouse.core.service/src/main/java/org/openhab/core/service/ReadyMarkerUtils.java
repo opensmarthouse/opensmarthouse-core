@@ -52,5 +52,4 @@ public class ReadyMarkerUtils {
                 + ", getLastModified()=" + bundle.getLastModified() + ", getBundleContext()="
                 + bundle.getBundleContext() + ", getVersion()=" + bundle.getVersion() + "]";
     }
-
 }

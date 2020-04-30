@@ -130,5 +130,4 @@ public class CommandlineRuleImporter extends AbstractCommandProvider<Rule> {
         }
         return providedRules;
     }
-
 }

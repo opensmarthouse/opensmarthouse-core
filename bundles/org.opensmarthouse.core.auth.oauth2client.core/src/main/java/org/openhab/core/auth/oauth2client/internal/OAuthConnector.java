@@ -374,5 +374,4 @@ public class OAuthConnector {
             logger.error("Exception while shutting down httpClient, {}", e.getMessage(), e);
         }
     }
-
 }

@@ -456,5 +456,4 @@ public class XmlDocumentBundleTracker<T> extends BundleTracker<Bundle> {
     public String toString() {
         return super.toString() + "(" + xmlDirectory + ")";
     }
-
 }

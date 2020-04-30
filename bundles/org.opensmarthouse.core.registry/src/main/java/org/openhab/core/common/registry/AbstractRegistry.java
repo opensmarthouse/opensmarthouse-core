@@ -653,5 +653,4 @@ public abstract class AbstractRegistry<E extends Identifiable<K>, K, P extends P
             }
         }
     }
-
 }

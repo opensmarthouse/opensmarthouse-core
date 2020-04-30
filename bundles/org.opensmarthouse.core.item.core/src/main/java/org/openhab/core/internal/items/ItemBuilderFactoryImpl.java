@@ -72,5 +72,4 @@ public class ItemBuilderFactoryImpl implements ItemBuilderFactory {
     protected void unsetCoreItemFactory(ItemFactory coreItemFactory) {
         itemFactories.remove(coreItemFactory);
     }
-
 }

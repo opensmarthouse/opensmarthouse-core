@@ -10,9 +10,9 @@
 
   <artifactId>assembly</artifactId>
 
+  <packaging>karaf-assembly</packaging>
   <name>OpenSmartHouse Core | Features | Assembly</name>
   <description>OpenSmartHouse Karaf Assembly</description>
-  <packaging>karaf-assembly</packaging>
 
   <dependencies>
     <dependency>
@@ -47,15 +47,15 @@
     <resources>
       <!-- add distribution specific resources -->
       <resource>
-        <directory>src/main/resources</directory>
         <filtering>false</filtering>
+        <directory>src/main/resources</directory>
         <includes>
           <include>**/*</include>
         </includes>
       </resource>
       <resource>
-        <directory>src/main/filtered-resources</directory>
         <filtering>true</filtering>
+        <directory>src/main/filtered-resources</directory>
         <includes>
           <include>**/*</include>
         </includes>
@@ -82,15 +82,6 @@
         <groupId>org.apache.karaf.tooling</groupId>
         <artifactId>karaf-maven-plugin</artifactId>
         <extensions>true</extensions>
-        <executions>
-          <execution>
-            <id>karaf-feature-verification</id>
-            <goals>
-              <goal>verify</goal>
-            </goals>
-            <phase>none</phase>
-          </execution>
-        </executions>
         <configuration>
           <installedFeatures>
             <feature>wrapper</feature>
@@ -166,6 +157,15 @@
             -->
           </blacklistedBundles>
         </configuration>
+        <executions>
+          <execution>
+            <id>karaf-feature-verification</id>
+            <goals>
+              <goal>verify</goal>
+            </goals>
+            <phase>none</phase>
+          </execution>
+        </executions>
       </plugin>
     </plugins>
   </build>

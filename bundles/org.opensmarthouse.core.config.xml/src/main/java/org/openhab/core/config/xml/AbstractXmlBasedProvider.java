@@ -185,5 +185,4 @@ public abstract class AbstractXmlBasedProvider<T_ID, T_OBJECT extends Identifiab
     private LocalizedKey getLocalizedKey(T_OBJECT object, @Nullable Locale locale) {
         return new LocalizedKey(object.getUID(), locale != null ? locale.toLanguageTag() : null);
     }
-
 }

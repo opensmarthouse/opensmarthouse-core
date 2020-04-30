@@ -50,5 +50,4 @@ public interface Provider<E> {
      * @param listener the listener to be removed.
      */
     void removeProviderChangeListener(ProviderChangeListener<E> listener);
-
 }

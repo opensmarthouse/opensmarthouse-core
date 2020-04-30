@@ -28,7 +28,6 @@ import java.util.stream.Stream;
 
 import javax.measure.Unit;
 
-import org.apache.commons.lang.StringUtils;
 import org.eclipse.emf.common.util.BasicEList;
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EObject;
@@ -38,7 +37,6 @@ import org.eclipse.jdt.annotation.Nullable;
 import org.openhab.core.common.registry.RegistryChangeListener;
 import org.openhab.core.items.GroupItem;
 import org.openhab.core.items.Item;
-import org.openhab.core.items.ItemBuilder;
 import org.openhab.core.items.ItemBuilderFactory;
 import org.openhab.core.items.ItemNotFoundException;
 import org.openhab.core.items.ItemNotUniqueException;
@@ -315,7 +313,7 @@ public class ItemUIRegistryImpl implements ItemUIRegistry {
         String label = getLabelFromWidget(w);
 
         String itemName = w.getItem();
-        if (StringUtils.isBlank(itemName)) {
+        if (itemName == null || itemName.isBlank()) {
             return transform(label, true, null);
         }
 
@@ -1351,7 +1349,7 @@ public class ItemUIRegistryImpl implements ItemUIRegistry {
             // we require the item to define a dimension, otherwise no unit will be reported to the UIs.
             if (item instanceof NumberItem && ((NumberItem) item).getDimension() != null) {
                 String unit = getUnitFromLabel(w.getLabel());
-                if (StringUtils.isNotBlank(unit) && !UnitUtils.UNIT_PLACEHOLDER.equals(unit)) {
+                if (!UnitUtils.UNIT_PLACEHOLDER.equals(unit)) {
                     return unit;
                 }
 
@@ -1375,7 +1373,7 @@ public class ItemUIRegistryImpl implements ItemUIRegistry {
     }
 
     private @Nullable String getUnitFromLabel(String label) {
-        if (StringUtils.isBlank(label)) {
+        if (label.isBlank()) {
             return null;
         }
 
@@ -1386,23 +1384,4 @@ public class ItemUIRegistryImpl implements ItemUIRegistry {
 
         return null;
     }
-
-    @Override
-    public ItemBuilder newItemBuilder(Item item) {
-        if (itemBuilderFactory != null) {
-            return itemBuilderFactory.newItemBuilder(item);
-        } else {
-            throw new IllegalStateException("Cannot create an item builder without the item registry");
-        }
-    }
-
-    @Override
-    public ItemBuilder newItemBuilder(String itemType, String itemName) {
-        if (itemBuilderFactory != null) {
-            return itemBuilderFactory.newItemBuilder(itemType, itemName);
-        } else {
-            throw new IllegalStateException("Cannot create an item builder without the item registry");
-        }
-    }
-
 }

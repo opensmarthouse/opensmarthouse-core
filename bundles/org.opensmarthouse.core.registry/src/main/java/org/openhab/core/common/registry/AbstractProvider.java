@@ -86,5 +86,4 @@ public abstract class AbstractProvider<E> implements Provider<E> {
     protected void notifyListenersAboutUpdatedElement(E oldElement, E element) {
         notifyListeners(oldElement, element, EventType.UPDATED);
     }
-
 }

@@ -75,5 +75,4 @@ public class CommandDescriptionConverter extends GenericUnmarshaller<CommandDesc
         nodeIterator.assertEndOfType();
         return null;
     }
-
 }

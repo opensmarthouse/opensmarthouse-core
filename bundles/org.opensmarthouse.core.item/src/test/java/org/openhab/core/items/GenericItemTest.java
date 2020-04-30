@@ -222,5 +222,4 @@ public class GenericItemTest {
     private <T> T toNull() {
         return null; // :-P
     }
-
 }

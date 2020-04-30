@@ -66,5 +66,4 @@ public class ScriptedRuleProvider implements RuleProvider {
             providerChangeListener.removed(this, rule);
         }
     }
-
 }

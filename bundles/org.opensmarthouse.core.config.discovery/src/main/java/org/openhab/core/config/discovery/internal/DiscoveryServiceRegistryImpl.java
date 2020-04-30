@@ -480,5 +480,4 @@ public final class DiscoveryServiceRegistryImpl implements DiscoveryServiceRegis
     protected void unsetSafeCaller(SafeCaller safeCaller) {
         this.safeCaller = null;
     }
-
 }

@@ -72,10 +72,10 @@
     <bnd.version>4.3.0</bnd.version>
     <karaf.compile.version>4.2.1</karaf.compile.version>
     <karaf.tooling.version>4.2.7</karaf.tooling.version>
-    <sat.version>0.9.0</sat.version>
+    <sat.version>0.10.0</sat.version>
     <slf4j.version>1.7.21</slf4j.version>
     <xtext.version>2.19.0</xtext.version>
-    <spotless.version>1.24.3</spotless.version>
+    <spotless.version>1.30.0</spotless.version>
     <spotless.check.skip>true</spotless.check.skip>
     <!-- Spotless disabled for now -->
   </properties>
@@ -199,7 +199,7 @@ Import-Package: \\
           <version>${bnd.version}</version>
           <configuration>
             <failOnChanges>false</failOnChanges>
-            <bndruns />
+            <bndruns/>
           </configuration>
           <executions>
             <execution>
@@ -463,7 +463,7 @@ Import-Package: \\
                     </goals>
                   </pluginExecutionFilter>
                   <action>
-                    <ignore />
+                    <ignore/>
                   </action>
                 </pluginExecution>
                 <pluginExecution>
@@ -476,7 +476,7 @@ Import-Package: \\
                     </goals>
                   </pluginExecutionFilter>
                   <action>
-                    <ignore />
+                    <ignore/>
                   </action>
                 </pluginExecution>
                 <pluginExecution>
@@ -490,7 +490,7 @@ Import-Package: \\
                     </goals>
                   </pluginExecutionFilter>
                   <action>
-                    <ignore />
+                    <ignore/>
                   </action>
                 </pluginExecution>
                 <pluginExecution>
@@ -503,7 +503,7 @@ Import-Package: \\
                     </goals>
                   </pluginExecutionFilter>
                   <action>
-                    <ignore />
+                    <ignore/>
                   </action>
                 </pluginExecution>
               </pluginExecutions>
@@ -564,13 +564,13 @@ Import-Package: \\
             <java>
               <eclipse>
                 <file>openhab_codestyle.xml</file>
-                <version>4.11.0</version>
+                <version>4.13.0</version>
               </eclipse>
-              <removeUnusedImports />
+              <removeUnusedImports/>
               <importOrder>
                 <file>openhab.importorder</file>
               </importOrder>
-              <endWithNewline />
+              <endWithNewline/>
             </java>
             <formats>
               <format>
@@ -601,10 +601,10 @@ Import-Package: \\
                   <files>
                     <file>openhab_wst_pom_file.prefs</file>
                   </files>
-                  <version>4.12.0</version>
+                  <version>4.13.0</version>
                 </eclipseWtp>
-                <trimTrailingWhitespace />
-                <endWithNewline />
+                <trimTrailingWhitespace/>
+                <endWithNewline/>
               </format>
             </formats>
           </configuration>

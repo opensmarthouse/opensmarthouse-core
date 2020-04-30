@@ -409,5 +409,4 @@ public class QuantityType<T extends Quantity<T>> extends Number
                 .get();
         return new QuantityType<T>(sum);
     }
-
 }

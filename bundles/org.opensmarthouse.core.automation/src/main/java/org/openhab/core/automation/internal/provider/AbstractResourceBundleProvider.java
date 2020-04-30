@@ -473,5 +473,4 @@ public abstract class AbstractResourceBundleProvider<E> {
      * @return
      */
     protected abstract String getUID(E parsedObject);
-
 }

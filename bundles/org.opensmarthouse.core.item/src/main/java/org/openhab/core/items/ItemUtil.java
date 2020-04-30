@@ -58,8 +58,8 @@ public class ItemUtil {
      * @param itemName the name of the item to be checked (could be null or empty)
      * @return true if the specified name is a valid item name, otherwise false
      */
-    public static boolean isValidItemName(final String itemName) {
-        return StringUtils.isNotEmpty(itemName) && itemName.matches("[a-zA-Z0-9_]*");
+    public static boolean isValidItemName(final @Nullable String itemName) {
+        return itemName != null && !itemName.isEmpty() && itemName.matches("[a-zA-Z0-9_]*");
     }
 
     /**
@@ -137,5 +137,4 @@ public class ItemUtil {
 
         return itemStateConverter.convertToAcceptedState(state, item);
     }
-
 }

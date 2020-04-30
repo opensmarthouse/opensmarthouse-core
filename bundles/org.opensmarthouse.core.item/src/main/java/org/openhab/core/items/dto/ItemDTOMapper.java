@@ -58,7 +58,7 @@ public class ItemDTOMapper {
             if (itemDTO instanceof GroupItemDTO && GroupItem.TYPE.equals(itemDTO.type)) {
                 GroupItemDTO groupItemDTO = (GroupItemDTO) itemDTO;
                 Item baseItem = null;
-                if (!StringUtils.isEmpty(groupItemDTO.groupType)) {
+                if (groupItemDTO.groupType != null && !groupItemDTO.groupType.isEmpty()) {
                     baseItem = itemBuilderFactory.newItemBuilder(groupItemDTO.groupType, itemDTO.name).build();
                     builder.withBaseItem(baseItem);
                 }
@@ -168,5 +168,4 @@ public class ItemDTOMapper {
 
         return dto;
     }
-
 }

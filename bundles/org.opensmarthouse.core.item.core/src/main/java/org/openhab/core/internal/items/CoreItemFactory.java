@@ -84,5 +84,4 @@ public class CoreItemFactory implements ItemFactory, org.openhab.core.library.Co
         return new String[] { SWITCH, ROLLERSHUTTER, CONTACT, STRING, NUMBER, DIMMER, DATETIME, COLOR, IMAGE, PLAYER,
                 LOCATION, CALL };
     }
-
 }

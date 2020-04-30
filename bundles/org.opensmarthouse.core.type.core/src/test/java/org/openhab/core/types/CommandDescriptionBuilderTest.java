@@ -64,5 +64,4 @@ public class CommandDescriptionBuilderTest {
 
         assertThat(commandDescription1.getCommandOptions(), is(not(commandDescription2.getCommandOptions())));
     }
-
 }

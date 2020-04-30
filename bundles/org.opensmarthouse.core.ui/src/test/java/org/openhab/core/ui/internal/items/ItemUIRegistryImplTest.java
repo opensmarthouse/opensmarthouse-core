@@ -753,5 +753,4 @@ public class ItemUIRegistryImplTest {
         String color = uiRegistry.getLabelColor(widget);
         assertEquals("yellow", color);
     }
-
 }

@@ -49,5 +49,4 @@ public interface ProviderChangeListener<E> {
      * @param element the element that has been updated
      */
     void updated(Provider<E> provider, E oldelement, E element);
-
 }

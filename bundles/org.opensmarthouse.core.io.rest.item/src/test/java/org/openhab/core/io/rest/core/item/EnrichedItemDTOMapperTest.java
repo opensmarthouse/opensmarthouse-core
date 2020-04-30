@@ -112,5 +112,4 @@ public class EnrichedItemDTOMapperTest extends JavaTest {
         assertThat(dto.members.length, is(2));
         assertThat(((EnrichedGroupItemDTO) dto.members[0]).members.length, is(1));
     }
-
 }

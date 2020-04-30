@@ -589,5 +589,4 @@ public abstract class BaseThingHandler implements ThingHandler {
                     this.getClass().getSimpleName());
         }
     }
-
 }

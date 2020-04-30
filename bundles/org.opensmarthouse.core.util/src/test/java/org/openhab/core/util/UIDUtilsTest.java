@@ -40,5 +40,4 @@ public class UIDUtilsTest {
         test.accept("test_test-test%test");
         test.accept("äöø€");
     }
-
 }

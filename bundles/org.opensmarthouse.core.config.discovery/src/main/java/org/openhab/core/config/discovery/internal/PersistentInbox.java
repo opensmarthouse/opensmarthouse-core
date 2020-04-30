@@ -604,5 +604,4 @@ public final class PersistentInbox implements Inbox, DiscoveryListener, ThingReg
     protected void removeThingHandlerFactory(ThingHandlerFactory thingHandlerFactory) {
         this.thingHandlerFactories.remove(thingHandlerFactory);
     }
-
 }

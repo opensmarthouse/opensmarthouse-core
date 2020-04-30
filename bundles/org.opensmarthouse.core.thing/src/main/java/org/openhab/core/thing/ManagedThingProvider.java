@@ -45,5 +45,4 @@ public class ManagedThingProvider extends DefaultAbstractManagedProvider<Thing, 
     protected String keyToString(ThingUID key) {
         return key.toString();
     }
-
 }

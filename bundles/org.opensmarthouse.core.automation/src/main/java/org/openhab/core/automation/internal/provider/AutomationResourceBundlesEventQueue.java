@@ -244,5 +244,4 @@ public class AutomationResourceBundlesEventQueue<E> implements Runnable {
             }
         }
     }
-
 }

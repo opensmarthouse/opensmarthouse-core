@@ -47,5 +47,4 @@ public class ItemDTOMapperTest {
         assertThat(gFunc.getParameters().length, is(1));
         assertThat(gFunc.getParameters()[0], instanceOf(StringType.class));
     }
-
 }
