@@ -19,6 +19,26 @@
     <jna.version>5.4.0</jna.version>
   </properties>
 
+  <dependencies>
+    <dependency>
+      <groupId>org.opensmarthouse.core.bom</groupId>
+      <artifactId>org.opensmarthouse.core.bom.compile-model</artifactId>
+      <type>pom</type>
+    </dependency>
+    <dependency>
+      <groupId>org.opensmarthouse.core.bom</groupId>
+      <artifactId>org.opensmarthouse.core.bom.opensmarthouse-core</artifactId>
+      <version>${project.version}</version>
+      <type>pom</type>
+    </dependency>
+    <dependency>
+      <groupId>org.opensmarthouse.core.features.karaf</groupId>
+      <artifactId>org.opensmarthouse.core.features.karaf.opensmarthouse-tp</artifactId>
+      <classifier>features</classifier>
+      <type>xml</type>
+    </dependency>
+  </dependencies>
+
   <build>
     <plugins>
       <plugin>

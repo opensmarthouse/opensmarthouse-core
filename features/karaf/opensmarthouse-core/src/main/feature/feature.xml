@@ -650,7 +650,7 @@
 
     <feature name="opensmarthouse-core-ui" version="${project.version}">
         <feature>opensmarthouse-core-registry</feature>
-        <feature>opensmarthouse-core-io-http</feature>>
+        <feature>opensmarthouse-core-io-http</feature>
         <feature>opensmarthouse-core-io-rest-item</feature>
         <feature>opensmarthouse-core-model-item</feature>
         <feature>opensmarthouse-core-model-sitemap</feature>

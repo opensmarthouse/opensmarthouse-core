@@ -1,0 +1,1 @@
+This is application configuration directory. This file is provided to keep directory in archives. 

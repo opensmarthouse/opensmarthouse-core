@@ -165,6 +165,38 @@
         <scope>compile</scope>
       </dependency>
 
+      <!-- Karaf -->
+      <dependency>
+        <groupId>org.apache.karaf.features</groupId>
+        <artifactId>framework</artifactId>
+        <version>${karaf.tooling.version}</version>
+        <type>kar</type>
+        <scope>provided</scope>
+        <exclusions>
+          <exclusion>
+            <!-- This should have been an optional dependency and will be fixed in Karaf 4.2.8 (KARAF-6462). -->
+            <groupId>org.knopflerfish.kf6</groupId>
+            <artifactId>log-API</artifactId>
+          </exclusion>
+        </exclusions>
+      </dependency>
+
+      <dependency>
+        <groupId>org.apache.karaf.features</groupId>
+        <artifactId>standard</artifactId>
+        <version>${karaf.tooling.version}</version>
+        <classifier>features</classifier>
+        <type>xml</type>
+      </dependency>
+
+      <dependency>
+        <groupId>org.apache.karaf.features</groupId>
+        <artifactId>standard</artifactId>
+        <version>${karaf.tooling.version}</version>
+        <classifier>features</classifier>
+        <type>xml</type>
+      </dependency>
+
       <!-- Netty -->
       <dependency>
         <groupId>io.netty</groupId>

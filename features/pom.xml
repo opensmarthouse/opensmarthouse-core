@@ -19,14 +19,24 @@
     <module>karaf</module>
   </modules>
 
-  <dependencies>
+  <dependencyManagement>
     <!-- BOM, so features are built after bundles in parallel builds -->
-    <dependency>
-      <groupId>org.opensmarthouse.core.bom</groupId>
-      <artifactId>org.opensmarthouse.core.bom.opensmarthouse-core</artifactId>
-      <version>${project.version}</version>
-      <type>pom</type>
-    </dependency>
-  </dependencies>
+    <dependencies>
+      <dependency>
+        <groupId>org.opensmarthouse.core.bom</groupId>
+        <artifactId>opensmarthouse</artifactId>
+        <version>${project.version}</version>
+        <type>pom</type>
+        <scope>import</scope>
+      </dependency>
+      <dependency>
+        <groupId>org.opensmarthouse.core.bom</groupId>
+        <artifactId>opensmarthouse-dependencies</artifactId>
+        <version>${project.version}</version>
+        <type>pom</type>
+        <scope>import</scope>
+      </dependency>
+    </dependencies>
+  </dependencyManagement>
 
 </project>

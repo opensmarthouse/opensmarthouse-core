@@ -1,0 +1,173 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+
+  <parent>
+    <groupId>org.opensmarthouse.core.features.karaf</groupId>
+    <artifactId>org.opensmarthouse.core.reactor.features.karaf</artifactId>
+    <version>1.0.0-SNAPSHOT</version>
+  </parent>
+
+  <artifactId>assembly</artifactId>
+
+  <name>OpenSmartHouse Core | Features | Assembly</name>
+  <description>OpenSmartHouse Karaf Assembly</description>
+  <packaging>karaf-assembly</packaging>
+
+  <dependencies>
+    <dependency>
+      <groupId>org.apache.karaf.features</groupId>
+      <artifactId>framework</artifactId>
+      <type>kar</type>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.karaf.features</groupId>
+      <artifactId>standard</artifactId>
+      <classifier>features</classifier>
+      <type>xml</type>
+      <scope>compile</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.opensmarthouse.core.features.karaf</groupId>
+      <artifactId>org.opensmarthouse.core.features.karaf.opensmarthouse-core</artifactId>
+      <classifier>features</classifier>
+      <type>xml</type>
+      <scope>compile</scope>
+    </dependency>
+
+    <dependency>
+      <groupId>org.apache.karaf.features</groupId>
+      <artifactId>framework</artifactId>
+      <type>kar</type>
+      <scope>compile</scope>
+    </dependency>
+  </dependencies>
+
+  <build>
+    <resources>
+      <!-- add distribution specific resources -->
+      <resource>
+        <directory>src/main/resources</directory>
+        <filtering>false</filtering>
+        <includes>
+          <include>**/*</include>
+        </includes>
+      </resource>
+      <resource>
+        <directory>src/main/filtered-resources</directory>
+        <filtering>true</filtering>
+        <includes>
+          <include>**/*</include>
+        </includes>
+      </resource>
+    </resources>
+    <plugins>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-resources-plugin</artifactId>
+        <version>2.6</version>
+        <configuration>
+          <escapeString>\</escapeString>
+        </configuration>
+        <executions>
+          <execution>
+            <id>process-resources</id>
+            <goals>
+              <goal>resources</goal>
+            </goals>
+          </execution>
+        </executions>
+      </plugin>
+      <plugin>
+        <groupId>org.apache.karaf.tooling</groupId>
+        <artifactId>karaf-maven-plugin</artifactId>
+        <extensions>true</extensions>
+        <executions>
+          <execution>
+            <id>karaf-feature-verification</id>
+            <goals>
+              <goal>verify</goal>
+            </goals>
+            <phase>none</phase>
+          </execution>
+        </executions>
+        <configuration>
+          <installedFeatures>
+            <feature>wrapper</feature>
+            <feature>wrap</feature>
+            <feature>opensmarthouse-core-*</feature>
+            <feature>opensmarthouse-io-*</feature>
+          </installedFeatures>
+          <startupFeatures>
+            <feature>eventadmin</feature>
+          </startupFeatures>
+          <bootFeatures>
+            <feature>jaas</feature>
+            <feature>shell</feature>
+            <feature>ssh</feature>
+            <feature>bundle</feature>
+            <feature>config</feature>
+            <feature>deployer</feature>
+            <feature>diagnostic</feature>
+            <feature>feature</feature>
+            <feature>instance</feature>
+            <feature>kar</feature>
+            <feature>log</feature>
+            <feature>package</feature>
+            <feature>service</feature>
+            <feature>system</feature>
+
+            <feature>opensmarthouse-*</feature>
+            <!--
+            <feature>opensmarthouse-core-base</feature>
+            <feature>openhab-transport-mqtt</feature>
+            <feature>opensmarthouse-runtime-base</feature>
+            -->
+          </bootFeatures>
+          <archiveTarGz>true</archiveTarGz>
+          <blacklistedFeatures>
+            <!--
+            xtext is a hard dependency on openhab-core-base so we can't disable it fully, we must blacklist all
+            problematic bundles coming via this feature such as EMF, XText, XTend.
+            <feature>openhab.tp-xtext</feature>
+            -->
+            <!--
+            <feature>openhab.tp-lsp4j</feature>
+            <feature>openhab.inc-model-core</feature>
+            <feature>openhab-core-model-item</feature>
+            <feature>openhab-core-model-item-ide</feature>
+            <feature>openhab-core-model-persistence</feature>
+            <feature>openhab-core-model-persistence-ide</feature>
+            <feature>openhab-core-model-rule</feature>
+            <feature>openhab-core-model-rule-ide</feature>
+            <feature>openhab-core-model-script</feature>
+            <feature>openhab-core-model-script-ide</feature>
+            <feature>openhab-core-model-thing</feature>
+            <feature>openhab-core-model-thing-ide</feature>
+            <feature>openhab-core-model-sitemap</feature>
+            <feature>openhab-core-model-sitemap-ide</feature>
+            <feature>openhab-core-model-lsp</feature>
+            <feature>openhab-core-io-rest-sitemap</feature>
+            -->
+          </blacklistedFeatures>
+          <blacklistedBundles>
+            <!-- depends on EMF, and is not criticial -->
+            <!--
+            <bundle>mvn:org.openhab.core.bundles/org.openhab.core.boot</bundle>
+            <bundle>mvn:org.eclipse.orbit.bundles/io.github.classgraph</bundle>
+            <bundle>mvn:org.eclipse.emf/org.eclipse.emf*</bundle>
+            <bundle>mvn:org.eclipse.xtext/org.eclipse.xtext*</bundle>
+            <bundle>mvn:org.eclipse.xtend/org.eclipse.xtend*</bundle>
+            <bundle>mvn:de.maggu2810.p2redist/com.google.inject</bundle>
+            <bundle>mvn:de.maggu2810.p2redist/org.antlr.runtime</bundle>
+            <bundle>mvn:org.eclipse.platform/org.eclipse.equinox.common</bundle>
+            <bundle>mvn:org.eclipse.platform/org.eclipse.equinox.registry</bundle>
+            <bundle>mvn:org.eclipse.platform/org.eclipse.equinox.supplement</bundle>
+            -->
+          </blacklistedBundles>
+        </configuration>
+      </plugin>
+    </plugins>
+  </build>
+
+</project>
