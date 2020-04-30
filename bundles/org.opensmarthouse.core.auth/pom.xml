@@ -16,7 +16,7 @@
   <dependencies>
     <dependency>
       <groupId>org.opensmarthouse.core.bundles</groupId>
-      <artifactId>org.opensmarthouse.core.persistence</artifactId>
+      <artifactId>org.opensmarthouse.core.registry</artifactId>
     </dependency>
   </dependencies>
 

@@ -54,8 +54,8 @@ Require-Bundle: org.antlr.runtime,\
  org.eclipse.emf.common,\
  org.eclipse.emf.ecore,\
  org.eclipse.emf.mwe2.launch;resolution:=optional,\
- org.openhab.core.model.item,\
- org.openhab.core.model.lazygen;resolution:=optional,\
+ org.opensmarthouse.core.model.item,\
+ org.opensmarthouse.core.model.lazygen;resolution:=optional,\
  org.eclipse.xtend.lib;resolution:=optional,\
  org.eclipse.xtext.common.types,\
  org.eclipse.xtext.generator;resolution:=optional,\

@@ -13,7 +13,7 @@
   <packaging>maven-archetype</packaging>
 
   <name>OpenSmartHouse Core | Tools | Binding Archetypes</name>
-  <description>This is the Maven-Archetype for building new bindings for OpenSmartHome.</description>
+  <description>This is the Maven-Archetype for building new bindings for OpenSmartHouse.</description>
 
   <build>
     <resources>

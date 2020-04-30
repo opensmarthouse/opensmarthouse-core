@@ -1,5 +1,5 @@
 Bundle-SymbolicName: ${project.artifactId}
-Require-Bundle: org.openhab.core.model.sitemap
+Require-Bundle: org.opensmarthouse.core.model.sitemap
 Import-Package: \
  org.eclipse.jdt.annotation;resolution:=optional,\
  org.openhab.core.model.core,\

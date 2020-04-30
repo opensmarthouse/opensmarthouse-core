@@ -51,6 +51,9 @@
   </distributionManagement>
 
   <properties>
+    <!-- This is version tag for published/public openhab packages -->
+    <openhab-api.version>3.0.0-SNAPSHOT</openhab-api.version>
+
     <snapshot.repository-id>zss-snapshots</snapshot.repository-id>
     <snapshot.repository-name>Z-SmartSystems Snapshots</snapshot.repository-name>
     <snapshot.repository-url>http://repo.cd-jackson.com/repository/maven-snapshots/</snapshot.repository-url>
@@ -128,15 +131,17 @@ Import-Package: \\
   io.swagger.annotations.*;resolution:=optional,\\
   javax.annotation.security.*;resolution:=optional,\\
   org.eclipse.jdt.annotation.*;resolution:=optional,\\
-  org.opensmarthouse.core.automation.annotation.*;resolution:=optional,\\
+  org.openhab.core.automation.annotation.*;resolution:=optional,\\
   com.google.common.*;version="14.0",\\
   *
+
 -exportcontents: \\
   !*.internal.*,\\
   !*.impl.*, \\
-  org.opensmarthouse.*,\\
-  org.opensmarthouse.core.*
+  org.openhab.*;version=${openhab-api.version}},\\
+  org.openhab.core.*;version=${openhab-api.version}
 -sources: false
+-removeheaders: Require-Capability,Provide-Capability,Service-Component
 -contract: *
 -includeresource: -${.}/NOTICE, -${.}/*.xsd]]></bnd>
             <!-- Bundle-SymbolicName: ${project.groupId}.${project.artifactId} -->

@@ -27,4 +27,4 @@ Import-Package: \
   weblogic.jdbc.vendor.oracle;resolution:=optional,\
   *
 Export-Package: \
-  org.quartz.*;version="2.2.1"
+  org.quartz.*;version="2.2.1"\

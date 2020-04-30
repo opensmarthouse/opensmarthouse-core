@@ -1,2 +1,2 @@
 Bundle-SymbolicName: ${project.artifactId}
-Require-Bundle: org.openhab.core.model.persistence
+Require-Bundle: org.opensmarthouse.core.model.persistence
