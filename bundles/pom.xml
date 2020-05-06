@@ -133,6 +133,7 @@
     <module>org.opensmarthouse.core.test</module>
     <module>org.opensmarthouse.core.test.magic</module>
     <module>org.opensmarthouse.core.thing</module>
+    <module>org.opensmarthouse.core.thing.console</module>
     <module>org.opensmarthouse.core.thing.core</module>
     <module>org.opensmarthouse.core.thing.xml</module>
     <module>org.opensmarthouse.core.transform</module>

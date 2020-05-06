@@ -758,4 +758,30 @@
         <feature>opensmarthouse-core-io-transport-upnp</feature>
     </feature>
 
+    <feature name="opensmarthouse-core-thing-core" description="Thing Core" version="${project.version}">
+        <feature>opensmarthouse.tp-commons-io</feature>
+        <feature>opensmarthouse-core-thing</feature>
+        <feature>opensmarthouse-core-library-item</feature>
+        <bundle>mvn:org.opensmarthouse.core.bundles/org.opensmarthouse.core.thing.core/${project.version}</bundle>
+    </feature>
+
+    <feature name="opensmarthouse-core-thing-console" description="Thing Console" version="${project.version}">
+        <feature>opensmarthouse-core-thing</feature>
+        <feature>opensmarthouse-core-io-console</feature>
+        <bundle>mvn:org.opensmarthouse.core.bundles/org.opensmarthouse.core.thing.console/${project.version}</bundle>
+    </feature>
+
+    <feature name="opensmarthouse-core-io-rest-thing" version="${project.version}">
+        <feature>opensmarthouse-core-thing</feature>
+        <feature>opensmarthouse-core-io-rest</feature>
+        <bundle>mvn:org.opensmarthouse.core.bundles/org.opensmarthouse.core.io.rest.thing/${project.version}</bundle>
+    </feature>
+
+    <feature name="opensmarthouse-core-item-core" description="Item Core" version="${project.version}">
+        <feature>opensmarthouse.tp-commons-io</feature>
+        <feature>opensmarthouse-core-item</feature>
+        <feature>opensmarthouse-core-library-item</feature>
+        <bundle>mvn:org.opensmarthouse.core.bundles/org.opensmarthouse.core.item.core/${project.version}</bundle>
+    </feature>
+
 </features>
