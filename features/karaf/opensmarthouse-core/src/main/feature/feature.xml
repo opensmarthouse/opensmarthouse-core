@@ -333,6 +333,7 @@
     </feature>
 
     <feature name="opensmarthouse-core-io-http-auth" version="${project.version}">
+        <feature dependency="true">opensmarthouse.tp-jax-rs-min</feature>
         <feature dependency="true">opensmarthouse.tp-commons-io</feature>
         <feature>opensmarthouse-core-io-http</feature>
         <feature>opensmarthouse-core-auth-jaas</feature>
