@@ -11,6 +11,7 @@ bin/
 **/.settings/org.eclipse.*
 
 dependency-reduced-pom.xml
+bundles/org.opensmarthouse.core.id/userdata/uuid
 bundles/org.openhab.core.model.*/META-INF/
 features/karaf/*/src/main/history
 
