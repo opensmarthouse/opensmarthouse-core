@@ -218,7 +218,7 @@ fi
 
 # Restore the original file
 rm $1
-rm $1.original
+rm $1.original.diff
 mv $1.tmp $1
 
 echo --- Patch Information ---
