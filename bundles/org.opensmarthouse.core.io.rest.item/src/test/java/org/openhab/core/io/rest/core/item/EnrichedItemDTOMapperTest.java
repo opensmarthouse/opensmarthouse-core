@@ -78,7 +78,7 @@ public class EnrichedItemDTOMapperTest extends JavaTest {
         subGroup.addMember(stringItem);
 
         EnrichedGroupItemDTO dto = (EnrichedGroupItemDTO) EnrichedItemDTOMapper.map(bundleContext,
-                stateDescriptionFragmentBuilderFactory, group, false, null, URI.create(""),
+                stateDescriptionFragmentBuilderFactory, group, false, null, null,
                 null);
         assertThat(dto.members.length, is(0));
 
