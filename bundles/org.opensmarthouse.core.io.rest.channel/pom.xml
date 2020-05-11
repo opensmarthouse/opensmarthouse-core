@@ -51,11 +51,6 @@
       <groupId>org.osgi</groupId>
       <artifactId>osgi.enroute.hamcrest.wrapper</artifactId>
     </dependency>
-    <dependency>
-      <groupId>com.eclipsesource.jaxrs</groupId>
-      <artifactId>publisher</artifactId>
-      <scope>test</scope>
-    </dependency>
   </dependencies>
 
 </project>

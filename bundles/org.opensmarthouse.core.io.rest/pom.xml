@@ -41,11 +41,6 @@
     </dependency>
 
     <dependency>
-      <groupId>com.eclipsesource.jaxrs</groupId>
-      <artifactId>publisher</artifactId>
-      <scope>test</scope>
-    </dependency>
-    <dependency>
       <groupId>junit</groupId>
       <artifactId>junit</artifactId>
     </dependency>

@@ -43,10 +43,6 @@
       <groupId>io.swagger</groupId>
       <artifactId>swagger-annotations</artifactId>
     </dependency>
-    <dependency>
-      <groupId>com.eclipsesource.jaxrs</groupId>
-      <artifactId>publisher</artifactId>
-    </dependency>
   </dependencies>
 
 </project>
