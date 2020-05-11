@@ -175,8 +175,7 @@ public class SitemapResource
     @Activate
     protected void activate(BundleContext bundleContext) {
         this.bundleContext = bundleContext;
-        broadcaster = new SseBroadcaster();
-        broadcaster.add(this);
+        broadcaster = new SseBroadcaster<>();
 
         // The clean SSE subscriptions job sends an ALIVE event to all subscribers. This will trigger
         // an exception when the subscriber is dead, leading to the release of the SSE subscription
@@ -199,9 +198,12 @@ public class SitemapResource
             cleanSubscriptionsJob.cancel(true);
             cleanSubscriptionsJob = null;
         }
-        broadcaster.remove(this);
-        broadcaster = null;
-        bundleContext = null;
+        broadcaster.close();
+    }
+
+    @Context
+    public void setSse(final Sse sse) {
+        this.sse = sse;
     }
 
     @Reference(cardinality = ReferenceCardinality.OPTIONAL, policy = ReferencePolicy.DYNAMIC)
@@ -527,8 +529,8 @@ public class SitemapResource
                         .substring(widget.eClass().getInstanceTypeName().lastIndexOf(".") + 1);
                 boolean isMapview = "mapview".equalsIgnoreCase(widgetTypeName);
                 Predicate<Item> itemFilter = (i -> CoreItemFactory.LOCATION.equals(i.getType()));
-                bean.item = EnrichedItemDTOMapper.map(bundleContext, stateDescriptionFragmentBuilderFactory, item, isMapview, itemFilter, UriBuilder.fromUri(uri).build(),
-                        locale);
+                bean.item = EnrichedItemDTOMapper.map(bundleContext, stateDescriptionFragmentBuilderFactory, item, isMapview, itemFilter,
+                        UriBuilder.fromUri(uri).path("{itemName}"), locale);
                 bean.state = itemUIRegistry.getState(widget).toFullString();
                 // In case the widget state is identical to the item state, its value is set to null.
                 if (bean.state != null && bean.state.equals(bean.item.state)) {

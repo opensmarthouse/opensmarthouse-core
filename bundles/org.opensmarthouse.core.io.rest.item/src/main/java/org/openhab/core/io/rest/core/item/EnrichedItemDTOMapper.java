@@ -18,6 +18,7 @@ import java.util.LinkedHashSet;
 import java.util.Locale;
 import java.util.function.Predicate;
 
+import javax.ws.rs.core.UriBuilder;
 import org.eclipse.jdt.annotation.NonNullByDefault;
 import org.eclipse.jdt.annotation.Nullable;
 import org.openhab.core.io.rest.core.internal.item.ItemResource;
@@ -58,12 +59,12 @@ public class EnrichedItemDTOMapper {
      * @return item DTO object
      */
     public static EnrichedItemDTO map(BundleContext bundleContext, @Nullable StateDescriptionFragmentBuilderFactory stateDescriptionFragmentBuilderFactory,
-            Item item, boolean drillDown, @Nullable Predicate<Item> itemFilter, @Nullable URI uri, @Nullable Locale locale) {
+            Item item, boolean drillDown, @Nullable Predicate<Item> itemFilter, @Nullable UriBuilder uriBuilder, @Nullable Locale locale) {
         ItemDTO itemDTO = ItemDTOMapper.map(item);
-        return map(bundleContext, item, itemDTO, uri, stateDescriptionFragmentBuilderFactory, drillDown, itemFilter, locale);
+        return map(bundleContext, item, itemDTO, uriBuilder, stateDescriptionFragmentBuilderFactory, drillDown, itemFilter, locale);
     }
 
-    private static EnrichedItemDTO map(BundleContext bundleContext, Item item, ItemDTO itemDTO, @Nullable URI uri,
+    private static EnrichedItemDTO map(BundleContext bundleContext, Item item, ItemDTO itemDTO, @Nullable UriBuilder uriBuilder,
             @Nullable StateDescriptionFragmentBuilderFactory stateDescriptionFragmentBuilderFactory, boolean drillDown,
             @Nullable Predicate<Item> itemFilter, @Nullable Locale locale) {
         String state = item.getState().toFullString();
@@ -72,7 +73,12 @@ public class EnrichedItemDTOMapper {
             transformedState = null;
         }
         StateDescription stateDescription = considerTransformation(stateDescriptionFragmentBuilderFactory, item.getStateDescription(locale));
-        String link = null != uri ? uri.toASCIIString() + ItemResource.PATH_ITEMS + "/" + itemDTO.name : null;
+        final String link;
+        if (uriBuilder != null) {
+            link = uriBuilder.build(itemDTO.name).toASCIIString();
+        } else {
+            link = null;
+        }
 
         EnrichedItemDTO enrichedItemDTO = null;
 
@@ -83,7 +89,7 @@ public class EnrichedItemDTOMapper {
                 Collection<EnrichedItemDTO> members = new LinkedHashSet<>();
                 for (Item member : groupItem.getMembers()) {
                     if (itemFilter == null || itemFilter.test(member)) {
-                        members.add(map(bundleContext, stateDescriptionFragmentBuilderFactory, member, drillDown, itemFilter, uri, locale));
+                        members.add(map(bundleContext, stateDescriptionFragmentBuilderFactory, member, drillDown, itemFilter, uriBuilder, locale));
                     }
                 }
                 memberDTOs = members.toArray(new EnrichedItemDTO[members.size()]);

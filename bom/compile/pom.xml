@@ -229,20 +229,6 @@
       <scope>compile</scope>
     </dependency>
 
-    <!-- Servlet and JAX-RS API -->
-    <dependency>
-      <groupId>org.apache.felix</groupId>
-      <artifactId>org.apache.felix.http.servlet-api</artifactId>
-      <version>1.1.2</version>
-      <scope>compile</scope>
-    </dependency>
-    <dependency>
-      <groupId>org.apache.aries.spec</groupId>
-      <artifactId>org.apache.aries.javax.jax.rs-api</artifactId>
-      <version>1.0.0</version>
-      <scope>compile</scope>
-    </dependency>
-
     <!-- Swagger -->
     <dependency>
       <groupId>io.swagger</groupId>

@@ -259,13 +259,20 @@ public class ItemResource implements RESTResource {
         this.stateDescriptionFragmentBuilderFactory = null;
     }
 
+    private UriBuilder uriBuilder(final UriInfo uriInfo, final HttpHeaders httpHeaders) {
+        final UriBuilder uriBuilder = uriInfo.getAbsolutePathBuilder();
+        respectForwarded(uriBuilder, httpHeaders);
+        uriBuilder.path("{itemName}");
+        return uriBuilder;
+    }
+
     @GET
     @RolesAllowed({ Role.USER, Role.ADMIN })
     @Produces(MediaType.APPLICATION_JSON)
     @ApiOperation(value = "Get all available items.", response = EnrichedItemDTO.class, responseContainer = "List")
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "OK", response = EnrichedItemDTO.class, responseContainer = "List") })
-    public Response getItems(
+    public Response getItems(final @Context UriInfo uriInfo, final @Context HttpHeaders httpHeaders,
             @HeaderParam(HttpHeaders.ACCEPT_LANGUAGE) @ApiParam(value = "language") @Nullable String language,
             @QueryParam("type") @ApiParam(value = "item type filter", required = false) @Nullable String type,
             @QueryParam("tags") @ApiParam(value = "item tag filter", required = false) @Nullable String tags,
@@ -274,10 +281,9 @@ public class ItemResource implements RESTResource {
             @QueryParam("fields") @ApiParam(value = "limit output to the given fields (comma separated)", required = false) @Nullable String fields) {
         final Locale locale = localeService.getLocale(language);
         final Set<String> namespaces = splitAndFilterNamespaces(namespaceSelector, locale);
-        logger.debug("Received HTTP GET request at '{}'", uriInfo.getPath());
 
         Stream<EnrichedItemDTO> itemStream = getItems(type, tags).stream() //
-                .map(item -> EnrichedItemDTOMapper.map(bundleContext, stateDescriptionFragmentBuilderFactory, item, recursive, null, uriInfo.getBaseUri(), locale)) //
+                .map(item -> EnrichedItemDTOMapper.map(bundleContext, stateDescriptionFragmentBuilderFactory, item, recursive, null, uriBuilder(uriInfo, httpHeaders), locale)) //
                 .peek(dto -> addMetadata(dto, namespaces, null)) //
                 .peek(dto -> dto.editable = isEditable(dto.name));
         itemStream = dtoMapper.limitToFields(itemStream, fields);
@@ -291,13 +297,12 @@ public class ItemResource implements RESTResource {
     @ApiOperation(value = "Gets a single item.", response = EnrichedItemDTO.class)
     @ApiResponses(value = { @ApiResponse(code = 200, message = "OK", response = EnrichedItemDTO.class),
             @ApiResponse(code = 404, message = "Item not found") })
-    public Response getItemData(
+    public Response getItemData(final @Context UriInfo uriInfo, final @Context HttpHeaders httpHeaders,
             @HeaderParam(HttpHeaders.ACCEPT_LANGUAGE) @ApiParam(value = "language") @Nullable String language,
             @QueryParam("metadata") @ApiParam(value = "metadata selector", required = false) @Nullable String namespaceSelector,
             @PathParam("itemname") @ApiParam(value = "item name", required = true) String itemname) {
         final Locale locale = localeService.getLocale(language);
         final Set<String> namespaces = splitAndFilterNamespaces(namespaceSelector, locale);
-        logger.debug("Received HTTP GET request at '{}'", uriInfo.getPath());
 
         // get item
         Item item = getItem(itemname);
@@ -305,12 +310,11 @@ public class ItemResource implements RESTResource {
         // if it exists
         if (item != null) {
             logger.debug("Received HTTP GET request at '{}'.", uriInfo.getPath());
-            EnrichedItemDTO dto = EnrichedItemDTOMapper.map(bundleContext, stateDescriptionFragmentBuilderFactory, item, true, null, uriInfo.getBaseUri(), locale);
+            EnrichedItemDTO dto = EnrichedItemDTOMapper.map(bundleContext, stateDescriptionFragmentBuilderFactory, item, true, null, uriBuilder(uriInfo, httpHeaders), locale);
             addMetadata(dto, namespaces, null);
             dto.editable = isEditable(dto.name);
             return JSONResponse.createResponse(Status.OK, dto, null);
         } else {
-            logger.info("Received HTTP GET request at '{}' for the unknown item '{}'.", uriInfo.getPath(), itemname);
             return getItemNotFoundResponse(itemname);
         }
     }
@@ -783,9 +787,10 @@ public class ItemResource implements RESTResource {
      * @param errormessage optional message in case of error
      * @return Response configured to represent the Item in depending on the status
      */
-    private Response getItemResponse(Status status, @Nullable Item item, Locale locale, @Nullable String errormessage) {
+    private Response getItemResponse(final @Nullable UriBuilder uriBuilder, Status status, @Nullable Item item,
+            Locale locale, @Nullable String errormessage) {
         Object entity = null != item ? EnrichedItemDTOMapper.map(bundleContext, stateDescriptionFragmentBuilderFactory,
-                item, true, null, uriInfo.getBaseUri(), locale) : null;
+                item, true, null, uriBuilder, locale) : null;
         return JSONResponse.createResponse(status, entity, errormessage);
     }
 

@@ -32,8 +32,8 @@
       <type>pom</type>
     </dependency>
     <dependency>
-      <groupId>com.eclipsesource.jaxrs</groupId>
-      <artifactId>publisher</artifactId>
+      <groupId>javax.ws.rs</groupId>
+      <artifactId>javax.ws.rs-api</artifactId>
     </dependency>
 
     <dependency>

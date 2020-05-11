@@ -158,7 +158,7 @@
         <bundle start-level="33" dependency="true">mvn:org.glassfish.hk2.external/aopalliance-repackaged/2.4.0-b34</bundle>
         <bundle dependency="true">mvn:javax.annotation/javax.annotation-api/1.2</bundle>
         <bundle dependency="true">mvn:javax.validation/validation-api/1.1.0.Final</bundle>
-        <bundle dependency="true">mvn:javax.ws.rs/javax.ws.rs-api/2.0.1</bundle>
+        <bundle dependency="true">mvn:javax.ws.rs/javax.ws.rs-api/2.1.1</bundle>
         <bundle dependency="true">mvn:org.javassist/javassist/3.18.1-GA</bundle>
         <bundle dependency="true">mvn:org.jvnet.mimepull/mimepull/1.9.6</bundle>
     </feature>

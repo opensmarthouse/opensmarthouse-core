@@ -27,6 +27,15 @@
       <artifactId>org.opensmarthouse.core.auth</artifactId>
     </dependency>
     <dependency>
+      <groupId>org.opensmarthouse.core.bundles</groupId>
+      <artifactId>org.opensmarthouse.core.io.rest</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>javax.inject</groupId>
+      <artifactId>javax.inject</artifactId>
+      <version>1</version>
+    </dependency>
+    <dependency>
       <groupId>javax.ws.rs</groupId>
       <artifactId>javax.ws.rs-api</artifactId>
     </dependency>
@@ -35,12 +44,16 @@
       <artifactId>javax.servlet-api</artifactId>
     </dependency>
     <dependency>
-      <groupId>com.eclipsesource.jaxrs</groupId>
-      <artifactId>publisher</artifactId>
+      <groupId>javax.ws.rs</groupId>
+      <artifactId>javax.ws.rs-api</artifactId>
     </dependency>
     <dependency>
       <groupId>io.swagger</groupId>
       <artifactId>swagger-annotations</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>javax.annotation</groupId>
+      <artifactId>javax.annotation-api</artifactId>
     </dependency>
 
     <dependency>

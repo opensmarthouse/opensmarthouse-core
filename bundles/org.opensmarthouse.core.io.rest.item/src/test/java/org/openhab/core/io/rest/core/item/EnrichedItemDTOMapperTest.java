@@ -83,24 +83,24 @@ public class EnrichedItemDTOMapperTest extends JavaTest {
         assertThat(dto.members.length, is(0));
 
         dto = (EnrichedGroupItemDTO) EnrichedItemDTOMapper.map(bundleContext, stateDescriptionFragmentBuilderFactory,
-                group, true, null, URI.create(""), null);
+                group, true, null, null, null);
         assertThat(dto.members.length, is(3));
         assertThat(((EnrichedGroupItemDTO) dto.members[0]).members.length, is(1));
 
         dto = (EnrichedGroupItemDTO) EnrichedItemDTOMapper.map(bundleContext, stateDescriptionFragmentBuilderFactory,
                 group, true,
-                i -> CoreItemFactory.NUMBER.equals(i.getType()), URI.create(""), null);
+                i -> CoreItemFactory.NUMBER.equals(i.getType()), null, null);
         assertThat(dto.members.length, is(1));
 
         dto = (EnrichedGroupItemDTO) EnrichedItemDTOMapper.map(bundleContext, stateDescriptionFragmentBuilderFactory,
                 group, true,
-                i -> CoreItemFactory.NUMBER.equals(i.getType()) || i instanceof GroupItem, URI.create(""), null);
+                i -> CoreItemFactory.NUMBER.equals(i.getType()) || i instanceof GroupItem, null, null);
         assertThat(dto.members.length, is(2));
         assertThat(((EnrichedGroupItemDTO) dto.members[0]).members.length, is(0));
 
         dto = (EnrichedGroupItemDTO) EnrichedItemDTOMapper.map(bundleContext, stateDescriptionFragmentBuilderFactory,
                 group, true,
-                i -> CoreItemFactory.NUMBER.equals(i.getType()) || i instanceof GroupItem, URI.create(""), null);
+                i -> CoreItemFactory.NUMBER.equals(i.getType()) || i instanceof GroupItem, null, null);
         assertThat(dto.members.length, is(2));
         assertThat(((EnrichedGroupItemDTO) dto.members[0]).members.length, is(0));
 
@@ -108,7 +108,7 @@ public class EnrichedItemDTOMapperTest extends JavaTest {
                 group, true,
                 i -> CoreItemFactory.NUMBER.equals(i.getType()) || i.getType().equals(CoreItemFactory.STRING)
                         || i instanceof GroupItem,
-                URI.create(""), null);
+                null, null);
         assertThat(dto.members.length, is(2));
         assertThat(((EnrichedGroupItemDTO) dto.members[0]).members.length, is(1));
     }
