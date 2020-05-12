@@ -10,15 +10,18 @@
  *
  * SPDX-License-Identifier: EPL-2.0
  */
-package org.openhab.core.io.rest.sse.beans;
+package org.openhab.core.io.rest.sse.internal.dto;
+
+import org.osgi.dto.DTO;
 
 /**
  * Event bean for broadcasted events.
  *
  * @author Ivan Iliev - Initial contribution
  * @author Dennis Nobel - Added event type and renamed object to payload
+ * @author Markus Rathgeb - Follow the Data Transfer Objects Specification
  */
-public class EventBean {
+public class EventDTO extends DTO {
 
     public String topic;
 

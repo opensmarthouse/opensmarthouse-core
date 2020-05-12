@@ -18,6 +18,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.Optional;
 import java.util.Set;
 import java.util.function.Predicate;
 import java.util.stream.Stream;
@@ -41,6 +42,7 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.ResponseBuilder;
 import javax.ws.rs.core.Response.Status;
+import javax.ws.rs.core.UriBuilder;
 import javax.ws.rs.core.UriInfo;
 
 import org.eclipse.jdt.annotation.NonNullByDefault;
@@ -50,6 +52,7 @@ import org.openhab.core.events.EventPublisher;
 import org.openhab.core.io.rest.DTOMapper;
 import org.openhab.core.io.rest.JSONResponse;
 import org.openhab.core.io.rest.LocaleService;
+import org.openhab.core.io.rest.RESTConstants;
 import org.openhab.core.io.rest.RESTResource;
 import org.openhab.core.io.rest.Stream2JSONInputStream;
 import org.openhab.core.io.rest.core.item.EnrichedGroupItemDTO;
@@ -84,6 +87,11 @@ import org.osgi.service.component.annotations.Deactivate;
 import org.osgi.service.component.annotations.Reference;
 import org.osgi.service.component.annotations.ReferenceCardinality;
 import org.osgi.service.component.annotations.ReferencePolicy;
+import org.osgi.service.jaxrs.whiteboard.JaxrsWhiteboardConstants;
+import org.osgi.service.jaxrs.whiteboard.propertytypes.JSONRequired;
+import org.osgi.service.jaxrs.whiteboard.propertytypes.JaxrsApplicationSelect;
+import org.osgi.service.jaxrs.whiteboard.propertytypes.JaxrsName;
+import org.osgi.service.jaxrs.whiteboard.propertytypes.JaxrsResource;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -115,21 +123,39 @@ import io.swagger.annotations.ApiResponses;
  * @author Jörg Plewe - refactoring, error handling
  * @author Franck Dechavanne - Added DTOs to ApiResponses
  * @author Stefan Triller - Added bulk item add method
+ * @author Markus Rathgeb - Migrated to JAX-RS Whiteboard Specification
  */
-@NonNullByDefault
-@Path(ItemResource.PATH_ITEMS)
-@Api(value = ItemResource.PATH_ITEMS)
 @Component
+@JaxrsResource
+@JaxrsName(ItemResource.PATH_ITEMS)
+@JaxrsApplicationSelect("(" + JaxrsWhiteboardConstants.JAX_RS_NAME + "=" + RESTConstants.JAX_RS_NAME + ")")
+@JSONRequired
+@Path(ItemResource.PATH_ITEMS)
+@Api(ItemResource.PATH_ITEMS)
+@NonNullByDefault
 public class ItemResource implements RESTResource {
-
-    private final Logger logger = LoggerFactory.getLogger(ItemResource.class);
 
     /** The URI path to this resource */
     public static final String PATH_ITEMS = "items";
 
-    @Context
-    @NonNullByDefault({})
-    UriInfo uriInfo;
+    /**
+     * Replaces part of the URI builder by forwarded headers.
+     *
+     * @param uriBuilder the URI builder
+     * @param httpHeaders the HTTP headers
+     */
+    private static void respectForwarded(final UriBuilder uriBuilder, final @Context HttpHeaders httpHeaders) {
+        Optional.ofNullable(httpHeaders.getHeaderString("X-Forwarded-Host")).ifPresent(host -> {
+            final String[] parts = host.split(":");
+            uriBuilder.host(parts[0]);
+            if (parts.length > 1) {
+                uriBuilder.port(Integer.parseInt(parts[1]));
+            }
+        });
+        Optional.ofNullable(httpHeaders.getHeaderString("X-Forwarded-Proto")).ifPresent(uriBuilder::scheme);
+    }
+
+    private final Logger logger = LoggerFactory.getLogger(ItemResource.class);
 
     private @NonNullByDefault({}) ItemRegistry itemRegistry;
     private @NonNullByDefault({}) MetadataRegistry metadataRegistry;
@@ -312,13 +338,10 @@ public class ItemResource implements RESTResource {
 
         // if it exists
         if (item != null) {
-            logger.debug("Received HTTP GET request at '{}'.", uriInfo.getPath());
-
             // we cannot use JSONResponse.createResponse() bc. MediaType.TEXT_PLAIN
             // return JSONResponse.createResponse(Status.OK, item.getState().toString(), null);
             return Response.ok(item.getState().toFullString()).build();
         } else {
-            logger.info("Received HTTP GET request at '{}' for the unknown item '{}'.", uriInfo.getPath(), itemname);
             return getItemNotFoundResponse(itemname);
         }
     }
@@ -347,18 +370,14 @@ public class ItemResource implements RESTResource {
 
             if (state != null) {
                 // set State and report OK
-                logger.debug("Received HTTP PUT request at '{}' with value '{}'.", uriInfo.getPath(), value);
                 eventPublisher.post(ItemEventFactory.createStateEvent(itemname, state));
-                return getItemResponse(Status.ACCEPTED, null, locale, null);
+                return getItemResponse(null, Status.ACCEPTED, null, locale, null);
             } else {
                 // State could not be parsed
-                logger.warn("Received HTTP PUT request at '{}' with an invalid status value '{}'.", uriInfo.getPath(),
-                        value);
                 return JSONResponse.createErrorResponse(Status.BAD_REQUEST, "State could not be parsed: " + value);
             }
         } else {
             // Item does not exist
-            logger.info("Received HTTP PUT request at '{}' for the unknown item '{}'.", uriInfo.getPath(), itemname);
             return getItemNotFoundResponse(itemname);
         }
     }
@@ -394,18 +413,14 @@ public class ItemResource implements RESTResource {
                 command = TypeParser.parseCommand(item.getAcceptedCommandTypes(), value);
             }
             if (command != null) {
-                logger.debug("Received HTTP POST request at '{}' with value '{}'.", uriInfo.getPath(), value);
                 eventPublisher.post(ItemEventFactory.createCommandEvent(itemname, command));
                 ResponseBuilder resbuilder = Response.ok();
                 resbuilder.type(MediaType.TEXT_PLAIN);
                 return resbuilder.build();
             } else {
-                logger.warn("Received HTTP POST request at '{}' with an invalid status value '{}'.", uriInfo.getPath(),
-                        value);
                 return Response.status(Status.BAD_REQUEST).build();
             }
         } else {
-            logger.info("Received HTTP POST request at '{}' for the unknown item '{}'.", uriInfo.getPath(), itemname);
             throw new WebApplicationException(404);
         }
     }
@@ -494,7 +509,6 @@ public class ItemResource implements RESTResource {
             @ApiResponse(code = 404, message = "Item not found or item is not editable.") })
     public Response removeItem(@PathParam("itemname") @ApiParam(value = "item name", required = true) String itemname) {
         if (managedItemProvider.remove(itemname) == null) {
-            logger.info("Received HTTP DELETE request at '{}' for the unknown item '{}'.", uriInfo.getPath(), itemname);
             return Response.status(Status.NOT_FOUND).build();
         }
         return Response.ok(null, MediaType.TEXT_PLAIN).build();
@@ -512,7 +526,6 @@ public class ItemResource implements RESTResource {
         Item item = getItem(itemname);
 
         if (item == null) {
-            logger.info("Received HTTP PUT request at '{}' for the unknown item '{}'.", uriInfo.getPath(), itemname);
             return Response.status(Status.NOT_FOUND).build();
         }
 
@@ -538,7 +551,6 @@ public class ItemResource implements RESTResource {
         Item item = getItem(itemname);
 
         if (item == null) {
-            logger.info("Received HTTP DELETE request at '{}' for the unknown item '{}'.", uriInfo.getPath(), itemname);
             return Response.status(Status.NOT_FOUND).build();
         }
 
@@ -569,14 +581,11 @@ public class ItemResource implements RESTResource {
         Item item = getItem(itemname);
 
         if (item == null) {
-            logger.info("Received HTTP PUT request at '{}' for the unknown item '{}'.", uriInfo.getPath(), itemname);
             return Response.status(Status.NOT_FOUND).build();
         }
 
         String value = metadata.value;
         if (value == null || value.isEmpty()) {
-            logger.info("Received HTTP PUT request at '{}' for item '{}' with empty metadata.", uriInfo.getPath(),
-                    itemname);
             return Response.status(Status.BAD_REQUEST).build();
         }
 
@@ -604,20 +613,15 @@ public class ItemResource implements RESTResource {
         Item item = getItem(itemname);
 
         if (item == null) {
-            logger.info("Received HTTP DELETE request at '{}' for the unknown item '{}'.", uriInfo.getPath(), itemname);
             return Response.status(Status.NOT_FOUND).build();
         }
 
         MetadataKey key = new MetadataKey(namespace, itemname);
         if (metadataRegistry.get(key) != null) {
             if (metadataRegistry.remove(key) == null) {
-                logger.info("Received HTTP DELETE request at '{}' for unmanaged item meta-data '{}'.",
-                        uriInfo.getPath(), key);
                 return Response.status(Status.CONFLICT).build();
             }
         } else {
-            logger.info("Received HTTP DELETE request at '{}' for unknown item meta-data '{}'.", uriInfo.getPath(),
-                    key);
             return Response.status(Status.NOT_FOUND).build();
         }
 
@@ -640,7 +644,7 @@ public class ItemResource implements RESTResource {
             @ApiResponse(code = 201, message = "Item created."), @ApiResponse(code = 400, message = "Item null."),
             @ApiResponse(code = 404, message = "Item not found."),
             @ApiResponse(code = 405, message = "Item not editable.") })
-    public Response createOrUpdateItem(
+    public Response createOrUpdateItem(final @Context UriInfo uriInfo, final @Context HttpHeaders httpHeaders,
             @HeaderParam(HttpHeaders.ACCEPT_LANGUAGE) @ApiParam(value = "language") String language,
             @PathParam("itemname") @ApiParam(value = "item name", required = true) String itemname,
             @ApiParam(value = "item data", required = true) @Nullable GroupItemDTO item) {
@@ -662,11 +666,13 @@ public class ItemResource implements RESTResource {
         if (getItem(itemname) == null) {
             // item does not yet exist, create it
             managedItemProvider.add(newItem);
-            return getItemResponse(Status.CREATED, itemRegistry.get(itemname), locale, null);
+            return getItemResponse(uriBuilder(uriInfo, httpHeaders), Status.CREATED, itemRegistry.get(itemname), locale,
+                    null);
         } else if (managedItemProvider.get(itemname) != null) {
             // item already exists as a managed item, update it
             managedItemProvider.update(newItem);
-            return getItemResponse(Status.OK, itemRegistry.get(itemname), locale, null);
+            return getItemResponse(uriBuilder(uriInfo, httpHeaders), Status.OK, itemRegistry.get(itemname), locale,
+                    null);
         } else {
             // Item exists but cannot be updated
             logger.warn("Cannot update existing item '{}', because is not managed.", itemname);
@@ -733,8 +739,8 @@ public class ItemResource implements RESTResource {
         List<JsonObject> responseList = new ArrayList<>();
 
         for (GroupItemDTO item : wrongTypes) {
-            responseList.add(buildStatusObject(item.name, "error", "Received HTTP PUT request at '" + uriInfo.getPath()
-                    + "' with an invalid item type '" + item.type + "'."));
+            responseList.add(buildStatusObject(item.name, "error",
+                    "Received HTTP PUT request with an invalid item type '" + item.type + "'."));
         }
         for (Item item : failedItems) {
             responseList.add(buildStatusObject(item.getName(), "error", "Cannot update non-managed item"));
