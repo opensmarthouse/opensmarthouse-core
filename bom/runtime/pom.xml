@@ -14,11 +14,6 @@
 
   <name>OpenSmartHouse Core | BOM | Runtime</name>
 
-  <properties>
-    <pax.web.version>7.2.11</pax.web.version>
-    <jetty.version>9.4.20.v20190813</jetty.version>
-  </properties>
-
   <dependencies>
     <!-- BEG: Slightly modified EnRoute implementation index artifacts -->
 

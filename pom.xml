@@ -69,9 +69,16 @@
     <maven.compiler.target>${osh.java.version}</maven.compiler.target>
     <maven.compiler.compilerVersion>${osh.java.version}</maven.compiler.compilerVersion>
 
+    <!-- moved here from bom/compile, bom -->
+    <jackson.version>2.10.3</jackson.version>
+    <jetty.version>9.4.20.v20190813</jetty.version>
+    <pax.web.version>7.2.14</pax.web.version>
+    <swagger.version>1.6.1</swagger.version>
+    <netty.version>4.1.42.Final</netty.version>
+
     <bnd.version>4.3.0</bnd.version>
-    <karaf.compile.version>4.2.1</karaf.compile.version>
-    <karaf.tooling.version>4.2.7</karaf.tooling.version>
+    <karaf.compile.version>4.2.8</karaf.compile.version>
+    <karaf.tooling.version>4.2.8</karaf.tooling.version>
     <sat.version>0.10.0</sat.version>
     <slf4j.version>1.7.21</slf4j.version>
     <xtext.version>2.19.0</xtext.version>
