@@ -12,17 +12,22 @@
  */
 package org.openhab.core.thing.internal.type;
 
+import org.eclipse.jdt.annotation.NonNullByDefault;
 import org.openhab.core.thing.type.ChannelTypeBuilderFactory;
 import org.openhab.core.thing.type.ChannelTypeUID;
 import org.openhab.core.thing.type.StateChannelTypeBuilder;
 import org.openhab.core.thing.type.TriggerChannelTypeBuilder;
+import org.osgi.service.component.annotations.Component;
 
 /**
  * Default implementation of {@link ChannelTypeBuilderFactory}.
  *
  * @author Łukas Dywicki - Initial contribution.
  */
+@NonNullByDefault
+@Component(service = ChannelTypeBuilderFactory.class)
 public class ChannelTypeBuilderFactoryImpl implements ChannelTypeBuilderFactory {
+
     @Override
     public StateChannelTypeBuilder state(ChannelTypeUID channelTypeUID, String label, String itemType) {
         return new StateChannelTypeBuilderImpl(channelTypeUID, label, itemType);

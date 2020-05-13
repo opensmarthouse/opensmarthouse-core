@@ -25,11 +25,14 @@ import org.openhab.core.thing.ThingTypeUID;
 import org.openhab.core.thing.ThingUID;
 import org.openhab.core.thing.binding.ThingFactory;
 import org.openhab.core.thing.binding.ThingHandlerFactory;
+import org.openhab.core.thing.binding.builder.ChannelBuilderFactory;
 import org.openhab.core.thing.binding.builder.ThingBuilder;
 import org.openhab.core.thing.internal.ThingFactoryHelper;
 import org.openhab.core.thing.type.BridgeType;
 import org.openhab.core.thing.type.ThingType;
+import org.osgi.service.component.annotations.Activate;
 import org.osgi.service.component.annotations.Component;
+import org.osgi.service.component.annotations.Reference;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -47,6 +50,12 @@ import org.slf4j.LoggerFactory;
 public class ThingFactoryImpl implements ThingFactory {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(ThingFactoryImpl.class);
+    private final ChannelBuilderFactory channelBuilderFactory;
+
+    @Activate
+    public ThingFactoryImpl(@Reference ChannelBuilderFactory channelBuilderFactory) {
+        this.channelBuilderFactory = channelBuilderFactory;
+    }
 
     @Override
     public ThingUID generateRandomThingUID(ThingTypeUID thingTypeUID) {
@@ -66,7 +75,8 @@ public class ThingFactoryImpl implements ThingFactory {
             @Nullable ThingUID bridgeUID, @Nullable ConfigDescriptionRegistry configDescriptionRegistry) {
         ThingFactoryHelper.applyDefaultConfiguration(configuration, thingType, configDescriptionRegistry);
 
-        List<Channel> channels = ThingFactoryHelper.createChannels(thingType, thingUID, configDescriptionRegistry);
+        List<Channel> channels = ThingFactoryHelper.createChannels(thingType, thingUID, channelBuilderFactory,
+                configDescriptionRegistry);
 
         return createThingBuilder(thingType, thingUID).withConfiguration(configuration).withChannels(channels)
                 .withProperties(thingType.getProperties()).withBridge(bridgeUID).build();

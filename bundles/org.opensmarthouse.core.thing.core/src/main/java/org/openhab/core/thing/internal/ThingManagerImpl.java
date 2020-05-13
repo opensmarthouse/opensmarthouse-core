@@ -71,6 +71,7 @@ import org.openhab.core.thing.binding.ThingHandler;
 import org.openhab.core.thing.binding.ThingHandlerCallback;
 import org.openhab.core.thing.binding.ThingHandlerFactory;
 import org.openhab.core.thing.binding.builder.ChannelBuilder;
+import org.openhab.core.thing.binding.builder.ChannelBuilderFactory;
 import org.openhab.core.thing.binding.builder.ThingStatusInfoBuilder;
 import org.openhab.core.thing.events.ThingEventFactory;
 import org.openhab.core.thing.i18n.ThingStatusInfoI18nLocalizationService;
@@ -160,6 +161,7 @@ public class ThingManagerImpl
     private volatile boolean active = false;
     private StorageService storageService;
     private Storage<String> storage;
+    private ChannelBuilderFactory channelBuilderFactory;
 
     private final ThingHandlerCallback thingHandlerCallback = new ThingHandlerCallback() {
 
@@ -303,7 +305,7 @@ public class ThingManagerImpl
             if (channelType == null) {
                 throw new IllegalArgumentException(String.format("Channel type '%s' is not known", channelTypeUID));
             }
-            return ThingFactoryHelper.createChannelBuilder(channelUID, channelType, configDescriptionRegistry);
+            return ThingFactoryHelper.createChannelBuilder(channelBuilderFactory, channelUID, channelType, configDescriptionRegistry);
         };
 
         @Override
@@ -313,7 +315,7 @@ public class ThingManagerImpl
                 throw new IllegalArgumentException(
                         String.format("Channel '%s' does not exist for thing '%s'", channelUID, thing.getUID()));
             }
-            return ChannelBuilder.create(channel);
+            return channelBuilderFactory.create(channel);
         }
 
         @Override
@@ -329,7 +331,7 @@ public class ThingManagerImpl
                 ChannelType channelType = channelTypeRegistry.getChannelType(channelDefinition.getChannelTypeUID());
                 if (channelType != null) {
                     ChannelUID channelUID = new ChannelUID(channelGroupUID, channelDefinition.getId());
-                    channelBuilders.add(ThingFactoryHelper.createChannelBuilder(channelUID, channelType,
+                    channelBuilders.add(ThingFactoryHelper.createChannelBuilder(channelBuilderFactory, channelUID, channelType,
                             configDescriptionRegistry));
                 }
             }
@@ -387,7 +389,7 @@ public class ThingManagerImpl
 
                     // Set the new channels
                     List<Channel> channels = ThingFactoryHelper.createChannels(thingType, thingUID,
-                            configDescriptionRegistry);
+                            channelBuilderFactory, configDescriptionRegistry);
                     ((ThingImpl) thing).setChannels(channels);
 
                     // Set the given configuration
@@ -1365,4 +1367,14 @@ public class ThingManagerImpl
             this.storage = null;
         }
     }
+
+    @Reference
+    public void setChannelBuilderFactory(ChannelBuilderFactory channelBuilderFactory) {
+        this.channelBuilderFactory = channelBuilderFactory;
+    }
+
+    public void unsetChannelBuilderFactory(ChannelBuilderFactory channelBuilderFactory) {
+        this.channelBuilderFactory = null;
+    }
+
 }

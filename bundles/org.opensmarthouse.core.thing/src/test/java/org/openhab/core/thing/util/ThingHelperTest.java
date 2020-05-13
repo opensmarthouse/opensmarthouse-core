@@ -14,19 +14,22 @@ package org.openhab.core.thing.util;
 
 import static java.util.Collections.singletonList;
 import static org.junit.Assert.*;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 import java.util.Arrays;
+import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
 import org.openhab.core.config.core.Configuration;
+import org.openhab.core.config.core.compat.NormalizerFactoryDelegate;
+import org.openhab.core.thing.Channel;
+import org.openhab.core.thing.ChannelTestHelper;
 import org.openhab.core.thing.ChannelUID;
 import org.openhab.core.thing.Thing;
 import org.openhab.core.thing.ThingTypeUID;
 import org.openhab.core.thing.ThingUID;
-import org.openhab.core.thing.binding.builder.ChannelBuilder;
 
 /**
  * @author Alex Tugarev - Initial contribution
@@ -50,10 +53,10 @@ public class ThingHelperTest {
         configurationA.put("prop2", "value2");
 
         when(thingA.getUID()).thenReturn(THING_UID);
-        when(thingA.getChannels()).thenReturn(Arrays.asList(
-                ChannelBuilder.create(new ChannelUID("binding:type:thingId:channel1"), "itemType").build(),
-                ChannelBuilder.create(new ChannelUID("binding:type:thingId:channel2"), "itemType").build())
-        );
+        when(thingA.getChannels()).thenAnswer((invocation) -> Arrays.asList(
+                ChannelTestHelper.create(new ChannelUID("binding:type:thingId:channel1"), "itemType"),
+                ChannelTestHelper.create(new ChannelUID("binding:type:thingId:channel2"), "itemType")
+        ));
         when(thingA.getConfiguration()).thenReturn(configurationA);
 
         assertTrue(ThingHelper.equals(thingA, thingA));
@@ -62,10 +65,10 @@ public class ThingHelperTest {
         configurationB.put("prop1", "value1");
         configurationB.put("prop2", "value2");
         when(thingB.getUID()).thenReturn(THING_UID);
-        when(thingB.getChannels()).thenReturn(Arrays.asList(
-                ChannelBuilder.create(new ChannelUID("binding:type:thingId:channel2"), "itemType").build(),
-                ChannelBuilder.create(new ChannelUID("binding:type:thingId:channel1"), "itemType").build())
-        );
+        when(thingB.getChannels()).thenAnswer((invocation) -> Arrays.asList(
+                ChannelTestHelper.create(new ChannelUID("binding:type:thingId:channel2"), "itemType"),
+                ChannelTestHelper.create(new ChannelUID("binding:type:thingId:channel1"), "itemType")
+        ));
         when(thingB.getConfiguration()).thenReturn(configurationB);
 
         assertTrue(ThingHelper.equals(thingA, thingB));
@@ -78,10 +81,10 @@ public class ThingHelperTest {
         configurationA.put("prop1", "value1");
 
         when(thingA.getUID()).thenReturn(THING_UID);
-        when(thingA.getChannels()).thenReturn(Arrays.asList(
-                ChannelBuilder.create(new ChannelUID("binding:type:thingId:channel1"), "itemType").build(),
-                ChannelBuilder.create(new ChannelUID("binding:type:thingId:channel2"), "itemType").build())
-        );
+        when(thingA.getChannels()).thenAnswer((invocation) -> Arrays.asList(
+                ChannelTestHelper.create(new ChannelUID("binding:type:thingId:channel1"), "itemType"),
+                ChannelTestHelper.create(new ChannelUID("binding:type:thingId:channel2"), "itemType")
+        ));
         when(thingA.getConfiguration()).thenReturn(configurationA);
 
         // second thing
@@ -89,10 +92,10 @@ public class ThingHelperTest {
         configurationB.put("prop1", "value1");
 
         when(thingB.getUID()).thenReturn(THING_UID);
-        when(thingB.getChannels()).thenReturn(Arrays.asList(
-                ChannelBuilder.create(new ChannelUID("binding:type:thingId:channel2"), "itemType").build(),
-                ChannelBuilder.create(new ChannelUID("binding:type:thingId:channel1"), "itemType").build())
-        );
+        when(thingB.getChannels()).thenAnswer((invocation) -> Arrays.asList(
+                ChannelTestHelper.create(new ChannelUID("binding:type:thingId:channel2"), "itemType"),
+                ChannelTestHelper.create(new ChannelUID("binding:type:thingId:channel1"), "itemType")
+        ));
         when(thingB.getConfiguration()).thenReturn(configurationB);
 
         // actual test
@@ -113,8 +116,8 @@ public class ThingHelperTest {
 
         assertTrue(ThingHelper.equals(thingA, thingB));
 
-        when(thingB.getChannels()).thenReturn(singletonList(
-                ChannelBuilder.create(new ChannelUID("binding:type:thingId:channel3"), "itemType3").build())
+        when(thingB.getChannels()).thenAnswer((invocation) -> singletonList(
+                ChannelTestHelper.create(new ChannelUID("binding:type:thingId:channel3"), "itemType3"))
         );
 
         assertFalse(ThingHelper.equals(thingA, thingB));

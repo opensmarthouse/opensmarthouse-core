@@ -43,7 +43,7 @@ import org.openhab.core.thing.ThingRegistry;
 import org.openhab.core.thing.ThingStatus;
 import org.openhab.core.thing.ThingUID;
 import org.openhab.core.thing.binding.ThingHandler;
-import org.openhab.core.thing.binding.builder.ChannelBuilder;
+import org.openhab.core.thing.internal.builder.ChannelBuilderFactoryImpl;
 import org.openhab.core.thing.link.ItemChannelLink;
 import org.openhab.core.thing.link.ItemChannelLinkRegistry;
 import org.openhab.core.thing.type.AutoUpdatePolicy;
@@ -94,15 +94,15 @@ public class AutoUpdateManagerTest {
         when(mockThingOnline.getHandler()).thenReturn(mockHandler);
         when(mockThingOnline.getStatus()).thenReturn(ThingStatus.ONLINE);
         when(mockThingOnline.getChannel(eq(CHANNEL_UID_ONLINE_1.getId())))
-                .thenAnswer(answer -> ChannelBuilder.create(CHANNEL_UID_ONLINE_1, "String")
+                .thenAnswer(answer -> new ChannelBuilderFactoryImpl().create(CHANNEL_UID_ONLINE_1, "String")
                         .withAutoUpdatePolicy(policies.get(CHANNEL_UID_ONLINE_1)).build());
         when(mockThingOnline.getChannel(eq(CHANNEL_UID_ONLINE_2.getId())))
-                .thenAnswer(answer -> ChannelBuilder.create(CHANNEL_UID_ONLINE_2, "String")
+                .thenAnswer(answer -> new ChannelBuilderFactoryImpl().create(CHANNEL_UID_ONLINE_2, "String")
                         .withAutoUpdatePolicy(policies.get(CHANNEL_UID_ONLINE_2)).build());
         when(mockThingOffline.getHandler()).thenReturn(mockHandler);
         when(mockThingOffline.getStatus()).thenReturn(ThingStatus.OFFLINE);
         when(mockThingOffline.getChannel(eq(CHANNEL_UID_OFFLINE_1.getId())))
-                .thenAnswer(answer -> ChannelBuilder.create(CHANNEL_UID_OFFLINE_1, "String")
+                .thenAnswer(answer -> new ChannelBuilderFactoryImpl().create(CHANNEL_UID_OFFLINE_1, "String")
                         .withAutoUpdatePolicy(policies.get(CHANNEL_UID_OFFLINE_1)).build());
 
         aum = new AutoUpdateManager();

@@ -27,19 +27,16 @@ import java.util.Optional;
 import org.hamcrest.collection.IsMapContaining;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
 import org.openhab.core.config.core.Configuration;
 import org.openhab.core.library.CoreItemFactory;
 import org.openhab.core.thing.Bridge;
 import org.openhab.core.thing.Channel;
+import org.openhab.core.thing.ChannelTestHelper;
 import org.openhab.core.thing.ChannelUID;
 import org.openhab.core.thing.Thing;
 import org.openhab.core.thing.ThingTypeUID;
 import org.openhab.core.thing.ThingUID;
-import org.openhab.core.thing.binding.ThingBuilderFactory;
-import org.openhab.core.thing.binding.builder.ChannelBuilder;
-import org.openhab.core.thing.binding.builder.ThingBuilder;
 
 /**
  * This is the test class for {@link ThingDTO}.
@@ -59,10 +56,10 @@ public class ThingDTOTest {
         when(subject.getUID()).thenReturn(THING_UID);
         when(subject.getThingTypeUID()).thenReturn(THING_TYPE_UID);
         when(subject.getBridgeUID()).thenReturn(new ThingUID(new ThingTypeUID("binding-id", "bridge-type-id"), "bridge-id"));
-        when(subject.getChannels()).thenReturn(Arrays.asList(
-                ChannelBuilder.create(new ChannelUID(THING_UID, "channel1"), CoreItemFactory.STRING).build(),
-                ChannelBuilder.create(new ChannelUID(THING_UID, "channel2"), CoreItemFactory.STRING).build())
-        );
+        when(subject.getChannels()).thenAnswer((inv) -> Arrays.asList(
+                ChannelTestHelper.create(new ChannelUID(THING_UID, "channel1"), CoreItemFactory.STRING),
+                ChannelTestHelper.create(new ChannelUID(THING_UID, "channel2"), CoreItemFactory.STRING)
+        ));
         when(subject.getConfiguration()).thenReturn(new Configuration(Collections.singletonMap("param1", "value1")));
         when(subject.getProperties()).thenReturn(properties);
         when(subject.getLocation()).thenReturn("Somewhere over the rainbow");

@@ -10,14 +10,17 @@
  *
  * SPDX-License-Identifier: EPL-2.0
  */
-package org.openhab.core.thing.binding.builder;
+package org.openhab.core.thing.internal.builder;
 
 import java.util.Map;
 import java.util.Set;
+
 import org.eclipse.jdt.annotation.NonNullByDefault;
 import org.eclipse.jdt.annotation.Nullable;
 import org.openhab.core.config.core.Configuration;
 import org.openhab.core.thing.Channel;
+import org.openhab.core.thing.ChannelUID;
+import org.openhab.core.thing.binding.builder.ChannelBuilder;
 import org.openhab.core.thing.type.AutoUpdatePolicy;
 import org.openhab.core.thing.type.ChannelKind;
 import org.openhab.core.thing.type.ChannelType;
@@ -29,10 +32,28 @@ import org.openhab.core.thing.type.ChannelTypeUID;
  * @author Dennis Nobel - Initial contribution
  * @author Alex Tugarev - Extended about default tags
  * @author Chris Jackson - Added properties and label/description
- * @author Łukasz Dywicki - Refactoring to interface.
+ * @author Łukasz Dywicki - Separation of interface from implementation.
  */
 @NonNullByDefault
-public interface ChannelBuilder {
+public class ChannelBuilderImpl implements ChannelBuilder {
+
+    private final ChannelUID channelUID;
+    private @Nullable final String acceptedItemType;
+    private ChannelKind kind;
+    private @Nullable Configuration configuration;
+    private Set<String> defaultTags;
+    private @Nullable Map<String, String> properties;
+    private @Nullable String label;
+    private @Nullable String description;
+    private @Nullable ChannelTypeUID channelTypeUID;
+    private @Nullable AutoUpdatePolicy autoUpdatePolicy;
+
+    ChannelBuilderImpl(ChannelUID channelUID, @Nullable String acceptedItemType, Set<String> defaultTags) {
+        this.channelUID = channelUID;
+        this.acceptedItemType = acceptedItemType;
+        this.defaultTags = defaultTags;
+        this.kind = ChannelKind.STATE;
+    }
 
     /**
      * Appends the channel type to the channel to build
@@ -40,7 +61,11 @@ public interface ChannelBuilder {
      * @param channelTypeUID channel type UID
      * @return channel builder
      */
-    ChannelBuilder withType(@Nullable ChannelTypeUID channelTypeUID);
+    @Override
+    public ChannelBuilder withType(@Nullable ChannelTypeUID channelTypeUID) {
+        this.channelTypeUID = channelTypeUID;
+        return this;
+    }
 
     /**
      * Appends a configuration to the channel to build.
@@ -48,7 +73,11 @@ public interface ChannelBuilder {
      * @param configuration configuration
      * @return channel builder
      */
-    ChannelBuilder withConfiguration(Configuration configuration);
+    @Override
+    public ChannelBuilder withConfiguration(Configuration configuration) {
+        this.configuration = configuration;
+        return this;
+    }
 
     /**
      * Adds properties to the channel
@@ -56,7 +85,11 @@ public interface ChannelBuilder {
      * @param properties properties to add
      * @return channel builder
      */
-    ChannelBuilder withProperties(Map<String, String> properties);
+    @Override
+    public ChannelBuilder withProperties(Map<String, String> properties) {
+        this.properties = properties;
+        return this;
+    }
 
     /**
      * Sets the channel label. This allows overriding of the default label set in the {@link ChannelType}
@@ -64,7 +97,11 @@ public interface ChannelBuilder {
      * @param label the channel label to override the label set in the {@link ChannelType}
      * @return channel builder
      */
-    ChannelBuilder withLabel(String label);
+    @Override
+    public ChannelBuilder withLabel(String label) {
+        this.label = label;
+        return this;
+    }
 
     /**
      * Sets the channel label. This allows overriding of the default label set in the {@link ChannelType}
@@ -72,7 +109,11 @@ public interface ChannelBuilder {
      * @param label the channel label to override the label set in the {@link ChannelType}
      * @return channel builder
      */
-    ChannelBuilder withDescription(String description);
+    @Override
+    public ChannelBuilder withDescription(String description) {
+        this.description = description;
+        return this;
+    }
 
     /**
      * Appends default tags to the channel to build.
@@ -80,7 +121,11 @@ public interface ChannelBuilder {
      * @param defaultTags default tags
      * @return channel builder
      */
-    ChannelBuilder withDefaultTags(Set<String> defaultTags);
+    @Override
+    public ChannelBuilder withDefaultTags(Set<String> defaultTags) {
+        this.defaultTags = defaultTags;
+        return this;
+    }
 
     /**
      * Sets the kind of the channel.
@@ -88,7 +133,15 @@ public interface ChannelBuilder {
      * @param kind kind.
      * @return channel builder
      */
-    ChannelBuilder withKind(ChannelKind kind);
+    @Override
+    public ChannelBuilder withKind(ChannelKind kind) {
+        if (kind == null) {
+            throw new IllegalArgumentException("kind must not be null");
+        }
+
+        this.kind = kind;
+        return this;
+    }
 
     /**
      * Sets the auto update policy. See {@link AutoUpdatePolicy} for details.
@@ -96,12 +149,20 @@ public interface ChannelBuilder {
      * @param policy the auto update policy to use
      * @return channel builder
      */
-    ChannelBuilder withAutoUpdatePolicy(@Nullable AutoUpdatePolicy policy);
+    @Override
+    public ChannelBuilder withAutoUpdatePolicy(@Nullable AutoUpdatePolicy policy) {
+        this.autoUpdatePolicy = policy;
+        return this;
+    }
 
     /**
      * Builds and returns the channel.
      *
      * @return channel
      */
-    Channel build();
+    @Override
+    public Channel build() {
+        return new Channel(channelUID, channelTypeUID, acceptedItemType, kind, configuration, defaultTags, properties,
+                label, description, autoUpdatePolicy);
+    }
 }

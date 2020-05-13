@@ -26,6 +26,7 @@ import org.openhab.core.thing.ChannelUID;
 import org.openhab.core.thing.ThingUID;
 import org.openhab.core.thing.binding.ThingFactory;
 import org.openhab.core.thing.binding.builder.ChannelBuilder;
+import org.openhab.core.thing.binding.builder.ChannelBuilderFactory;
 import org.openhab.core.thing.type.ChannelDefinition;
 import org.openhab.core.thing.type.ChannelGroupDefinition;
 import org.openhab.core.thing.type.ChannelGroupType;
@@ -56,16 +57,17 @@ public class ThingFactoryHelper {
      *
      * @param thingType the type of the Thing (must not be null)
      * @param thingUID the Thing's UID (must not be null)
+     * @param channelBuilderFactory
      * @param configDescriptionRegistry {@link ConfigDescriptionRegistry} that will be used to initialize the
      *            {@link Channel}s with their corresponding default values, if given.
      * @return a list of {@link Channel}s
      */
     public static List<Channel> createChannels(ThingType thingType, ThingUID thingUID,
-            ConfigDescriptionRegistry configDescriptionRegistry) {
+            ChannelBuilderFactory channelBuilderFactory, ConfigDescriptionRegistry configDescriptionRegistry) {
         List<Channel> channels = new ArrayList<>();
         List<ChannelDefinition> channelDefinitions = thingType.getChannelDefinitions();
         for (ChannelDefinition channelDefinition : channelDefinitions) {
-            Channel channel = createChannel(channelDefinition, thingUID, null, configDescriptionRegistry);
+            Channel channel = createChannel(channelBuilderFactory, channelDefinition, thingUID, null, configDescriptionRegistry);
             if (channel != null) {
                 channels.add(channel);
             }
@@ -81,7 +83,7 @@ public class ThingFactoryHelper {
                 if (channelGroupType != null) {
                     List<ChannelDefinition> channelGroupChannelDefinitions = channelGroupType.getChannelDefinitions();
                     for (ChannelDefinition channelDefinition : channelGroupChannelDefinitions) {
-                        Channel channel = createChannel(channelDefinition, thingUID, channelGroupDefinition.getId(),
+                        Channel channel = createChannel(channelBuilderFactory, channelDefinition, thingUID, channelGroupDefinition.getId(),
                                 configDescriptionRegistry);
                         if (channel != null) {
                             channels.add(channel);
@@ -132,7 +134,7 @@ public class ThingFactoryHelper {
         }
     }
 
-    private static Channel createChannel(ChannelDefinition channelDefinition, ThingUID thingUID, String groupId,
+    private static Channel createChannel(ChannelBuilderFactory channelBuilderFactory, ChannelDefinition channelDefinition, ThingUID thingUID, String groupId,
             ConfigDescriptionRegistry configDescriptionRegistry) {
         ChannelType type = withChannelTypeRegistry(channelTypeRegistry -> {
             return (channelTypeRegistry != null)
@@ -147,7 +149,7 @@ public class ThingFactoryHelper {
         }
 
         final ChannelUID channelUID = new ChannelUID(thingUID, groupId, channelDefinition.getId());
-        final ChannelBuilder channelBuilder = createChannelBuilder(channelUID, type, configDescriptionRegistry);
+        final ChannelBuilder channelBuilder = createChannelBuilder(channelBuilderFactory, channelUID, type, configDescriptionRegistry);
 
         // If we want to override the label, add it...
         final String label = channelDefinition.getLabel();
@@ -164,9 +166,9 @@ public class ThingFactoryHelper {
         return channelBuilder.withProperties(channelDefinition.getProperties()).build();
     }
 
-    static ChannelBuilder createChannelBuilder(ChannelUID channelUID, ChannelType channelType,
-            ConfigDescriptionRegistry configDescriptionRegistry) {
-        final ChannelBuilder channelBuilder = ChannelBuilder.create(channelUID, channelType.getItemType()) //
+    static ChannelBuilder createChannelBuilder(ChannelBuilderFactory channelBuilderFactory, ChannelUID channelUID,
+            ChannelType channelType, ConfigDescriptionRegistry configDescriptionRegistry) {
+        final ChannelBuilder channelBuilder = channelBuilderFactory.create(channelUID, channelType.getItemType()) //
                 .withType(channelType.getUID()) //
                 .withDefaultTags(channelType.getTags()) //
                 .withKind(channelType.getKind()) //

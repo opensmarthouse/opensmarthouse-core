@@ -37,7 +37,7 @@ import org.openhab.core.thing.ThingTypeUID
 import org.openhab.core.thing.ThingUID
 import org.openhab.core.thing.binding.ThingHandlerFactory
 import org.openhab.core.thing.binding.ThingBuilderFactory
-import org.openhab.core.thing.binding.builder.ChannelBuilder
+import org.openhab.core.thing.binding.builder.ChannelBuilderFactory
 import org.openhab.core.thing.binding.builder.ThingBuilder
 import org.openhab.core.thing.type.AutoUpdatePolicy
 import org.openhab.core.thing.type.ChannelDefinition
@@ -86,6 +86,7 @@ class GenericThingProvider extends AbstractProvider<Thing> implements ThingProvi
     private ChannelTypeRegistry channelTypeRegistry
 
     private BundleResolver bundleResolver;
+    private ChannelBuilderFactory channelBuilderFactory;
 
     private Map<String, Collection<Thing>> thingsMap = new ConcurrentHashMap
 
@@ -375,7 +376,7 @@ class GenericThingProvider extends AbstractProvider<Thing> implements ThingProvi
                     parsedKind = ChannelKind.parse(kind)
                 }
 
-                var channel = ChannelBuilder.create(new ChannelUID(thingUID, id), itemType).withKind(parsedKind).
+                var channel = channelBuilderFactory.create(new ChannelUID(thingUID, id), itemType).withKind(parsedKind).
                     withConfiguration(configuration).withType(channelTypeUID).withLabel(label).
                     withAutoUpdatePolicy(autoUpdatePolicy)
                 channels += channel.build()
@@ -386,7 +387,7 @@ class GenericThingProvider extends AbstractProvider<Thing> implements ThingProvi
                 val channelType = it.channelTypeUID.channelType
                 if (channelType !== null) {
                     channels +=
-                        ChannelBuilder.create(new ChannelUID(thingUID, id), channelType.itemType).withType(
+                        channelBuilderFactory.create(new ChannelUID(thingUID, id), channelType.itemType).withType(
                             it.channelTypeUID).withAutoUpdatePolicy(channelType.autoUpdatePolicy).build
                 } else {
                     logger.warn(
@@ -436,6 +437,15 @@ class GenericThingProvider extends AbstractProvider<Thing> implements ThingProvi
 
     def protected void unsetBundleResolver(BundleResolver bundleResolver) {
         this.bundleResolver = null;
+    }
+
+    @Reference
+    def protected void setChannelBuilderFactory(ChannelBuilderFactory channelBuilderFactory) {
+        this.channelBuilderFactory = channelBuilderFactory;
+    }
+
+    def protected void unsetChannelBuilderFactory(ChannelBuilderFactory channelBuilderFactory) {
+        this.channelBuilderFactory = null;
     }
 
     override void modelChanged(String modelName, org.openhab.core.model.core.EventType type) {
