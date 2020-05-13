@@ -35,7 +35,7 @@ import org.osgi.service.component.annotations.ReferencePolicy;
  * @author Henning Treu - Initial contribution
  */
 @NonNullByDefault
-@Component
+@Component(service = ItemBuilderFactory.class)
 public class ItemBuilderFactoryImpl implements ItemBuilderFactory {
 
     private final @NonNullByDefault({}) Set<ItemFactory> itemFactories = new CopyOnWriteArraySet<>();
@@ -62,14 +62,5 @@ public class ItemBuilderFactoryImpl implements ItemBuilderFactory {
 
     protected void removeItemFactory(ItemFactory itemFactory) {
         itemFactories.remove(itemFactory);
-    }
-
-    @Reference(target = "(component.name=org.openhab.core.library.CoreItemFactory)")
-    protected void setCoreItemFactory(ItemFactory coreItemFactory) {
-        itemFactories.add(coreItemFactory);
-    }
-
-    protected void unsetCoreItemFactory(ItemFactory coreItemFactory) {
-        itemFactories.remove(coreItemFactory);
     }
 }

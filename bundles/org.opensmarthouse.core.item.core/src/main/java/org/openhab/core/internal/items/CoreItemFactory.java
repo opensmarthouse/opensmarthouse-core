@@ -38,7 +38,7 @@ import org.osgi.service.component.annotations.Component;
  * @author Kai Kreuzer - Initial contribution
  * @author Alexander Kostadinov - Initial contribution
  */
-@Component(immediate = true)
+@Component(immediate = true, service = ItemFactory.class)
 @NonNullByDefault
 public class CoreItemFactory implements ItemFactory, org.openhab.core.library.CoreItemFactory {
 

@@ -14,12 +14,14 @@ package org.openhab.core.internal.types;
 
 import org.openhab.core.types.CommandDescriptionBuilder;
 import org.openhab.core.types.CommandDescriptionBuilderFactory;
+import org.osgi.service.component.annotations.Component;
 
 /**
  * Default implementation of core description builder factory.
  *
  * @author Łukasz Dywicki - Initial contribution.
  */
+@Component(service = CommandDescriptionBuilderFactory.class)
 public class CoreCommandDescriptionBuilderFactory implements CommandDescriptionBuilderFactory {
 
     @Override

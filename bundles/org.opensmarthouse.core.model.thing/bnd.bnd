@@ -14,6 +14,7 @@ Export-Package: org.openhab.core.model.thing,\
 Import-Package: org.apache.log4j,\
  org.eclipse.jdt.annotation;resolution:=optional,\
  org.openhab.core.config.core,\
+ org.openhab.core.common.osgi,\
  org.openhab.core.common.registry,\
  org.openhab.core.i18n,\
  org.openhab.core.items,\
