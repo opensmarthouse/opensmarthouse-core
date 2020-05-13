@@ -36,6 +36,10 @@
         <bundle dependency="true">mvn:commons-io/commons-io/2.2</bundle>
     </feature>
 
+    <feature name="opensmarthouse.tp-javax-inject" description="Runtime - Javax Inject" version="${project.version}">
+        <bundle dependency="true">mvn:org.apache.geronimo.specs/geronimo-atinject_1.0_spec/1.2</bundle>
+    </feature>
+
     <feature name="opensmarthouse.tp-unit-of-measurement" description="Runtime - Units of Measurement" version="${project.version}">
         <bundle dependency="true">mvn:javax.measure/unit-api/1.0</bundle>
         <bundle dependency="true">mvn:tec.uom/uom-se/1.0.10</bundle>
@@ -58,6 +62,10 @@
         <bundle dependency="true">mvn:tec.uom/uom-se/1.0.10</bundle>
         <bundle dependency="true">mvn:tec.uom.lib/uom-lib-common/1.0.3</bundle>
 
+        <feature>opensmarthouse.tp-xstream</feature>
+    </feature>
+
+    <feature name="opensmarthouse.tp-xstream" description="XStream library" version="${project.version}">
         <!-- TODO: Unbundled libraries -->
         <bundle dependency="true">mvn:org.apache.servicemix.bundles/org.apache.servicemix.bundles.xstream/1.4.7_1</bundle>
     </feature>
@@ -106,17 +114,17 @@
     </feature>
 
     <feature name="opensmarthouse.tp-jackson" description="FasterXML Jackson bundles" version="${project.version}">
-        <capability>opensmarthouse.tp;feature=jackson;version=2.9.10</capability>
-        <bundle dependency="true">mvn:com.fasterxml.jackson.core/jackson-annotations/2.9.10</bundle>
-        <bundle dependency="true">mvn:com.fasterxml.jackson.core/jackson-core/2.9.10</bundle>
-        <bundle dependency="true">mvn:com.fasterxml.jackson.core/jackson-databind/2.9.10</bundle>
-        <bundle dependency="true">mvn:com.fasterxml.jackson.dataformat/jackson-dataformat-xml/2.9.10</bundle>
-        <bundle dependency="true">mvn:com.fasterxml.jackson.dataformat/jackson-dataformat-yaml/2.9.10</bundle>
-        <bundle dependency="true">mvn:com.fasterxml.jackson.datatype/jackson-datatype-joda/2.9.10</bundle>
-        <bundle dependency="true">mvn:com.fasterxml.jackson.jaxrs/jackson-jaxrs-base/2.9.10</bundle>
-        <bundle dependency="true">mvn:com.fasterxml.jackson.jaxrs/jackson-jaxrs-json-provider/2.9.10</bundle>
-        <bundle dependency="true">mvn:com.fasterxml.jackson.module/jackson-module-jaxb-annotations/2.9.10</bundle>
-        <bundle dependency="true">mvn:org.yaml/snakeyaml/1.23</bundle>
+        <capability>opensmarthouse.tp;feature=jackson;version=${jackson.version}</capability>
+        <bundle dependency="true">mvn:com.fasterxml.jackson.core/jackson-annotations/${jackson.version}</bundle>
+        <bundle dependency="true">mvn:com.fasterxml.jackson.core/jackson-core/${jackson.version}</bundle>
+        <bundle dependency="true">mvn:com.fasterxml.jackson.core/jackson-databind/${jackson.version}</bundle>
+        <bundle dependency="true">mvn:com.fasterxml.jackson.dataformat/jackson-dataformat-xml/${jackson.version}</bundle>
+        <bundle dependency="true">mvn:com.fasterxml.jackson.dataformat/jackson-dataformat-yaml/${jackson.version}</bundle>
+        <bundle dependency="true">mvn:com.fasterxml.jackson.datatype/jackson-datatype-joda/${jackson.version}</bundle>
+        <bundle dependency="true">mvn:com.fasterxml.jackson.jaxrs/jackson-jaxrs-base/${jackson.version}</bundle>
+        <bundle dependency="true">mvn:com.fasterxml.jackson.jaxrs/jackson-jaxrs-json-provider/${jackson.version}</bundle>
+        <bundle dependency="true">mvn:com.fasterxml.jackson.module/jackson-module-jaxb-annotations/${jackson.version}</bundle>
+        <bundle dependency="true">mvn:org.yaml/snakeyaml/1.24</bundle>
     </feature>
 
     <feature name="opensmarthouse.tp-jax-rs" version="${project.version}">

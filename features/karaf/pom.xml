@@ -26,7 +26,7 @@
     <dependency>
       <groupId>org.apache.karaf.features</groupId>
       <artifactId>framework</artifactId>
-      <version>${karaf.tooling.version}</version>
+      <version>${karaf.compile.version}</version>
       <type>kar</type>
       <scope>provided</scope>
       <exclusions>
@@ -42,7 +42,7 @@
     <dependency>
       <groupId>org.apache.karaf.features</groupId>
       <artifactId>standard</artifactId>
-      <version>${karaf.tooling.version}</version>
+      <version>${karaf.compile.version}</version>
       <classifier>features</classifier>
       <type>xml</type>
       <scope>provided</scope>
@@ -82,19 +82,20 @@
               <configuration>
                 <descriptors combine.children="append">
                   <!-- Apache Karaf -->
-                  <descriptor>mvn:org.apache.karaf.features/framework/${karaf.tooling.version}/xml/features</descriptor>
-                  <descriptor>mvn:org.apache.karaf.features/standard/${karaf.tooling.version}/xml/features</descriptor>
+                  <descriptor>mvn:org.apache.karaf.features/framework/${karaf.compile.version}/xml/features</descriptor>
+                  <descriptor>mvn:org.apache.karaf.features/standard/${karaf.compile.version}/xml/features</descriptor>
                   <!-- Current feature under verification -->
                   <descriptor>file:${project.build.directory}/feature/feature.xml</descriptor>
                 </descriptors>
                 <distribution>org.apache.karaf.features:framework</distribution>
-                <javase>${oh.java.version}</javase>
+                <javase>${osh.java.version}</javase>
                 <framework>
                   <feature>framework</feature>
                 </framework>
                 <features>
                   <feature>opensmarthouse.tp-*</feature>
                   <feature>opensmarthouse-core-*</feature>
+                  <feature>opensmarthouse-runtime-*</feature>
                 </features>
                 <verifyTransitive>false</verifyTransitive>
                 <ignoreMissingConditions>true</ignoreMissingConditions>

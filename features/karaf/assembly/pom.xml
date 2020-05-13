@@ -107,13 +107,10 @@
             <feature>package</feature>
             <feature>service</feature>
             <feature>system</feature>
+            <feature>http</feature>
 
-            <feature>opensmarthouse-*</feature>
-            <!--
             <feature>opensmarthouse-core-base</feature>
-            <feature>openhab-transport-mqtt</feature>
             <feature>opensmarthouse-runtime-base</feature>
-            -->
           </bootFeatures>
           <archiveTarGz>true</archiveTarGz>
           <blacklistedFeatures>

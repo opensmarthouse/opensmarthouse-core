@@ -148,9 +148,15 @@ Import-Package: \\
   org.openhab.*;version=${openhab-api.version}},\\
   org.openhab.core.*;version=${openhab-api.version}
 -sources: false
--removeheaders: Require-Capability,Provide-Capability,Service-Component
+-removeheaders: Require-Capability,Provide-Capability
 -contract: *
 -includeresource: -${.}/NOTICE, -${.}/*.xsd]]></bnd>
+            <!--
+            The -removeheaders: Require-Capability,Provide-Capability section is a blessing and curse at the same time.
+            Because some services references are located in public API packages we strip these to let resolution process go.
+            Ideally we will be able to move components from API packages to private ones and make proper use of Require/
+            Provide Capability headers. For now these are stripped from built modules.
+            -->
             <!-- Bundle-SymbolicName: ${project.groupId}.${project.artifactId} -->
           </configuration>
           <executions>
