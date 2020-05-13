@@ -16,6 +16,7 @@ import static org.hamcrest.CoreMatchers.*;
 import static org.hamcrest.collection.IsCollectionWithSize.hasSize;
 import static org.hamcrest.collection.IsEmptyCollection.empty;
 import static org.junit.Assert.assertThat;
+import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 import static org.mockito.MockitoAnnotations.initMocks;
 
@@ -37,8 +38,8 @@ import org.openhab.core.thing.Thing;
 import org.openhab.core.thing.ThingStatusInfo;
 import org.openhab.core.thing.ThingTypeUID;
 import org.openhab.core.thing.ThingUID;
-import org.openhab.core.thing.binding.builder.ChannelBuilder;
 import org.openhab.core.thing.firmware.dto.FirmwareStatusDTO;
+import org.openhab.core.thing.type.ChannelKind;
 
 /**
  * @author Henning Treu - Initial contribution
@@ -75,7 +76,7 @@ public class EnrichedThingDTOMapperTest {
         when(thing.getThingTypeUID()).thenReturn(new ThingTypeUID(THING_TYPE_UID));
         when(thing.getUID()).thenReturn(new ThingUID(UID));
         when(thing.getLabel()).thenReturn(THING_LABEL);
-        when(thing.getChannels()).thenReturn(mockChannels());
+        when(thing.getChannels()).thenAnswer((invocation) -> mockChannels());
         when(thing.getConfiguration()).thenReturn(configuration);
         when(thing.getProperties()).thenReturn(properties);
         when(thing.getLocation()).thenReturn(LOCATION);
@@ -113,9 +114,17 @@ public class EnrichedThingDTOMapperTest {
     private List<Channel> mockChannels() {
         List<Channel> channels = new ArrayList<>();
 
-        channels.add(ChannelBuilder.create(new ChannelUID(THING_TYPE_UID + ":" + UID + ":1"), ITEM_TYPE).build());
-        channels.add(ChannelBuilder.create(new ChannelUID(THING_TYPE_UID + ":" + UID + ":2"), ITEM_TYPE).build());
+        channels.add(create(new ChannelUID(THING_TYPE_UID + ":" + UID + ":1"), ITEM_TYPE));
+        channels.add(create(new ChannelUID(THING_TYPE_UID + ":" + UID + ":2"), ITEM_TYPE));
 
         return channels;
+    }
+
+    private Channel create(ChannelUID channelUID, String itemType) {
+        Channel channel = mock(Channel.class);
+        when(channel.getUID()).thenReturn(channelUID);
+        when(channel.getAcceptedItemType()).thenReturn(itemType);
+        when(channel.getKind()).thenReturn(ChannelKind.STATE);
+        return channel;
     }
 }

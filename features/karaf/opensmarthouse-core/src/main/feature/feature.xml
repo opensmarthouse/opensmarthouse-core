@@ -127,14 +127,35 @@
         <bundle>mvn:org.opensmarthouse.core.bundles/org.opensmarthouse.core.voice/${project.version}</bundle>
     </feature>
 
+    <feature name="opensmarthouse-core-voice-core" description="Open SmartHouse Core: Voice Core" version="${project.version}">
+        <feature>opensmarthouse-core-voice</feature>
+        <feature>opensmarthouse-core-net</feature>
+        <feature>opensmarthouse-core-config-core</feature>
+        <feature>opensmarthouse-core-io-console</feature>
+        <bundle>mvn:org.opensmarthouse.core.bundles/org.opensmarthouse.core.voice.core/${project.version}</bundle>
+        <config name="org.opensmarthouse.core.voice">
+            defaultHLI = rulehli
+        </config>
+    </feature>
+
     <feature name="opensmarthouse-core-audio" description="Open SmartHouse Core: Audio" version="${project.version}">
+        <feature dependency="true">opensmarthouse.tp-commons-io</feature>
+        <feature dependency="true">opensmarthouse-core-library-type</feature>
+        <bundle>mvn:org.opensmarthouse.core.bundles/org.opensmarthouse.core.audio/${project.version}</bundle>
+    </feature>
+
+    <feature name="opensmarthouse-core-audio-core" description="Open SmartHouse Core: Audio Core" version="${project.version}">
         <feature dependency="true">http</feature>
         <feature dependency="true">opensmarthouse.tp-commons-lang</feature>
-        <feature dependency="true">opensmarthouse.tp-commons-io</feature>
+        <feature>opensmarthouse-core-audio</feature>
+        <feature>opensmarthouse-core-net</feature>
         <feature>opensmarthouse-core-config-core</feature>
         <feature>opensmarthouse-core-io-console</feature>
         <feature>opensmarthouse-core-io-http</feature>
-        <bundle>mvn:org.opensmarthouse.core.bundles/org.opensmarthouse.core.audio/${project.version}</bundle>
+        <bundle>mvn:org.opensmarthouse.core.bundles/org.opensmarthouse.core.audio.core/${project.version}</bundle>
+        <config name="org.opensmarthouse.core.audio">
+            defaultSink = enhancedjavasound
+        </config>
     </feature>
 
     <feature name="opensmarthouse-core-common" description="Open SmartHouse Core: Common services" version="${project.version}">
@@ -704,12 +725,12 @@
     <!--
         <bundle start-level="90">mvn:org.opensmarthouse.core.bundles/org.opensmarthouse.core.boot/${project.version}</bundle>
         <bundle>mvn:org.opensmarthouse.core.bundles/org.opensmarthouse.core.karaf/${project.version}</bundle>
-        <config name="org.opensmarthouse.core.audio">
-            defaultSink = enhancedjavasound
-        </config>
-        <config name="org.opensmarthouse.core.voice">
-            defaultHLI = rulehli
-        </config>
+    </feature>
+
+    <feature name="opensmarthouse-core-extension" version="${project.version}">
+        <feature>opensmarthouse-core-event</feature>
+        <bundle>mvn:org.opensmarthouse.core.bundles/org.opensmarthouse.core.extension/${project.version}</bundle>
+    </feature>
     </feature>
     -->
 

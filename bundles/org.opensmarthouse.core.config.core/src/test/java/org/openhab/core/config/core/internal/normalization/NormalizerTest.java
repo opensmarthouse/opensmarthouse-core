@@ -24,6 +24,7 @@ import java.util.stream.Stream;
 import org.junit.Test;
 import org.openhab.core.config.core.ConfigDescriptionParameter;
 import org.openhab.core.config.core.ConfigDescriptionParameter.Type;
+import org.openhab.core.config.core.Normalizer;
 
 /**
  * @author Simon Kaufmann - Initial contribution
@@ -33,7 +34,7 @@ public class NormalizerTest {
 
     @Test
     public void testBooleanNormalizer() {
-        Normalizer normalizer = NormalizerFactory.getNormalizer(new ConfigDescriptionParameter("test", Type.BOOLEAN));
+        Normalizer normalizer = new NormalizerFactoryImpl().getNormalizer(new ConfigDescriptionParameter("test", Type.BOOLEAN));
 
         assertThat(normalizer.normalize(null), is(nullValue()));
         assertThat(normalizer.normalize(true), is(equalTo(true)));
@@ -67,7 +68,7 @@ public class NormalizerTest {
 
     @Test
     public void testIntNormalizer() {
-        Normalizer normalizer = NormalizerFactory.getNormalizer(new ConfigDescriptionParameter("test", Type.INTEGER));
+        Normalizer normalizer = new NormalizerFactoryImpl().getNormalizer(new ConfigDescriptionParameter("test", Type.INTEGER));
 
         assertThat(normalizer.normalize(null), is(nullValue()));
         assertThat(normalizer.normalize(42), is(equalTo(new BigDecimal(42))));
@@ -93,7 +94,7 @@ public class NormalizerTest {
 
     @Test
     public void testDecimalNormalizer() {
-        Normalizer normalizer = NormalizerFactory.getNormalizer(new ConfigDescriptionParameter("test", Type.DECIMAL));
+        Normalizer normalizer = new NormalizerFactoryImpl().getNormalizer(new ConfigDescriptionParameter("test", Type.DECIMAL));
 
         assertThat(normalizer.normalize(null), is(nullValue()));
         assertThat(normalizer.normalize(42), is(equalTo(new BigDecimal("42.0"))));
@@ -121,7 +122,7 @@ public class NormalizerTest {
 
     @Test
     public void testTextNormalizer() {
-        Normalizer normalizer = NormalizerFactory.getNormalizer(new ConfigDescriptionParameter("test", Type.TEXT));
+        Normalizer normalizer = new NormalizerFactoryImpl().getNormalizer(new ConfigDescriptionParameter("test", Type.TEXT));
 
         assertThat(normalizer.normalize(null), is(nullValue()));
         assertThat(normalizer.normalize(""), is(equalTo("")));
@@ -142,7 +143,7 @@ public class NormalizerTest {
 
     @Test
     public void testListNormalizer() {
-        Normalizer normalizer = NormalizerFactory.getNormalizer(new ConfigDescriptionParameter() {
+        Normalizer normalizer = new NormalizerFactoryImpl().getNormalizer(new ConfigDescriptionParameter() {
             @Override
             public Type getType() {
                 return Type.BOOLEAN;

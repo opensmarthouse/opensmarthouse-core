@@ -14,6 +14,7 @@ package org.openhab.core.config.core.internal.normalization;
 
 import java.util.ArrayList;
 import java.util.List;
+import org.openhab.core.config.core.Normalizer;
 
 /**
  * The normalizer for configuration parameters allowing multiple values. It converts all collections/arrays to a

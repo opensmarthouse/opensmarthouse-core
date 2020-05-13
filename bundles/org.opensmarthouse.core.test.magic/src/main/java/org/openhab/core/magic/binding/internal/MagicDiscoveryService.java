@@ -15,12 +15,12 @@ package org.openhab.core.magic.binding.internal;
 import static org.openhab.core.magic.binding.MagicBindingConstants.THING_TYPE_CONFIG_THING;
 
 import java.util.Collections;
+import java.util.Map;
 import java.util.UUID;
 
 import org.eclipse.jdt.annotation.NonNullByDefault;
 import org.openhab.core.config.discovery.AbstractDiscoveryService;
 import org.openhab.core.config.discovery.DiscoveryResult;
-import org.openhab.core.config.discovery.DiscoveryResultBuilder;
 import org.openhab.core.config.discovery.DiscoveryService;
 import org.openhab.core.thing.Thing;
 import org.openhab.core.thing.ThingUID;
@@ -42,10 +42,11 @@ public class MagicDiscoveryService extends AbstractDiscoveryService {
     @Override
     protected void startScan() {
         String serialNumber = createRandomSerialNumber();
-        DiscoveryResult discoveryResult = DiscoveryResultBuilder
-                .create(new ThingUID(THING_TYPE_CONFIG_THING, serialNumber))
-                .withRepresentationProperty(Thing.PROPERTY_SERIAL_NUMBER)
-                .withProperty(Thing.PROPERTY_SERIAL_NUMBER, serialNumber).withLabel("Magic Thing").build();
+
+        Map<String, Object> properties = Collections.singletonMap(Thing.PROPERTY_SERIAL_NUMBER, serialNumber);
+
+        DiscoveryResult discoveryResult = new MagicDiscoveryResult(new ThingUID(THING_TYPE_CONFIG_THING, serialNumber),
+                Thing.PROPERTY_SERIAL_NUMBER, properties, "Magic Thing");
         thingDiscovered(discoveryResult);
     }
 

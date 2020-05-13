@@ -13,11 +13,10 @@
 package org.openhab.core.audio;
 
 import org.eclipse.jdt.annotation.NonNullByDefault;
-import org.openhab.core.audio.internal.AudioServlet;
 
 /**
- * This is an interface that is implemented by {@link AudioServlet} and which allows exposing audio streams through
- * HTTP.
+ * This is an interface that is implemented by {@link org.openhab.core.audio.internal.AudioServlet} and which allows
+ * exposing audio streams through HTTP.
  * Streams are only served a single time and then discarded.
  *
  * @author Kai Kreuzer - Initial contribution

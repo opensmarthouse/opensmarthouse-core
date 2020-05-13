@@ -14,6 +14,7 @@ package org.openhab.core.config.discovery.inbox;
 
 import static org.hamcrest.CoreMatchers.*;
 import static org.junit.Assert.assertThat;
+import static org.mockito.Mockito.when;
 import static org.openhab.core.config.discovery.inbox.InboxPredicates.*;
 
 import java.util.AbstractMap.SimpleEntry;
@@ -27,10 +28,10 @@ import java.util.stream.Stream;
 
 import org.junit.Before;
 import org.junit.Test;
+import org.mockito.Mockito;
 import org.openhab.core.config.discovery.DiscoveryResult;
 import org.openhab.core.config.discovery.DiscoveryResultBuilder;
 import org.openhab.core.config.discovery.DiscoveryResultFlag;
-import org.openhab.core.config.discovery.internal.DiscoveryResultImpl;
 import org.openhab.core.thing.ThingTypeUID;
 import org.openhab.core.thing.ThingUID;
 
@@ -67,18 +68,15 @@ public class InboxPredicatesTest {
     private static final Map<String, Object> PROPS2 = Collections.singletonMap(PROP2, PROP_VAL2);
 
     private static final List<DiscoveryResult> RESULTS = Arrays.asList(
-            DiscoveryResultBuilder.create(THING_UID11).withThingType(THING_TYPE_UID11).withProperties(PROPS1)
-                    .withRepresentationProperty(PROP1).withLabel("label").build(),
-            DiscoveryResultBuilder.create(THING_UID12).withThingType(THING_TYPE_UID11).withProperties(PROPS1)
-                    .withLabel("label").build(),
-            DiscoveryResultBuilder.create(THING_UID12).withThingType(THING_TYPE_UID12).withProperties(PROPS2)
-                    .withRepresentationProperty(PROP2).withLabel("label").build(),
-            DiscoveryResultBuilder.create(THING_UID22).withThingType(THING_TYPE_UID21).withProperties(PROPS2)
-                    .withLabel("label").build());
+            create(THING_UID11, THING_TYPE_UID11, PROPS1, PROP1, "label"),
+            create(THING_UID12, THING_TYPE_UID11, PROPS1, "label"),
+            create(THING_UID12, THING_TYPE_UID12, PROPS2, PROP2, "label"),
+            create(THING_UID22, THING_TYPE_UID21, PROPS2, "label")
+    );
 
     @Before
     public void setUp() throws Exception {
-        ((DiscoveryResultImpl) RESULTS.get(3)).setFlag(DiscoveryResultFlag.IGNORED);
+        when(RESULTS.get(3).getFlag()).thenReturn(DiscoveryResultFlag.IGNORED);
     }
 
     @Test
@@ -168,4 +166,23 @@ public class InboxPredicatesTest {
                 RESULTS.stream().filter(withRepresentationPropertyValue(PROP_VAL2)).collect(Collectors.toList()).get(0),
                 is(equalTo(RESULTS.get(2))));
     }
+
+    public static DiscoveryResult create(ThingUID thingUID, ThingTypeUID thingTypeUID, Map<String, Object> properties,
+            String label) {
+        return create(thingUID, thingTypeUID, properties, null, label);
+    }
+
+    static DiscoveryResult create(ThingUID thingUID, ThingTypeUID thingTypeUID, Map<String, Object> properties,
+            String representationProperty, String label) {
+        DiscoveryResult result = Mockito.mock(DiscoveryResult.class);
+        when(result.getThingUID()).thenReturn(thingUID);
+        when(result.getBindingId()).thenReturn(thingUID.getBindingId());
+        when(result.getThingTypeUID()).thenReturn(thingTypeUID);
+        when(result.getProperties()).thenReturn(properties);
+        when(result.getRepresentationProperty()).thenReturn(representationProperty);
+        when(result.getLabel()).thenReturn(label);
+        when(result.getFlag()).thenReturn(DiscoveryResultFlag.NEW);
+        return result;
+    }
+
 }

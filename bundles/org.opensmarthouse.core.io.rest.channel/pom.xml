@@ -16,7 +16,7 @@
   <dependencies>
     <dependency>
       <groupId>org.opensmarthouse.core.bundles</groupId>
-      <artifactId>org.opensmarthouse.core.config.core</artifactId>
+      <artifactId>org.opensmarthouse.core.config</artifactId>
     </dependency>
     <dependency>
       <groupId>org.opensmarthouse.core.bundles</groupId>
@@ -50,6 +50,12 @@
     <dependency>
       <groupId>org.osgi</groupId>
       <artifactId>osgi.enroute.hamcrest.wrapper</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.glassfish.jersey.core</groupId>
+      <artifactId>jersey-common</artifactId>
+      <version>2.22.2</version>
+      <scope>test</scope>
     </dependency>
   </dependencies>
 

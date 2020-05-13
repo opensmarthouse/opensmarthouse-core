@@ -24,6 +24,7 @@ import org.eclipse.jdt.annotation.Nullable;
 import org.openhab.core.config.discovery.AbstractDiscoveryService;
 import org.openhab.core.config.discovery.DiscoveryResult;
 import org.openhab.core.config.discovery.DiscoveryResultBuilder;
+import org.openhab.core.config.discovery.DiscoveryResultBuilderFactory;
 import org.openhab.core.config.discovery.DiscoveryService;
 import org.openhab.core.config.discovery.usbserial.UsbSerialDeviceInformation;
 import org.openhab.core.config.discovery.usbserial.UsbSerialDiscovery;
@@ -31,6 +32,7 @@ import org.openhab.core.config.discovery.usbserial.UsbSerialDiscoveryListener;
 import org.openhab.core.config.discovery.usbserial.UsbSerialDiscoveryParticipant;
 import org.openhab.core.thing.ThingTypeUID;
 import org.openhab.core.thing.ThingUID;
+import org.openhab.core.thing.binding.builder.ChannelBuilderFactory;
 import org.osgi.service.component.annotations.Activate;
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Deactivate;
@@ -74,6 +76,7 @@ public class UsbSerialDiscoveryService extends AbstractDiscoveryService implemen
     private final Set<UsbSerialDeviceInformation> previouslyDiscovered = new CopyOnWriteArraySet<>();
 
     private @NonNullByDefault({}) UsbSerialDiscovery usbSerialDiscovery;
+    private @NonNullByDefault({}) DiscoveryResultBuilderFactory discoveryResultBuilderFactory;
 
     public UsbSerialDiscoveryService() {
         super(5);
@@ -123,6 +126,15 @@ public class UsbSerialDiscoveryService extends AbstractDiscoveryService implemen
         usbSerialDiscovery.unregisterDiscoveryListener(this);
         this.usbSerialDiscovery = null;
         this.previouslyDiscovered.clear();
+    }
+
+    @Reference
+    public void setDiscoveryResultBuilderFactory(DiscoveryResultBuilderFactory discoveryResultBuilderFactory) {
+        this.discoveryResultBuilderFactory = discoveryResultBuilderFactory;
+    }
+
+    public void unsetDiscoveryResultBuilderFactory(DiscoveryResultBuilderFactory discoveryResultBuilderFactory) {
+        this.discoveryResultBuilderFactory = null;
     }
 
     @Override
@@ -189,7 +201,7 @@ public class UsbSerialDiscoveryService extends AbstractDiscoveryService implemen
         resultProperties.put(THING_PROPERTY_USB_VENDOR_ID, usbSerialDeviceInformation.getVendorId());
         resultProperties.put(THING_PROPERTY_USB_PRODUCT_ID, usbSerialDeviceInformation.getProductId());
 
-        return DiscoveryResultBuilder.create(result.getThingUID()).withProperties(resultProperties)
+        return discoveryResultBuilderFactory.create(result.getThingUID()).withProperties(resultProperties)
                 .withBridge(result.getBridgeUID()).withTTL(result.getTimeToLive()).withLabel(result.getLabel())
                 .withRepresentationProperty(result.getRepresentationProperty()).build();
     }

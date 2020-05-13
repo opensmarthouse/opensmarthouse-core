@@ -12,12 +12,9 @@
  */
 package org.openhab.core.config.discovery;
 
-import java.util.HashMap;
 import java.util.Map;
-
 import org.eclipse.jdt.annotation.NonNullByDefault;
 import org.eclipse.jdt.annotation.Nullable;
-import org.openhab.core.config.discovery.internal.DiscoveryResultImpl;
 import org.openhab.core.thing.ThingTypeUID;
 import org.openhab.core.thing.ThingUID;
 
@@ -27,35 +24,12 @@ import org.openhab.core.thing.ThingUID;
  * @author Kai Kreuzer - Initial contribution
  * @author Andre Fuechsel - added support for time to live
  * @author Thomas Höfer - Added representation
+ * @author Łukasz Dywicki - Refactoring to interface
  *
  * @see DiscoveryResult
  */
 @NonNullByDefault
-public class DiscoveryResultBuilder {
-
-    private final ThingUID thingUID;
-
-    private @Nullable ThingUID bridgeUID;
-    private final Map<String, Object> properties = new HashMap<>();
-    private @Nullable String representationProperty;
-    private @Nullable String label;
-    private long ttl = DiscoveryResult.TTL_UNLIMITED;
-    private @Nullable ThingTypeUID thingTypeUID;
-
-    private DiscoveryResultBuilder(ThingUID thingUID) {
-        this.thingTypeUID = thingUID.getThingTypeUID();
-        this.thingUID = thingUID;
-    };
-
-    /**
-     * Creates a new builder for a given thing UID.
-     *
-     * @param thingUID the thing UID for which the builder should be created-
-     * @return a new instance of a {@link DiscoveryResultBuilder}
-     */
-    public static DiscoveryResultBuilder create(ThingUID thingUID) {
-        return new DiscoveryResultBuilder(thingUID);
-    }
+public interface DiscoveryResultBuilder {
 
     /**
      * Explicitly sets the thing type.
@@ -63,10 +37,7 @@ public class DiscoveryResultBuilder {
      * @param thingTypeUID the {@link ThingTypeUID}
      * @return the updated builder
      */
-    public DiscoveryResultBuilder withThingType(@Nullable ThingTypeUID thingTypeUID) {
-        this.thingTypeUID = thingTypeUID;
-        return this;
-    }
+    DiscoveryResultBuilder withThingType(@Nullable ThingTypeUID thingTypeUID);
 
     /**
      * Adds properties to the desired result.
@@ -74,12 +45,7 @@ public class DiscoveryResultBuilder {
      * @param properties of the desired result
      * @return the updated builder
      */
-    public DiscoveryResultBuilder withProperties(@Nullable Map<String, Object> properties) {
-        if (properties != null) {
-            this.properties.putAll(properties);
-        }
-        return this;
-    }
+    DiscoveryResultBuilder withProperties(@Nullable Map<String, Object> properties);
 
     /**
      * Adds a property to the desired result.
@@ -87,10 +53,7 @@ public class DiscoveryResultBuilder {
      * @param property of the desired result
      * @return the updated builder
      */
-    public DiscoveryResultBuilder withProperty(String key, Object value) {
-        this.properties.put(key, value);
-        return this;
-    }
+    DiscoveryResultBuilder withProperty(String key, Object value);
 
     /**
      * Sets the representation Property of the desired result.
@@ -98,10 +61,7 @@ public class DiscoveryResultBuilder {
      * @param representationProperty the representation property of the desired result
      * @return the updated builder
      */
-    public DiscoveryResultBuilder withRepresentationProperty(@Nullable String representationProperty) {
-        this.representationProperty = representationProperty;
-        return this;
-    }
+    DiscoveryResultBuilder withRepresentationProperty(@Nullable String representationProperty);
 
     /**
      * Sets the bridgeUID of the desired result.
@@ -109,10 +69,7 @@ public class DiscoveryResultBuilder {
      * @param bridgeUID of the desired result
      * @return the updated builder
      */
-    public DiscoveryResultBuilder withBridge(@Nullable ThingUID bridgeUID) {
-        this.bridgeUID = bridgeUID;
-        return this;
-    }
+    DiscoveryResultBuilder withBridge(@Nullable ThingUID bridgeUID);
 
     /**
      * Sets the label of the desired result.
@@ -120,10 +77,7 @@ public class DiscoveryResultBuilder {
      * @param label of the desired result
      * @return the updated builder
      */
-    public DiscoveryResultBuilder withLabel(@Nullable String label) {
-        this.label = label;
-        return this;
-    }
+    DiscoveryResultBuilder withLabel(@Nullable String label);
 
     /**
      * Sets the time to live for the result in seconds.
@@ -131,19 +85,12 @@ public class DiscoveryResultBuilder {
      * @param ttl time to live in seconds
      * @return the updated builder
      */
-    public DiscoveryResultBuilder withTTL(long ttl) {
-        this.ttl = ttl;
-        return this;
-    }
+    DiscoveryResultBuilder withTTL(long ttl);
 
     /**
      * Builds a result with the settings of this builder.
      *
      * @return the desired result
      */
-    @SuppressWarnings("deprecation")
-    public DiscoveryResult build() {
-        return new DiscoveryResultImpl(thingTypeUID, thingUID, bridgeUID, properties, representationProperty, label,
-                ttl);
-    }
+    @SuppressWarnings("deprecation") DiscoveryResult build();
 }
