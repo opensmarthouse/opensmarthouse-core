@@ -83,7 +83,7 @@
     <module>org.opensmarthouse.core.io.rest.service</module>
     <module>org.opensmarthouse.core.io.rest.sitemap</module>
     <module>org.opensmarthouse.core.io.rest.sse</module>
-    <module>org.opensmarthouse.core.io.rest.swagger1</module>
+    <module>org.opensmarthouse.core.io.rest.swagger</module>
     <module>org.opensmarthouse.core.io.rest.thing</module>
     <module>org.opensmarthouse.core.io.rest.ui</module>
     <module>org.opensmarthouse.core.io.rest.voice</module>

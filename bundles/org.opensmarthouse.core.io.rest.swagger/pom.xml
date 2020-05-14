@@ -9,8 +9,8 @@
     <version>1.0.0-SNAPSHOT</version>
   </parent>
 
-  <artifactId>org.opensmarthouse.core.io.rest.swagger1</artifactId>
-  <name>openHAB Core :: Bundles :: REST Interface :: Swagger 1</name>
+  <artifactId>org.opensmarthouse.core.io.rest.swagger</artifactId>
+  <name>openHAB Core :: Bundles :: REST Interface :: Swagger</name>
 
   <dependencies>
     <dependency>
