@@ -76,6 +76,7 @@
         <feature>opensmarthouse-core-io-rest-service</feature>
         <feature>opensmarthouse-core-io-rest-sitemap</feature>
         <feature>opensmarthouse-core-io-rest-sse</feature>
+        <feature>opensmarthouse-core-io-rest-swagger</feature>
         <feature>opensmarthouse-core-io-rest-thing</feature>
         <feature>opensmarthouse-core-io-rest-ui</feature>
 
@@ -1013,10 +1014,10 @@
         <bundle>mvn:org.opensmarthouse.core.bundles/org.opensmarthouse.core.type.core/${project.version}</bundle>
     </feature>
 
-    <feature name="opensmarthouse-core-io-rest-swagger1" version="${project.version}">
-        <feature>opensmarthouse.tp-jaxrswb-swagger1-gen</feature>
+    <feature name="opensmarthouse-core-io-rest-swagger" version="${project.version}">
+        <feature>opensmarthouse.tp-jaxrswb-swagger-gen</feature>
         <feature>opensmarthouse-core-io-rest</feature>
-        <bundle>mvn:org.opensmarthouse.core.bundles/org.opensmarthouse.core.io.rest.swagger1/${project.version}</bundle>
+        <bundle>mvn:org.opensmarthouse.core.bundles/org.opensmarthouse.core.io.rest.swagger/${project.version}</bundle>
     </feature>
 
 </features>

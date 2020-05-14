@@ -10,7 +10,7 @@
   </parent>
 
   <artifactId>org.opensmarthouse.core.io.rest.swagger</artifactId>
-  <name>openHAB Core :: Bundles :: REST Interface :: Swagger</name>
+  <name>OpenSmartHouse Core | Bundles | REST | Swagger</name>
 
   <dependencies>
     <dependency>
