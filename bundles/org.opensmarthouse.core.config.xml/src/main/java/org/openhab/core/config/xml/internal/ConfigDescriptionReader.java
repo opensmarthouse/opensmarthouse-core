@@ -41,6 +41,7 @@ import com.thoughtworks.xstream.XStream;
  * @author Michael Grammling - Initial contribution
  * @author Alex Tugarev - Extended for options and filter criteria
  * @author Chris Jackson - Added configuration groups
+ * @author Łukasz Dywicki - Added XStream security handling.
  */
 public class ConfigDescriptionReader extends XmlDocumentReader<List<ConfigDescription>> {
 
@@ -73,5 +74,18 @@ public class ConfigDescriptionReader extends XmlDocumentReader<List<ConfigDescri
         xstream.alias("option", NodeValue.class);
         xstream.alias("filter", List.class);
         xstream.alias("criteria", FilterCriteria.class);
+    }
+
+    @Override
+    public void registerSecurity(XStream xstream) {
+        xstream.allowTypes(new Class[] {
+                ConfigDescription.class,
+                ConfigDescriptionParameter.class,
+                ConfigDescriptionParameterGroup.class,
+                FilterCriteria.class,
+                NodeList.class,
+                NodeValue.class,
+                NodeAttributes.class
+        });
     }
 }

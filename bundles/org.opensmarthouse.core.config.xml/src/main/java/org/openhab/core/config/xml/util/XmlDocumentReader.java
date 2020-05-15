@@ -28,6 +28,7 @@ import com.thoughtworks.xstream.io.xml.StaxDriver;
  * This class uses {@code XStream} and {@code StAX} to parse and convert the XML document.
  *
  * @author Michael Grammling - Initial contribution
+ * @author Łukasz Dywicki - Added XStream security handling.
  *
  * @param <T> the result type of the conversion
  */
@@ -37,15 +38,16 @@ public abstract class XmlDocumentReader<T> {
 
     /**
      * The default constructor of this class initializes the {@code XStream} object, and calls
-     * the abstract methods {@link #registerConverters()} and {@link #registerAliases()}.
+     * the abstract methods {@link #registerConverters()} and {@link #registerAliases()} as well as
+     * {@link #registerSecurity(XStream)}.
      */
     public XmlDocumentReader() {
         StaxDriver driver = new StaxDriver();
 
         this.xstream = new Java9XStream(driver);
-
         registerConverters(this.xstream);
         registerAliases(this.xstream);
+        registerSecurity(this.xstream);
     }
 
     /**
@@ -70,6 +72,13 @@ public abstract class XmlDocumentReader<T> {
      * @param xstream the XStream object to be configured
      */
     public abstract void registerAliases(XStream xstream);
+
+    /**
+     * Set up security manager for the {@link XStream} instance.
+     *
+     * @param xstream the XStream object to be configured
+     */
+    public abstract void registerSecurity(XStream xstream);
 
     /**
      * Reads the XML document containing a specific XML tag from the specified {@link URL} and converts it to the

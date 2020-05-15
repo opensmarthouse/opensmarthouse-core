@@ -40,6 +40,7 @@ import com.thoughtworks.xstream.XStream;
  * @author Michael Grammling - Initial contribution
  * @author Alex Tugarev - Extended by options and filter criteria
  * @author Chris Jackson - Add parameter groups
+ * @author Łukasz Dywicki - Added XStream security handling.
  */
 public class BindingInfoReader extends XmlDocumentReader<BindingInfoXmlResult> {
 
@@ -76,5 +77,19 @@ public class BindingInfoReader extends XmlDocumentReader<BindingInfoXmlResult> {
         xstream.alias("option", NodeValue.class);
         xstream.alias("filter", List.class);
         xstream.alias("criteria", FilterCriteria.class);
+    }
+
+    @Override
+    public void registerSecurity(XStream xstream) {
+        xstream.allowTypes(new Class[] {
+                BindingInfoXmlResult.class,
+                ConfigDescription.class,
+                ConfigDescriptionParameter.class,
+                ConfigDescriptionParameterGroup.class,
+                FilterCriteria.class,
+                NodeList.class,
+                NodeValue.class,
+                NodeAttributes.class,
+        });
     }
 }

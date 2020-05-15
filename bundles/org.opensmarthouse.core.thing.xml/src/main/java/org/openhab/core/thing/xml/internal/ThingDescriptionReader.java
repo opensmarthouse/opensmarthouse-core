@@ -49,6 +49,7 @@ import com.thoughtworks.xstream.XStream;
  * @author Thomas Höfer - Added thing and thing type properties
  * @author Chris Jackson - Added parameter groups and channel properties
  * @author Moritz Kammerer - Added triggers
+ * @author Łukasz Dywicki - Added XStream security handling.
  */
 public class ThingDescriptionReader extends XmlDocumentReader<List<?>> {
 
@@ -125,5 +126,26 @@ public class ThingDescriptionReader extends XmlDocumentReader<List<?>> {
         xstream.alias("representation-property", NodeValue.class);
         xstream.alias("command-options", NodeList.class);
         xstream.alias("autoUpdatePolicy", NodeValue.class);
+    }
+
+    @Override
+    public void registerSecurity(XStream xstream) {
+        xstream.allowTypes(new Class[] {
+                ThingDescriptionList.class,
+                ThingTypeXmlResult.class,
+                ChannelTypeXmlResult.class,
+                ChannelGroupTypeXmlResult.class,
+                ChannelXmlResult.class,
+                StateDescription.class,
+                CommandDescription.class,
+                EventDescription.class,
+                CommandDescription.class,
+                ConfigDescriptionParameter.class,
+                ConfigDescriptionParameterGroup.class,
+                FilterCriteria.class,
+                NodeList.class,
+                NodeValue.class,
+                NodeAttributes.class,
+        });
     }
 }
