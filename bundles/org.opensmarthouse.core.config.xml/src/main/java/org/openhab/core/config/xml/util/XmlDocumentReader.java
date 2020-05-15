@@ -17,6 +17,8 @@ import java.net.URL;
 import com.thoughtworks.xstream.XStream;
 import com.thoughtworks.xstream.converters.ConversionException;
 import com.thoughtworks.xstream.converters.Converter;
+import com.thoughtworks.xstream.converters.extended.DynamicProxyConverter;
+import com.thoughtworks.xstream.converters.reflection.PureJavaReflectionProvider;
 import com.thoughtworks.xstream.io.xml.StaxDriver;
 
 /**
@@ -40,7 +42,7 @@ public abstract class XmlDocumentReader<T> {
     public XmlDocumentReader() {
         StaxDriver driver = new StaxDriver();
 
-        this.xstream = new XStream(driver);
+        this.xstream = new Java9XStream(driver);
 
         registerConverters(this.xstream);
         registerAliases(this.xstream);

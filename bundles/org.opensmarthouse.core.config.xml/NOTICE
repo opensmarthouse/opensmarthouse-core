@@ -15,10 +15,10 @@ https://github.com/openhab/openhab-core
 
 == Third-party Content
 
-xstream Version: 1.4.7
+xstream Version: 1.4.11.1
 * License: New BSD License
 * Project: http://xstream.codehaus.org/
-* Source: http://svn.codehaus.org/xstream/tags/XSTREAM_1_4_7/xstream/
+* Source: https://github.com/x-stream/xstream/tree/XSTREAM_1_4_11_1
 
 == Third-party license(s)
 
