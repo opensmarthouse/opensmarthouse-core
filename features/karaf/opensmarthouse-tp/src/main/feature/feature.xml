@@ -133,7 +133,7 @@
     </feature>
 
     <feature name="opensmarthouse.tp-jax-rs-whiteboard" version="${project.version}">
-        <capability>openhab.tp;feature=jax-rs-whiteboard;version=1.0.8</capability>
+        <capability>opensmarthouse.tp;feature=jax-rs-whiteboard;version=1.0.8</capability>
 
         <!-- BEG: https://issues.apache.org/jira/browse/KARAF-6536 -->
         <!-- Add it here, so we do not use to rely on a feature that is using version ranges. -->

@@ -321,7 +321,6 @@
         <details>
             This feature enables REST interface handling in OSH.
         </details>
-        <feature dependency="true">opensmarthouse.tp-jax-rs-whiteboard</feature>
         <feature>opensmarthouse-core-io-rest</feature>
         <bundle>mvn:org.opensmarthouse.core.bundles/org.opensmarthouse.core.io.rest.core/${project.version}</bundle>
     </feature>
@@ -968,6 +967,7 @@
     </feature>
 
     <feature name="opensmarthouse-core-io-rest-binding" version="${project.version}">
+        <feature>opensmarthouse-core-io-rest</feature>
         <feature>opensmarthouse-core-io-rest-config</feature>
         <feature>opensmarthouse-core-binding</feature>
         <feature>opensmarthouse-core-config</feature>
