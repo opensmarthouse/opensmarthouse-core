@@ -17,15 +17,15 @@ import java.util.Objects;
 import org.eclipse.jdt.annotation.NonNullByDefault;
 import org.eclipse.jdt.annotation.Nullable;
 import org.openhab.core.types.Command;
-import org.openhab.core.types.PrimitiveType;
 import org.openhab.core.types.State;
 
 /**
  *
  * @author Kai Kreuzer - Initial contribution
+ * @author Chris Jackson - Rewrite type system for OpenSmartHouse
  */
 @NonNullByDefault
-public class StringType implements PrimitiveType, State, Command {
+public class StringType extends AbstractBaseType implements State, Command {
 
     public static final StringType EMPTY = new StringType();
 

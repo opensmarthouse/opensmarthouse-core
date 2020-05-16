@@ -26,6 +26,7 @@ import org.eclipse.jdt.annotation.NonNullByDefault;
  *
  * @author Kai Kreuzer - Initial contribution
  * @author Markus Rathgeb - Add the simple and full type string methods
+ * @author Chris Jackson - Rewrite type system for OpenSmartHouse
  */
 @NonNullByDefault
 public interface Type {
@@ -36,7 +37,7 @@ public interface Type {
      * @param pattern the pattern to use
      * @return the formatted string
      */
-    String format(String pattern);
+    public abstract String format(String pattern);
 
     /**
      * Get a string representation that contains the whole internal representation of the type.
@@ -47,5 +48,5 @@ public interface Type {
      *
      * @return a full string representation of the type to be consumed by 'valueOf(String)'
      */
-    String toFullString();
+    public abstract String toFullString();
 }

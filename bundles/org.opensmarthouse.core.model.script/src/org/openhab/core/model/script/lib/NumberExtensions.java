@@ -18,6 +18,7 @@ import java.math.RoundingMode;
 import javax.measure.quantity.Dimensionless;
 
 import org.openhab.core.library.types.DecimalType;
+import org.openhab.core.library.types.NumberType;
 import org.openhab.core.library.types.QuantityType;
 import org.openhab.core.library.unit.SmartHomeUnits;
 import org.openhab.core.types.Type;
@@ -27,6 +28,7 @@ import org.openhab.core.types.Type;
  * provided by Xbase. These include things like number handling and comparisons.
  *
  * @author Kai Kreuzer - Initial contribution
+ * @author Chris Jackson - Refactored type system for OpenSmartHouse
  */
 public class NumberExtensions {
 
@@ -40,7 +42,7 @@ public class NumberExtensions {
 
     // Calculation operators for numbers
 
-    public static BigDecimal operator_plus(Number x, Number y) {
+    public static BigDecimal operator_plus(NumberType x, NumberType y) {
         BigDecimal xValue = numberToBigDecimal(x);
         BigDecimal yValue = numberToBigDecimal(y);
         if (xValue == null) {
@@ -52,7 +54,7 @@ public class NumberExtensions {
         }
     }
 
-    public static BigDecimal operator_minus(Number x) {
+    public static BigDecimal operator_minus(NumberType x) {
         BigDecimal xValue = numberToBigDecimal(x);
         if (xValue == null) {
             return xValue;
@@ -61,11 +63,11 @@ public class NumberExtensions {
         }
     }
 
-    public static BigDecimal operator_minus(Number x, Number y) {
+    public static BigDecimal operator_minus(NumberType x, NumberType y) {
         BigDecimal xValue = numberToBigDecimal(x);
         BigDecimal yValue = numberToBigDecimal(y);
         if (xValue == null) {
-            return operator_minus(yValue);
+            return operator_minus(y);
         } else if (yValue == null) {
             return xValue;
         } else {
@@ -73,7 +75,7 @@ public class NumberExtensions {
         }
     }
 
-    public static BigDecimal operator_multiply(Number x, Number y) {
+    public static BigDecimal operator_multiply(NumberType x, NumberType y) {
         BigDecimal xValue = numberToBigDecimal(x);
         BigDecimal yValue = numberToBigDecimal(y);
         if (xValue == null) {
@@ -85,7 +87,7 @@ public class NumberExtensions {
         }
     }
 
-    public static BigDecimal operator_divide(Number x, Number y) {
+    public static BigDecimal operator_divide(NumberType x, NumberType y) {
         BigDecimal xValue = numberToBigDecimal(x);
         BigDecimal yValue = numberToBigDecimal(y);
         return xValue.divide(yValue, 8, RoundingMode.HALF_UP);
@@ -93,7 +95,7 @@ public class NumberExtensions {
 
     // Comparison operations between numbers
 
-    public static boolean operator_equals(Number left, Number right) {
+    public static boolean operator_equals(NumberType left, NumberType right) {
         // in case one of the Number instances is of type QuantityType they are never equal (except for
         // SmartHomeUnit.ONE).
         // for both instances being QuantityTypes the specific method
@@ -112,7 +114,7 @@ public class NumberExtensions {
         }
     }
 
-    public static boolean operator_notEquals(Number left, Number right) {
+    public static boolean operator_notEquals(NumberType left, NumberType right) {
         BigDecimal leftValue = numberToBigDecimal(left);
         BigDecimal rightValue = numberToBigDecimal(right);
         if (leftValue == null) {
@@ -124,7 +126,7 @@ public class NumberExtensions {
         }
     }
 
-    public static boolean operator_lessThan(Number left, Number right) {
+    public static boolean operator_lessThan(NumberType left, NumberType right) {
         BigDecimal leftValue = numberToBigDecimal(left);
         BigDecimal rightValue = numberToBigDecimal(right);
         if (leftValue == null) {
@@ -136,7 +138,7 @@ public class NumberExtensions {
         }
     }
 
-    public static boolean operator_greaterThan(Number left, Number right) {
+    public static boolean operator_greaterThan(NumberType left, NumberType right) {
         BigDecimal leftValue = numberToBigDecimal(left);
         BigDecimal rightValue = numberToBigDecimal(right);
         if (leftValue == null) {
@@ -148,7 +150,7 @@ public class NumberExtensions {
         }
     }
 
-    public static boolean operator_lessEqualsThan(Number left, Number right) {
+    public static boolean operator_lessEqualsThan(NumberType left, NumberType right) {
         BigDecimal leftValue = numberToBigDecimal(left);
         BigDecimal rightValue = numberToBigDecimal(right);
         if (leftValue == null) {
@@ -160,7 +162,7 @@ public class NumberExtensions {
         }
     }
 
-    public static boolean operator_greaterEqualsThan(Number left, Number right) {
+    public static boolean operator_greaterEqualsThan(NumberType left, NumberType right) {
         BigDecimal leftValue = numberToBigDecimal(left);
         BigDecimal rightValue = numberToBigDecimal(right);
         if (leftValue == null) {
@@ -174,7 +176,7 @@ public class NumberExtensions {
 
     // Comparison operators between ESH types and numbers
 
-    public static boolean operator_equals(Type type, Number x) {
+    public static boolean operator_equals(Type type, NumberType x) {
         if (type instanceof QuantityType && x instanceof QuantityType) {
             return operator_equals((QuantityType<?>) type, (QuantityType<?>) x);
         }
@@ -185,7 +187,7 @@ public class NumberExtensions {
         }
     }
 
-    public static boolean operator_notEquals(Type type, Number x) {
+    public static boolean operator_notEquals(Type type, NumberType x) {
         if (type instanceof QuantityType && x instanceof QuantityType) {
             return operator_notEquals((QuantityType<?>) type, (QuantityType<?>) x);
         }
@@ -197,7 +199,7 @@ public class NumberExtensions {
         }
     }
 
-    public static boolean operator_greaterThan(Type type, Number x) {
+    public static boolean operator_greaterThan(Type type, NumberType x) {
         if (type instanceof QuantityType && x instanceof QuantityType) {
             return operator_greaterThan((QuantityType<?>) type, (QuantityType<?>) x);
         }
@@ -208,7 +210,7 @@ public class NumberExtensions {
         }
     }
 
-    public static boolean operator_greaterEqualsThan(Type type, Number x) {
+    public static boolean operator_greaterEqualsThan(Type type, NumberType x) {
         if (type instanceof QuantityType && x instanceof QuantityType) {
             return operator_greaterEqualsThan((QuantityType<?>) type, (QuantityType<?>) x);
         }
@@ -219,7 +221,7 @@ public class NumberExtensions {
         }
     }
 
-    public static boolean operator_lessThan(Type type, Number x) {
+    public static boolean operator_lessThan(Type type, NumberType x) {
         if (type instanceof QuantityType && x instanceof QuantityType) {
             return operator_lessThan((QuantityType<?>) type, (QuantityType<?>) x);
         }
@@ -230,7 +232,7 @@ public class NumberExtensions {
         }
     }
 
-    public static boolean operator_lessEqualsThan(Type type, Number x) {
+    public static boolean operator_lessEqualsThan(Type type, NumberType x) {
         if (type instanceof QuantityType && x instanceof QuantityType) {
             return operator_lessEqualsThan((QuantityType<?>) type, (QuantityType<?>) x);
         }
@@ -257,7 +259,7 @@ public class NumberExtensions {
         return x == null ? operator_minus(y) : y == null ? x : x.subtract((QuantityType) y);
     }
 
-    public static QuantityType<?> operator_multiply(Number x, QuantityType<?> y) {
+    public static QuantityType<?> operator_multiply(NumberType x, QuantityType<?> y) {
         BigDecimal xValue = numberToBigDecimal(x);
         if (xValue == null) {
             return QuantityType.ZERO;
@@ -268,7 +270,7 @@ public class NumberExtensions {
         }
     }
 
-    public static QuantityType<?> operator_multiply(QuantityType<?> x, Number y) {
+    public static QuantityType<?> operator_multiply(QuantityType<?> x, NumberType y) {
         return operator_multiply(y, x);
     }
 
@@ -276,7 +278,7 @@ public class NumberExtensions {
         return x == null || y == null ? QuantityType.ZERO : x.multiply(y);
     }
 
-    public static QuantityType<?> operator_divide(QuantityType<?> x, Number y) {
+    public static QuantityType<?> operator_divide(QuantityType<?> x, NumberType y) {
         BigDecimal yValue = numberToBigDecimal(y);
         return x.divide(yValue);
     }
@@ -295,8 +297,8 @@ public class NumberExtensions {
     }
 
     // support SmartHomeUnit.ONE as Number representation
-    public static boolean operator_equals(QuantityType<?> left, Number right) {
-        return operator_equals((Number) left, right);
+    public static boolean operator_equals(QuantityType<?> left, NumberType right) {
+        return operator_equals((NumberType) left, right);
     }
 
     public static boolean operator_notEquals(QuantityType<?> left, QuantityType<?> right) {
@@ -304,8 +306,8 @@ public class NumberExtensions {
     }
 
     // support SmartHomeUnit.ONE as Number representation
-    public static boolean operator_notEquals(QuantityType<?> left, Number right) {
-        return operator_notEquals((Number) left, right);
+    public static boolean operator_notEquals(QuantityType<?> left, NumberType right) {
+        return operator_notEquals((NumberType) left, right);
     }
 
     @SuppressWarnings({ "unchecked", "rawtypes" })
@@ -318,8 +320,8 @@ public class NumberExtensions {
     }
 
     // support SmartHomeUnit.ONE as Number representation
-    public static boolean operator_lessThan(QuantityType<?> x, Number y) {
-        return operator_lessThan((Number) x, y);
+    public static boolean operator_lessThan(QuantityType<?> x, NumberType y) {
+        return operator_lessThan((NumberType) x, y);
     }
 
     @SuppressWarnings({ "unchecked", "rawtypes" })
@@ -332,8 +334,8 @@ public class NumberExtensions {
     }
 
     // support SmartHomeUnit.ONE as Number representation
-    public static boolean operator_lessEqualsThan(QuantityType<?> x, Number y) {
-        return operator_lessEqualsThan((Number) x, y);
+    public static boolean operator_lessEqualsThan(QuantityType<?> x, NumberType y) {
+        return operator_lessEqualsThan((NumberType) x, y);
     }
 
     @SuppressWarnings({ "unchecked", "rawtypes" })
@@ -346,8 +348,8 @@ public class NumberExtensions {
     }
 
     // support SmartHomeUnit.ONE as Number representation
-    public static boolean operator_greaterThan(QuantityType<?> x, Number y) {
-        return operator_greaterThan((Number) x, y);
+    public static boolean operator_greaterThan(QuantityType<?> x, NumberType y) {
+        return operator_greaterThan((NumberType) x, y);
     }
 
     @SuppressWarnings({ "unchecked", "rawtypes" })
@@ -360,18 +362,18 @@ public class NumberExtensions {
     }
 
     // support SmartHomeUnit.ONE as Number representation
-    public static boolean operator_greaterEqualsThan(QuantityType<?> x, Number y) {
-        return operator_greaterEqualsThan((Number) x, y);
+    public static boolean operator_greaterEqualsThan(QuantityType<?> x, NumberType y) {
+        return operator_greaterEqualsThan((NumberType) x, y);
     }
 
     /**
      * Convert the given number into a BigDecimal
      *
      * @param number
-     *            the number to convert
+     *            the {@link NumberType} to convert
      * @return the given number as BigDecimal or null if number is null
      */
-    public static BigDecimal numberToBigDecimal(Number number) {
+    public static BigDecimal numberToBigDecimal(NumberType number) {
         if (number instanceof QuantityType) {
             QuantityType<?> state = ((QuantityType<?>) number)
                     .toUnit(((QuantityType<?>) number).getUnit().getSystemUnit());
@@ -387,7 +389,7 @@ public class NumberExtensions {
         }
     }
 
-    private static boolean oneIsQuantity(Number left, Number right) {
+    private static boolean oneIsQuantity(NumberType left, NumberType right) {
         return (left instanceof QuantityType && !isAbstractUnitOne((QuantityType<?>) left))
                 || (right instanceof QuantityType && !isAbstractUnitOne((QuantityType<?>) right));
     }

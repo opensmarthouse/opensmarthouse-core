@@ -13,17 +13,37 @@
 package org.openhab.core.library.types;
 
 import org.eclipse.jdt.annotation.NonNullByDefault;
+import org.eclipse.jdt.annotation.Nullable;
 import org.openhab.core.types.Command;
-import org.openhab.core.types.PrimitiveType;
 
 /**
  *
  * @author Kai Kreuzer - Initial contribution
+ * @author Chris Jackson - Rewrite type system for OpenSmartHouse
  */
 @NonNullByDefault
-public enum IncreaseDecreaseType implements PrimitiveType, Command {
-    INCREASE,
-    DECREASE;
+public class IncreaseDecreaseType extends AbstractBaseType implements Command {
+
+    private static String CONST_INCREASE = "INCREASE";
+    private static String CONST_DECREASE = "DECREASE";
+    public static IncreaseDecreaseType INCREASE = new IncreaseDecreaseType(CONST_INCREASE);
+    public static IncreaseDecreaseType DECREASE = new IncreaseDecreaseType(CONST_DECREASE);
+
+    private final String value;
+
+    private IncreaseDecreaseType(String value) {
+        this.value = value;
+    }
+
+    public static @Nullable IncreaseDecreaseType valueOf(String value) {
+        if (CONST_INCREASE.equals(value)) {
+            return INCREASE;
+        }
+        if (CONST_DECREASE.equals(value)) {
+            return DECREASE;
+        }
+        return null;
+    }
 
     @Override
     public String format(String pattern) {
@@ -32,11 +52,22 @@ public enum IncreaseDecreaseType implements PrimitiveType, Command {
 
     @Override
     public String toString() {
-        return toFullString();
+        return value;
     }
 
     @Override
     public String toFullString() {
-        return super.toString();
+        return value;
+    }
+
+    /**
+     * Gets the string name of this value
+     * 
+     * @return the name of the value
+     * @deprecated use {@link #toString()} instead
+     */
+    @Deprecated
+    public String name() {
+        return toString();
     }
 }

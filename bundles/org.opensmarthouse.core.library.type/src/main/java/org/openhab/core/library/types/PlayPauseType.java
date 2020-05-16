@@ -13,19 +13,39 @@
 package org.openhab.core.library.types;
 
 import org.eclipse.jdt.annotation.NonNullByDefault;
+import org.eclipse.jdt.annotation.Nullable;
 import org.openhab.core.types.Command;
-import org.openhab.core.types.PrimitiveType;
 import org.openhab.core.types.State;
 
 /**
  * This type is used by the {@link org.openhab.core.library.items.PlayerItem}.
  *
  * @author Alex Tugarev - Initial contribution
+ * @author Chris Jackson - Rewrite type system for OpenSmartHouse
  */
 @NonNullByDefault
-public enum PlayPauseType implements PrimitiveType, State, Command {
-    PLAY,
-    PAUSE;
+public class PlayPauseType extends AbstractBaseType implements State, Command {
+
+    private static String CONST_PLAY = "PLAY";
+    private static String CONST_PAUSE = "PAUSE";
+    public static PlayPauseType PLAY = new PlayPauseType(CONST_PLAY);
+    public static PlayPauseType PAUSE = new PlayPauseType(CONST_PAUSE);
+
+    private final String value;
+
+    private PlayPauseType(String value) {
+        this.value = value;
+    }
+
+    public static @Nullable PlayPauseType valueOf(String value) {
+        if (CONST_PLAY.equals(value)) {
+            return PLAY;
+        }
+        if (CONST_PAUSE.equals(value)) {
+            return PAUSE;
+        }
+        return null;
+    }
 
     @Override
     public String format(String pattern) {
@@ -34,11 +54,22 @@ public enum PlayPauseType implements PrimitiveType, State, Command {
 
     @Override
     public String toString() {
-        return toFullString();
+        return value;
     }
 
     @Override
     public String toFullString() {
-        return super.toString();
+        return value;
+    }
+
+    /**
+     * Gets the string name of this value
+     * 
+     * @return the name of the value
+     * @deprecated use {@link #toString()} instead
+     */
+    @Deprecated
+    public String name() {
+        return toString();
     }
 }

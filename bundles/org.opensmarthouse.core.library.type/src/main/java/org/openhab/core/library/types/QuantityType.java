@@ -12,7 +12,10 @@
  */
 package org.openhab.core.library.types;
 
-import static org.eclipse.jdt.annotation.DefaultLocation.*;
+import static org.eclipse.jdt.annotation.DefaultLocation.FIELD;
+import static org.eclipse.jdt.annotation.DefaultLocation.PARAMETER;
+import static org.eclipse.jdt.annotation.DefaultLocation.RETURN_TYPE;
+import static org.eclipse.jdt.annotation.DefaultLocation.TYPE_ARGUMENT;
 
 import java.math.BigDecimal;
 import java.util.Arrays;
@@ -31,7 +34,6 @@ import org.eclipse.jdt.annotation.Nullable;
 import org.openhab.core.internal.library.unit.UnitInitializer;
 import org.openhab.core.library.unit.SmartHomeUnits;
 import org.openhab.core.types.Command;
-import org.openhab.core.types.PrimitiveType;
 import org.openhab.core.types.State;
 import org.openhab.core.types.util.UnitUtils;
 import org.slf4j.Logger;
@@ -45,12 +47,13 @@ import tec.uom.se.quantity.Quantities;
  * The measure type extends DecimalType to handle physical unit measurement
  *
  * @author Gaël L'hopital - Initial contribution
+ * @author Chris Jackson - Rewrite type system for OpenSmartHouse
  */
 @NonNullByDefault({ PARAMETER, RETURN_TYPE, FIELD, TYPE_ARGUMENT }) // TYPE_BOUNDS can not be used here since
                                                                     // javax.measure.quantity.* interfaces are not
                                                                     // annotated.
-public class QuantityType<T extends Quantity<T>> extends Number
-        implements PrimitiveType, State, Command, Comparable<QuantityType<T>> {
+public class QuantityType<T extends Quantity<T>> extends NumberType
+        implements State, Command, Comparable<QuantityType<T>> {
     private final Logger logger = LoggerFactory.getLogger(QuantityType.class);
 
     private static final long serialVersionUID = 8828949721938234629L;
@@ -108,7 +111,7 @@ public class QuantityType<T extends Quantity<T>> extends Number
     public QuantityType(Number value, Unit<T> unit) {
         // Avoid scientific notation for double
         BigDecimal bd = new BigDecimal(value.toString());
-        quantity = (Quantity<T>) Quantities.getQuantity(bd, unit);
+        quantity = Quantities.getQuantity(bd, unit);
     }
 
     /**
@@ -257,24 +260,80 @@ public class QuantityType<T extends Quantity<T>> extends Number
         return String.format(formatPattern, bd);
     }
 
+    /**
+     * Returns the value of the specified number as an {@code int}.
+     *
+     * @return the numeric value represented by this object after conversion
+     *         to type {@code int}.
+     */
     @Override
     public int intValue() {
         return quantity.getValue().intValue();
     }
 
+    /**
+     * Returns the value of the specified number as a {@code long}.
+     *
+     * @return the numeric value represented by this object after conversion
+     *         to type {@code long}.
+     */
     @Override
     public long longValue() {
         return quantity.getValue().longValue();
     }
 
+    /**
+     * Returns the value of the specified number as a {@code float}.
+     *
+     * @return the numeric value represented by this object after conversion
+     *         to type {@code float}.
+     */
     @Override
     public float floatValue() {
         return quantity.getValue().floatValue();
     }
 
+    /**
+     * Returns the value of the specified number as a {@code double}.
+     *
+     * @return the numeric value represented by this object after conversion
+     *         to type {@code double}.
+     */
     @Override
     public double doubleValue() {
         return quantity.getValue().doubleValue();
+    }
+
+    /**
+     * Returns the value of the specified number as a {@code byte}.
+     *
+     * <p>
+     * This implementation returns the result of {@link #intValue} cast
+     * to a {@code byte}.
+     *
+     * @return the numeric value represented by this object after conversion
+     *         to type {@code byte}.
+     * @since 1.1
+     */
+    @Override
+    public byte byteValue() {
+        return (byte) intValue();
+    }
+
+    /**
+     * Returns the value of the specified number as a {@code short}.
+     *
+     * <p>
+     * This implementation returns the result of {@link #intValue} cast
+     * to a {@code short}.
+     *
+     * @return the numeric value represented by this object after conversion
+     *         to type {@code short}.
+     * @since 1.1
+     */
+    @Override
+    public short shortValue() {
+        return (short) intValue();
     }
 
     @Override

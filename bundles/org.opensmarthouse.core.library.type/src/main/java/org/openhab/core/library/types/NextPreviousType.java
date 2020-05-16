@@ -13,18 +13,38 @@
 package org.openhab.core.library.types;
 
 import org.eclipse.jdt.annotation.NonNullByDefault;
+import org.eclipse.jdt.annotation.Nullable;
 import org.openhab.core.types.Command;
-import org.openhab.core.types.PrimitiveType;
 
 /**
  * This type is used by the {@link org.openhab.core.library.items.PlayerItem}.
  *
  * @author Alex Tugarev - Initial contribution
+ * @author Chris Jackson - Rewrite type system for OpenSmartHouse
  */
 @NonNullByDefault
-public enum NextPreviousType implements PrimitiveType, Command {
-    NEXT,
-    PREVIOUS;
+public class NextPreviousType extends AbstractBaseType implements Command {
+
+    private static String CONST_NEXT = "NEXT";
+    private static String CONST_PREVIOUS = "PREVIOUS";
+    public static NextPreviousType NEXT = new NextPreviousType(CONST_NEXT);
+    public static NextPreviousType PREVIOUS = new NextPreviousType(CONST_PREVIOUS);
+
+    private final String value;
+
+    private NextPreviousType(String value) {
+        this.value = value;
+    }
+
+    public static @Nullable NextPreviousType valueOf(String value) {
+        if (CONST_NEXT.equals(value)) {
+            return NEXT;
+        }
+        if (CONST_PREVIOUS.equals(value)) {
+            return PREVIOUS;
+        }
+        return null;
+    }
 
     @Override
     public String format(String pattern) {
@@ -33,11 +53,22 @@ public enum NextPreviousType implements PrimitiveType, Command {
 
     @Override
     public String toString() {
-        return toFullString();
+        return value;
     }
 
     @Override
     public String toFullString() {
-        return super.toString();
+        return value;
+    }
+
+    /**
+     * Gets the string name of this value
+     * 
+     * @return the name of the value
+     * @deprecated use {@link #toString()} instead
+     */
+    @Deprecated
+    public String name() {
+        return toString();
     }
 }

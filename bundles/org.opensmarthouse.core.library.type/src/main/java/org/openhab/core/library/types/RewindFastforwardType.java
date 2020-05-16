@@ -13,19 +13,39 @@
 package org.openhab.core.library.types;
 
 import org.eclipse.jdt.annotation.NonNullByDefault;
+import org.eclipse.jdt.annotation.Nullable;
 import org.openhab.core.types.Command;
-import org.openhab.core.types.PrimitiveType;
 import org.openhab.core.types.State;
 
 /**
  * This type is used by the {@link org.openhab.core.library.items.PlayerItem}.
  *
  * @author Alex Tugarev - Initial contribution
+ * @author Chris Jackson - Rewrite type system for OpenSmartHouse
  */
 @NonNullByDefault
-public enum RewindFastforwardType implements PrimitiveType, State, Command {
-    REWIND,
-    FASTFORWARD;
+public class RewindFastforwardType extends AbstractBaseType implements State, Command {
+
+    private static String CONST_REWIND = "REWIND";
+    private static String CONST_FASTFORWARD = "FASTFORWARD";
+    public static RewindFastforwardType REWIND = new RewindFastforwardType(CONST_REWIND);
+    public static RewindFastforwardType FASTFORWARD = new RewindFastforwardType(CONST_FASTFORWARD);
+
+    private final String value;
+
+    private RewindFastforwardType(String value) {
+        this.value = value;
+    }
+
+    public static @Nullable RewindFastforwardType valueOf(String value) {
+        if (CONST_REWIND.equals(value)) {
+            return REWIND;
+        }
+        if (CONST_FASTFORWARD.equals(value)) {
+            return FASTFORWARD;
+        }
+        return null;
+    }
 
     @Override
     public String format(String pattern) {
@@ -34,11 +54,22 @@ public enum RewindFastforwardType implements PrimitiveType, State, Command {
 
     @Override
     public String toString() {
-        return toFullString();
+        return value;
     }
 
     @Override
     public String toFullString() {
-        return super.toString();
+        return value;
+    }
+
+    /**
+     * Gets the string name of this value
+     * 
+     * @return the name of the value
+     * @deprecated use {@link #toString()} instead
+     */
+    @Deprecated
+    public String name() {
+        return toString();
     }
 }

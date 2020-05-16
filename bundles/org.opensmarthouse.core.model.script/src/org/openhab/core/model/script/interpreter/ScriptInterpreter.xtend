@@ -36,6 +36,7 @@ import org.eclipse.xtext.xbase.interpreter.IEvaluationContext
 import org.eclipse.xtext.xbase.interpreter.impl.XbaseInterpreter
 import org.eclipse.xtext.xbase.jvmmodel.IJvmModelAssociations
 import org.eclipse.xtext.xbase.typesystem.IBatchTypeResolver
+import org.openhab.core.library.types.NumberType
 
 /**
  * The script interpreter handles ESH specific script components, which are not known
@@ -116,10 +117,10 @@ public class ScriptInterpreter extends XbaseInterpreter {
     }
 
     override protected boolean eq(Object a, Object b) {
-        if (a instanceof Type && b instanceof Number) {
-            return NumberExtensions.operator_equals(a as Type, b as Number);
-        } else if (a instanceof Number && b instanceof Type) {
-            return NumberExtensions.operator_equals(b as Type, a as Number);
+        if (a instanceof Type && b instanceof NumberType) {
+            return NumberExtensions.operator_equals(a as Type, b as NumberType);
+        } else if (a instanceof NumberType && b instanceof Type) {
+            return NumberExtensions.operator_equals(b as Type, a as NumberType);
         } else {
             return super.eq(a, b);
         }

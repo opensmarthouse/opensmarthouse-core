@@ -16,15 +16,11 @@ import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.Arrays;
 import java.util.List;
-import java.util.SortedMap;
-import java.util.TreeMap;
 import java.util.stream.Collectors;
 
 import org.eclipse.jdt.annotation.NonNullByDefault;
 import org.eclipse.jdt.annotation.Nullable;
 import org.openhab.core.types.Command;
-import org.openhab.core.types.ComplexType;
-import org.openhab.core.types.PrimitiveType;
 import org.openhab.core.types.State;
 
 /**
@@ -33,9 +29,10 @@ import org.openhab.core.types.State;
  *
  * @author Kai Kreuzer - Initial contribution
  * @author Chris Jackson - Added fromRGB
+ * @author Chris Jackson - Rewrite type system for OpenSmartHouse
  */
 @NonNullByDefault
-public class HSBType extends PercentType implements ComplexType, State, Command {
+public class HSBType extends PercentType implements State, Command {
 
     private static final long serialVersionUID = 322902950356613226L;
 
@@ -185,15 +182,6 @@ public class HSBType extends PercentType implements ComplexType, State, Command 
         b = gammaCompress(b / max);
 
         return HSBType.fromRGB((int) (r * 255.0f + 0.5f), (int) (g * 255.0f + 0.5f), (int) (b * 255.0f + 0.5f));
-    }
-
-    @Override
-    public SortedMap<String, PrimitiveType> getConstituents() {
-        TreeMap<String, PrimitiveType> map = new TreeMap<>();
-        map.put(KEY_HUE, getHue());
-        map.put(KEY_SATURATION, getSaturation());
-        map.put(KEY_BRIGHTNESS, getBrightness());
-        return map;
     }
 
     public DecimalType getHue() {

@@ -29,7 +29,6 @@ import java.util.TimeZone;
 import org.eclipse.jdt.annotation.NonNullByDefault;
 import org.eclipse.jdt.annotation.Nullable;
 import org.openhab.core.types.Command;
-import org.openhab.core.types.PrimitiveType;
 import org.openhab.core.types.State;
 
 /**
@@ -40,9 +39,10 @@ import org.openhab.core.types.State;
  * @author Wouter Born - increase parsing and formatting precision
  * @author Laurent Garnier - added methods toLocaleZone and toZone
  * @author Gaël L'hopital - added ability to use second and milliseconds unix time
+ * @author Chris Jackson - Rewrite type system for OpenSmartHouse
  */
 @NonNullByDefault
-public class DateTimeType implements PrimitiveType, State, Command {
+public class DateTimeType extends AbstractBaseType implements State, Command {
 
     // external format patterns for output
     public static final String DATE_PATTERN = "yyyy-MM-dd'T'HH:mm:ss";

@@ -16,15 +16,11 @@ import java.math.BigDecimal;
 import java.util.Arrays;
 import java.util.Formatter;
 import java.util.List;
-import java.util.SortedMap;
-import java.util.TreeMap;
 import java.util.stream.Collectors;
 
 import org.eclipse.jdt.annotation.NonNullByDefault;
 import org.eclipse.jdt.annotation.Nullable;
 import org.openhab.core.types.Command;
-import org.openhab.core.types.ComplexType;
-import org.openhab.core.types.PrimitiveType;
 import org.openhab.core.types.State;
 
 /**
@@ -33,9 +29,10 @@ import org.openhab.core.types.State;
  *
  * @author Gaël L'hopital - Initial contribution
  * @author John Cocula - Initial contribution
+ * @author Chris Jackson - Rewrite type system for OpenSmartHouse
  */
 @NonNullByDefault
-public class PointType implements ComplexType, Command, State {
+public class PointType extends AbstractBaseType implements Command, State {
 
     // external format patterns for output
     public static final String LOCATION_PATTERN = "%2$s°N %3$s°E %1$sm";
@@ -162,7 +159,7 @@ public class PointType implements ComplexType, Command, State {
             formatPattern = LOCATION_PATTERN;
         }
 
-        return String.format(formatPattern, getConstituents().values().toArray());
+        return String.format(formatPattern, "[" + getLatitude() + "," + getLongitude() + "," + getAltitude() + "]");
     }
 
     public static PointType valueOf(String value) {
@@ -185,15 +182,6 @@ public class PointType implements ComplexType, Command, State {
         }
 
         return sb.toString();
-    }
-
-    @Override
-    public SortedMap<String, PrimitiveType> getConstituents() {
-        SortedMap<String, PrimitiveType> result = new TreeMap<>();
-        result.put(KEY_LATITUDE, getLatitude());
-        result.put(KEY_LONGITUDE, getLongitude());
-        result.put(KEY_ALTITUDE, getAltitude());
-        return result;
     }
 
     /**

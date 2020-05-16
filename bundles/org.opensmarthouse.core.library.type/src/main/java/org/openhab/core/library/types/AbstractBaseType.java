@@ -10,16 +10,17 @@
  *
  * SPDX-License-Identifier: EPL-2.0
  */
-package org.openhab.core.types;
+package org.openhab.core.library.types;
 
-import org.eclipse.jdt.annotation.NonNullByDefault;
+import org.openhab.core.types.Type;
 
 /**
- * A primitive type consists of a single value like a string, a number, etc.
+ * This class provides the base functionality for the OpenSmartHouse type system. It provides the core functionality
+ * that is supported by all {@link Type}s.
+ * 
+ * @author Chris Jackson - Initial Contribution to OpenSmartHouse
  *
- * @author Kai Kreuzer - Initial contribution
  */
-@NonNullByDefault
-public interface PrimitiveType extends Type {
+public abstract class AbstractBaseType implements Type {
 
 }

@@ -29,9 +29,10 @@ import org.openhab.core.types.State;
  *
  * @author Thomas Eichstaedt-Engelen - Initial contribution
  * @author Gaël L'hopital - port to Eclipse SmartHome
+ * @author Chris Jackson - Rewrite type system for OpenSmartHouse
  */
 @NonNullByDefault
-public class StringListType implements Command, State {
+public class StringListType extends AbstractBaseType implements Command, State {
 
     protected final List<String> typeDetails;
 

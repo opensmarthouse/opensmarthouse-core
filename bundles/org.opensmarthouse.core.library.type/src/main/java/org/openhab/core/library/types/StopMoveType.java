@@ -13,17 +13,37 @@
 package org.openhab.core.library.types;
 
 import org.eclipse.jdt.annotation.NonNullByDefault;
+import org.eclipse.jdt.annotation.Nullable;
 import org.openhab.core.types.Command;
-import org.openhab.core.types.PrimitiveType;
 
 /**
  *
  * @author Kai Kreuzer - Initial contribution
+ * @author Chris Jackson - Rewrite type system for OpenSmartHouse
  */
 @NonNullByDefault
-public enum StopMoveType implements PrimitiveType, Command {
-    STOP,
-    MOVE;
+public class StopMoveType extends AbstractBaseType implements Command {
+
+    private static String CONST_STOP = "STOP";
+    private static String CONST_MOVE = "MOVE";
+    public static StopMoveType STOP = new StopMoveType(CONST_STOP);
+    public static StopMoveType MOVE = new StopMoveType(CONST_MOVE);
+
+    private final String value;
+
+    private StopMoveType(String value) {
+        this.value = value;
+    }
+
+    public static @Nullable StopMoveType valueOf(String value) {
+        if (CONST_STOP.equals(value)) {
+            return STOP;
+        }
+        if (CONST_MOVE.equals(value)) {
+            return MOVE;
+        }
+        return null;
+    }
 
     @Override
     public String format(String pattern) {
@@ -32,11 +52,22 @@ public enum StopMoveType implements PrimitiveType, Command {
 
     @Override
     public String toString() {
-        return toFullString();
+        return value;
     }
 
     @Override
     public String toFullString() {
-        return super.toString();
+        return value;
+    }
+
+    /**
+     * Gets the string name of this value
+     * 
+     * @return the name of the value
+     * @deprecated use {@link #toString()} instead
+     */
+    @Deprecated
+    public String name() {
+        return toString();
     }
 }

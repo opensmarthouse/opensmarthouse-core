@@ -17,17 +17,36 @@ import java.math.BigDecimal;
 import org.eclipse.jdt.annotation.NonNullByDefault;
 import org.eclipse.jdt.annotation.Nullable;
 import org.openhab.core.types.Command;
-import org.openhab.core.types.PrimitiveType;
 import org.openhab.core.types.State;
 
 /**
  *
  * @author Kai Kreuzer - Initial contribution
+ * @author Chris Jackson - Rewrite type system for OpenSmartHouse
  */
 @NonNullByDefault
-public enum UpDownType implements PrimitiveType, State, Command {
-    UP,
-    DOWN;
+public class UpDownType extends AbstractBaseType implements State, Command {
+
+    private static String CONST_UP = "UP";
+    private static String CONST_DOWN = "DOWN";
+    public static UpDownType UP = new UpDownType(CONST_UP);
+    public static UpDownType DOWN = new UpDownType(CONST_DOWN);
+
+    private final String value;
+
+    private UpDownType(String value) {
+        this.value = value;
+    }
+
+    public static @Nullable UpDownType valueOf(String value) {
+        if (CONST_UP.equals(value)) {
+            return UP;
+        }
+        if (CONST_DOWN.equals(value)) {
+            return DOWN;
+        }
+        return null;
+    }
 
     @Override
     public String format(String pattern) {
@@ -36,12 +55,12 @@ public enum UpDownType implements PrimitiveType, State, Command {
 
     @Override
     public String toString() {
-        return toFullString();
+        return value;
     }
 
     @Override
     public String toFullString() {
-        return super.toString();
+        return value;
     }
 
     @Override
@@ -53,5 +72,16 @@ public enum UpDownType implements PrimitiveType, State, Command {
         } else {
             return State.super.as(target);
         }
+    }
+
+    /**
+     * Gets the string name of this value
+     * 
+     * @return the name of the value
+     * @deprecated use {@link #toString()} instead
+     */
+    @Deprecated
+    public String name() {
+        return toString();
     }
 }

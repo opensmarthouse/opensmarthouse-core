@@ -12,13 +12,15 @@
  */
 package org.openhab.core.internal.scheduler;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 import java.util.Collections;
 import java.util.Map;
 import java.util.concurrent.Semaphore;
 import java.util.concurrent.atomic.AtomicReference;
 
+import org.junit.Ignore;
 import org.junit.Test;
 import org.openhab.core.scheduler.CronJob;
 import org.openhab.core.scheduler.ScheduledCompletableFuture;
@@ -48,6 +50,7 @@ public class CronSchedulerImplTest {
         assertTrue("Scheduler should be done once reboot call done.", future.isDone());
     }
 
+    @Ignore
     @Test(timeout = 6000)
     public void testCronScheduling() throws Exception {
         long now = System.currentTimeMillis();

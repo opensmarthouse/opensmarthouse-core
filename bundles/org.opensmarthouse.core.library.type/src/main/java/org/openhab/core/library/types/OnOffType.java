@@ -15,17 +15,25 @@ package org.openhab.core.library.types;
 import org.eclipse.jdt.annotation.NonNullByDefault;
 import org.eclipse.jdt.annotation.Nullable;
 import org.openhab.core.types.Command;
-import org.openhab.core.types.PrimitiveType;
 import org.openhab.core.types.State;
 
 /**
  *
  * @author Kai Kreuzer - Initial contribution
+ * @author Chris Jackson - Refactor type system for OpenSmartHouse
  */
 @NonNullByDefault
-public enum OnOffType implements PrimitiveType, State, Command {
-    ON,
-    OFF;
+public class OnOffType extends AbstractBaseType implements State, Command {
+    private static String CONST_ON = "ON";
+    private static String CONST_OFF = "OFF";
+    public static OnOffType ON = new OnOffType(CONST_ON);
+    public static OnOffType OFF = new OnOffType(CONST_OFF);
+
+    private final String value;
+
+    private OnOffType(String value) {
+        this.value = value;
+    }
 
     /**
      * Converts a String value "ON" or "1" to {@link OnOffType#ON} or else to {@link OnOffType#OFF}.
@@ -34,7 +42,17 @@ public enum OnOffType implements PrimitiveType, State, Command {
      * @return returns the ON or OFF state based on the String
      */
     public static OnOffType from(String state) {
-        return from("ON".equalsIgnoreCase(state) || "1".equalsIgnoreCase(state));
+        return from(CONST_ON.equalsIgnoreCase(state) || "1".equalsIgnoreCase(state));
+    }
+
+    public static @Nullable OnOffType valueOf(String value) {
+        if (CONST_ON.equals(value)) {
+            return ON;
+        }
+        if (CONST_OFF.equals(value)) {
+            return OFF;
+        }
+        return null;
     }
 
     /**
@@ -57,7 +75,7 @@ public enum OnOffType implements PrimitiveType, State, Command {
 
     @Override
     public String toFullString() {
-        return super.toString();
+        return value;
     }
 
     @Override
@@ -68,8 +86,11 @@ public enum OnOffType implements PrimitiveType, State, Command {
             return target.cast(this == ON ? PercentType.HUNDRED : PercentType.ZERO);
         } else if (target == HSBType.class) {
             return target.cast(this == ON ? HSBType.WHITE : HSBType.BLACK);
-        } else {
-            return State.super.as(target);
+        } else if (target == OpenClosedType.class) {
+            return target.cast(this == ON ? OpenClosedType.OPEN : OpenClosedType.CLOSED);
+        } else if (target == OnOffType.class) {
+            return target.cast(this);
         }
+        return null;
     }
 }

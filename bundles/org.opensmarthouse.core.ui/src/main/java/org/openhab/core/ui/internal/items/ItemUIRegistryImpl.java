@@ -57,6 +57,7 @@ import org.openhab.core.library.items.SwitchItem;
 import org.openhab.core.library.types.DateTimeType;
 import org.openhab.core.library.types.DecimalType;
 import org.openhab.core.library.types.NextPreviousType;
+import org.openhab.core.library.types.NumberType;
 import org.openhab.core.library.types.OnOffType;
 import org.openhab.core.library.types.PercentType;
 import org.openhab.core.library.types.PlayPauseType;
@@ -102,6 +103,7 @@ import org.slf4j.LoggerFactory;
  * @author Chris Jackson - Initial contribution
  * @author Stefan Triller - Method to convert a state into something a sitemap entity can understand
  * @author Erdoan Hadzhiyusein - Adapted the class to work with the new DateTimeType
+ * @author Chris Jackson - change enum.name() to emum.toString()
  */
 @NonNullByDefault
 @Component
@@ -284,16 +286,16 @@ public class ItemUIRegistryImpl implements ItemUIRegistry {
         final List<Mapping> mappings = playerItemSwitch.getMappings();
         Mapping commandMapping;
         mappings.add(commandMapping = SitemapFactory.eINSTANCE.createMapping());
-        commandMapping.setCmd(NextPreviousType.PREVIOUS.name());
+        commandMapping.setCmd(NextPreviousType.PREVIOUS.toString());
         commandMapping.setLabel("<<");
         mappings.add(commandMapping = SitemapFactory.eINSTANCE.createMapping());
-        commandMapping.setCmd(PlayPauseType.PAUSE.name());
+        commandMapping.setCmd(PlayPauseType.PAUSE.toString());
         commandMapping.setLabel("||");
         mappings.add(commandMapping = SitemapFactory.eINSTANCE.createMapping());
-        commandMapping.setCmd(PlayPauseType.PLAY.name());
+        commandMapping.setCmd(PlayPauseType.PLAY.toString());
         commandMapping.setLabel(">");
         mappings.add(commandMapping = SitemapFactory.eINSTANCE.createMapping());
-        commandMapping.setCmd(NextPreviousType.NEXT.name());
+        commandMapping.setCmd(NextPreviousType.NEXT.toString());
         commandMapping.setLabel(">>");
         return playerItemSwitch;
     }
@@ -338,7 +340,7 @@ public class ItemUIRegistryImpl implements ItemUIRegistry {
                 state = item.getState();
 
                 if (formatPattern.contains("%d")) {
-                    if (!(state instanceof Number)) {
+                    if (!(state instanceof NumberType)) {
                         // States which do not provide a Number will be converted to DecimalType.
                         // e.g.: GroupItem can provide a count of items matching the active state
                         // for some group functions.

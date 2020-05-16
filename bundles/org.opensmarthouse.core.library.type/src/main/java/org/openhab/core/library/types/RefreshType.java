@@ -10,21 +10,19 @@
  *
  * SPDX-License-Identifier: EPL-2.0
  */
-package org.openhab.core.types;
+package org.openhab.core.library.types;
 
 import org.eclipse.jdt.annotation.NonNullByDefault;
 import org.eclipse.jdt.annotation.Nullable;
+import org.openhab.core.types.Command;
 
 /**
  *
  * @author Oliver Libutzki - Initial contribution
  * @author Chris Jackson - Rewrite type system for OpenSmartHouse
- * 
- * @deprecated For OpenSmartHouse use {@link org.openhab.core.library.types.RefreshType} instead
  */
-@Deprecated
 @NonNullByDefault
-public class RefreshType implements Command {
+public class RefreshType extends AbstractBaseType implements Command {
     private static String CONST_REFRESH = "REFRESH";
     public static RefreshType REFRESH = new RefreshType(CONST_REFRESH);
 
@@ -54,5 +52,16 @@ public class RefreshType implements Command {
     @Override
     public String toFullString() {
         return value;
+    }
+
+    /**
+     * Gets the string name of this value
+     * 
+     * @return the name of the value
+     * @deprecated use {@link #toString()} instead
+     */
+    @Deprecated
+    public String name() {
+        return toString();
     }
 }

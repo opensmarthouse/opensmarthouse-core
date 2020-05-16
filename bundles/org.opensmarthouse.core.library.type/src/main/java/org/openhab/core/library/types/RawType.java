@@ -17,7 +17,6 @@ import java.util.Base64;
 
 import org.eclipse.jdt.annotation.NonNullByDefault;
 import org.eclipse.jdt.annotation.Nullable;
-import org.openhab.core.types.PrimitiveType;
 import org.openhab.core.types.State;
 
 /**
@@ -26,9 +25,10 @@ import org.openhab.core.types.State;
  *
  * @author Kai Kreuzer - Initial contribution
  * @author Laurent Garnier - add MIME type
+ * @author Chris Jackson - Rewrite type system for OpenSmartHouse
  */
 @NonNullByDefault
-public class RawType implements PrimitiveType, State {
+public class RawType extends AbstractBaseType implements State {
 
     public static final String DEFAULT_MIME_TYPE = "application/octet-stream";
 
