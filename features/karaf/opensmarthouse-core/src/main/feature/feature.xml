@@ -309,7 +309,7 @@
     </feature>
 
     <feature name="opensmarthouse-core-io-rest" version="${project.version}">
-        <feature dependency="true">opensmarthouse.tp-jax-rs-whiteboard</feature>
+        <feature>opensmarthouse.tp-jax-rs-whiteboard</feature>
         <feature dependency="true">opensmarthouse.tp-gson</feature>
         <feature dependency="true">opensmarthouse.tp-commons-io</feature>
         <feature dependency="true">opensmarthouse.tp-commons-lang</feature>
