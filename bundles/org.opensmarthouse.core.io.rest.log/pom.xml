@@ -11,7 +11,7 @@
 
   <artifactId>org.opensmarthouse.core.io.rest.log</artifactId>
 
-  <name>OpenSmartHouse Core | Bundles | REST UI Logging Module</name>
+  <name>OpenSmartHouse Core | Bundles | REST | Logging</name>
 
   <dependencies>
     <dependency>

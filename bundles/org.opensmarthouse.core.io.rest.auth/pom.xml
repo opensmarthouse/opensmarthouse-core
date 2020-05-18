@@ -12,7 +12,7 @@
 
   <artifactId>org.opensmarthouse.core.io.rest.auth</artifactId>
 
-  <name>OpenSmartHouse Core | Bundles | REST Authentication</name>
+  <name>OpenSmartHouse Core | Bundles | REST | Auth</name>
 
   <dependencies>
     <dependency>

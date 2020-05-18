@@ -18,6 +18,7 @@ import static org.mockito.Mockito.when;
 
 import java.util.function.Function;
 import java.util.function.Supplier;
+
 import org.eclipse.jdt.annotation.Nullable;
 import org.mockito.invocation.InvocationOnMock;
 import org.openhab.core.test.mockito.MapArgument;
@@ -80,8 +81,8 @@ public class ChannelBuilderFactoryDelegate implements ChannelBuilderFactory {
         builder(builder, () -> builder.withAutoUpdatePolicy(any()), channel::getAutoUpdatePolicy, new MapArgument<>());
     }
 
-
-    private <T, X> void builder(T mock, Supplier<T> builderCall, Supplier<X> getterCall, Function<InvocationOnMock, X> returnValue) {
+    private <T, X> void builder(T mock, Supplier<T> builderCall, Supplier<X> getterCall,
+            Function<InvocationOnMock, X> returnValue) {
         when(builderCall.get()).thenAnswer(new MapBuilderToMock<>(mock, getterCall, returnValue));
     }
 

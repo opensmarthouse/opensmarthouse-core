@@ -35,10 +35,6 @@
       <artifactId>uom-se</artifactId>
     </dependency>
     <dependency>
-      <groupId>commons-lang</groupId>
-      <artifactId>commons-lang</artifactId>
-    </dependency>
-    <dependency>
       <groupId>org.eclipse.orbit.bundles</groupId>
       <artifactId>com.google.gson</artifactId>
     </dependency>

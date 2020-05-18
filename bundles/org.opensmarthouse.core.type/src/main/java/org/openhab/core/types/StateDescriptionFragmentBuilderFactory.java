@@ -12,11 +12,14 @@
  */
 package org.openhab.core.types;
 
+import org.eclipse.jdt.annotation.NonNullByDefault;
+
 /**
  * Root entry point for building state description builders.
  *
  * @author Łukasz Dywicki - Initial contribution
  */
+@NonNullByDefault
 public interface StateDescriptionFragmentBuilderFactory {
 
     /**

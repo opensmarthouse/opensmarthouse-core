@@ -15,7 +15,6 @@ package org.openhab.core.items.dto;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.apache.commons.lang.StringUtils;
 import org.eclipse.jdt.annotation.NonNullByDefault;
 import org.eclipse.jdt.annotation.Nullable;
 import org.openhab.core.items.GroupFunction;
@@ -86,17 +85,17 @@ public class ItemDTOMapper {
     public static GroupFunction mapFunction(@Nullable Item baseItem, GroupFunctionDTO function) {
         List<State> args = parseStates(baseItem, function.params);
 
-        //return GROUP_FUNCTION_HELPER.createGroupFunction(function, args, getDimension(baseItem));
+        // return GROUP_FUNCTION_HELPER.createGroupFunction(function, args, getDimension(baseItem));
         throw new AbstractMethodError("This method has been moved!");
     }
-//
-//    private static @Nullable Class<? extends Quantity<?>> getDimension(@Nullable Item baseItem) {
-//        if (baseItem instanceof NumberItem) {
-//            return ((NumberItem) baseItem).getDimension();
-//        }
-//
-//        return null;
-//    }
+    //
+    // private static @Nullable Class<? extends Quantity<?>> getDimension(@Nullable Item baseItem) {
+    // if (baseItem instanceof NumberItem) {
+    // return ((NumberItem) baseItem).getDimension();
+    // }
+    //
+    // return null;
+    // }
 
     private static List<State> parseStates(@Nullable Item baseItem, String @Nullable [] params) {
         List<State> states = new ArrayList<>();

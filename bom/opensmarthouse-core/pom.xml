@@ -531,12 +531,6 @@
       <version>${project.version}</version>
       <scope>compile</scope>
     </dependency>
-    <dependency>
-      <groupId>org.opensmarthouse.core.bundles</groupId>
-      <artifactId>org.opensmarthouse.core.storage.mapdb</artifactId>
-      <version>${project.version}</version>
-      <scope>compile</scope>
-    </dependency>
   </dependencies>
 
 </project>

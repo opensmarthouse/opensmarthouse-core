@@ -12,11 +12,15 @@
  */
 package org.openhab.core.io.rest.sitemap.internal;
 
-import static org.hamcrest.CoreMatchers.*;
+import static org.hamcrest.CoreMatchers.instanceOf;
+import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.CoreMatchers.notNullValue;
+import static org.hamcrest.CoreMatchers.nullValue;
 import static org.hamcrest.collection.IsCollectionWithSize.hasSize;
 import static org.hamcrest.collection.IsEmptyCollection.empty;
 import static org.junit.Assert.assertThat;
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 import static org.mockito.MockitoAnnotations.initMocks;
 
 import java.math.BigDecimal;
@@ -37,7 +41,9 @@ import org.eclipse.emf.ecore.EClass;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
+import org.mockito.Mockito;
 import org.openhab.core.io.rest.LocaleService;
+import org.openhab.core.io.rest.sitemap.SitemapSubscriptionService;
 import org.openhab.core.items.GenericItem;
 import org.openhab.core.items.ItemNotFoundException;
 import org.openhab.core.library.types.DecimalType;
@@ -51,7 +57,9 @@ import org.openhab.core.model.sitemap.sitemap.Widget;
 import org.openhab.core.test.java.JavaTest;
 import org.openhab.core.types.Command;
 import org.openhab.core.types.State;
+import org.openhab.core.types.StateDescriptionFragmentBuilderFactory;
 import org.openhab.core.ui.items.ItemUIRegistry;
+import org.osgi.framework.BundleContext;
 
 /**
  * Test aspects of the {@link SitemapResource}.
@@ -79,23 +87,14 @@ public class SitemapResourceTest extends JavaTest {
 
     private SitemapResource sitemapResource;
 
-    @Mock
-    private UriInfo uriInfo;
-
-    @Mock
-    private HttpServletRequest request;
-
-    @Mock
-    private SitemapProvider sitemapProvider;
-
-    @Mock
-    private Sitemap defaultSitemap;
-
-    @Mock
-    private ItemUIRegistry itemUIRegistry;
-
-    @Mock
-    private HttpHeaders headers;
+    private @Mock HttpHeaders headers;
+    private @Mock Sitemap defaultSitemap;
+    private @Mock ItemUIRegistry itemUIRegistry;
+    private @Mock LocaleService localeService;
+    private @Mock HttpServletRequest request;
+    private @Mock SitemapProvider sitemapProvider;
+    private @Mock SitemapSubscriptionService subscriptions;
+    private @Mock UriInfo uriInfo;
 
     private GenericItem item;
     private GenericItem visibilityRuleItem;
@@ -107,7 +106,9 @@ public class SitemapResourceTest extends JavaTest {
     @Before
     public void setup() throws Exception {
         initMocks(this);
-        sitemapResource = new SitemapResource();
+
+        sitemapResource = new SitemapResource(Mockito.mock(BundleContext.class), itemUIRegistry, localeService,
+                subscriptions, Mockito.mock(StateDescriptionFragmentBuilderFactory.class));
 
         when(uriInfo.getAbsolutePathBuilder()).thenReturn(UriBuilder.fromPath(SITEMAP_PATH));
         when(uriInfo.getBaseUriBuilder()).thenReturn(UriBuilder.fromPath(SITEMAP_PATH));
@@ -121,9 +122,7 @@ public class SitemapResourceTest extends JavaTest {
         labelColorItem = new TestItem(LABEL_COLOR_ITEM_NAME);
         valueColorItem = new TestItem(VALUE_COLOR_ITEM_NAME);
 
-        LocaleService localeService = mock(LocaleService.class);
         when(localeService.getLocale(null)).thenReturn(Locale.US);
-        sitemapResource.setLocaleService(localeService);
 
         configureSitemapProviderMock();
         configureSitemapMock();
@@ -131,7 +130,6 @@ public class SitemapResourceTest extends JavaTest {
 
         widgets = initSitemapWidgets();
         configureItemUIRegistry(PercentType.HUNDRED, OnOffType.ON);
-        sitemapResource.setItemUIRegistry(itemUIRegistry);
 
         // Disable long polling
         when(headers.getRequestHeader(HTTP_HEADER_X_ATMOSPHERE_TRANSPORT)).thenReturn(null);

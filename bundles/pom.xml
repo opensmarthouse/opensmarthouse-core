@@ -134,7 +134,6 @@
     <module>org.opensmarthouse.core.service.core</module>
     <module>org.opensmarthouse.core.storage</module>
     <module>org.opensmarthouse.core.storage.json</module>
-    <module>org.opensmarthouse.core.storage.mapdb</module>
     <module>org.opensmarthouse.core.test</module>
     <module>org.opensmarthouse.core.test.magic</module>
     <module>org.opensmarthouse.core.thing</module>

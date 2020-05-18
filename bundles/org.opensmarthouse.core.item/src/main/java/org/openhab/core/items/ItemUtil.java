@@ -14,7 +14,6 @@ package org.openhab.core.items;
 
 import java.util.Objects;
 
-import org.apache.commons.lang.StringUtils;
 import org.eclipse.jdt.annotation.NonNullByDefault;
 import org.eclipse.jdt.annotation.Nullable;
 import org.openhab.core.common.osgi.BundleResolver;
@@ -123,7 +122,8 @@ public class ItemUtil {
      * @deprecated use DS service {@link ItemStateConverter#convertToAcceptedState(State, Item)} instead.
      */
     @Deprecated
-    public static @Nullable State convertToAcceptedState(BundleResolver bundleResolver, @Nullable State state, Item item) {
+    public static @Nullable State convertToAcceptedState(BundleResolver bundleResolver, @Nullable State state,
+            Item item) {
         BundleContext bundleContext = bundleResolver.resolveBundle(ItemUtil.class).getBundleContext();
         ServiceReference<ItemStateConverter> service = bundleContext.getServiceReference(ItemStateConverter.class);
         if (service == null) {

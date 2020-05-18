@@ -28,10 +28,6 @@
         <feature dependency="true">http</feature>
     </feature>
 
-    <feature name="opensmarthouse.tp-commons-lang" description="Runtime - Commons Lang" version="${project.version}">
-        <bundle dependency="true">mvn:commons-lang/commons-lang/2.6</bundle>
-    </feature>
-
     <feature name="opensmarthouse.tp-commons-io" description="Runtime - Commons IO" version="${project.version}">
         <bundle dependency="true">mvn:commons-io/commons-io/2.2</bundle>
     </feature>
@@ -55,7 +51,6 @@
         <!-- Apache Commons -->
         <bundle dependency="true">mvn:commons-codec/commons-codec/1.6</bundle>
         <bundle dependency="true">mvn:commons-io/commons-io/2.2</bundle>
-        <bundle dependency="true">mvn:commons-lang/commons-lang/2.6</bundle>
 
         <!-- Measurement -->
         <bundle dependency="true">mvn:javax.measure/unit-api/1.0</bundle>
@@ -219,12 +214,6 @@
 
         <feature dependency="true">opensmarthouse.tp-gson</feature>
         <feature dependency="true">opensmarthouse.tp-xtext</feature>
-    </feature>
-
-    <feature name="opensmarthouse.tp-mapdb" description="MapDB" version="${project.version}">
-        <capability>opensmarthouse.tp;feature=mapdb;version=1.0.9</capability>
-
-        <bundle dependency="true">mvn:org.mapdb/mapdb/1.0.9</bundle>
     </feature>
 
     <feature name="opensmarthouse.tp-serial-javacomm" version="${project.version}">

@@ -11,7 +11,7 @@
 
   <artifactId>org.opensmarthouse.core.io.rest.voice</artifactId>
 
-  <name>OpenSmartHouse Core | Bundles | Voice REST Interface</name>
+  <name>OpenSmartHouse Core | Bundles | REST | Voice</name>
 
   <dependencies>
     <dependency>

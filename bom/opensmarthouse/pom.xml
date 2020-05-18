@@ -632,11 +632,6 @@
         <artifactId>org.opensmarthouse.core.storage.json</artifactId>
         <version>${project.version}</version>
       </dependency>
-      <dependency>
-        <groupId>org.opensmarthouse.core.bundles</groupId>
-        <artifactId>org.opensmarthouse.core.storage.mapdb</artifactId>
-        <version>${project.version}</version>
-      </dependency>
 
       <!-- Assembly & Features -->
       <dependency>

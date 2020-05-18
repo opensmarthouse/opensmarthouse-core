@@ -11,7 +11,7 @@
 
   <artifactId>org.opensmarthouse.core.io.rest.audio</artifactId>
 
-  <name>OpenSmartHouse Core | Bundles | Audio REST Interface</name>
+  <name>OpenSmartHouse Core | Bundles | REST | Audio</name>
 
   <dependencies>
     <dependency>

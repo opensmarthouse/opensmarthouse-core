@@ -11,7 +11,7 @@
 
   <artifactId>org.opensmarthouse.core.io.rest.core</artifactId>
 
-  <name>OpenSmartHouse Core | Bundles | REST Interface Core</name>
+  <name>OpenSmartHouse Core | Bundles | REST | Core</name>
 
   <dependencies>
     <dependency>

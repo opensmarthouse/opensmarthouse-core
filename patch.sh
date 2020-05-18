@@ -68,6 +68,9 @@ refactor $1 "bundles/org.openhab.core/src/test/java/org/openhab/core/library/dim
 refactor $1 "bundles/org.openhab.core/src/test/java/org/openhab/core/types/CommandDescriptionBuilderTest.java"                   "bundles/org.opensmarthouse.core.type.core/src/test/java/org/openhab/core/types/CommandDescriptionBuilderTest.java"
 refactor $1 "bundles/org.openhab.core/src/test/java/org/openhab/core/types/StateDescriptionFragmentBuilderTest.java"             "bundles/org.opensmarthouse.core.type.core/src/test/java/org/openhab/core/types/StateDescriptionFragmentBuilderTest.java"
 
+refactor $1 "bundles/org.openhab.core.config.core/src/main/java/org/openhab/core/config/core/internal/ConfigMapper.java"         "bundles/org.opensmarthouse.core.config/src/main/java/org/openhab/core/config/core/ConfigMapper.java"
+
+refactor $1 "bundles/org.openhab.core.id/src/main/java/org/openhab/core/id/internal/UUIDResource.java"                           "bundles/org.opensmarthouse.core.io.rest.id/src/main/java/org/openhab/core/id/internal/UUIDResource.java"
 
 
 # Patch and refactored bundles - migrating packages to new bundles
@@ -109,6 +112,12 @@ refactor $1 "bundles/org.openhab.core/src/main/java/org/openhab/core/internal/co
 refactor $1 "bundles/org.openhab.core/src/test/java/org/openhab/core/internal/common/"                                    "bundles/org.opensmarthouse.core.common/src/test/java/org/openhab/core/internal/common/"
 
 # Config relocation
+refactor $1 "bundles/org.openhab.core.config.core/src/main/java/org/openhab/core/config/core/internal/"                   "bundles/org.opensmarthouse.core.config.core/src/main/java/org/openhab/core/config/core/internal/"
+refactor $1 "bundles/org.openhab.core.config.core/src/test/java/org/openhab/core/config/core/internal/"                   "bundles/org.opensmarthouse.core.config.core/src/test/java/org/openhab/core/config/core/internal/"
+
+refactor $1 "bundles/org.openhab.core.config.core/src/main/java/org/openhab/core/config/core/"                            "bundles/org.opensmarthouse.core.config/src/main/java/org/openhab/core/config/core/"
+refactor $1 "bundles/org.openhab.core.config.core/src/test/java/org/openhab/core/config/core/"                            "bundles/org.opensmarthouse.core.config/src/test/java/org/openhab/core/config/core/"
+
 refactor $1 "bundles/org.openhab.core.config/src/main/java/org/openhab/core/config/internal/"                             "bundles/org.opensmarthouse.core.config.core/src/main/java/org/openhab/core/config/internal/"
 refactor $1 "bundles/org.openhab.core.config/src/test/java/org/openhab/core/config/internal/"                             "bundles/org.opensmarthouse.core.config.core/src/test/java/org/openhab/core/config/internal/"
 

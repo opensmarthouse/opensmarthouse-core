@@ -20,7 +20,7 @@ package org.openhab.core.config.core;
 public class ConfigConstants {
 
     /** The program argument name for setting the user data directory path */
-    public static final String USERDATA_DIR_PROG_ARGUMENT = "openhab.userdata";
+    public static final String USERDATA_DIR_PROG_ARGUMENT = "opensmarthouse.userdata";
 
     /** The program argument name for setting the main config directory path */
     public static final String CONFIG_DIR_PROG_ARGUMENT = "openhab.conf";
