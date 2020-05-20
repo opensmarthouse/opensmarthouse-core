@@ -20,6 +20,7 @@ import org.eclipse.jdt.annotation.Nullable;
 import org.openhab.core.io.transport.serial.SerialPortIdentifier;
 import org.openhab.core.io.transport.serial.SerialPortManager;
 import org.openhab.core.io.transport.serial.SerialPortProvider;
+import org.openhab.core.io.transport.serial.SerialPortRegistry;
 import org.osgi.service.component.annotations.Activate;
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Reference;

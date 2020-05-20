@@ -91,6 +91,7 @@
     <module>org.opensmarthouse.core.io.transport.mdns</module>
     <module>org.opensmarthouse.core.io.transport.mqtt</module>
     <module>org.opensmarthouse.core.io.transport.serial</module>
+    <module>org.opensmarthouse.core.io.transport.serial.console</module>
     <module>org.opensmarthouse.core.io.transport.serial.javacomm</module>
     <module>org.opensmarthouse.core.io.transport.serial.rxtx</module>
     <module>org.opensmarthouse.core.io.transport.serial.rxtx.rfc2217</module>

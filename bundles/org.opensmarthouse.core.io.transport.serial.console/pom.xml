@@ -8,9 +8,9 @@
     <version>1.0.0-SNAPSHOT</version>
   </parent>
 
-  <artifactId>org.opensmarthouse.core.io.transport.serial.rxtx</artifactId>
+  <artifactId>org.opensmarthouse.core.io.transport.serial.console</artifactId>
 
-  <name>OpenSmartHouse Core | Bundles | Transport | Serial | RXTX</name>
+  <name>OpenSmartHouse Core | Bundles | Transport | Serial | Console</name>
 
   <dependencies>
     <dependency>
@@ -19,9 +19,11 @@
       <version>${project.version}</version>
     </dependency>
     <dependency>
-      <groupId>com.neuronrobotics</groupId>
-      <artifactId>nrjavaserial</artifactId>
+      <groupId>org.opensmarthouse.core.bundles</groupId>
+      <artifactId>org.opensmarthouse.core.io.console</artifactId>
+      <version>${project.version}</version>
     </dependency>
+
   </dependencies>
 
 </project>

@@ -10,13 +10,20 @@
 
   <artifactId>org.opensmarthouse.core.io.transport.serial</artifactId>
 
-  <name>OpenSmartHouse Core | Bundles | Serial Transport</name>
+  <name>OpenSmartHouse Core | Bundles | Transport | Serial | API</name>
 
   <dependencies>
     <dependency>
-      <groupId>org.opensmarthouse.core.bundles</groupId>
-      <artifactId>org.opensmarthouse.core.io.console</artifactId>
-      <version>${project.version}</version>
+      <groupId>org.slf4j</groupId>
+      <artifactId>slf4j-api</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.eclipse.jdt</groupId>
+      <artifactId>org.eclipse.jdt.annotation</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.osgi</groupId>
+      <artifactId>osgi.cmpn</artifactId>
     </dependency>
   </dependencies>
 

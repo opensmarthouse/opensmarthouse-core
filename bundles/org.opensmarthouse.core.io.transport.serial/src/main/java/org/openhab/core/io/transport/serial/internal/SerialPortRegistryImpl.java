@@ -22,6 +22,7 @@ import java.util.stream.Collectors;
 import org.eclipse.jdt.annotation.NonNullByDefault;
 import org.openhab.core.io.transport.serial.ProtocolType.PathType;
 import org.openhab.core.io.transport.serial.SerialPortProvider;
+import org.openhab.core.io.transport.serial.SerialPortRegistry;
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Reference;
 import org.osgi.service.component.annotations.ReferenceCardinality;
@@ -33,14 +34,15 @@ import org.osgi.service.component.annotations.ReferencePolicyOption;
  *
  * @author Matthias Steigenberger - Initial contribution
  * @author Markus Rathgeb - Respect the possible failure of port identifier creation
+ * @author Chris Jackson - Split out interface an implementation
  */
-@Component(service = SerialPortRegistry.class)
+@Component(service = SerialPortRegistryImpl.class)
 @NonNullByDefault
-public class SerialPortRegistry {
+public class SerialPortRegistryImpl implements SerialPortRegistry {
 
     private @NonNullByDefault({}) final Collection<SerialPortProvider> portCreators;
 
-    public SerialPortRegistry() {
+    public SerialPortRegistryImpl() {
         this.portCreators = new HashSet<>();
     }
 
@@ -68,6 +70,7 @@ public class SerialPortRegistry {
      * @param portName The port's name.
      * @return all possible {@link SerialPortProvider}. If no provider is available an empty collection is returned
      */
+    @Override
     public Collection<SerialPortProvider> getPortProvidersForPortName(URI portName) {
         final String scheme = portName.getScheme();
         final PathType pathType = PathType.fromURI(portName);
@@ -86,6 +89,12 @@ public class SerialPortRegistry {
         return portCreators.stream().filter(filter).collect(Collectors.toList());
     }
 
+    /**
+     * Gets the Collection of {@link SerialPortProvider}
+     * 
+     * @return Collection of {@link SerialPortProvider}
+     */
+    @Override
     public Collection<SerialPortProvider> getPortCreators() {
         synchronized (this.portCreators) {
             return Collections.unmodifiableCollection(new HashSet<>(portCreators));

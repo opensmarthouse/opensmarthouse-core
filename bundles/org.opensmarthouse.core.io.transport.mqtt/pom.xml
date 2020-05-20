@@ -10,7 +10,7 @@
 
   <artifactId>org.opensmarthouse.core.io.transport.mqtt</artifactId>
 
-  <name>OpenSmartHouse Core | Bundles | MQTT Transport</name>
+  <name>OpenSmartHouse Core | Bundles | Transport | MQTT</name>
 
   <dependencies>
     <dependency>

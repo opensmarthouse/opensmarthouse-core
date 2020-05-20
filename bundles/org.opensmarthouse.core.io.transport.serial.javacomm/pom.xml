@@ -10,7 +10,7 @@
 
   <artifactId>org.opensmarthouse.core.io.transport.serial.javacomm</artifactId>
 
-  <name>OpenSmartHouse Core | Bundles | Serial Transport - Java COM</name>
+  <name>OpenSmartHouse Core | Bundles | Transport | Serial | Java COM</name>
 
   <dependencies>
     <dependency>

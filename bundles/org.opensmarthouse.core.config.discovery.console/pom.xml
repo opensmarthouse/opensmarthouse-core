@@ -11,7 +11,7 @@
 
   <artifactId>org.opensmarthouse.core.config.discovery.console</artifactId>
 
-  <name>OpenSmartHouse Core | Bundles | Configuration Discovery | Console</name>
+  <name>OpenSmartHouse Core | Bundles | Discovery | Console</name>
 
   <dependencies>
     <dependency>

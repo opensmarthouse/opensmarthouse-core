@@ -11,7 +11,7 @@
 
   <artifactId>org.opensmarthouse.core.persistence</artifactId>
 
-  <name>OpenSmartHouse Core | Bundles | Persistence</name>
+  <name>OpenSmartHouse Core | Bundles | Persistence | API</name>
 
   <dependencies>
     <dependency>

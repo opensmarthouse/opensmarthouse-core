@@ -564,46 +564,34 @@
     </feature>
 
     <feature name="opensmarthouse-core-io-transport-serial" version="${project.version}">
-        <!--
-        <requirement>osgi.service;filter:="(objectClass=org.opensmarthouse.core.io.transport.serial.SerialPortManager)"</requirement>
-        <requirement>osgi.service;filter:="(objectClass=org.opensmarthouse.core.io.transport.serial.SerialPortProvider)"</requirement>
-        -->
-        <feature dependency="true">opensmarthouse-core-io-transport-serial-rxtx</feature>
-        <feature>opensmarthouse-core-io-console</feature>
-
         <bundle>mvn:org.opensmarthouse.core.bundles/org.opensmarthouse.core.io.transport.serial/${project.version}</bundle>
     </feature>
 
-    <feature name="opensmarthouse-core-io-transport-serial-javacomm" version="${project.version}">
+    <feature name="opensmarthouse-core-io-transport-serial-console" version="${project.version}">
         <feature>opensmarthouse-core-io-console</feature>
+        <feature>opensmarthouse-core-io-transport-serial</feature>
+        <bundle>mvn:org.opensmarthouse.core.bundles/org.opensmarthouse.core.io.transport.serial.console/${project.version}</bundle>
+    </feature>
 
-        <requirement>opensmarthouse.tp;filter:="(&amp;(feature=serial)(impl=javacomm))"</requirement>
-        <feature dependency="true">opensmarthouse.tp-serial-javacomm</feature>
+    <feature name="opensmarthouse-core-io-transport-serial-javacomm" version="${project.version}">
+        <feature>opensmarthouse.tp-serial-javacomm</feature>
+        <feature>opensmarthouse-core-io-transport-serial</feature>
 
-        <bundle>mvn:org.opensmarthouse.core.bundles/org.opensmarthouse.core.io.transport.serial/${project.version}</bundle>
         <bundle>mvn:org.opensmarthouse.core.bundles/org.opensmarthouse.core.io.transport.serial.javacomm/${project.version}</bundle>
     </feature>
 
     <feature name="opensmarthouse-core-io-transport-serial-rxtx" version="${project.version}">
-        <feature>opensmarthouse-core-io-console</feature>
+        <feature>opensmarthouse.tp-serial-rxtx</feature>
+        <feature>opensmarthouse-core-io-transport-serial</feature>
 
-        <requirement>opensmarthouse.tp;filter:="(&amp;(feature=serial)(impl=rxtx))"</requirement>
-        <feature dependency="true">opensmarthouse.tp-serial-rxtx</feature>
-
-        <bundle>mvn:org.opensmarthouse.core.bundles/org.opensmarthouse.core.io.transport.serial/${project.version}</bundle>
         <bundle>mvn:org.opensmarthouse.core.bundles/org.opensmarthouse.core.io.transport.serial.rxtx/${project.version}</bundle>
     </feature>
 
     <feature name="opensmarthouse-core-io-transport-serial-rfc2217" version="${project.version}">
-        <feature>opensmarthouse-core-base</feature>
+        <feature>opensmarthouse-core-io-transport-serial</feature>
+        <feature>opensmarthouse-core-io-transport-serial-rxtx</feature>
+        <feature>opensmarthouse.tp-commons-net</feature>
 
-        <requirement>opensmarthouse.tp;filter:="(&amp;(feature=serial)(impl=rxtx))"</requirement>
-        <feature dependency="true">opensmarthouse-core-io-transport-serial-rxtx</feature>
-
-        <requirement>opensmarthouse.tp;filter:="(feature=commons-net)"</requirement>
-        <feature dependency="true">opensmarthouse.tp-commons-net</feature>
-
-        <bundle>mvn:org.opensmarthouse.core.bundles/org.opensmarthouse.core.io.transport.serial/${project.version}</bundle>
         <bundle>mvn:org.opensmarthouse.core.bundles/org.opensmarthouse.core.io.transport.serial.rxtx.rfc2217/${project.version}</bundle>
     </feature>
 
@@ -743,7 +731,6 @@
     </feature>
 
     <feature name="opensmarthouse-core-model-lsp" version="${project.version}">
-
         <requirement>opensmarthouse.tp;filter:="(&amp;(feature=xtext-ide)(version&gt;=2.19.0)(!(version&gt;=2.20.0)))"</requirement>
         <feature dependency="true">opensmarthouse.tp-xtext-ide</feature>
 

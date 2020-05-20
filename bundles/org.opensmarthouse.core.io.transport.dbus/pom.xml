@@ -10,7 +10,7 @@
 
   <artifactId>org.opensmarthouse.core.io.transport.dbus</artifactId>
 
-  <name>OpenSmartHouse Core | Bundles | DBus Transport</name>
+  <name>OpenSmartHouse Core | Bundles | Transport | DBus</name>
 
   <dependencies>
     <dependency>

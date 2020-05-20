@@ -10,7 +10,7 @@
 
   <artifactId>org.opensmarthouse.core.io.transport.serial.rxtx.rfc2217</artifactId>
 
-  <name>OpenSmartHouse Core | Bundles | Serial Transport - RFC2217</name>
+  <name>OpenSmartHouse Core | Bundles | Transport | Serial | RFC2217</name>
 
   <dependencies>
     <dependency>

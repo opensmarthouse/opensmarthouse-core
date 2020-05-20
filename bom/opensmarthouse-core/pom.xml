@@ -173,6 +173,12 @@
     </dependency>
     <dependency>
       <groupId>org.opensmarthouse.core.bundles</groupId>
+      <artifactId>org.opensmarthouse.core.io.transport.serial.console</artifactId>
+      <version>${project.version}</version>
+      <scope>compile</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.opensmarthouse.core.bundles</groupId>
       <artifactId>org.opensmarthouse.core.io.console.eclipse</artifactId>
       <version>${project.version}</version>
       <scope>compile</scope>

@@ -11,7 +11,7 @@
 
   <artifactId>org.opensmarthouse.core.io.transport.mdns</artifactId>
 
-  <name>OpenSmartHouse Core | Bundles | mDNS Service</name>
+  <name>OpenSmartHouse Core | Bundles | Transport | mDNS</name>
 
   <dependencies>
     <dependency>

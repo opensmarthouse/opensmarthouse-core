@@ -24,7 +24,7 @@ import org.openhab.core.io.console.extensions.AbstractConsoleCommandExtension;
 import org.openhab.core.io.console.extensions.ConsoleCommandExtension;
 import org.openhab.core.io.transport.serial.SerialPortIdentifier;
 import org.openhab.core.io.transport.serial.SerialPortManager;
-import org.openhab.core.io.transport.serial.internal.SerialPortRegistry;
+import org.openhab.core.io.transport.serial.SerialPortRegistry;
 import org.osgi.service.component.annotations.Activate;
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Reference;

@@ -11,7 +11,7 @@
 
   <artifactId>org.opensmarthouse.core.config.discovery</artifactId>
 
-  <name>OpenSmartHouse Core | Bundles | Configuration Discovery</name>
+  <name>OpenSmartHouse Core | Bundles | Discovery | API</name>
 
   <dependencies>
     <dependency>

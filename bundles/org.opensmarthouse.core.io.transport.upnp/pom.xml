@@ -10,7 +10,7 @@
 
   <artifactId>org.opensmarthouse.core.io.transport.upnp</artifactId>
 
-  <name>OpenSmartHouse Core | Bundles | UPnP Transport</name>
+  <name>OpenSmartHouse Core | Bundles | Transport |  UPnP</name>
 
   <dependencies>
     <dependency>

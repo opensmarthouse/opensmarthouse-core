@@ -11,7 +11,7 @@
 
   <artifactId>org.opensmarthouse.core.storage.json</artifactId>
 
-  <name>OpenSmartHouse Core | Bundles | JSON Storage</name>
+  <name>OpenSmartHouse Core | Bundles | Storage | JSON</name>
 
   <dependencies>
     <dependency>
