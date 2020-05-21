@@ -28,7 +28,7 @@ import com.thoughtworks.xstream.io.xml.StaxDriver;
  * This class uses {@code XStream} and {@code StAX} to parse and convert the XML document.
  *
  * @author Michael Grammling - Initial contribution
- * @author Łukasz Dywicki - Added XStream security handling.
+ * @author Łukasz Dywicki - Added XStream security handling, added option to defer initialization of xstream.
  *
  * @param <T> the result type of the conversion
  */
@@ -38,13 +38,36 @@ public abstract class XmlDocumentReader<T> {
 
     /**
      * The default constructor of this class initializes the {@code XStream} object, and calls
-     * the abstract methods {@link #registerConverters()} and {@link #registerAliases()} as well as
+     * the abstract methods {@link #registerConverters(XStream)} and {@link #registerAliases(XStream)} as well as
      * {@link #registerSecurity(XStream)}.
      */
     public XmlDocumentReader() {
+        this(true);
+    }
+
+    /**
+     * The custom constructor to be used by extension classes in order to control initialization flow.
+     * If {@link #setup} parameter is set then {@link #setup()} method is called automatically asking sub-classes
+     * for registration of converters and such. If its not set, then caller can prepare itself, assign all necessary
+     * fields and trigger setup manually.
+     *
+     * @param setup Flag which determine if registerConverters, registerAliases and registerSecurity methods should be
+     *              called automatically in this constructor or deferred and called by extension class via manual
+     *              {@link #setup()} method call.
+     */
+    protected XmlDocumentReader(boolean setup) {
         StaxDriver driver = new StaxDriver();
 
         this.xstream = new Java9XStream(driver);
+        if (setup) {
+            setup();
+        }
+    }
+
+    /**
+     * Ask sub classes to register it converters, aliases and setup sandbox for type deserialization.
+     */
+    protected void setup() {
         registerConverters(this.xstream);
         registerAliases(this.xstream);
         registerSecurity(this.xstream);

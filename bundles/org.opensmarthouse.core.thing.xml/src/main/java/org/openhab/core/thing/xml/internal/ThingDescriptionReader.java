@@ -49,7 +49,7 @@ import com.thoughtworks.xstream.XStream;
  * @author Thomas Höfer - Added thing and thing type properties
  * @author Chris Jackson - Added parameter groups and channel properties
  * @author Moritz Kammerer - Added triggers
- * @author Łukasz Dywicki - Added XStream security handling.
+ * @author Łukasz Dywicki - Added XStream security handling, defer initialization of converters.
  */
 public class ThingDescriptionReader extends XmlDocumentReader<List<?>> {
 
@@ -63,9 +63,12 @@ public class ThingDescriptionReader extends XmlDocumentReader<List<?>> {
      */
     public ThingDescriptionReader(ChannelTypeBuilderFactory channelTypeBuilderFactory,
             CommandDescriptionBuilderFactory commandDescriptionBuilderFactory) {
+        super(false);
         this.channelTypeBuilderFactory = channelTypeBuilderFactory;
         this.commandDescriptionBuilderFactory = commandDescriptionBuilderFactory;
         super.setClassLoader(ThingDescriptionReader.class.getClassLoader());
+
+        setup();
     }
 
     @Override
