@@ -13,11 +13,7 @@
 package org.openhab.core.thing;
 
 import org.eclipse.jdt.annotation.NonNullByDefault;
-import org.openhab.core.common.registry.DefaultAbstractManagedProvider;
-import org.openhab.core.storage.StorageService;
-import org.osgi.service.component.annotations.Activate;
-import org.osgi.service.component.annotations.Component;
-import org.osgi.service.component.annotations.Reference;
+import org.openhab.core.common.registry.ManagedProvider;
 
 /**
  * {@link ManagedThingProvider} is an OSGi service, that allows to add or remove
@@ -28,23 +24,8 @@ import org.osgi.service.component.annotations.Reference;
  * @author Oliver Libutzki - Initial contribution
  * @author Dennis Nobel - Integrated Storage
  * @author Michael Grammling - Added dynamic configuration update
+ * @author Lukasz Dywicki - Separated interface and storage implementation
  */
 @NonNullByDefault
-@Component(immediate = true, service = { ThingProvider.class, ManagedThingProvider.class })
-public class ManagedThingProvider extends DefaultAbstractManagedProvider<Thing, ThingUID> implements ThingProvider {
-
-    @Activate
-    public ManagedThingProvider(final @Reference StorageService storageService) {
-        super(storageService);
-    }
-
-    @Override
-    protected String getStorageName() {
-        return Thing.class.getName();
-    }
-
-    @Override
-    protected String keyToString(ThingUID key) {
-        return key.toString();
-    }
+public interface ManagedThingProvider extends ManagedProvider<Thing, ThingUID>, ThingProvider {
 }
