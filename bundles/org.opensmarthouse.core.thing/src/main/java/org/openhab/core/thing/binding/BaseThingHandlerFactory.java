@@ -63,9 +63,9 @@ public abstract class BaseThingHandlerFactory implements ThingHandlerFactory {
 
     private final Map<ThingUID, Set<ServiceRegistration<?>>> thingHandlerServices = new ConcurrentHashMap<>();
 
+    private @NonNullByDefault({}) ServiceTracker<ThingFactory, ThingFactory> thingFactoryServiceTracker;
     private @NonNullByDefault({}) ServiceTracker<ThingTypeRegistry, ThingTypeRegistry> thingTypeRegistryServiceTracker;
     private @NonNullByDefault({}) ServiceTracker<ConfigDescriptionRegistry, ConfigDescriptionRegistry> configDescriptionRegistryServiceTracker;
-    private @NonNullByDefault({}) ThingFactory thingFactory;
 
     /**
      * Initializes the {@link BaseThingHandlerFactory}. If this method is overridden by a sub class, the implementing
@@ -75,6 +75,8 @@ public abstract class BaseThingHandlerFactory implements ThingHandlerFactory {
      */
     protected void activate(ComponentContext componentContext) {
         bundleContext = componentContext.getBundleContext();
+        thingFactoryServiceTracker = new ServiceTracker<>(bundleContext, ThingFactory.class.getName(), null);
+        thingFactoryServiceTracker.open();
         thingTypeRegistryServiceTracker = new ServiceTracker<>(bundleContext, ThingTypeRegistry.class.getName(), null);
         thingTypeRegistryServiceTracker.open();
         configDescriptionRegistryServiceTracker = new ServiceTracker<>(bundleContext,
@@ -327,6 +329,7 @@ public abstract class BaseThingHandlerFactory implements ThingHandlerFactory {
     @Override
     public @Nullable Thing createThing(ThingTypeUID thingTypeUID, Configuration configuration,
             @Nullable ThingUID thingUID, @Nullable ThingUID bridgeUID) {
+        ThingFactory thingFactory = getThingFactory();
         ThingUID effectiveUID = thingUID != null ? thingUID : thingFactory.generateRandomThingUID(thingTypeUID);
         ThingType thingType = getThingTypeByUID(thingTypeUID);
         if (thingType != null) {
@@ -344,5 +347,17 @@ public abstract class BaseThingHandlerFactory implements ThingHandlerFactory {
                     "Config Description Registry has not been properly initialized. Did you forget to call super.activate()?");
         }
         return configDescriptionRegistryServiceTracker.getService();
+    }
+
+    protected ThingFactory getThingFactory() {
+        if (thingFactoryServiceTracker == null) {
+            throw new IllegalStateException(
+                    "Config Description Registry has not been properly initialized. Did you forget to call super.activate()?");
+        }
+        ThingFactory thingFactory = thingFactoryServiceTracker.getService();
+        if (thingFactory == null) {
+            throw new IllegalStateException("Thing factory is not available!");
+        }
+        return thingFactory;
     }
 }

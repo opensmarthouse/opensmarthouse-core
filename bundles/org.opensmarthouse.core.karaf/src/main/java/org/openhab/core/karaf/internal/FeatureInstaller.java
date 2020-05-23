@@ -26,6 +26,8 @@ import java.util.HashSet;
 import java.util.Hashtable;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
+import java.util.Optional;
 import java.util.Properties;
 import java.util.Set;
 import java.util.concurrent.ExecutorService;
@@ -199,8 +201,16 @@ public class FeatureInstaller implements ConfigurationListener {
         try {
             Configuration cfg = configurationAdmin.getConfiguration(OpenSmartHouse.ADDONS_SERVICE_PID, null);
             Dictionary<String, Object> props = cfg.getProperties();
-            Object typeProp = props.get(type);
-            String[] addonIds = typeProp != null ? typeProp.toString().split(",") : new String[0];
+            if (props == null) {
+                // properties can be empty if PID does not exist
+                props = new Hashtable<>();
+            }
+            String[] addonIds = Optional.of(props)
+                .map(dict -> dict.get(type)) //
+                .filter(Objects::nonNull) //
+                .map(Object::toString) //
+                .map(str -> str.split(",")) //
+                .orElse(new String[0]);
             List<String> trimmedAddonIds = Arrays.stream(addonIds).map(addonId -> addonId.trim())
                     .collect(Collectors.toList());
             if (!trimmedAddonIds.contains(id)) {

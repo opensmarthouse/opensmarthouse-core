@@ -15,12 +15,14 @@ package org.openhab.core.config.discovery.internal;
 import org.openhab.core.config.discovery.DiscoveryResultBuilder;
 import org.openhab.core.config.discovery.DiscoveryResultBuilderFactory;
 import org.openhab.core.thing.ThingUID;
+import org.osgi.service.component.annotations.Component;
 
 /**
  * Default implementation of discovery result builder.
  *
  * @author Łukasz Dywicki - Initial contribution.
  */
+@Component
 public class DiscoveryResultBuilderFactoryImpl implements DiscoveryResultBuilderFactory {
 
     @Override

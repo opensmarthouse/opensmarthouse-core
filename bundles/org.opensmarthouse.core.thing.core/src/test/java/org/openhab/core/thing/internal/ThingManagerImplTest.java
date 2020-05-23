@@ -39,7 +39,6 @@ import org.openhab.core.thing.type.ChannelGroupTypeRegistry;
 import org.openhab.core.thing.type.ChannelTypeRegistry;
 import org.openhab.core.thing.type.ThingTypeRegistry;
 import org.osgi.framework.Bundle;
-import org.osgi.service.component.ComponentContext;
 
 /**
  * @author Simon Kaufmann - Initial contribution
