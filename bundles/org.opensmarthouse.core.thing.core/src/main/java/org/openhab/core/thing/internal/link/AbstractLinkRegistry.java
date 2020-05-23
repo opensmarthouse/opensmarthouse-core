@@ -10,7 +10,7 @@
  *
  * SPDX-License-Identifier: EPL-2.0
  */
-package org.openhab.core.thing.link;
+package org.openhab.core.thing.internal.link;
 
 import java.util.Collections;
 import java.util.HashMap;
@@ -24,6 +24,8 @@ import org.eclipse.jdt.annotation.NonNullByDefault;
 import org.openhab.core.common.registry.AbstractRegistry;
 import org.openhab.core.common.registry.Provider;
 import org.openhab.core.thing.UID;
+import org.openhab.core.thing.link.AbstractLink;
+import org.openhab.core.thing.link.LinkRegistry;
 
 /**
  * {@link AbstractLinkRegistry} is an abstract class for link based registries,
@@ -36,7 +38,7 @@ import org.openhab.core.thing.UID;
  */
 @NonNullByDefault
 public abstract class AbstractLinkRegistry<L extends AbstractLink, P extends Provider<L>>
-        extends AbstractRegistry<L, String, P> {
+        extends AbstractRegistry<L, String, P> implements LinkRegistry<L> {
 
     private final ReentrantReadWriteLock toLinkLock = new ReentrantReadWriteLock();
     private final Map<String, Set<L>> itemNameToLink = new HashMap<>();
@@ -127,6 +129,7 @@ public abstract class AbstractLinkRegistry<L extends AbstractLink, P extends Pro
      * @param uid UID
      * @return true if linked, false otherwise
      */
+    @Override
     public boolean isLinked(final String itemName, final UID uid) {
         toLinkLock.readLock().lock();
         try {
@@ -148,6 +151,7 @@ public abstract class AbstractLinkRegistry<L extends AbstractLink, P extends Pro
      * @param itemName item name
      * @return true if a link exists, otherwise false
      */
+    @Override
     public boolean isLinked(final String itemName) {
         toLinkLock.readLock().lock();
         try {
@@ -163,6 +167,7 @@ public abstract class AbstractLinkRegistry<L extends AbstractLink, P extends Pro
      * @param uid UID
      * @return true if a link exists, otherwise false
      */
+    @Override
     public boolean isLinked(final UID uid) {
         toLinkLock.readLock().lock();
         try {
@@ -178,6 +183,7 @@ public abstract class AbstractLinkRegistry<L extends AbstractLink, P extends Pro
      * @param uid UID
      * @return a non-null unmodifiable collection of item names that are linked to the given UID.
      */
+    @Override
     public Set<String> getLinkedItemNames(final UID uid) {
         toLinkLock.readLock().lock();
         try {
@@ -197,6 +203,7 @@ public abstract class AbstractLinkRegistry<L extends AbstractLink, P extends Pro
      * @param uid a channel UID
      * @return an unmodifiable set of links for the given UID
      */
+    @Override
     public Set<L> getLinks(final UID uid) {
         toLinkLock.readLock().lock();
         try {
@@ -213,6 +220,7 @@ public abstract class AbstractLinkRegistry<L extends AbstractLink, P extends Pro
      * @param itemName the name of the item
      * @return an unmodifiable set of links for the given item name
      */
+    @Override
     public Set<L> getLinks(final String itemName) {
         toLinkLock.readLock().lock();
         try {

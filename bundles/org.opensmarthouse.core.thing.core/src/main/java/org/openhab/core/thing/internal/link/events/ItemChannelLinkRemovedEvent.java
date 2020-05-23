@@ -10,7 +10,7 @@
  *
  * SPDX-License-Identifier: EPL-2.0
  */
-package org.openhab.core.thing.link.events;
+package org.openhab.core.thing.internal.link.events;
 
 import org.openhab.core.thing.link.dto.ItemChannelLinkDTO;
 
