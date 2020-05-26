@@ -14,17 +14,20 @@ package org.openhab.core.ui.icon;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.*;
+import static org.mockito.MockitoAnnotations.initMocks;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.nio.charset.StandardCharsets;
 import java.util.Collections;
 import java.util.Locale;
 import java.util.Set;
 
-import org.apache.commons.io.IOUtils;
 import org.junit.Before;
 import org.junit.Test;
+import org.mockito.Mock;
+import org.openhab.core.i18n.TranslationProvider;
 import org.openhab.core.ui.icon.IconSet.Format;
 
 /**
@@ -37,9 +40,13 @@ public class AbstractResourceIconProviderTest {
 
     private IconProvider provider;
 
+    private @Mock TranslationProvider i18nProviderMock;
+
     @Before
     public void setUp() {
-        provider = new AbstractResourceIconProvider() {
+        initMocks(this);
+
+        provider = new AbstractResourceIconProvider(i18nProviderMock) {
             @Override
             protected InputStream getResource(String iconset, String resourceName) {
                 switch (resourceName) {
@@ -96,14 +103,14 @@ public class AbstractResourceIconProviderTest {
     @Test
     public void testWithQuantityTypeState() throws IOException {
         try (InputStream is = provider.getIcon("x", "classic", "34 °C", Format.PNG)) {
-            assertThat(IOUtils.toString(is), is("x-30.png"));
+            assertThat(new String(is.readAllBytes(), StandardCharsets.UTF_8), is("x-30.png"));
         }
     }
 
     @Test
     public void testWithStringTypeState() throws IOException {
         try (InputStream is = provider.getIcon("x", "classic", "y z", Format.PNG)) {
-            assertThat(IOUtils.toString(is), is("x-y z.png"));
+            assertThat(new String(is.readAllBytes(), StandardCharsets.UTF_8), is("x-y z.png"));
         }
     }
 }

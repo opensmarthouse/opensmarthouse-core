@@ -70,9 +70,14 @@ refactor $1 "bundles/org.openhab.core/src/test/java/org/openhab/core/types/State
 
 refactor $1 "bundles/org.openhab.core.config.core/src/main/java/org/openhab/core/config/core/internal/ConfigMapper.java"                        "bundles/org.opensmarthouse.core.config/src/main/java/org/openhab/core/config/core/ConfigMapper.java"
 
+refactor $1 "bundles/org.openhab.core.config.core/src/main/java/org/openhab/core/config/core/i18n/ConfigI18nLocalizationService.java"           "bundles/org.opensmarthouse.core.config.core/src/main/java/org/openhab/core/config/core/internal/i18n/ConfigI18nLocalizationServiceImpl.java"
+refactor $1 "bundles/org.openhab.core.config.core/src/main/java/org/openhab/core/config/core/normalization/NormalizerFactory.java"              "bundles/org.opensmarthouse.core.config.core/src/main/java/org/openhab/core/config/core/internal/normalization/NormalizerFactoryImpl.java"
+
 refactor $1 "bundles/org.openhab.core.id/src/main/java/org/openhab/core/id/internal/UUIDResource.java"                                          "bundles/org.opensmarthouse.core.io.rest.id/src/main/java/org/openhab/core/id/internal/UUIDResource.java"
 
+refactor $1 "bundles/org.openhab.core.io.transport.serial/src/main/java/org/openhab/core/io/transport/serial/internal/SerialPortRegistry.java"  "bundles/org.opensmarthouse.core.io.transport.serial/src/main/java/org/openhab/core/io/transport/serial/internalSerialPortRegistryImpl.java"
 refactor $1 "bundles/org.openhab.core.io.transport.serial/src/main/java/org/openhab/core/io/transport/serial/internal/SerialPortProvider.java"  "bundles/org.opensmarthouse.core.io.transport.serial/src/main/java/org/openhab/core/io/transport/serial/SerialPortProvider.java"
+
 
 
 # Patch and refactored bundles - migrating packages to new bundles
@@ -168,11 +173,11 @@ refactor $1 "bundles/org.openhab.core.io.rest.core/src/main/java/org/openhab/cor
 refactor $1 "bundles/org.openhab.core.io.rest.core/src/test/java/org/openhab/core/io/rest/core/internal/service/"         "bundles/org.opensmarthouse.core.io.rest.service/src/test/java/org/openhab/core/io/rest/core/internal/service/"
 
 
-refactor $1 "/bundles/org.openhab.core.io.rest.core/src/main/java/org/openhab/core/io/rest/core/persistence/"             "/bundles/org.opensmarthouse.core.io.rest.persistence/src/main/java/org/openhab/core/io/rest/core/persistence/"
-refactor $1 "/bundles/org.openhab.core.io.rest.core/src/test/java/org/openhab/core/io/rest/core/persistence/"             "/bundles/org.opensmarthouse.core.io.rest.persistence/src/test/java/org/openhab/core/io/rest/core/persistence/"
+refactor $1 "bundles/org.openhab.core.io.rest.core/src/main/java/org/openhab/core/io/rest/core/persistence/"              "bundles/org.opensmarthouse.core.io.rest.persistence/src/main/java/org/openhab/core/io/rest/core/persistence/"
+refactor $1 "bundles/org.openhab.core.io.rest.core/src/test/java/org/openhab/core/io/rest/core/persistence/"              "bundles/org.opensmarthouse.core.io.rest.persistence/src/test/java/org/openhab/core/io/rest/core/persistence/"
 
-refactor $1 "/bundles/org.openhab.core.io.rest.core/src/main/java/org/openhab/core/io/rest/core/internal/persistence/"    "/bundles/org.opensmarthouse.core.io.rest.persistence/src/main/java/org/openhab/core/io/rest/core/internal/persistence/"
-refactor $1 "/bundles/org.openhab.core.io.rest.core/src/test/java/org/openhab/core/io/rest/core/internal/persistence/"    "/bundles/org.opensmarthouse.core.io.rest.persistence/src/test/java/org/openhab/core/io/rest/core/internal/persistence/"
+refactor $1 "bundles/org.openhab.core.io.rest.core/src/main/java/org/openhab/core/io/rest/core/internal/persistence/"     "bundles/org.opensmarthouse.core.io.rest.persistence/src/main/java/org/openhab/core/io/rest/core/internal/persistence/"
+refactor $1 "bundles/org.openhab.core.io.rest.core/src/test/java/org/openhab/core/io/rest/core/internal/persistence/"     "bundles/org.opensmarthouse.core.io.rest.persistence/src/test/java/org/openhab/core/io/rest/core/internal/persistence/"
 
 refactor $1 "bundles/org.openhab.core.io.rest.core/src/main/java/org/openhab/core/thing/internal/console/"                "bundles/org.opensmarthouse.core.io.rest.thing/src/main/java/org/openhab/core/thing/internal/console/"
 refactor $1 "bundles/org.openhab.core.io.rest.core/src/test/java/org/openhab/core/thing/internal/console/"                "bundles/org.opensmarthouse.core.io.rest.thing/src/test/java/org/openhab/core/thing/internal/console/"
@@ -233,14 +238,14 @@ refactor $1 "bundles/org.openhab.core/src/test/java/org/openhab/core/util/"     
 
 refactor $1 "bundles/org.openhab.core.io.rest.core/src/main/java/org/openhab/core/io/rest/core/internal/profile"          "bundles/org.opensmarthouse.core.io.rest.item/src/main/java/org/openhab/core/io/rest/core/internal/profile"
 
-refactor $1 "/bundles/org.openhab.core/src/test/java/org/openhab/core/cache/"                                             "/bundles/org.opensmarthouse.core.cache/src/test/java/org/openhab/core/cache/"
+refactor $1 "bundles/org.openhab.core/src/test/java/org/openhab/core/cache/"                                              "bundles/org.opensmarthouse.core.cache/src/test/java/org/openhab/core/cache/"
 
-refactor $1 "bundles/org.openhab.core.voice/src/main/java/org/openhab/core/voice/internal/"                               "bundles/org.opensmarthouse.core.audio.core/src/main/java/org/openhab/core/voice/internal/"
-refactor $1 "bundles/org.openhab.core.voice/src/test/java/org/openhab/core/voice/internal/"                               "bundles/org.opensmarthouse.core.audio.core/src/test/java/org/openhab/core/voice/internal/"
-refactor $1 "bundles/org.openhab.core.voice/src/main/resources"                                                           "bundles/org.opensmarthouse.core.audio.core/src/main/resources"
+refactor $1 "bundles/org.openhab.core.voice/src/main/java/org/openhab/core/voice/internal/"                               "bundles/org.opensmarthouse.core.voice.core/src/main/java/org/openhab/core/voice/internal/"
+refactor $1 "bundles/org.openhab.core.voice/src/test/java/org/openhab/core/voice/internal/"                               "bundles/org.opensmarthouse.core.voice.core/src/test/java/org/openhab/core/voice/internal/"
+refactor $1 "bundles/org.openhab.core.voice/src/main/resources"                                                           "bundles/org.opensmarthouse.core.voice.core/src/main/resources"
 
 # Catch-all. Must be last!
-refactor $1 "/itests/org.openhab.core"  "/itests/org.opensmarthouse.core"
+refactor $1 "itests/org.openhab.core"  "itests/org.opensmarthouse.core"
 refactor $1 "bundles/org.openhab.core" "bundles/org.opensmarthouse.core"
 
 

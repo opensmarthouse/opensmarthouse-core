@@ -18,6 +18,8 @@ import static org.junit.Assert.assertThat;
 import org.eclipse.jdt.annotation.NonNullByDefault;
 import org.junit.Before;
 import org.junit.Test;
+import org.openhab.core.config.core.ConfigDescriptionParameterGroup;
+import org.openhab.core.config.core.ConfigDescriptionParameterGroupBuilder;
 
 /**
  * Tests for {@link ConfigDescriptionParameterGroupBuilder) class.

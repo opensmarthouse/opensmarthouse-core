@@ -471,13 +471,4 @@ public final class DiscoveryServiceRegistryImpl implements DiscoveryServiceRegis
     public int getMaxScanTimeout(String bindingId) {
         return getMaxScanTimeout(getDiscoveryServices(bindingId));
     }
-
-    @Reference
-    protected void setSafeCaller(SafeCaller safeCaller) {
-        this.safeCaller = safeCaller;
-    }
-
-    protected void unsetSafeCaller(SafeCaller safeCaller) {
-        this.safeCaller = null;
-    }
 }

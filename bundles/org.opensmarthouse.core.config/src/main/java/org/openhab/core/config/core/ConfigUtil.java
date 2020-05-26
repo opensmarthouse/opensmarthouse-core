@@ -13,6 +13,7 @@
 package org.openhab.core.config.core;
 
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
@@ -42,6 +43,7 @@ import org.slf4j.LoggerFactory;
  *
  * @author Kai Kreuzer - Initial contribution
  * @author Thomas Höfer - Minor changes for type normalization based on config description
+ * @author Łuaksz Dywicki - Refactor to use factory
  */
 public class ConfigUtil {
 
@@ -75,7 +77,7 @@ public class ConfigUtil {
                         LoggerFactory.getLogger(ConfigUtil.class).warn(
                                 "Default value for parameter '{}' of type 'INTEGER' seems not to be an integer value: {}",
                                 parameterName, defaultValue);
-                        return value.setScale(0, BigDecimal.ROUND_DOWN);
+                        return value.setScale(0, RoundingMode.DOWN);
                     }
                     return value;
                 case DECIMAL:
@@ -157,7 +159,8 @@ public class ConfigUtil {
      * @param configuration the configuration that needs to be normalized
      * @return normalized configuration
      */
-    public static Map<String, Object> normalizeTypesWithFactory(NormalizerFactory normalizerFactory, Map<String, Object> configuration) {
+    public static Map<String, Object> normalizeTypesWithFactory(NormalizerFactory normalizerFactory,
+            Map<String, Object> configuration) {
         Map<String, Object> convertedConfiguration = new HashMap<>(configuration.size());
         for (Entry<String, Object> parameter : configuration.entrySet()) {
             String name = parameter.getKey();
@@ -192,7 +195,8 @@ public class ConfigUtil {
      * @return corresponding value as a valid type
      * @throws IllegalArgumentException if a invalid type has been given
      */
-    public static Object normalizeTypeWithFactory(NormalizerFactory normalizerFactory, Object value, @Nullable ConfigDescriptionParameter configDescriptionParameter) {
+    public static Object normalizeTypeWithFactory(NormalizerFactory normalizerFactory, Object value,
+            @Nullable ConfigDescriptionParameter configDescriptionParameter) {
         if (configDescriptionParameter != null) {
             Normalizer normalizer = normalizerFactory.getNormalizer(configDescriptionParameter);
             return normalizer.normalize(value);
@@ -227,7 +231,8 @@ public class ConfigUtil {
      * @deprecated Use variant with normalizer factory argument.
      */
     @Deprecated
-    public static Map<String, Object> normalizeTypes(Map<String, Object> configuration, List<ConfigDescription> configDescriptions) {
+    public static Map<String, Object> normalizeTypes(Map<String, Object> configuration,
+            List<ConfigDescription> configDescriptions) {
         return normalizeTypesWithFactory(new NormalizerFactoryDelegate(), configuration, configDescriptions);
     }
 
@@ -240,8 +245,8 @@ public class ConfigUtil {
      * @return the normalized configuration or null if given configuration was null
      * @throws IllegalArgumentExcetpion if given config description is null
      */
-    public static Map<String, Object> normalizeTypesWithFactory(NormalizerFactory normalizerFactory, Map<String, Object> configuration,
-            List<ConfigDescription> configDescriptions) {
+    public static Map<String, Object> normalizeTypesWithFactory(NormalizerFactory normalizerFactory,
+            Map<String, Object> configuration, List<ConfigDescription> configDescriptions) {
         if (configDescriptions == null || configDescriptions.isEmpty()) {
             throw new IllegalArgumentException("Config description must not be null.");
         }
@@ -261,7 +266,8 @@ public class ConfigUtil {
             Object value = parameter.getValue();
             if (!isOSGiConfigParameter(name)) {
                 ConfigDescriptionParameter configDescriptionParameter = configParams.get(name);
-                convertedConfiguration.put(name, normalizeTypeWithFactory(normalizerFactory, value, configDescriptionParameter));
+                convertedConfiguration.put(name,
+                        normalizeTypeWithFactory(normalizerFactory, value, configDescriptionParameter));
             }
         }
         return convertedConfiguration;
@@ -271,7 +277,8 @@ public class ConfigUtil {
      * Normalizes the type of the parameter to the one allowed for configurations.
      *
      * The conversion is performed 'best-effort' (e.g. "3" will always end up being a BigDecimal, never a String).
-     * Use {@link #normalizeTypeWithFactory(NormalizerFactory, Object, ConfigDescriptionParameter)} to make sure your field type ends up as intended.
+     * Use {@link #normalizeTypeWithFactory(NormalizerFactory, Object, ConfigDescriptionParameter)} to make sure your
+     * field type ends up as intended.
      *
      * @param value the value to return as normalized type
      * @return corresponding value as a valid type
@@ -301,7 +308,8 @@ public class ConfigUtil {
      * @return a collection that contains the normalized entries
      * @throws IllegalArgumentException if the type of the normalized values differ or an invalid type has been given
      */
-    private static Collection<Object> normalizeCollection(NormalizerFactory normalizerFactory, Collection<?> collection) throws IllegalArgumentException {
+    private static Collection<Object> normalizeCollection(NormalizerFactory normalizerFactory, Collection<?> collection)
+            throws IllegalArgumentException {
         if (collection.isEmpty()) {
             return Collections.emptyList();
         } else {

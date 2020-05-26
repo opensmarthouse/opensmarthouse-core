@@ -25,6 +25,16 @@
       <groupId>org.opensmarthouse.core.bundles</groupId>
       <artifactId>org.opensmarthouse.core.registry</artifactId>
     </dependency>
+    
+    <dependency>
+      <groupId>org.opensmarthouse.core.bundles</groupId>
+      <artifactId>org.opensmarthouse.core.test</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.osgi</groupId>
+      <artifactId>osgi.enroute.hamcrest.wrapper</artifactId>
+    </dependency>
+    
   </dependencies>
 
 </project>

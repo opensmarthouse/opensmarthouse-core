@@ -20,6 +20,7 @@ import java.util.Locale;
 import org.eclipse.jdt.annotation.NonNullByDefault;
 import org.eclipse.jdt.annotation.Nullable;
 import org.openhab.core.config.core.ConfigDescription;
+import org.openhab.core.config.core.ConfigDescriptionBuilder;
 import org.openhab.core.config.core.ConfigDescriptionParameter;
 import org.openhab.core.config.core.ConfigDescriptionParameterBuilder;
 import org.openhab.core.config.core.ConfigDescriptionParameterGroup;
@@ -61,7 +62,8 @@ public class ConfigI18nLocalizationServiceImpl implements ConfigI18nLocalization
      * @return a localized configuration description on success, a non-localized one on error (e.g. no translation is
      *         found).
      */
-    @Override public ConfigDescription getLocalizedConfigDescription(final Bundle bundle,
+    @Override
+    public ConfigDescription getLocalizedConfigDescription(final Bundle bundle,
             final ConfigDescription configDescription, final @Nullable Locale locale) {
         final List<ConfigDescriptionParameter> localizedConfigDescriptionParameters = new ArrayList<>(
                 configDescription.getParameters().size());
@@ -83,8 +85,9 @@ public class ConfigI18nLocalizationServiceImpl implements ConfigI18nLocalization
                     bundle, configDescription, configDescriptionParameterGroup, locale);
             localizedConfigDescriptionGroups.add(localizedConfigDescriptionGroup);
         }
-        return new ConfigDescription(configDescription.getUID(), localizedConfigDescriptionParameters,
-                localizedConfigDescriptionGroups);
+        return ConfigDescriptionBuilder.create(configDescription.getUID())
+                .withParameters(localizedConfigDescriptionParameters)
+                .withParameterGroups(localizedConfigDescriptionGroups).build();
     }
 
     /**
@@ -96,7 +99,8 @@ public class ConfigI18nLocalizationServiceImpl implements ConfigI18nLocalization
      * @param locale the locale it should be localized to
      * @return a localized parameter on success, a non-localized one on error (e.g. no translation is found).
      */
-    @Override public ConfigDescriptionParameter getLocalizedConfigDescriptionParameter(final Bundle bundle,
+    @Override
+    public ConfigDescriptionParameter getLocalizedConfigDescriptionParameter(final Bundle bundle,
             final ConfigDescription configDescription, final ConfigDescriptionParameter parameter,
             final @Nullable Locale locale) {
         final URI configDescriptionURI = configDescription.getUID();
@@ -112,7 +116,8 @@ public class ConfigI18nLocalizationServiceImpl implements ConfigI18nLocalization
      * @param locale the locale it should be localized to
      * @return a localized parameter on success, a non-localized one on error (e.g. no translation is found).
      */
-    @Override public ConfigDescriptionParameter getLocalizedConfigDescriptionParameter(final Bundle bundle,
+    @Override
+    public ConfigDescriptionParameter getLocalizedConfigDescriptionParameter(final Bundle bundle,
             final URI configDescriptionURI, final ConfigDescriptionParameter parameter, final @Nullable Locale locale) {
         final String parameterName = parameter.getName();
 
@@ -155,7 +160,8 @@ public class ConfigI18nLocalizationServiceImpl implements ConfigI18nLocalization
      * @param locale the locale it should be localized to
      * @return a localized parameter group on success, a non-localized one on error (e.g. no translation is found).
      */
-    @Override public ConfigDescriptionParameterGroup getLocalizedConfigDescriptionGroup(final Bundle bundle,
+    @Override
+    public ConfigDescriptionParameterGroup getLocalizedConfigDescriptionGroup(final Bundle bundle,
             final ConfigDescription configDescription, final ConfigDescriptionParameterGroup group,
             final @Nullable Locale locale) {
         final URI configDescriptionURI = configDescription.getUID();
@@ -171,7 +177,8 @@ public class ConfigI18nLocalizationServiceImpl implements ConfigI18nLocalization
      * @param locale the locale it should be localized to
      * @return a localized parameter group on success, a non-localized one on error (e.g. no translation is found).
      */
-    @Override public ConfigDescriptionParameterGroup getLocalizedConfigDescriptionGroup(final Bundle bundle,
+    @Override
+    public ConfigDescriptionParameterGroup getLocalizedConfigDescriptionGroup(final Bundle bundle,
             final URI configDescriptionURI, final ConfigDescriptionParameterGroup group,
             final @Nullable Locale locale) {
         final String name = group.getName();
@@ -198,7 +205,8 @@ public class ConfigI18nLocalizationServiceImpl implements ConfigI18nLocalization
      * @return a list with parameter option. If an option could not be localized (e.g. no translation is found), the
      *         non-localized one is added to the list.
      */
-    @Override public List<ParameterOption> getLocalizedOptions(final List<ParameterOption> originalOptions, final Bundle bundle,
+    @Override
+    public List<ParameterOption> getLocalizedOptions(final List<ParameterOption> originalOptions, final Bundle bundle,
             final URI configDescriptionURI, final String parameterName, final @Nullable Locale locale) {
         if (originalOptions == null || originalOptions.isEmpty()) {
             return originalOptions;

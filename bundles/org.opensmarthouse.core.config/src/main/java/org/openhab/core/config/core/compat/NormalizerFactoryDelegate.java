@@ -39,7 +39,8 @@ public class NormalizerFactoryDelegate implements NormalizerFactory {
     @Override
     public Normalizer getNormalizer(ConfigDescriptionParameter configDescriptionParameter) {
         ServiceReference<NormalizerFactory> reference = bundleContext.getServiceReference(NormalizerFactory.class);
-        return new NormalizerDelegate(bundleContext.getService(reference).getNormalizer(configDescriptionParameter), (svc) -> bundleContext.ungetService(reference));
+        return new NormalizerDelegate(bundleContext.getService(reference).getNormalizer(configDescriptionParameter),
+                (svc) -> bundleContext.ungetService(reference));
     }
 
 }

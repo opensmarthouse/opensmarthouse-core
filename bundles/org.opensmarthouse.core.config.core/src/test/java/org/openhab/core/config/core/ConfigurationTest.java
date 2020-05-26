@@ -12,7 +12,9 @@
  */
 package org.openhab.core.config.core;
 
-import static org.hamcrest.CoreMatchers.*;
+import static org.hamcrest.CoreMatchers.equalTo;
+import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.CoreMatchers.nullValue;
 import static org.hamcrest.core.IsCollectionContaining.hasItems;
 import static org.junit.Assert.assertThat;
 
@@ -39,7 +41,7 @@ public class ConfigurationTest {
             ON,
             OFF,
             UNKNOWN
-        };
+        }
 
         public MyEnum enumField = MyEnum.UNKNOWN;
         public int intField;

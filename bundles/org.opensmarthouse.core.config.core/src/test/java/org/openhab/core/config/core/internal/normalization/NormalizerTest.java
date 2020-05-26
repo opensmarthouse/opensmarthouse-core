@@ -13,7 +13,9 @@
 package org.openhab.core.config.core.internal.normalization;
 
 import static java.util.stream.Collectors.toList;
-import static org.hamcrest.CoreMatchers.*;
+import static org.hamcrest.CoreMatchers.equalTo;
+import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.CoreMatchers.nullValue;
 import static org.junit.Assert.assertThat;
 
 import java.math.BigDecimal;
@@ -23,7 +25,7 @@ import java.util.stream.Stream;
 
 import org.junit.Test;
 import org.openhab.core.config.core.ConfigDescriptionParameter;
-import org.openhab.core.config.core.ConfigDescriptionParameter.Type;
+import org.openhab.core.config.core.ConfigDescriptionParameterBuilder;
 import org.openhab.core.config.core.Normalizer;
 
 /**
@@ -34,7 +36,8 @@ public class NormalizerTest {
 
     @Test
     public void testBooleanNormalizer() {
-        Normalizer normalizer = new NormalizerFactoryImpl().getNormalizer(new ConfigDescriptionParameter("test", Type.BOOLEAN));
+        Normalizer normalizer = new NormalizerFactoryImpl().getNormalizer(
+                ConfigDescriptionParameterBuilder.create("test", ConfigDescriptionParameter.Type.BOOLEAN).build());
 
         assertThat(normalizer.normalize(null), is(nullValue()));
         assertThat(normalizer.normalize(true), is(equalTo(true)));
@@ -68,7 +71,8 @@ public class NormalizerTest {
 
     @Test
     public void testIntNormalizer() {
-        Normalizer normalizer = new NormalizerFactoryImpl().getNormalizer(new ConfigDescriptionParameter("test", Type.INTEGER));
+        Normalizer normalizer = new NormalizerFactoryImpl().getNormalizer(
+                ConfigDescriptionParameterBuilder.create("test", ConfigDescriptionParameter.Type.INTEGER).build());
 
         assertThat(normalizer.normalize(null), is(nullValue()));
         assertThat(normalizer.normalize(42), is(equalTo(new BigDecimal(42))));
@@ -94,7 +98,8 @@ public class NormalizerTest {
 
     @Test
     public void testDecimalNormalizer() {
-        Normalizer normalizer = new NormalizerFactoryImpl().getNormalizer(new ConfigDescriptionParameter("test", Type.DECIMAL));
+        Normalizer normalizer = new NormalizerFactoryImpl().getNormalizer(
+                ConfigDescriptionParameterBuilder.create("test", ConfigDescriptionParameter.Type.DECIMAL).build());
 
         assertThat(normalizer.normalize(null), is(nullValue()));
         assertThat(normalizer.normalize(42), is(equalTo(new BigDecimal("42.0"))));
@@ -122,7 +127,8 @@ public class NormalizerTest {
 
     @Test
     public void testTextNormalizer() {
-        Normalizer normalizer = new NormalizerFactoryImpl().getNormalizer(new ConfigDescriptionParameter("test", Type.TEXT));
+        Normalizer normalizer = new NormalizerFactoryImpl().getNormalizer(
+                ConfigDescriptionParameterBuilder.create("test", ConfigDescriptionParameter.Type.TEXT).build());
 
         assertThat(normalizer.normalize(null), is(nullValue()));
         assertThat(normalizer.normalize(""), is(equalTo("")));
@@ -147,12 +153,12 @@ public class NormalizerTest {
             @Override
             public Type getType() {
                 return Type.BOOLEAN;
-            };
+            }
 
             @Override
             public Boolean isMultiple() {
                 return true;
-            };
+            }
         });
 
         assertThat(normalizer.normalize(null), is(nullValue()));

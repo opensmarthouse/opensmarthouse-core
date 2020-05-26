@@ -13,7 +13,6 @@
 package org.openhab.core.storage.json.internal;
 
 import java.io.File;
-import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
@@ -40,10 +39,8 @@ import org.slf4j.LoggerFactory;
  */
 @Component(name = "org.openhab.core.storage.json", configurationPid = "org.openhab.storage.json", property = { //
         Constants.SERVICE_PID + "=org.openhab.storage.json", //
-        ConfigurableService.SERVICE_PROPERTY_LABEL + "=Json Storage", //
-        ConfigurableService.SERVICE_PROPERTY_CATEGORY + "=system", //
-        ConfigurableService.SERVICE_PROPERTY_DESCRIPTION_URI + "=system:json_storage", //
         "storage.format=json" })
+@ConfigurableService(category = "system", label = "Json Storage", description_uri = JsonStorageService.CONFIG_URI)
 @NonNullByDefault
 public class JsonStorageService implements StorageService {
 
@@ -54,6 +51,7 @@ public class JsonStorageService implements StorageService {
     /** the folder name to store database ({@code jsondb} by default) */
     private String dbFolderName = "jsondb";
 
+    protected static final String CONFIG_URI = "system:json_storage";
     private static final String CFG_MAX_BACKUP_FILES = "backup_files";
     private static final String CFG_WRITE_DELAY = "write_delay";
     private static final String CFG_MAX_DEFER_DELAY = "max_defer_delay";
@@ -148,13 +146,7 @@ public class JsonStorageService implements StorageService {
      * @return url-encoded string or the original string if UTF-8 is not supported on the system
      */
     protected String urlEscapeUnwantedChars(String s) {
-        String result;
-        try {
-            result = URLEncoder.encode(s, StandardCharsets.UTF_8.name());
-        } catch (UnsupportedEncodingException e) {
-            logger.warn("Encoding UTF-8 is not supported, might generate invalid filenames.");
-            result = s;
-        }
+        String result = URLEncoder.encode(s, StandardCharsets.UTF_8);
         int length = Math.min(result.length(), MAX_FILENAME_LENGTH);
         return result.substring(0, length);
     }

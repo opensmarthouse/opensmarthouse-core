@@ -13,9 +13,19 @@
 package org.openhab.core.config.discovery.internal;
 
 import static org.hamcrest.collection.IsMapContaining.hasEntry;
-import static org.junit.Assert.*;
-import static org.mockito.ArgumentMatchers.*;
-import static org.mockito.Mockito.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertThat;
+import static org.junit.Assert.assertTrue;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyList;
+import static org.mockito.ArgumentMatchers.eq;
+import static org.mockito.ArgumentMatchers.nullable;
+import static org.mockito.Mockito.doAnswer;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.reset;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 import static org.mockito.MockitoAnnotations.initMocks;
 
 import java.math.BigDecimal;
@@ -27,20 +37,16 @@ import java.util.Map;
 
 import org.junit.Before;
 import org.junit.Test;
-import org.junit.runner.RunWith;
 import org.mockito.ArgumentCaptor;
 import org.mockito.Mock;
-import org.mockito.junit.MockitoJUnitRunner;
 import org.openhab.core.config.core.ConfigDescription;
-import org.openhab.core.config.core.ConfigDescriptionParameter;
+import org.openhab.core.config.core.ConfigDescriptionBuilder;
 import org.openhab.core.config.core.ConfigDescriptionParameter.Type;
 import org.openhab.core.config.core.ConfigDescriptionParameterBuilder;
 import org.openhab.core.config.core.ConfigDescriptionRegistry;
 import org.openhab.core.config.core.Configuration;
-import org.openhab.core.config.core.NormalizerFactory;
 import org.openhab.core.config.core.compat.NormalizerFactoryDelegate;
 import org.openhab.core.config.discovery.DiscoveryResult;
-import org.openhab.core.config.discovery.DiscoveryResultBuilder;
 import org.openhab.core.config.discovery.DiscoveryServiceRegistry;
 import org.openhab.core.config.discovery.inbox.events.InboxAddedEvent;
 import org.openhab.core.config.discovery.inbox.events.InboxUpdatedEvent;
@@ -160,7 +166,8 @@ public class PersistentInboxTest {
 
     @Test
     public void testApproveNormalization() throws Exception {
-        DiscoveryResult result = new DiscoveryResultBuilderFactoryImpl().create(THING_UID).withProperty("foo", 3).build();
+        DiscoveryResult result = new DiscoveryResultBuilderFactoryImpl().create(THING_UID).withProperty("foo", 3)
+                .build();
         configureConfigDescriptionRegistryMock("foo", Type.TEXT);
         when(storage.getValues()).thenReturn(Collections.singletonList(result));
 
@@ -177,14 +184,16 @@ public class PersistentInboxTest {
 
     @Test
     public void testEmittedAddedResultIsReadFromStorage() {
-        DiscoveryResult result = new DiscoveryResultBuilderFactoryImpl().create(THING_UID).withProperty("foo", 3).build();
+        DiscoveryResult result = new DiscoveryResultBuilderFactoryImpl().create(THING_UID).withProperty("foo", 3)
+                .build();
 
         EventPublisher eventPublisher = mock(EventPublisher.class);
         inbox.setEventPublisher(eventPublisher);
 
         when(storage.get(THING_UID.toString())) //
                 .thenReturn(null) //
-                .thenReturn(new DiscoveryResultBuilderFactoryImpl().create(THING_UID).withProperty("foo", "bar").build());
+                .thenReturn(
+                        new DiscoveryResultBuilderFactoryImpl().create(THING_UID).withProperty("foo", "bar").build());
 
         inbox.activate();
         inbox.add(result);
@@ -201,14 +210,16 @@ public class PersistentInboxTest {
 
     @Test
     public void testEmittedUpdatedResultIsReadFromStorage() {
-        DiscoveryResult result = new DiscoveryResultBuilderFactoryImpl().create(THING_UID).withProperty("foo", 3).build();
+        DiscoveryResult result = new DiscoveryResultBuilderFactoryImpl().create(THING_UID).withProperty("foo", 3)
+                .build();
 
         EventPublisher eventPublisher = mock(EventPublisher.class);
         inbox.setEventPublisher(eventPublisher);
 
         when(storage.get(THING_UID.toString())) //
                 .thenReturn(result) //
-                .thenReturn(new DiscoveryResultBuilderFactoryImpl().create(THING_UID).withProperty("foo", "bar").build());
+                .thenReturn(
+                        new DiscoveryResultBuilderFactoryImpl().create(THING_UID).withProperty("foo", "bar").build());
 
         inbox.activate();
         inbox.add(result);
@@ -227,8 +238,8 @@ public class PersistentInboxTest {
         URI configDescriptionURI = new URI("thing-type:test:test");
         ThingType thingType = ThingTypeBuilder.instance(THING_TYPE_UID, "Test")
                 .withConfigDescriptionURI(configDescriptionURI).build();
-        ConfigDescriptionParameter param = ConfigDescriptionParameterBuilder.create(paramName, type).build();
-        ConfigDescription configDesc = new ConfigDescription(configDescriptionURI, Collections.singletonList(param));
+        ConfigDescription configDesc = ConfigDescriptionBuilder.create(configDescriptionURI)
+                .withParameter(ConfigDescriptionParameterBuilder.create(paramName, type).build()).build();
 
         when(thingTypeRegistry.getThingType(THING_TYPE_UID)).thenReturn(thingType);
         when(configDescriptionRegistry.getConfigDescription(eq(configDescriptionURI))).thenReturn(configDesc);

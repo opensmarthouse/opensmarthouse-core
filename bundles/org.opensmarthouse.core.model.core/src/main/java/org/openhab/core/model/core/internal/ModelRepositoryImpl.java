@@ -15,6 +15,7 @@ package org.openhab.core.model.core.internal;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.nio.charset.StandardCharsets;
 import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -27,7 +28,6 @@ import java.util.Set;
 import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.stream.Collectors;
 
-import org.apache.commons.io.IOUtils;
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.resource.Resource;
@@ -98,7 +98,7 @@ public class ModelRepositoryImpl implements ModelRepository {
         try {
             InputStream inputStream = null;
             if (originalInputStream != null) {
-                byte[] bytes = IOUtils.toByteArray(originalInputStream);
+                byte[] bytes = originalInputStream.readAllBytes();
                 String validationResult = validateModel(name, new ByteArrayInputStream(bytes));
                 if (validationResult != null) {
                     logger.warn("Configuration model '{}' has errors, therefore ignoring it: {}", name,
@@ -121,7 +121,7 @@ public class ModelRepositoryImpl implements ModelRepository {
                         if (resource != null) {
                             logger.info("Loading model '{}'", name);
                             Map<String, String> options = new HashMap<>();
-                            options.put(XtextResource.OPTION_ENCODING, "UTF-8");
+                            options.put(XtextResource.OPTION_ENCODING, StandardCharsets.UTF_8.name());
                             if (inputStream == null) {
                                 logger.warn(
                                         "Resource '{}' not found. You have to pass an inputStream to create the resource.",

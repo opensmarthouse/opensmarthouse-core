@@ -70,14 +70,14 @@ public abstract class BaseBridgeHandler extends BaseThingHandler implements Brid
      * Creates a bridge builder, which allows to modify the bridge. The method
      * {@link BaseThingHandler#updateThing(Thing)} must be called to persist the changes.
      *
-     * @return {@link BridgeBuilder} which builds an exact copy of the bridge (not null)
+     * @return {@link BridgeBuilder} which builds an exact copy of the bridge
      */
     @Override
     protected BridgeBuilder editThing() {
-        return thingBuilderFactory.createBridge(this.thing.getThingTypeUID(), this.thing.getUID())
-                .withBridge(this.thing.getBridgeUID()).withChannels(this.thing.getChannels())
-                .withConfiguration(this.thing.getConfiguration()).withLabel(this.thing.getLabel())
-                .withLocation(this.thing.getLocation()).withProperties(this.thing.getProperties());
+        return thingBuilderFactory.createBridge(thing.getThingTypeUID(), thing.getUID())
+                .withBridge(thing.getBridgeUID()).withChannels(thing.getChannels())
+                .withConfiguration(thing.getConfiguration()).withLabel(thing.getLabel())
+                .withLocation(thing.getLocation()).withProperties(thing.getProperties());
     }
 
     @Override
