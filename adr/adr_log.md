@@ -6,4 +6,7 @@ An ADR is to be produced for all proposed significant architectural changes to _
 
 | ID                    | Date      | Status    | Title                                  |
 |-----------------------|-----------|-----------|----------------------------------------|
-| [ADR0001](adr0001.md) | 17MAY2020 | PROPOSED  | Introduce Type Provider                |
+| [ADR0001](adr0001.md) | 16MAY2020 | ACCEPTED  | Introduce Type Provider                |
+| [ADR0002](adr0002.md) | 18MAY2020 | PROPOSED  | Thing Provisioning Framework           |
+| [ADE0003](adr0003.md) | 26MAY2020 | PROPOSED  | Type System Refactoring                |
+| [ADE0004](adr0004.md) | 26MAY2020 | PROPOSED  | Provide Discovery Index                |
