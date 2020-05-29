@@ -9,28 +9,20 @@
     <version>1.0.0-SNAPSHOT</version>
   </parent>
 
-  <artifactId>org.opensmarthouse.core.thing.core</artifactId>
+  <artifactId>org.opensmarthouse.core.config.net</artifactId>
 
-  <name>OpenSmartHouse Core | Bundles | Thing Core</name>
+  <name>OpenSmartHouse Core | Bundles | Config | Net</name>
 
   <dependencies>
     <dependency>
       <groupId>org.opensmarthouse.core.bundles</groupId>
-      <artifactId>org.opensmarthouse.core.thing</artifactId>
+      <artifactId>org.opensmarthouse.core.config</artifactId>
     </dependency>
     <dependency>
       <groupId>org.opensmarthouse.core.bundles</groupId>
-      <artifactId>org.opensmarthouse.core.io.console</artifactId>
+      <artifactId>org.opensmarthouse.core.net</artifactId>
     </dependency>
 
-    <dependency>
-      <groupId>org.opensmarthouse.core.bundles</groupId>
-      <artifactId>org.opensmarthouse.core.test</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>org.osgi</groupId>
-      <artifactId>osgi.enroute.hamcrest.wrapper</artifactId>
-    </dependency>
   </dependencies>
 
 </project>

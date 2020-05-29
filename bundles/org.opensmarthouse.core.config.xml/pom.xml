@@ -11,7 +11,7 @@
 
   <artifactId>org.opensmarthouse.core.config.xml</artifactId>
 
-  <name>OpenSmartHouse Core | Bundles | Configuration XML</name>
+  <name>OpenSmartHouse Core | Bundles | Config | XML</name>
 
   <dependencies>
     <dependency>

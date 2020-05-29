@@ -11,7 +11,7 @@
 
   <artifactId>org.opensmarthouse.core.config.dispatch</artifactId>
 
-  <name>OpenSmartHouse Core | Bundles | Configuration Dispatcher</name>
+  <name>OpenSmartHouse Core | Bundles | Config | Dispatcher</name>
 
   <dependencies>
     <dependency>
@@ -21,10 +21,6 @@
     <dependency>
       <groupId>org.opensmarthouse.core.bundles</groupId>
       <artifactId>org.opensmarthouse.core.service</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>commons-io</groupId>
-      <artifactId>commons-io</artifactId>
     </dependency>
 
     <dependency>

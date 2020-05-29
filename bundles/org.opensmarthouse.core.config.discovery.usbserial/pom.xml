@@ -11,7 +11,7 @@
 
   <artifactId>org.opensmarthouse.core.config.discovery.usbserial</artifactId>
 
-  <name>OpenSmartHouse Core | Bundles | Configuration USB-Serial Discovery</name>
+  <name>OpenSmartHouse Core | Bundles | Discovery | USB-Serial</name>
 
   <dependencies>
     <dependency>

@@ -33,10 +33,6 @@
       <groupId>org.opensmarthouse.core.bundles</groupId>
       <artifactId>org.opensmarthouse.core.common</artifactId>
     </dependency>
-    <dependency>
-      <groupId>org.opensmarthouse.core.bundles</groupId>
-      <artifactId>org.opensmarthouse.core.net</artifactId>
-    </dependency>
 
     <dependency>
       <groupId>org.opensmarthouse.core.bundles</groupId>

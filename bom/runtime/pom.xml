@@ -367,12 +367,6 @@
 
     <!-- Apache Commons -->
     <dependency>
-      <groupId>commons-io</groupId>
-      <artifactId>commons-io</artifactId>
-      <version>2.2</version>
-      <scope>compile</scope>
-    </dependency>
-    <dependency>
       <groupId>commons-lang</groupId>
       <artifactId>commons-lang</artifactId>
       <version>2.6</version>
@@ -474,12 +468,7 @@
     <dependency>
       <groupId>org.openhab</groupId>
       <artifactId>nrjavaserial</artifactId>
-      <!-- Use "no liblockdev" version -->
-      <!-- See: https://github.com/opensmarthouse/opensmarthouse-core/pull/761 -->
-      <!-- See: https://github.com/opensmarthouse/opensmarthouse-core/issues/750 -->
-      <!-- <groupId>com.neuronrobotics</groupId> -->
-      <!-- <version>3.15.0</version> -->
-      <version>3.15.0.OH2</version>
+      <version>5.2.1</version>
       <scope>compile</scope>
     </dependency>
 

@@ -11,7 +11,7 @@
 
   <artifactId>org.opensmarthouse.core.config.discovery.upnp</artifactId>
 
-  <name>OpenSmartHouse Core | Bundles | Configuration UPnP Discovery</name>
+  <name>OpenSmartHouse Core | Bundles | Discovery | UPnP</name>
 
   <dependencies>
     <dependency>

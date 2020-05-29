@@ -28,10 +28,6 @@
         <feature dependency="true">http</feature>
     </feature>
 
-    <feature name="opensmarthouse.tp-commons-io" description="Runtime - Commons IO" version="${project.version}">
-        <bundle dependency="true">mvn:commons-io/commons-io/2.2</bundle>
-    </feature>
-
     <feature name="opensmarthouse.tp-javax-inject" description="Runtime - Javax Inject" version="${project.version}">
         <bundle dependency="true">mvn:org.apache.geronimo.specs/geronimo-atinject_1.0_spec/1.2</bundle>
     </feature>
@@ -50,7 +46,6 @@
 
         <!-- Apache Commons -->
         <bundle dependency="true">mvn:commons-codec/commons-codec/1.6</bundle>
-        <bundle dependency="true">mvn:commons-io/commons-io/2.2</bundle>
 
         <!-- Measurement -->
         <bundle dependency="true">mvn:javax.measure/unit-api/1.0</bundle>

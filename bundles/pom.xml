@@ -44,6 +44,7 @@
     <module>org.opensmarthouse.core.config.discovery.usbserial</module>
     <module>org.opensmarthouse.core.config.discovery.usbserial.linuxsysfs</module>
     <module>org.opensmarthouse.core.config.dispatch</module>
+    <module>org.opensmarthouse.core.config.net</module>
     <module>org.opensmarthouse.core.config.serial</module>
     <module>org.opensmarthouse.core.config.xml</module>
     <module>org.opensmarthouse.core.ephemeris</module>

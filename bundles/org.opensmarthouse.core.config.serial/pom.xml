@@ -11,7 +11,7 @@
 
   <artifactId>org.opensmarthouse.core.config.serial</artifactId>
 
-  <name>OpenSmartHouse Core | Bundles | Configuration Serial</name>
+  <name>OpenSmartHouse Core | Bundles | Config | Serial</name>
 
   <dependencies>
     <dependency>
