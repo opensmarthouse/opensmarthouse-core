@@ -434,9 +434,10 @@ public class ThingResource implements RESTResource {
     @Consumes(MediaType.APPLICATION_JSON)
     @ApiOperation(value = "Updates thing's configuration.")
     @ApiResponses(value = { @ApiResponse(code = 200, message = "OK", response = ThingDTO.class),
+            @ApiResponse(code = 202, message = "OK, Updates were not saved.", response = ThingDTO.class),
             @ApiResponse(code = 400, message = "Configuration of the thing is not valid."),
-            @ApiResponse(code = 404, message = "Thing not found"),
-            @ApiResponse(code = 409, message = "Thing could not be updated as it is not editable.") })
+            @ApiResponse(code = 404, message = "Thing not found.") })
+
     public Response updateConfiguration(
             @HeaderParam(HttpHeaders.ACCEPT_LANGUAGE) @ApiParam(value = "language") @Nullable String language,
             @PathParam("thingUID") @ApiParam(value = "thing") String thingUID,
@@ -452,16 +453,6 @@ public class ThingResource implements RESTResource {
             logger.info("Received HTTP PUT request for update configuration at '{}' for the unknown thing '{}'.",
                     uriInfo.getPath(), thingUID);
             return getThingNotFoundResponse(thingUID);
-        }
-
-        // Ask whether the Thing exists as a managed thing, so it can get updated
-        // 409 otherwise
-        Thing managed = managedThingProvider.get(thingUIDObject);
-        if (managed == null) {
-            logger.info("Received HTTP PUT request for update configuration at '{}' for an unmanaged thing '{}'.",
-                    uriInfo.getPath(), thingUID);
-            return getThingResponse(Status.CONFLICT, thing, locale,
-                    "Cannot update Thing " + thingUID + " as it is not editable.");
         }
 
         // Only move on if Thing is known to be managed, so it can get updated
@@ -481,7 +472,14 @@ public class ThingResource implements RESTResource {
             return JSONResponse.createResponse(Status.INTERNAL_SERVER_ERROR, null, ex.getMessage());
         }
 
-        return getThingResponse(Status.OK, thing, locale, null);
+        // Check if the Thing exists as a managed thing.
+        // If not managed, changes will not be persisted so we return 202 instead of 200.
+        Status status = Status.OK;
+        if (managedThingProvider.get(thingUIDObject) == null) {
+            status = Status.ACCEPTED;
+        }
+
+        return getThingResponse(status, thing, locale, null);
     }
 
     @GET
@@ -677,6 +675,7 @@ public class ThingResource implements RESTResource {
      *
      * @param status
      * @param thing
+     * @param locale
      * @param errormessage an optional error message (may be null), ignored if the status family is successful
      * @return Response
      */
