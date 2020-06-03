@@ -203,6 +203,9 @@ refactor $1 "bundles/org.openhab.core/src/test/java/org/openhab/core/internal/i1
 refactor $1 "bundles/org.openhab.core/src/main/java/org/openhab/core/events/"                                             "bundles/org.opensmarthouse.core.event/src/main/java/org/openhab/core/events/"
 refactor $1 "bundles/org.openhab.core/src/test/java/org/openhab/core/events/"                                             "bundles/org.opensmarthouse.core.event/src/test/java/org/openhab/core/events/"
 
+refactor $1 "bundles/org.openhab.core/src/main/java/org/openhab/core/events/system/"                                      "bundles/org.opensmarthouse.core.event.core/src/main/java/org/openhab/core/events/system/"
+refactor $1 "bundles/org.openhab.core/src/test/java/org/openhab/core/events/system/"                                      "bundles/org.opensmarthouse.core.event.core/src/test/java/org/openhab/core/events/system/"
+
 refactor $1 "bundles/org.openhab.core/src/main/java/org/openhab/core/internal/events/"                                    "bundles/org.opensmarthouse.core.event.core/src/main/java/org/openhab/core/internal/events/"
 refactor $1 "bundles/org.openhab.core/src/test/java/org/openhab/core/internal/events/"                                    "bundles/org.opensmarthouse.core.event.core/src/test/java/org/openhab/core/internal/events/"
 

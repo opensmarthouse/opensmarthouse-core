@@ -272,6 +272,7 @@
         <feature>opensmarthouse-core-config-core</feature>
         <feature>opensmarthouse-core-registry</feature>
         <feature>opensmarthouse-core-ephemeris</feature>
+        <feature>opensmarthouse-core-event-core</feature>
         <bundle>mvn:org.opensmarthouse.core.bundles/org.opensmarthouse.core.automation/${project.version}</bundle>
     </feature>
 

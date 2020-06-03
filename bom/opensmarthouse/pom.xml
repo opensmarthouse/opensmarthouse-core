@@ -114,6 +114,11 @@
       </dependency>
       <dependency>
         <groupId>org.opensmarthouse.core.bundles</groupId>
+        <artifactId>org.opensmarthouse.core.event.core</artifactId>
+        <version>${project.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.opensmarthouse.core.bundles</groupId>
         <artifactId>org.opensmarthouse.core.extension</artifactId>
         <version>${project.version}</version>
       </dependency>
