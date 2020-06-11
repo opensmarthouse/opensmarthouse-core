@@ -37,7 +37,7 @@ public interface Type {
      * @param pattern the pattern to use
      * @return the formatted string
      */
-    public abstract String format(String pattern);
+    public String format(String pattern);
 
     /**
      * Get a string representation that contains the whole internal representation of the type.
@@ -48,5 +48,5 @@ public interface Type {
      *
      * @return a full string representation of the type to be consumed by 'valueOf(String)'
      */
-    public abstract String toFullString();
+    public String toFullString();
 }

@@ -28,8 +28,8 @@ if [ $check == 0 ]
 then
    echo 
    echo
-   echo This script will import a patch file from openHAB and migrate it to openSmartHouse.
-   echo Since this will refactor some bundles, and other changes may have been made to openSmartHouse, there may be errors or merge rejections.
+   echo This script will import a patch file from openHAB and migrate it to OpenSmartHouse.
+   echo Since this will refactor some bundles, and other changes may have been made to OpenSmartHouse, there may be errors or merge rejections.
    echo You are therfore encouraged to use the "-check" option before performing the patch. This will show any errors or warnings before
    echo actually performing the patch.
    echo

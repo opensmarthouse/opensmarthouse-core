@@ -20,7 +20,7 @@
     </dependency>
     <dependency>
       <groupId>org.opensmarthouse.core.bundles</groupId>
-      <artifactId>org.opensmarthouse.core.io.console</artifactId>
+      <artifactId>org.opensmarthouse.core.service</artifactId>
     </dependency>
 
     <dependency>

@@ -12,7 +12,11 @@
  */
 package org.openhab.core.internal.items.function;
 
+import static org.hamcrest.CoreMatchers.instanceOf;
+import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.number.IsCloseTo.closeTo;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertThat;
 
 import java.util.Collections;
 import java.util.HashSet;
@@ -21,13 +25,6 @@ import java.util.Set;
 
 import org.junit.Before;
 import org.junit.Test;
-import org.openhab.core.internal.items.function.And;
-import org.openhab.core.internal.items.function.Count;
-import org.openhab.core.internal.items.function.NAnd;
-import org.openhab.core.internal.items.function.NOr;
-import org.openhab.core.internal.items.function.Or;
-import org.openhab.core.internal.items.function.Sum;
-import org.openhab.core.items.ArithmeticGroupFunction;
 import org.openhab.core.items.GenericItem;
 import org.openhab.core.items.GroupFunction;
 import org.openhab.core.items.Item;
@@ -206,6 +203,21 @@ public class ArithmeticGroupFunctionTest {
     }
 
     @Test
+    public void testAvgFunction() {
+        items.add(new TestItem("TestItem1", new DecimalType("23.54")));
+        items.add(new TestItem("TestItem2", UnDefType.NULL));
+        items.add(new TestItem("TestItem3", new DecimalType("89")));
+        items.add(new TestItem("TestItem4", UnDefType.UNDEF));
+        items.add(new TestItem("TestItem5", new DecimalType("122.41")));
+
+        function = new Avg();
+        State state = function.calculate(items);
+
+        assertThat(state, instanceOf(DecimalType.class));
+        assertThat(((DecimalType) state).doubleValue(), is(closeTo(78.32, 0.01d)));
+    }
+
+    @Test
     public void testSumFunction() {
         items.add(new TestItem("TestItem1", new DecimalType("23.54")));
         items.add(new TestItem("TestItem2", UnDefType.NULL));
@@ -217,6 +229,34 @@ public class ArithmeticGroupFunctionTest {
         State state = function.calculate(items);
 
         assertEquals(new DecimalType("234.95"), state);
+    }
+
+    @Test
+    public void testMinFunction() {
+        items.add(new TestItem("TestItem1", new DecimalType("23.54")));
+        items.add(new TestItem("TestItem2", UnDefType.NULL));
+        items.add(new TestItem("TestItem3", new DecimalType("89")));
+        items.add(new TestItem("TestItem4", UnDefType.UNDEF));
+        items.add(new TestItem("TestItem5", new DecimalType("122.41")));
+
+        function = new Min();
+        State state = function.calculate(items);
+
+        assertThat(state, is(new DecimalType("23.54")));
+    }
+
+    @Test
+    public void testMaxFunction() {
+        items.add(new TestItem("TestItem1", new DecimalType("23.54")));
+        items.add(new TestItem("TestItem2", UnDefType.NULL));
+        items.add(new TestItem("TestItem3", new DecimalType("89")));
+        items.add(new TestItem("TestItem4", UnDefType.UNDEF));
+        items.add(new TestItem("TestItem5", new DecimalType("122.41")));
+
+        function = new Max();
+        State state = function.calculate(items);
+
+        assertThat(state, is(new DecimalType("122.41")));
     }
 
     @Test

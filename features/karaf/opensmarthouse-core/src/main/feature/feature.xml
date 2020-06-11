@@ -448,7 +448,7 @@
     </feature>
 
     <feature name="opensmarthouse-core-io-rest-auth" version="${project.version}">
-        <feature>opensmarthouse-core-auth</feature>
+        <feature>opensmarthouse-core-auth-core</feature>
         <feature>opensmarthouse-core-io-rest</feature>
         <feature>opensmarthouse-core-config</feature>
         <bundle>mvn:org.opensmarthouse.core.bundles/org.opensmarthouse.core.io.rest.auth/${project.version}</bundle>

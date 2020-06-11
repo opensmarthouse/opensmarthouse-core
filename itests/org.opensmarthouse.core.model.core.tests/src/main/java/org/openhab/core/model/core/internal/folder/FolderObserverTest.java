@@ -90,6 +90,9 @@ public class FolderObserverTest extends JavaOSGiTest {
     private ModelParser modelParser;
 
     @Mock
+    private ReadyService readyService;
+
+    @Mock
     private ComponentContext context;
     private Dictionary<String, Object> configProps;
 
@@ -124,7 +127,7 @@ public class FolderObserverTest extends JavaOSGiTest {
 
         modelRepo = new ModelRepoDummy();
 
-        folderObserver = new FolderObserver(modelRepo);
+        folderObserver = new FolderObserver(modelRepo, readyService);
         folderObserver.addModelParser(modelParser);
     }
 
@@ -348,7 +351,7 @@ public class FolderObserverTest extends JavaOSGiTest {
                 throw new RuntimeException("intentional failure.");
             }
         };
-        FolderObserver localFolderObserver = new FolderObserver(modelRepo);
+        FolderObserver localFolderObserver = new FolderObserver(modelRepo, readyService);
         localFolderObserver.addModelParser(modelParser);
 
         String validExtension = "java";
