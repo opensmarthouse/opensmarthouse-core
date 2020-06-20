@@ -11,13 +11,12 @@
 
   <artifactId>org.opensmarthouse.core.config.discovery.mdns</artifactId>
 
-  <name>OpenSmartHouse Core | Bundles | Configuration mDNS Discovery</name>
+  <name>OpenSmartHouse Core | Bundles | Discovery | mDNS</name>
 
   <dependencies>
     <dependency>
       <groupId>org.opensmarthouse.core.bundles</groupId>
       <artifactId>org.opensmarthouse.core.io.transport.mdns</artifactId>
-      <version>${project.version}</version>
     </dependency>
   </dependencies>
 

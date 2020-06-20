@@ -88,6 +88,8 @@
         <feature>opensmarthouse-core-thing-core</feature>
         <feature>opensmarthouse-core-voice-core</feature>
 
+        <feature>opensmarthouse-core-ui-all</feature>
+
         <feature>opensmarthouse-core-io-console-karaf</feature>
         <!--
         <bundle>mvn:org.opensmarthouse.core.bundles/org.opensmarthouse.core.io.http/${project.version}</bundle>
@@ -491,8 +493,9 @@
     </feature>
 
     <feature name="opensmarthouse-core-io-rest-sitemap" version="${project.version}">
-        <feature>opensmarthouse-core-io-rest</feature>
-        <feature>opensmarthouse-core-ui</feature>
+        <feature>opensmarthouse-core-io-rest-core</feature>
+        <feature>opensmarthouse-core-io-rest-item</feature>
+        <feature>opensmarthouse-core-ui-sitemap</feature>
         <feature>opensmarthouse-core-model-sitemap</feature>
         <bundle>mvn:org.opensmarthouse.core.bundles/org.opensmarthouse.core.io.rest.sitemap/${project.version}</bundle>
     </feature>
@@ -747,12 +750,22 @@
 
     <feature name="opensmarthouse-core-ui" version="${project.version}">
         <feature>opensmarthouse-core-registry</feature>
+        <feature>opensmarthouse-core-config</feature>
+        <feature>opensmarthouse-core-library-item</feature>
+        <bundle>mvn:org.opensmarthouse.core.bundles/org.opensmarthouse.core.ui/${project.version}</bundle>
+    </feature>
+
+    <feature name="opensmarthouse-core-ui-all" version="${project.version}">
+        <feature>opensmarthouse-core-ui</feature>
         <feature>opensmarthouse-core-io-http</feature>
         <feature>opensmarthouse-core-io-rest-item</feature>
         <feature>opensmarthouse-core-model-item</feature>
         <feature>opensmarthouse-core-model-sitemap</feature>
         <feature>opensmarthouse-core-persistence</feature>
-        <bundle>mvn:org.opensmarthouse.core.bundles/org.opensmarthouse.core.ui/${project.version}</bundle>
+        <bundle>mvn:org.opensmarthouse.core.bundles/org.opensmarthouse.core.ui.chart/${project.version}</bundle>
+        <bundle>mvn:org.opensmarthouse.core.bundles/org.opensmarthouse.core.ui.icon/${project.version}</bundle>
+        <bundle>mvn:org.opensmarthouse.core.bundles/org.opensmarthouse.core.ui.proxy/${project.version}</bundle>
+        <bundle>mvn:org.opensmarthouse.core.bundles/org.opensmarthouse.core.ui.sitemap/${project.version}</bundle>
         <bundle>mvn:org.opensmarthouse.core.bundles/org.opensmarthouse.core.io.rest.ui/${project.version}</bundle>
     </feature>
 
@@ -761,6 +774,16 @@
         <feature>opensmarthouse-core-io-http</feature>
         <feature>opensmarthouse-core-config</feature>
         <bundle>mvn:org.opensmarthouse.core.bundles/org.opensmarthouse.core.ui.icon/${project.version}</bundle>
+    </feature>
+
+    <feature name="opensmarthouse-core-ui-sitemap" version="${project.version}">
+        <feature>opensmarthouse-core-ui</feature>
+        <feature>opensmarthouse-core-registry</feature>
+        <feature>opensmarthouse-core-transform</feature>
+        <feature>opensmarthouse-core-io-http</feature>
+        <feature>opensmarthouse-core-model-item</feature>
+        <feature>opensmarthouse-core-model-sitemap</feature>
+        <bundle>mvn:org.opensmarthouse.core.bundles/org.opensmarthouse.core.ui.sitemap/${project.version}</bundle>
     </feature>
 
     <feature name="opensmarthouse-runtime-base" description="Open SmartHouse Runtime Base" version="${project.version}">

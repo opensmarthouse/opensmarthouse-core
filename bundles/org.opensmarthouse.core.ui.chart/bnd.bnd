@@ -1,0 +1,6 @@
+Bundle-SymbolicName: ${project.artifactId}
+Private-Package: \
+  org.knowm.xchart.*
+Import-Package: \
+  de.erichseifert.vectorgraphics2d.*;resolution:=optional,\
+  *

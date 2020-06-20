@@ -11,7 +11,7 @@
 
   <artifactId>org.opensmarthouse.core.thing.core</artifactId>
 
-  <name>OpenSmartHouse Core | Bundles | Thing Core</name>
+  <name>OpenSmartHouse Core | Bundles | Thing | Core</name>
 
   <dependencies>
     <dependency>

@@ -11,18 +11,16 @@
 
   <artifactId>org.opensmarthouse.core.io.rest.mdns</artifactId>
 
-  <name>OpenSmartHouse Core | Bundles | REST mDNS Announcer</name>
+  <name>OpenSmartHouse Core | Bundles | REST | mDNS</name>
 
   <dependencies>
     <dependency>
       <groupId>org.opensmarthouse.core.bundles</groupId>
       <artifactId>org.opensmarthouse.core.io.rest</artifactId>
-      <version>${project.version}</version>
     </dependency>
     <dependency>
       <groupId>org.opensmarthouse.core.bundles</groupId>
       <artifactId>org.opensmarthouse.core.io.transport.mdns</artifactId>
-      <version>${project.version}</version>
     </dependency>
   </dependencies>
 

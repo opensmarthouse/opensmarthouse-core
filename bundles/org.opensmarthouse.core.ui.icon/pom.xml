@@ -11,18 +11,20 @@
 
   <artifactId>org.opensmarthouse.core.ui.icon</artifactId>
 
-  <name>OpenSmartHouse Core | Bundles | UI Icon Support</name>
+  <name>OpenSmartHouse Core | Bundles | UI | Icon</name>
 
   <dependencies>
     <dependency>
       <groupId>org.opensmarthouse.core.bundles</groupId>
       <artifactId>org.opensmarthouse.core.ui</artifactId>
-      <version>${project.version}</version>
     </dependency>
     <dependency>
       <groupId>org.opensmarthouse.core.bundles</groupId>
       <artifactId>org.opensmarthouse.core.io.rest</artifactId>
-      <version>${project.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>org.opensmarthouse.core.bundles</groupId>
+      <artifactId>org.opensmarthouse.core.io.http</artifactId>
     </dependency>
 
     <dependency>

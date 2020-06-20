@@ -247,6 +247,15 @@ refactor $1 "bundles/org.openhab.core.voice/src/main/java/org/openhab/core/voice
 refactor $1 "bundles/org.openhab.core.voice/src/test/java/org/openhab/core/voice/internal/"                               "bundles/org.opensmarthouse.core.voice.core/src/test/java/org/openhab/core/voice/internal/"
 refactor $1 "bundles/org.openhab.core.voice/src/main/resources"                                                           "bundles/org.opensmarthouse.core.voice.core/src/main/resources"
 
+refactor $1 "bundles/org.openhab.core.ui/src/main/java/org/openhab/core/ui/chart/"                                        "bundles/org.opensmarthouse.core.ui.chart/src/main/java/org/openhab/core/ui/chart/"
+refactor $1 "bundles/org.openhab.core.ui/src/main/java/org/openhab/core/ui/internal/chart/"                               "bundles/org.opensmarthouse.core.ui.chart/src/main/java/org/openhab/core/ui/internal/chart/"
+
+refactor $1 "bundles/org.openhab.core.ui/src/main/java/org/openhab/core/ui/internal/proxy/"                               "bundles/org.opensmarthouse.core.ui.proxy/src/main/java/org/openhab/core/ui/internal/proxy/"
+refactor $1 "bundles/org.openhab.core.ui/src/test/java/org/openhab/core/ui/internal/proxy/"                               "bundles/org.opensmarthouse.core.ui.proxy/src/test/java/org/openhab/core/ui/internal/proxy/"
+
+refactor $1 "bundles/org.openhab.core.ui/src/test/java/org/openhab/core/ui/sitemap/"                                      "bundles/org.opensmarthouse.core.ui.sitemap/src/test/java/org/openhab/core/ui/sitemap/"
+
+
 # Catch-all. Must be last!
 refactor $1 "itests/org.openhab.core"  "itests/org.opensmarthouse.core"
 refactor $1 "bundles/org.openhab.core" "bundles/org.opensmarthouse.core"

@@ -10,7 +10,7 @@
   </parent>
 
   <artifactId>org.opensmarthouse.core.config.core</artifactId>
-  <name>OpenSmartHouse Core | Bundles | Configuration Core</name>
+  <name>OpenSmartHouse Core | Bundles | Config | Core</name>
 
   <dependencies>
     <dependency>

@@ -146,7 +146,11 @@
     <module>org.opensmarthouse.core.type</module>
     <module>org.opensmarthouse.core.type.core</module>
     <module>org.opensmarthouse.core.ui</module>
+    <module>org.opensmarthouse.core.ui.chart</module>
+    <module>org.opensmarthouse.core.ui.core</module>
     <module>org.opensmarthouse.core.ui.icon</module>
+    <module>org.opensmarthouse.core.ui.proxy</module>
+    <module>org.opensmarthouse.core.ui.sitemap</module>
     <module>org.opensmarthouse.core.util</module>
     <module>org.opensmarthouse.core.voice</module>
     <module>org.opensmarthouse.core.voice.core</module>
