@@ -17,10 +17,10 @@ import static org.junit.Assert.*;
 
 import java.time.DateTimeException;
 import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Arrays;
-import java.util.Calendar;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Locale;
@@ -60,12 +60,12 @@ public class DateTimeTypeTest {
         public final TimeZone defaultTimeZone;
         /**
          * input time.
-         * used to call the {@link Calendar#set(int, int, int, int, int, int)} method to set the time.
+         * used to call the {@link LocalDateTime#of(int, int, int, int, int, int, int)}method to set the time.
          */
         public final @Nullable Map<String, Integer> inputTimeMap;
         /**
          * input time zone.
-         * used to call the {@link Calendar#setTimeZone(TimeZone)} to set the time zone.
+         * used to call the {@link ZonedDateTime#of(LocalDateTime, ZoneId)} to set the time zone.
          * the time zone offset has direct impact on the result.
          */
         public final @Nullable TimeZone inputTimeZone;
@@ -325,7 +325,7 @@ public class DateTimeTypeTest {
             dt2 = new DateTimeType(zonedDate);
         } else if (inputTimeString != null) {
             dt1 = new DateTimeType(inputTimeString);
-            dt2 = new DateTimeType(dt1.getZonedDateTime().withZoneSameInstant(TimeZone.getDefault().toZoneId()));
+            dt2 = new DateTimeType(dt1.getZonedDateTime().withZoneSameInstant(ZoneId.systemDefault()));
             dt3 = new DateTimeType(dt1.getZonedDateTime());
         } else {
             throw new DateTimeException("Invalid inputs in parameter set");

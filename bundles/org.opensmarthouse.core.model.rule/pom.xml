@@ -17,7 +17,10 @@
     <dependency>
       <groupId>org.opensmarthouse.core.bundles</groupId>
       <artifactId>org.opensmarthouse.core.model.script</artifactId>
-      <version>${project.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>org.opensmarthouse.core.bundles</groupId>
+      <artifactId>org.opensmarthouse.core.event.core</artifactId>
     </dependency>
   </dependencies>
 

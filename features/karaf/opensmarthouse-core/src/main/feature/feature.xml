@@ -656,6 +656,9 @@
         <feature>opensmarthouse-core-model-item</feature>
         <feature>opensmarthouse-core-model-persistence</feature>
         <feature>opensmarthouse-core-model-script</feature>
+        <feature>opensmarthouse-core-event-core</feature>
+        <feature>opensmarthouse-core-automation</feature>
+        <feature>opensmarthouse-core-automation-module-script</feature>
         <bundle>mvn:org.opensmarthouse.core.bundles/org.opensmarthouse.core.model.rule/${project.version}</bundle>
         <bundle>mvn:org.opensmarthouse.core.bundles/org.opensmarthouse.core.model.rule.runtime/${project.version}</bundle>
     </feature>
@@ -678,6 +681,7 @@
         <feature>opensmarthouse-core-ephemeris</feature>
         <feature>opensmarthouse-core-scheduler-core</feature>
         <feature>opensmarthouse-core-model-persistence</feature>
+        <feature>opensmarthouse-core-automation-module-script</feature>
         <bundle>mvn:org.opensmarthouse.core.bundles/org.opensmarthouse.core.model.script/${project.version}</bundle>
         <bundle>mvn:org.opensmarthouse.core.bundles/org.opensmarthouse.core.model.script.runtime/${project.version}</bundle>
     </feature>
