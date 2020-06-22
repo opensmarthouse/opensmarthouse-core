@@ -15,6 +15,7 @@ package org.openhab.core.thing.internal.builder;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
+
 import org.eclipse.jdt.annotation.NonNullByDefault;
 import org.eclipse.jdt.annotation.Nullable;
 import org.openhab.core.config.core.ConfigDescriptionRegistry;
@@ -44,6 +45,7 @@ import org.slf4j.LoggerFactory;
  *         values
  * @author Thomas Höfer - added thing and thing type properties
  * @author Chris Jackson - Added properties, label, description
+ * @author Chris Jackson - Added thing type version support
  */
 @NonNullByDefault
 @Component(service = ThingFactory.class)
@@ -79,7 +81,8 @@ public class ThingFactoryImpl implements ThingFactory {
                 configDescriptionRegistry);
 
         return createThingBuilder(thingType, thingUID).withConfiguration(configuration).withChannels(channels)
-                .withProperties(thingType.getProperties()).withBridge(bridgeUID).build();
+                .withProperties(thingType.getProperties()).withBridge(bridgeUID)
+                .withThingTypeVersion(thingType.getVersion()).build();
     }
 
     @Override
@@ -114,9 +117,9 @@ public class ThingFactoryImpl implements ThingFactory {
     @Override
     public ThingBuilder createThingBuilder(ThingType thingType, ThingUID thingUID) {
         if (thingType instanceof BridgeType) {
-            return BridgeBuilderImpl.create(thingType.getUID(), thingUID);
+            return BridgeBuilderImpl.create(thingType.getUID(), thingUID).withThingTypeVersion(thingType.getVersion());
         }
-        return ThingBuilderImpl.create(thingType.getUID(), thingUID);
+        return ThingBuilderImpl.create(thingType.getUID(), thingUID).withThingTypeVersion(thingType.getVersion());
     }
 
 }

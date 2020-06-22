@@ -23,6 +23,7 @@ import org.openhab.core.thing.type.ThingType;
  * objects (DTOs).
  *
  * @author Miki Jankov - Initial contribution
+ * @author Chris Jackson - Added version
  */
 @NonNullByDefault
 public class StrippedThingTypeDTOMapper {
@@ -31,11 +32,12 @@ public class StrippedThingTypeDTOMapper {
      * Maps thing type into stripped thing type data transfer object.
      *
      * @param thingType the thing type to be mapped
+     * @param locale the {@link Locale}
      * @return the stripped thing type DTO object
      */
     public static StrippedThingTypeDTO map(ThingType thingType, Locale locale) {
-        return new StrippedThingTypeDTO(thingType.getUID().toString(), thingType.getLabel(), thingType.getDescription(),
-                thingType.getCategory(), thingType.isListed(), thingType.getSupportedBridgeTypeUIDs(),
-                thingType instanceof BridgeType);
+        return new StrippedThingTypeDTO(thingType.getUID().toString(), thingType.getVersion(), thingType.getLabel(),
+                thingType.getDescription(), thingType.getCategory(), thingType.isListed(),
+                thingType.getSupportedBridgeTypeUIDs(), thingType instanceof BridgeType);
     }
 }

@@ -42,6 +42,7 @@ import com.thoughtworks.xstream.io.HierarchicalStreamReader;
  * @author Thomas Höfer - Added thing and thing type properties
  * @author Chris Jackson - Added channel properties
  * @author Andre Fuechsel - Added representationProperty
+ * @author Chris Jackson - Added version
  */
 public class ThingTypeConverter extends AbstractDescriptionTypeConverter<ThingTypeXmlResult> {
 
@@ -58,8 +59,8 @@ public class ThingTypeConverter extends AbstractDescriptionTypeConverter<ThingTy
     @SuppressWarnings({ "rawtypes", "unchecked" })
     protected ThingTypeConverter(Class clazz, String type) {
         super(clazz, type);
-        this.attributeMapValidator = new ConverterAttributeMapValidator(
-                new String[][] { { "id", "true" }, { "listed", "false" }, { "extensible", "false" } });
+        this.attributeMapValidator = new ConverterAttributeMapValidator(new String[][] { { "id", "true" },
+                { "listed", "false" }, { "extensible", "false" }, { "version", "false" } });
     }
 
     protected List<String> readSupportedBridgeTypeUIDs(NodeIterator nodeIterator, UnmarshallingContext context) {
@@ -99,11 +100,12 @@ public class ThingTypeConverter extends AbstractDescriptionTypeConverter<ThingTy
     protected ThingTypeXmlResult unmarshalType(HierarchicalStreamReader reader, UnmarshallingContext context,
             Map<String, String> attributes, NodeIterator nodeIterator) throws ConversionException {
         ThingTypeXmlResult thingTypeXmlResult = new ThingTypeXmlResult(
-                new ThingTypeUID(super.getUID(attributes, context)), readSupportedBridgeTypeUIDs(nodeIterator, context),
-                super.readLabel(nodeIterator), super.readDescription(nodeIterator), readCategory(nodeIterator),
-                getListed(attributes), getExtensibleChannelTypeIds(attributes),
-                getChannelTypeReferenceObjects(nodeIterator), getProperties(nodeIterator),
-                getRepresentationProperty(nodeIterator), super.getConfigDescriptionObjects(nodeIterator));
+                new ThingTypeUID(super.getUID(attributes, context)), readVersion(attributes),
+                readSupportedBridgeTypeUIDs(nodeIterator, context), super.readLabel(nodeIterator),
+                super.readDescription(nodeIterator), readCategory(nodeIterator), getListed(attributes),
+                getExtensibleChannelTypeIds(attributes), getChannelTypeReferenceObjects(nodeIterator),
+                getProperties(nodeIterator), getRepresentationProperty(nodeIterator),
+                super.getConfigDescriptionObjects(nodeIterator));
 
         return thingTypeXmlResult;
     }
@@ -136,5 +138,13 @@ public class ThingTypeConverter extends AbstractDescriptionTypeConverter<ThingTy
 
     protected String getRepresentationProperty(NodeIterator nodeIterator) {
         return (String) nodeIterator.nextValue("representation-property", false);
+    }
+
+    protected Integer readVersion(Map<String, String> attributes) {
+        String version = attributes.get("version");
+        if (version != null) {
+            return Integer.parseInt(version);
+        }
+        return null;
     }
 }

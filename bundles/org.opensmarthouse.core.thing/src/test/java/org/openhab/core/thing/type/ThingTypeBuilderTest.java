@@ -14,7 +14,8 @@ package org.openhab.core.thing.type;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.collection.IsCollectionWithSize.hasSize;
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertThat;
+import static org.junit.Assert.fail;
 import static org.mockito.Mockito.mock;
 
 import java.net.URI;
@@ -187,6 +188,13 @@ public class ThingTypeBuilderTest {
         } catch (UnsupportedOperationException e) {
             // expected
         }
+    }
+
+    @Test
+    public void withVersion() {
+        ThingType thingType = builder.withVersion(2).build();
+
+        assertThat(thingType.getVersion(), is(2));
     }
 
     @Test

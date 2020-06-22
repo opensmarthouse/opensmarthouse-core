@@ -24,9 +24,6 @@ import org.openhab.core.thing.Thing;
 import org.openhab.core.thing.ThingTypeUID;
 import org.openhab.core.thing.ThingUID;
 import org.openhab.core.thing.binding.ThingBuilderFactory;
-import org.openhab.core.thing.binding.ThingFactory;
-import org.openhab.core.thing.binding.builder.BridgeBuilder;
-import org.openhab.core.thing.binding.builder.ThingBuilder;
 import org.openhab.core.thing.util.ThingHelper;
 
 /**
@@ -34,6 +31,7 @@ import org.openhab.core.thing.util.ThingHelper;
  *
  * @author Stefan Bußweiler - Initial contribution
  * @author Kai Kreuzer - Added DTO to Thing mapping
+ * @author Chris Jackson - Added thing type version
  */
 @NonNullByDefault
 public class ThingDTOMapper {
@@ -55,8 +53,9 @@ public class ThingDTOMapper {
         String thingUID = thing.getUID().toString();
         final ThingUID bridgeUID = thing.getBridgeUID();
 
-        return new ThingDTO(thingTypeUID, thingUID, thing.getLabel(), bridgeUID != null ? bridgeUID.toString() : null,
-                channelDTOs, toMap(thing.getConfiguration()), thing.getProperties(), thing.getLocation());
+        return new ThingDTO(thingTypeUID, thingUID, thing.getThingTypeVersion(), thing.getLabel(),
+                bridgeUID != null ? bridgeUID.toString() : null, channelDTOs, toMap(thing.getConfiguration()),
+                thing.getProperties(), thing.getLocation());
     }
 
     /**

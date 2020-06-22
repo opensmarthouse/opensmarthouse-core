@@ -58,6 +58,7 @@ public class ThingDescriptionReader extends XmlDocumentReader<List<?>> {
 
     /**
      * The default constructor of this class.
+     * 
      * @param channelTypeBuilderFactory
      * @param commandDescriptionBuilderFactory
      */
@@ -133,22 +134,10 @@ public class ThingDescriptionReader extends XmlDocumentReader<List<?>> {
 
     @Override
     public void registerSecurity(XStream xstream) {
-        xstream.allowTypes(new Class[] {
-                ThingDescriptionList.class,
-                ThingTypeXmlResult.class,
-                ChannelTypeXmlResult.class,
-                ChannelGroupTypeXmlResult.class,
-                ChannelXmlResult.class,
-                StateDescription.class,
-                CommandDescription.class,
-                EventDescription.class,
-                CommandDescription.class,
-                ConfigDescriptionParameter.class,
-                ConfigDescriptionParameterGroup.class,
-                FilterCriteria.class,
-                NodeList.class,
-                NodeValue.class,
-                NodeAttributes.class,
-        });
+        xstream.allowTypes(new Class[] { ThingDescriptionList.class, ThingTypeXmlResult.class,
+                ChannelTypeXmlResult.class, ChannelGroupTypeXmlResult.class, ChannelXmlResult.class,
+                StateDescription.class, CommandDescription.class, EventDescription.class, CommandDescription.class,
+                ConfigDescriptionParameter.class, ConfigDescriptionParameterGroup.class, FilterCriteria.class,
+                NodeList.class, NodeValue.class, NodeAttributes.class, });
     }
 }

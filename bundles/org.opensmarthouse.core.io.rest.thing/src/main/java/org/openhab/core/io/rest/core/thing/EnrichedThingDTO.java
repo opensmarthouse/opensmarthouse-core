@@ -25,6 +25,7 @@ import org.openhab.core.thing.firmware.dto.FirmwareStatusDTO;
  * @author Dennis Nobel - Initial contribution
  * @author Kai Kreuzer - Removed links and items
  * @author Chris Jackson - Added 'editable' flag
+ * @author Chris Jackson - Added thing type version
  */
 public class EnrichedThingDTO extends ThingDTO {
 
@@ -43,8 +44,8 @@ public class EnrichedThingDTO extends ThingDTO {
      */
     EnrichedThingDTO(ThingDTO thingDTO, List<ChannelDTO> channels, ThingStatusInfo statusInfo,
             FirmwareStatusDTO firmwareStatus, boolean editable) {
-        super(thingDTO.thingTypeUID, thingDTO.UID, thingDTO.label, thingDTO.bridgeUID, channels, thingDTO.configuration,
-                thingDTO.properties, thingDTO.location);
+        super(thingDTO.thingTypeUID, thingDTO.UID, thingDTO.thingTypeVersion, thingDTO.label, thingDTO.bridgeUID,
+                channels, thingDTO.configuration, thingDTO.properties, thingDTO.location);
         this.statusInfo = statusInfo;
         this.firmwareStatus = firmwareStatus;
         this.editable = editable;

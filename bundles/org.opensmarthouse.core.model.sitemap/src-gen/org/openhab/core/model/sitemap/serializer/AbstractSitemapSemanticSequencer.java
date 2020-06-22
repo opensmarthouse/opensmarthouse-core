@@ -271,9 +271,9 @@ public abstract class AbstractSitemapSemanticSequencer extends AbstractDelegatin
 	 *     (
 	 *         (
 	 *             (item=ItemRef | label=ID | label=STRING | icon=Icon)? 
-	 *             (Visibility+=VisibilityRule Visibility+=VisibilityRule*)? 
 	 *             (LabelColor+=ColorArray LabelColor+=ColorArray*)? 
-	 *             (ValueColor+=ColorArray ValueColor+=ColorArray*)?
+	 *             (ValueColor+=ColorArray ValueColor+=ColorArray*)? 
+	 *             (Visibility+=VisibilityRule Visibility+=VisibilityRule*)?
 	 *         )+ 
 	 *         children+=Widget*
 	 *     )
@@ -399,9 +399,9 @@ public abstract class AbstractSitemapSemanticSequencer extends AbstractDelegatin
 	 *     (
 	 *         (
 	 *             (item=ItemRef | label=ID | label=STRING | icon=Icon)? 
-	 *             (Visibility+=VisibilityRule Visibility+=VisibilityRule*)? 
+	 *             (LabelColor+=ColorArray LabelColor+=ColorArray*)? 
 	 *             (ValueColor+=ColorArray ValueColor+=ColorArray*)? 
-	 *             (LabelColor+=ColorArray LabelColor+=ColorArray*)?
+	 *             (Visibility+=VisibilityRule Visibility+=VisibilityRule*)?
 	 *         )+ 
 	 *         children+=Widget*
 	 *     )

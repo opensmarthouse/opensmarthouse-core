@@ -38,6 +38,7 @@ import org.osgi.service.component.annotations.Reference;
  * Default implementation of {@link ThingTypeI18nLocalizationService}.
  *
  * @author Łukasz Dywicki - Initial contribution.
+ * @author Chris Jackson - Add version
  */
 @Component(service = ThingTypeI18nLocalizationService.class)
 @NonNullByDefault
@@ -89,7 +90,7 @@ public class ThingTypeI18nLocalizationServiceImpl implements ThingTypeI18nLocali
             builder.withDescription(description);
         }
         builder.withChannelDefinitions(localizedChannelDefinitions)
-                .withChannelGroupDefinitions(localizedChannelGroupDefinitions);
+                .withChannelGroupDefinitions(localizedChannelGroupDefinitions).withVersion(thingType.getVersion());
 
         if (thingType instanceof BridgeType) {
             return builder.buildBridge();

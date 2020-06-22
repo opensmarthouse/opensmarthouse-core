@@ -36,6 +36,7 @@ import org.openhab.core.thing.ThingTypeUID;
  * @author Simon Kaufmann - Added listed field
  * @author Andre Fuechsel - Added representationProperty field
  * @author Stefan Triller - Added category field
+ * @author Chris Jackson - Added version
  */
 @NonNullByDefault
 public class ThingType extends AbstractDescriptionType {
@@ -49,6 +50,7 @@ public class ThingType extends AbstractDescriptionType {
     private final @Nullable URI configDescriptionURI;
     private final boolean listed;
     private final @Nullable String category;
+    private final Integer version;
 
     /**
      * @deprecated Use the {@link ThingTypeBuilder} instead.
@@ -112,8 +114,26 @@ public class ThingType extends AbstractDescriptionType {
     /**
      * Creates a new instance of this class with the specified parameters.
      *
+     * @deprecated Use the {@link ThingTypeBuilder} instead.
+     */
+    @Deprecated
+    ThingType(ThingTypeUID uid, @Nullable List<String> supportedBridgeTypeUIDs, String label,
+            @Nullable String description, @Nullable String category, boolean listed,
+            @Nullable String representationProperty, @Nullable List<ChannelDefinition> channelDefinitions,
+            @Nullable List<ChannelGroupDefinition> channelGroupDefinitions, @Nullable Map<String, String> properties,
+            @Nullable URI configDescriptionURI, @Nullable List<String> extensibleChannelTypeIds)
+            throws IllegalArgumentException {
+        this(uid, 1, supportedBridgeTypeUIDs, label, description, category, listed, representationProperty,
+                channelDefinitions, channelGroupDefinitions, properties, configDescriptionURI,
+                extensibleChannelTypeIds);
+    }
+
+    /**
+     * Creates a new instance of this class with the specified parameters.
+     *
      * @param uid the unique identifier which identifies this Thing type within the overall system
      *            (must neither be null, nor empty)
+     * @param version
      * @param supportedBridgeTypeUIDs the unique identifiers of the bridges this Thing type supports
      *            (could be null or empty)
      * @param label the human readable label for the according type
@@ -130,7 +150,7 @@ public class ThingType extends AbstractDescriptionType {
      * @param extensibleChannelTypeIds the channel-type ids this thing-type is extensible with (could be null or empty).
      * @throws IllegalArgumentException if the UID is null or empty, or the the meta information is null
      */
-    ThingType(ThingTypeUID uid, @Nullable List<String> supportedBridgeTypeUIDs, String label,
+    ThingType(ThingTypeUID uid, @Nullable Integer version, @Nullable List<String> supportedBridgeTypeUIDs, String label,
             @Nullable String description, @Nullable String category, boolean listed,
             @Nullable String representationProperty, @Nullable List<ChannelDefinition> channelDefinitions,
             @Nullable List<ChannelGroupDefinition> channelGroupDefinitions, @Nullable Map<String, String> properties,
@@ -138,6 +158,7 @@ public class ThingType extends AbstractDescriptionType {
             throws IllegalArgumentException {
         super(uid, label, description);
 
+        this.version = version == null ? 1 : version;
         this.category = category;
         this.listed = listed;
         this.representationProperty = representationProperty;
@@ -196,6 +217,16 @@ public class ThingType extends AbstractDescriptionType {
     }
 
     /**
+     * Gets the version of the thingtype definition. This allows the system to know if the thing type has changed since
+     * a thing using this thing type was instantiated.
+     * 
+     * @return the thing type version
+     */
+    public Integer getVersion() {
+        return version;
+    }
+
+    /**
      * Returns the unique identifiers of the bridges this {@link ThingType} supports.
      * <p>
      * The returned list is immutable.
@@ -248,6 +279,11 @@ public class ThingType extends AbstractDescriptionType {
         return properties;
     }
 
+    /**
+     * Gets the functional category in which this Thing resides
+     * 
+     * @return a {@link String} defining the category for the thing
+     */
     public @Nullable String getCategory() {
         return this.category;
     }
@@ -284,7 +320,7 @@ public class ThingType extends AbstractDescriptionType {
 
         ThingType other = (ThingType) obj;
 
-        return this.getUID().equals(other.getUID());
+        return this.getUID().equals(other.getUID()) && this.getVersion().equals(other.getVersion());
     }
 
     @Override

@@ -24,6 +24,7 @@ import org.openhab.core.thing.ThingTypeUID;
  * A {@link ThingType} builder.
  *
  * @author Henning Treu - Initial contribution
+ * @author Chris Jackson - Add version
  */
 @NonNullByDefault
 public class ThingTypeBuilder {
@@ -38,6 +39,7 @@ public class ThingTypeBuilder {
     private boolean listed;
     private @Nullable String category;
     private @Nullable String description;
+    private @Nullable Integer version;
 
     private final String bindingId;
     private final String thingTypeId;
@@ -118,9 +120,10 @@ public class ThingTypeBuilder {
             throw new IllegalArgumentException("The label must neither be null nor empty.");
         }
 
-        return new ThingType(new ThingTypeUID(bindingId, thingTypeId), supportedBridgeTypeUIDs, label, description,
-                category, listed, representationProperty, channelDefinitions, channelGroupDefinitions, properties,
-                configDescriptionURI, extensibleChannelTypeIds);
+        return new ThingType(new ThingTypeUID(bindingId, thingTypeId), version == null ? 1 : version,
+                supportedBridgeTypeUIDs, label, description, category, listed, representationProperty,
+                channelDefinitions, channelGroupDefinitions, properties, configDescriptionURI,
+                extensibleChannelTypeIds);
     }
 
     /**
@@ -140,9 +143,14 @@ public class ThingTypeBuilder {
             throw new IllegalArgumentException("The label must neither be null nor empty.");
         }
 
-        return new BridgeType(new ThingTypeUID(bindingId, thingTypeId), supportedBridgeTypeUIDs, label, description,
-                category, listed, representationProperty, channelDefinitions, channelGroupDefinitions, properties,
-                configDescriptionURI, extensibleChannelTypeIds);
+        return new BridgeType(new ThingTypeUID(bindingId, thingTypeId), version, supportedBridgeTypeUIDs, label,
+                description, category, listed, representationProperty, channelDefinitions, channelGroupDefinitions,
+                properties, configDescriptionURI, extensibleChannelTypeIds);
+    }
+
+    public ThingTypeBuilder withVersion(Integer version) {
+        this.version = version;
+        return this;
     }
 
     public ThingTypeBuilder withLabel(String label) {

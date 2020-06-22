@@ -32,7 +32,6 @@ import org.openhab.core.thing.ThingStatusDetail;
 import org.openhab.core.thing.ThingStatusInfo;
 import org.openhab.core.thing.ThingTypeUID;
 import org.openhab.core.thing.ThingUID;
-import org.openhab.core.thing.binding.builder.ChannelBuilder;
 import org.openhab.core.thing.binding.builder.ThingBuilder;
 import org.openhab.core.thing.binding.builder.ThingStatusInfoBuilder;
 import org.openhab.core.thing.util.ThingHandlerHelper;
@@ -58,6 +57,7 @@ import org.slf4j.LoggerFactory;
  * @author Stefan Bußweiler - Added new thing status handling, refactorings thing/bridge life cycle
  * @author Kai Kreuzer - Refactored isLinked method to not use deprecated functions anymore
  * @author Christoph Weitkamp - Moved OSGI ServiceTracker from BaseThingHandler to ThingHandlerCallback
+ * @author Chris Jackson - Added thing type version support
  */
 @NonNullByDefault
 public abstract class BaseThingHandler implements ThingHandler {
@@ -394,7 +394,8 @@ public abstract class BaseThingHandler implements ThingHandler {
         return thingBuilderFactory.createThing(this.thing.getThingTypeUID(), this.thing.getUID())
                 .withBridge(this.thing.getBridgeUID()).withChannels(this.thing.getChannels())
                 .withConfiguration(this.thing.getConfiguration()).withLabel(this.thing.getLabel())
-                .withLocation(this.thing.getLocation()).withProperties(this.thing.getProperties());
+                .withLocation(this.thing.getLocation()).withProperties(this.thing.getProperties())
+                .withThingTypeVersion(this.thing.getThingTypeVersion());
     }
 
     /**

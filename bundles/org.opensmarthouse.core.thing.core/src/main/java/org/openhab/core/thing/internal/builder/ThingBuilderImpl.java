@@ -35,6 +35,7 @@ import org.openhab.core.thing.util.ThingHelper;
  * Default realization of a thing builder concept.
  *
  * @author Łukasz Dywicki - Initial contribution.
+ * @author Chris Jackson - Added thing type version
  */
 @NonNullByDefault
 public class ThingBuilderImpl implements ThingBuilder {
@@ -47,6 +48,7 @@ public class ThingBuilderImpl implements ThingBuilder {
     private @Nullable ThingUID bridgeUID;
     private @Nullable Map<String, String> properties;
     private @Nullable String location;
+    private @Nullable Integer thingTypeVersion;
 
     protected ThingBuilderImpl(ThingTypeUID thingTypeUID, ThingUID thingUID) {
         this.thingUID = thingUID;
@@ -54,7 +56,8 @@ public class ThingBuilderImpl implements ThingBuilder {
     }
 
     public static ThingBuilder create(ThingTypeUID thingTypeUID, String thingId) {
-        return new ThingBuilderImpl(thingTypeUID, new ThingUID(thingTypeUID.getBindingId(), thingTypeUID.getId(), thingId));
+        return new ThingBuilderImpl(thingTypeUID,
+                new ThingUID(thingTypeUID.getBindingId(), thingTypeUID.getId(), thingId));
     }
 
     public static ThingBuilder create(ThingTypeUID thingTypeUID, ThingUID thingUID) {
@@ -144,11 +147,18 @@ public class ThingBuilderImpl implements ThingBuilder {
         return this;
     }
 
+    @Override
+    public ThingBuilder withThingTypeVersion(@Nullable Integer version) {
+        this.thingTypeVersion = version;
+        return this;
+    }
+
     protected Thing populate(ThingImpl thing) {
         thing.setLabel(label);
         thing.setChannels(channels);
         thing.setConfiguration(configuration);
         thing.setBridgeUID(bridgeUID);
+        thing.setThingTypeVersion(thingTypeVersion);
         if (properties != null) {
             for (Map.Entry<String, String> entry : properties.entrySet()) {
                 thing.setProperty(entry.getKey(), entry.getValue());

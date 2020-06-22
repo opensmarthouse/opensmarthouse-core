@@ -70,6 +70,7 @@ import org.openhab.core.thing.Thing;
 import org.openhab.core.thing.ThingManager;
 import org.openhab.core.thing.ThingRegistry;
 import org.openhab.core.thing.ThingStatusInfo;
+import org.openhab.core.thing.ThingTypeMigrationService;
 import org.openhab.core.thing.ThingTypeUID;
 import org.openhab.core.thing.ThingUID;
 import org.openhab.core.thing.binding.ThingBuilderFactory;
@@ -155,6 +156,7 @@ public class ThingResource implements RESTResource {
     private final ThingManager thingManager;
     private final ThingBuilderFactory thingBuilderFactory;
     private final LocaleService localeService;
+    private final ThingTypeMigrationService thingMigrationService;
 
     private @Context @NonNullByDefault({}) UriInfo uriInfo;
 
@@ -171,7 +173,8 @@ public class ThingResource implements RESTResource {
             final @Reference ThingRegistry thingRegistry, //
             final @Reference ThingStatusInfoI18nLocalizationService thingStatusInfoI18nLocalizationService, //
             final @Reference ThingTypeRegistry thingTypeRegistry, //
-            final @Reference ThingBuilderFactory thingBuilderFactory) {
+            final @Reference ThingBuilderFactory thingBuilderFactory, //
+            final @Reference ThingTypeMigrationService thingMigrationService) {
         this.channelTypeRegistry = channelTypeRegistry;
         this.configStatusService = configStatusService;
         this.configDescRegistry = configDescRegistry;
@@ -185,6 +188,7 @@ public class ThingResource implements RESTResource {
         this.thingStatusInfoI18nLocalizationService = thingStatusInfoI18nLocalizationService;
         this.thingTypeRegistry = thingTypeRegistry;
         this.thingBuilderFactory = thingBuilderFactory;
+        this.thingMigrationService = thingMigrationService;
     }
 
     /**
@@ -530,6 +534,33 @@ public class ThingResource implements RESTResource {
         }
 
         thingManager.setEnabled(thingUIDObject, Boolean.valueOf(enabled));
+
+        // everything went well
+        return getThingResponse(Status.OK, thing, locale, null);
+    }
+
+    @PUT
+    @RolesAllowed({ Role.USER, Role.ADMIN })
+    @Path("/{thingUID}/migrate")
+    @ApiOperation(value = "Migrates the thing to the latest ThingType version.")
+    @ApiResponses(value = { @ApiResponse(code = 200, message = "OK", response = String.class),
+            @ApiResponse(code = 404, message = "Thing not found.") })
+    public Response mirateThingType(
+            @HeaderParam(HttpHeaders.ACCEPT_LANGUAGE) @ApiParam(value = "language") @Nullable String language,
+            @PathParam("thingUID") @ApiParam(value = "thing") String thingUID) throws IOException {
+        final Locale locale = localeService.getLocale(language);
+
+        ThingUID thingUIDObject = new ThingUID(thingUID);
+
+        // Check if the Thing exists, 404 if not
+        Thing thing = thingRegistry.get(thingUIDObject);
+        if (thing == null) {
+            logger.info("Received HTTP PUT request to migrate thing type at '{}' for the unknown thing '{}'.",
+                    uriInfo.getPath(), thingUID);
+            return getThingNotFoundResponse(thingUID);
+        }
+
+        thingMigrationService.migrateThingType(thing, thing.getThingTypeUID(), thing.getConfiguration());
 
         // everything went well
         return getThingResponse(Status.OK, thing, locale, null);

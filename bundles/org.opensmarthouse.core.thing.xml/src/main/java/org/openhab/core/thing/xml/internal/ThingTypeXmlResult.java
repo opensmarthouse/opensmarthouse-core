@@ -43,6 +43,7 @@ import com.thoughtworks.xstream.converters.ConversionException;
  * @author Simon Kaufmann - Added listed field
  * @author Andre Fuechsel - Added representationProperty field
  * @author Stefan Triller - Added category field
+ * @author Chris Jackson - Added version
  */
 public class ThingTypeXmlResult {
 
@@ -59,12 +60,14 @@ public class ThingTypeXmlResult {
     protected List<NodeValue> properties;
     protected URI configDescriptionURI;
     protected ConfigDescription configDescription;
+    protected Integer version;
 
-    public ThingTypeXmlResult(ThingTypeUID thingTypeUID, List<String> supportedBridgeTypeUIDs, String label,
-            String description, String category, boolean listed, List<String> extensibleChannelTypeIds,
+    public ThingTypeXmlResult(ThingTypeUID thingTypeUID, Integer version, List<String> supportedBridgeTypeUIDs,
+            String label, String description, String category, boolean listed, List<String> extensibleChannelTypeIds,
             List<ChannelXmlResult>[] channelTypeReferenceObjects, List<NodeValue> properties,
             String representationProperty, Object[] configDescriptionObjects) {
         this.thingTypeUID = thingTypeUID;
+        this.version = version;
         this.supportedBridgeTypeUIDs = supportedBridgeTypeUIDs;
         this.label = label;
         this.description = description;
@@ -79,10 +82,20 @@ public class ThingTypeXmlResult {
         this.configDescription = (ConfigDescription) configDescriptionObjects[1];
     }
 
+    /**
+     * Gets the {@link ThingTypeUID} for this thing type
+     * 
+     * @return the {@link ThingTypeUID} for this thing type
+     */
     public ThingTypeUID getUID() {
         return thingTypeUID;
     }
 
+    /**
+     * Gets the {@link ConfigDescription} for this thing type
+     * 
+     * @return the {@link ConfigDescription} for this thing type
+     */
     public ConfigDescription getConfigDescription() {
         return configDescription;
     }
@@ -149,7 +162,8 @@ public class ThingTypeXmlResult {
                 .withChannelGroupDefinitions(toChannelGroupDefinitions(channelGroupTypeReferences)) //
                 .withProperties(toPropertiesMap()) //
                 .withConfigDescriptionURI(configDescriptionURI) //
-                .withExtensibleChannelTypeIds(extensibleChannelTypeIds); //
+                .withExtensibleChannelTypeIds(extensibleChannelTypeIds) //
+                .withVersion(version);
     }
 
     public ThingType toThingType() throws ConversionException {
@@ -158,12 +172,12 @@ public class ThingTypeXmlResult {
 
     @Override
     public String toString() {
-        return "ThingTypeXmlResult [thingTypeUID=" + thingTypeUID + ", supportedBridgeTypeUIDs="
-                + supportedBridgeTypeUIDs + ", label=" + label + ", description=" + description + ",  category="
-                + category + ", listed=" + listed + ", representationProperty=" + representationProperty
-                + ", channelTypeReferences=" + channelTypeReferences + ", channelGroupTypeReferences="
-                + channelGroupTypeReferences + ", extensibelChannelTypeIds=" + extensibleChannelTypeIds
-                + ", properties=" + properties + ", configDescriptionURI=" + configDescriptionURI
-                + ", configDescription=" + configDescription + "]";
+        return "ThingTypeXmlResult [thingTypeUID=" + thingTypeUID + ", version=" + version
+                + ", supportedBridgeTypeUIDs=" + supportedBridgeTypeUIDs + ", label=" + label + ", description="
+                + description + ",  category=" + category + ", listed=" + listed + ", representationProperty="
+                + representationProperty + ", channelTypeReferences=" + channelTypeReferences
+                + ", channelGroupTypeReferences=" + channelGroupTypeReferences + ", extensibelChannelTypeIds="
+                + extensibleChannelTypeIds + ", properties=" + properties + ", configDescriptionURI="
+                + configDescriptionURI + ", configDescription=" + configDescription + "]";
     }
 }

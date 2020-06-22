@@ -25,8 +25,20 @@ import org.openhab.core.thing.binding.builder.ThingBuilder;
  */
 public interface ThingBuilderFactory {
 
+    /**
+     * 
+     * @param thingTypeUID
+     * @param uid
+     * @return
+     */
     ThingBuilder createThing(ThingTypeUID thingTypeUID, ThingUID uid);
 
+    /**
+     * 
+     * @param thingTypeUID
+     * @param uid
+     * @return
+     */
     BridgeBuilder createBridge(ThingTypeUID thingTypeUID, ThingUID uid);
 
 }

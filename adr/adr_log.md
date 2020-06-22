@@ -12,3 +12,4 @@ An ADR is to be produced for all proposed significant architectural changes to _
 | [ADE0004](adr0004.md) | 26MAY2020 | PROPOSED  | Provide Discovery Index                                   |
 | [ADE0005](adr0005.md) | 28MAY2020 | PROPOSED  | Differentiate thing handler and device configuration      |
 | [ADE0006](adr0006.md) | 07JUN2020 | PROPOSED  | Add Command and State Attributes                          |
+| [ADE0007](adr0007.md) | 22JUN2020 | PROPOSED  | Add ThingType versioning                                  |

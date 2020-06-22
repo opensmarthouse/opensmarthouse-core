@@ -35,6 +35,7 @@ import org.openhab.core.thing.binding.ThingHandler;
  * @author Kai Kreuzer - Removed linked items from Thing
  * @author Yordan Zhelev - Added method for getting the enabled status
  * @author Christoph Weitkamp - Added method `getChannel(ChannelUID)`
+ * @author Chris Jackson - Added thing type version
  */
 @NonNullByDefault
 public interface Thing extends Identifiable<ThingUID> {
@@ -182,6 +183,14 @@ public interface Thing extends Identifiable<ThingUID> {
      * @return the thing type UID
      */
     ThingTypeUID getThingTypeUID();
+
+    /**
+     * Gets the thing type version
+     * 
+     * @return the thing type version
+     */
+    @Nullable
+    Integer getThingTypeVersion();
 
     /**
      * Returns an immutable copy of the {@link Thing} properties.

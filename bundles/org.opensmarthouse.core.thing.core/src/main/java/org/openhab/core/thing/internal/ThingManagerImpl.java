@@ -316,7 +316,8 @@ public class ThingManagerImpl
             if (channelType == null) {
                 throw new IllegalArgumentException(String.format("Channel type '%s' is not known", channelTypeUID));
             }
-            return ThingFactoryHelper.createChannelBuilder(channelBuilderFactory, channelUID, channelType, configDescriptionRegistry);
+            return ThingFactoryHelper.createChannelBuilder(channelBuilderFactory, channelUID, channelType,
+                    configDescriptionRegistry);
         };
 
         @Override
@@ -342,8 +343,8 @@ public class ThingManagerImpl
                 ChannelType channelType = channelTypeRegistry.getChannelType(channelDefinition.getChannelTypeUID());
                 if (channelType != null) {
                     ChannelUID channelUID = new ChannelUID(channelGroupUID, channelDefinition.getId());
-                    channelBuilders.add(ThingFactoryHelper.createChannelBuilder(channelBuilderFactory, channelUID, channelType,
-                            configDescriptionRegistry));
+                    channelBuilders.add(ThingFactoryHelper.createChannelBuilder(channelBuilderFactory, channelUID,
+                            channelType, configDescriptionRegistry));
                 }
             }
             return channelBuilders;
@@ -438,8 +439,8 @@ public class ThingManagerImpl
                     }
 
                     // Set the new channels
-                    List<Channel> channels = ThingFactoryHelper.createChannels(thingType, thingUID, channelBuilderFactory,
-                            configDescriptionRegistry);
+                    List<Channel> channels = ThingFactoryHelper.createChannels(thingType, thingUID,
+                            channelBuilderFactory, configDescriptionRegistry);
                     ((ThingImpl) thing).setChannels(channels);
 
                     // Set the given configuration

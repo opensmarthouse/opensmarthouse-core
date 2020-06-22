@@ -19,10 +19,12 @@ import java.util.List;
  * Stripped thing types exclude the parameters, configDescription and channels
  *
  * @author Miki Jankov - Initial contribution
+ * @author Chris Jackson - Added version
  */
 public class StrippedThingTypeDTO {
 
     public String UID;
+    public Integer version;
     public String label;
     public String description;
     public String category;
@@ -33,9 +35,25 @@ public class StrippedThingTypeDTO {
     public StrippedThingTypeDTO() {
     }
 
+    /**
+     * @deprecated Provided for backward compatibility with OH3
+     */
+    @Deprecated
     public StrippedThingTypeDTO(String UID, String label, String description, String category, boolean listed,
             List<String> supportedBridgeTypeUIDs, boolean bridge) {
         this.UID = UID;
+        this.label = label;
+        this.description = description;
+        this.category = category;
+        this.listed = listed;
+        this.supportedBridgeTypeUIDs = supportedBridgeTypeUIDs;
+        this.bridge = bridge;
+    }
+
+    public StrippedThingTypeDTO(String UID, Integer version, String label, String description, String category,
+            boolean listed, List<String> supportedBridgeTypeUIDs, boolean bridge) {
+        this.UID = UID;
+        this.version = version;
         this.label = label;
         this.description = description;
         this.category = category;

@@ -30,6 +30,7 @@ import org.openhab.core.thing.internal.BridgeImpl;
  * Default implementation of a bridge builder concept.
  *
  * @author Łukasz Dywicki - Initial contribution
+ * @author Chris Jackson - Added thing type version support
  */
 @NonNullByDefault
 public class BridgeBuilderImpl extends ThingBuilderImpl implements BridgeBuilder {
@@ -39,7 +40,8 @@ public class BridgeBuilderImpl extends ThingBuilderImpl implements BridgeBuilder
     }
 
     public static BridgeBuilder create(ThingTypeUID thingTypeUID, String bridgeId) {
-        return new BridgeBuilderImpl(thingTypeUID, new ThingUID(thingTypeUID.getBindingId(), thingTypeUID.getId(), bridgeId));
+        return new BridgeBuilderImpl(thingTypeUID,
+                new ThingUID(thingTypeUID.getBindingId(), thingTypeUID.getId(), bridgeId));
     }
 
     public static BridgeBuilder create(ThingTypeUID thingTypeUID, ThingUID thingUID) {
@@ -105,6 +107,11 @@ public class BridgeBuilderImpl extends ThingBuilderImpl implements BridgeBuilder
     @Override
     public BridgeBuilder withLocation(@Nullable String location) {
         return (BridgeBuilder) super.withLocation(location);
+    }
+
+    @Override
+    public BridgeBuilder withThingTypeVersion(@Nullable Integer version) {
+        return (BridgeBuilder) super.withThingTypeVersion(version);
     }
 
 }

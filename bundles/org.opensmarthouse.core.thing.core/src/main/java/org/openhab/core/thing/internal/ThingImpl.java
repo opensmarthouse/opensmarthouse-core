@@ -45,6 +45,7 @@ import org.openhab.core.thing.binding.builder.ThingStatusInfoBuilder;
  * @author Thomas Höfer - Added thing and thing type properties
  * @author Simon Kaufmann - Added label
  * @author Christoph Weitkamp - Added method `getChannel(ChannelUID)`
+ * @author Chris Jackson - Added thing type version
  */
 @NonNullByDefault
 public class ThingImpl implements Thing {
@@ -68,6 +69,8 @@ public class ThingImpl implements Thing {
     private @NonNullByDefault({}) ThingTypeUID thingTypeUID;
 
     private @Nullable String location;
+
+    private @Nullable Integer thingTypeVersion;
 
     private transient volatile ThingStatusInfo status = ThingStatusInfoBuilder
             .create(ThingStatus.UNINITIALIZED, ThingStatusDetail.NONE).build();
@@ -178,6 +181,7 @@ public class ThingImpl implements Thing {
         this.bridgeUID = bridgeUID;
     }
 
+    @Override
     public void addChannel(Channel channel) {
         this.channels.add(channel);
     }
@@ -214,6 +218,15 @@ public class ThingImpl implements Thing {
 
     public void setThingTypeUID(ThingTypeUID thingTypeUID) {
         this.thingTypeUID = thingTypeUID;
+    }
+
+    @Override
+    public @Nullable Integer getThingTypeVersion() {
+        return thingTypeVersion;
+    }
+
+    public void setThingTypeVersion(@Nullable Integer version) {
+        this.thingTypeVersion = version;
     }
 
     @Override

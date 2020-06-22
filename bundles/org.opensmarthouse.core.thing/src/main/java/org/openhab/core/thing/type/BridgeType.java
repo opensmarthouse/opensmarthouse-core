@@ -32,6 +32,7 @@ import org.openhab.core.thing.ThingTypeUID;
  * @author Michael Grammling - Initial contribution
  * @author Thomas Höfer - Added thing and thing type properties
  * @author Andre Fuechsel - Added representationProperty
+ * @author Chris Jackson - Added version
  */
 @NonNullByDefault
 public class BridgeType extends ThingType {
@@ -121,7 +122,9 @@ public class BridgeType extends ThingType {
      * @param configDescriptionURI the link to the concrete ConfigDescription (could be null)
      * @param extensibleChannelTypeIds the channel-type ids this thing-type is extensible with (could be null or empty).
      * @throws IllegalArgumentException if the UID is null or empty, or the the meta information is null
+     * @deprecated Provided for compatibility with OH3
      */
+    @Deprecated
     BridgeType(ThingTypeUID uid, @Nullable List<String> supportedBridgeTypeUIDs, String label,
             @Nullable String description, @Nullable String category, boolean listed,
             @Nullable String representationProperty, @Nullable List<ChannelDefinition> channelDefinitions,
@@ -132,4 +135,33 @@ public class BridgeType extends ThingType {
                 channelDefinitions, channelGroupDefinitions, properties, configDescriptionURI,
                 extensibleChannelTypeIds);
     }
+
+    /**
+     * 
+     * @param uid
+     * @param version
+     * @param supportedBridgeTypeUIDs
+     * @param label
+     * @param description
+     * @param category
+     * @param listed
+     * @param representationProperty
+     * @param channelDefinitions
+     * @param channelGroupDefinitions
+     * @param properties
+     * @param configDescriptionURI
+     * @param extensibleChannelTypeIds
+     * @throws IllegalArgumentException
+     */
+    BridgeType(ThingTypeUID uid, @Nullable Integer version, @Nullable List<String> supportedBridgeTypeUIDs,
+            String label, @Nullable String description, @Nullable String category, boolean listed,
+            @Nullable String representationProperty, @Nullable List<ChannelDefinition> channelDefinitions,
+            @Nullable List<ChannelGroupDefinition> channelGroupDefinitions, @Nullable Map<String, String> properties,
+            @Nullable URI configDescriptionURI, @Nullable List<String> extensibleChannelTypeIds)
+            throws IllegalArgumentException {
+        super(uid, version, supportedBridgeTypeUIDs, label, description, category, listed, representationProperty,
+                channelDefinitions, channelGroupDefinitions, properties, configDescriptionURI,
+                extensibleChannelTypeIds);
+    }
+
 }

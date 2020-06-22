@@ -14,6 +14,7 @@ package org.openhab.core.thing.binding.builder;
 
 import java.util.List;
 import java.util.Map;
+
 import org.eclipse.jdt.annotation.NonNullByDefault;
 import org.eclipse.jdt.annotation.Nullable;
 import org.openhab.core.config.core.Configuration;
@@ -28,6 +29,7 @@ import org.openhab.core.thing.ThingUID;
  * @author Dennis Nobel - Initial contribution
  * @author Kai Kreuzer - Refactoring to make BridgeBuilder a subclass
  * @author Łukasz Dywicki - Refactoring to interface
+ * @author Chris Jackson - Added thing type version
  */
 @NonNullByDefault
 public interface ThingBuilder {
@@ -55,5 +57,7 @@ public interface ThingBuilder {
     ThingBuilder withProperties(Map<String, String> properties);
 
     ThingBuilder withLocation(@Nullable String location);
+
+    ThingBuilder withThingTypeVersion(@Nullable Integer version);
 
 }

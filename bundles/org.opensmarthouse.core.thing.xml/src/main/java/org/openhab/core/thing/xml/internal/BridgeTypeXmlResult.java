@@ -31,15 +31,17 @@ import com.thoughtworks.xstream.converters.ConversionException;
  * @author Michael Grammling - Initial contribution
  * @author Thomas Höfer - Added thing and thing type properties
  * @author Andre Fuechsel - Added representationProperty
+ * @author Chris Jackson - Added version
  */
 public class BridgeTypeXmlResult extends ThingTypeXmlResult {
 
-    public BridgeTypeXmlResult(ThingTypeUID bridgeTypeUID, List<String> supportedBridgeTypeUIDs, String label,
-            String description, String category, boolean listed, List<String> extensibleChannelTypeIds,
+    public BridgeTypeXmlResult(ThingTypeUID bridgeTypeUID, Integer version, List<String> supportedBridgeTypeUIDs,
+            String label, String description, String category, boolean listed, List<String> extensibleChannelTypeIds,
             List<ChannelXmlResult>[] channelTypeReferenceObjects, List<NodeValue> properties,
             String representationProperty, Object[] configDescriptionObjects) {
-        super(bridgeTypeUID, supportedBridgeTypeUIDs, label, description, category, listed, extensibleChannelTypeIds,
-                channelTypeReferenceObjects, properties, representationProperty, configDescriptionObjects);
+        super(bridgeTypeUID, version, supportedBridgeTypeUIDs, label, description, category, listed,
+                extensibleChannelTypeIds, channelTypeReferenceObjects, properties, representationProperty,
+                configDescriptionObjects);
     }
 
     @Override
@@ -49,12 +51,12 @@ public class BridgeTypeXmlResult extends ThingTypeXmlResult {
 
     @Override
     public String toString() {
-        return "BridgeTypeXmlResult [thingTypeUID=" + thingTypeUID + ", supportedBridgeTypeUIDs="
-                + supportedBridgeTypeUIDs + ", label=" + label + ", description=" + description + ", category="
-                + category + ", listed=" + listed + ", representationProperty=" + representationProperty
-                + ", channelTypeReferences=" + channelTypeReferences + ", channelGroupTypeReferences="
-                + channelGroupTypeReferences + ", extensibelChannelTypeIds=" + extensibleChannelTypeIds
-                + ", properties=" + properties + ", configDescriptionURI=" + configDescriptionURI
-                + ", configDescription=" + configDescription + "]";
+        return "BridgeTypeXmlResult [thingTypeUID=" + thingTypeUID + ", version=" + version
+                + ", supportedBridgeTypeUIDs=" + supportedBridgeTypeUIDs + ", label=" + label + ", description="
+                + description + ", category=" + category + ", listed=" + listed + ", representationProperty="
+                + representationProperty + ", channelTypeReferences=" + channelTypeReferences
+                + ", channelGroupTypeReferences=" + channelGroupTypeReferences + ", extensibelChannelTypeIds="
+                + extensibleChannelTypeIds + ", properties=" + properties + ", configDescriptionURI="
+                + configDescriptionURI + ", configDescription=" + configDescription + "]";
     }
 }

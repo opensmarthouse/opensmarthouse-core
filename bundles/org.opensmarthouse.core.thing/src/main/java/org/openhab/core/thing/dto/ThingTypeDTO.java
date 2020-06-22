@@ -25,6 +25,7 @@ import org.openhab.core.config.core.dto.ConfigDescriptionParameterGroupDTO;
  * @author Thomas Höfer - Added thing and thing type properties
  * @author Chris Jackson - Added parameter groups
  * @author Miki Jankov - Introducing StrippedThingTypeDTO
+ * @author Chris Jackson - Added version
  */
 public class ThingTypeDTO extends StrippedThingTypeDTO {
 
@@ -38,12 +39,55 @@ public class ThingTypeDTO extends StrippedThingTypeDTO {
     public ThingTypeDTO() {
     }
 
+    /**
+     * @deprecated Provided only for compatibility with OH3
+     */
+    @Deprecated
     public ThingTypeDTO(String UID, String label, String description, String category, boolean listed,
             List<ConfigDescriptionParameterDTO> configParameters, List<ChannelDefinitionDTO> channels,
             List<ChannelGroupDefinitionDTO> channelGroups, List<String> supportedBridgeTypeUIDs,
             Map<String, String> properties, boolean bridge, List<ConfigDescriptionParameterGroupDTO> parameterGroups,
             List<String> extensibleChannelTypeIds) {
         this.UID = UID;
+        this.label = label;
+        this.description = description;
+        this.category = category;
+        this.listed = listed;
+        this.configParameters = configParameters;
+        this.channels = channels;
+        this.channelGroups = channelGroups;
+        this.supportedBridgeTypeUIDs = supportedBridgeTypeUIDs;
+        this.properties = properties;
+        this.bridge = bridge;
+        this.parameterGroups = parameterGroups;
+        this.extensibleChannelTypeIds = extensibleChannelTypeIds;
+    }
+
+    /**
+     * Creates the {@link ThingTypeDTO}
+     * 
+     * @param UID
+     * @param version
+     * @param label
+     * @param description
+     * @param category
+     * @param listed
+     * @param configParameters
+     * @param channels
+     * @param channelGroups
+     * @param supportedBridgeTypeUIDs
+     * @param properties
+     * @param bridge
+     * @param parameterGroups
+     * @param extensibleChannelTypeIds
+     */
+    public ThingTypeDTO(String UID, Integer version, String label, String description, String category, boolean listed,
+            List<ConfigDescriptionParameterDTO> configParameters, List<ChannelDefinitionDTO> channels,
+            List<ChannelGroupDefinitionDTO> channelGroups, List<String> supportedBridgeTypeUIDs,
+            Map<String, String> properties, boolean bridge, List<ConfigDescriptionParameterGroupDTO> parameterGroups,
+            List<String> extensibleChannelTypeIds) {
+        this.UID = UID;
+        this.version = version;
         this.label = label;
         this.description = description;
         this.category = category;

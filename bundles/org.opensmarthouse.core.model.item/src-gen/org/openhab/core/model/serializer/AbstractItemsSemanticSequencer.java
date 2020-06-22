@@ -117,13 +117,13 @@ public abstract class AbstractItemsSemanticSequencer extends AbstractDelegatingS
 	 *     (
 	 *         (
 	 *             (type=ModelItemType function=ModelGroupFunction?) | 
-	 *             (type=ModelItemType function=ModelGroupFunction? (args+=ID | args+=STRING) args+=STRING? (args+=ID? args+=STRING?)*)
+	 *             (type=ModelItemType function=ModelGroupFunction? (args+=ID | args+=STRING) args+=ID? (args+=STRING? args+=ID?)*)
 	 *         )? 
 	 *         name=ID 
 	 *         label=STRING? 
 	 *         (icon=ID | icon=STRING)? 
 	 *         (groups+=ID groups+=ID*)? 
-	 *         ((tags+=ID | tags+=STRING) (tags+=ID | tags+=STRING)*)? 
+	 *         ((tags+=ID | tags+=STRING) tags+=ID? (tags+=STRING? tags+=ID?)*)? 
 	 *         (bindings+=ModelBinding bindings+=ModelBinding*)?
 	 *     )
 	 */
@@ -143,7 +143,7 @@ public abstract class AbstractItemsSemanticSequencer extends AbstractDelegatingS
 	 *         label=STRING? 
 	 *         (icon=ID | icon=STRING)? 
 	 *         (groups+=ID groups+=ID*)? 
-	 *         ((tags+=ID | tags+=STRING) (tags+=ID | tags+=STRING)*)? 
+	 *         ((tags+=ID | tags+=STRING) tags+=ID? (tags+=STRING? tags+=ID?)*)? 
 	 *         (bindings+=ModelBinding bindings+=ModelBinding*)?
 	 *     )
 	 */

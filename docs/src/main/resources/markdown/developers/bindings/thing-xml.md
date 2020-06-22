@@ -14,7 +14,7 @@ which describe details about their functionality and configuration options.
 
 Technically, the thing types are provided by `ThingTypeProvider`s (`org.eclipse.smarthome.core.thing.binding.ThingTypeProvider`).
 
-openHAB comes with an implementation of such a provider that reads XML files from the folder `ESH-INF/thing` of bundles.
+_OpenSmartHouse_ comes with an implementation of such a provider that reads XML files from the folder `ESH-INF/thing` of bundles.
 Although we refer to this XML syntax in the following, you also have the option to provide directly object model instances through your own provider implementation.
 
 The same applies for the channel types.
@@ -29,7 +29,7 @@ A bridge is a specific type of thing as it can additionally provide access to ot
 Which Things can be associated through which bridge type is defined within the description of a thing:
 
 ```xml
-    <thing-type id="thingTypeID">
+    <thing-type id="thingTypeID" version="1">
         <supported-bridge-type-refs>
             <bridge-type-ref id="bridgeTypeID" />
         </supported-bridge-type-refs>
@@ -40,6 +40,11 @@ Which Things can be associated through which bridge type is defined within the d
     </thing-type>
 ```
 
+Thing types are listed by default, unless specified otherwise.
+Hiding thing types potentially makes sense if they are deprecated and should not be used anymore.
+Also, this can be useful if users should not be bothered with distinguishing similar devices which for technical reasons have to have separate thing types.
+In that way, a generic thing type could be listed for users and a corresponding thing handler would change the thing type immediately to a more concrete one, handing over control to the correct specialized handler.
+
 Bindings may optionally set the listing of a thing type.
 By doing do, they indicate to user interfaces whether it should be shown to the users or not, e.g. when pairing things manually:
 
@@ -49,10 +54,8 @@ By doing do, they indicate to user interfaces whether it should be shown to the 
     </thing-type>
 ```
 
-Thing types are listed by default, unless specified otherwise.
-Hiding thing types potentially makes sense if they are deprecated and should not be used anymore.
-Also, this can be useful if users should not be bothered with distinguishing similar devices which for technical reasons have to have separate thing types.
-In that way, a generic thing type could be listed for users and a corresponding thing handler would change the thing type immediately to a more concrete one, handing over control to the correct specialized handler.
+Bindings may optionally set the version of a thing type. This may be used within the system to detect if any things have been instantiated from an older version of the thing type and should be updated.
+
 
 ### Thing Categories
 
@@ -444,7 +447,7 @@ Details about the category can be found in our [categories overview](../../conce
 
 ## Properties
 
-Solutions based on openHAB might require meta data from a device.
+Solutions based on _OpenSmartHouse_ might require meta data from a device.
 These meta data could include:
 
 - general device information, e.g. the device vendor, the device series or the model ID, ...
@@ -585,11 +588,11 @@ The full Java API for bridge and *Thing* descriptions can be found in the Java p
 <?xml version="1.0" encoding="UTF-8"?>
 <thing:thing-descriptions bindingId="bindingID"
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-    xmlns:thing="https://openhab.org/schemas/thing-description/v1.0.0"
-    xsi:schemaLocation="https://openhab.org/schemas/thing-description/v1.0.0
-        https://openhab.org/schemas/thing-description-1.0.0.xsd">
+    xmlns:thing="https://opensmarthouse.org/schemas/thing-description/v1.0.0"
+    xsi:schemaLocation="https://opensmarthouse.org/schemas/thing-description/v1.0.0
+        https://opensmarthouse.org/schemas/thing-description-1.0.0.xsd">
 
-  <bridge-type id="bridgeTypeID" listed="{true|false}" extensible="channelTypeId1,channelTypeId2,...">
+  <bridge-type id="bridgeTypeID" version="1" listed="{true|false}" extensible="channelTypeId1,channelTypeId2,...">
     <supported-bridge-type-refs>
       <bridge-type-ref id="bridgeTypeID" />
       ...
@@ -632,7 +635,7 @@ The full Java API for bridge and *Thing* descriptions can be found in the Java p
     <config-description-ref uri="{binding|thing-type|channel-type|any_other}:bindingID:..." />
   </bridge-type>
 
-  <thing-type id="thingTypeID" listed="{true|false}" extensible="channelTypeId1,channelTypeId2,...">
+  <thing-type id="thingTypeID" version="6" listed="{true|false}" extensible="channelTypeId1,channelTypeId2,...">
     <supported-bridge-type-refs>
       <bridge-type-ref id="bridgeTypeID" />
       ...
@@ -748,6 +751,7 @@ The full Java API for bridge and *Thing* descriptions can be found in the Java p
 |--------------------------------|----------------------------------------------|--------|
 | bridge-type.id / thing-type.id | An identifier for the bridge/Thing type | mandatory |
 | bridge-type.listed / thing-type.listed | Denotes if user interfaces should list the bridge/Thing, e.g. for pairing | optional, defaults to true |
+| bridge-type.version / thing-type.version | The version number of this thing type definition. This is an integer value used to allow the system to detect changes to thing definitions and update any things appropriately | optional | 
 | bridge-type.extensible / thing-type.extensible | If the bridge/Thing supports a generic number of channels the allowed channelTypeIds can be listed here. This provides a hint for UIs to support adding/removing channels. Channel groups are not supported. | optional |
 | supported-bridge-type-refs     | The identifiers of the bridges this bridge/Thing can connect to | optional |
 | bridge-type-ref.id             | The identifier of a bridge this bridge/Thing can connect to | mandatory |
@@ -814,7 +818,7 @@ The full Java API for bridge and *Thing* descriptions can be found in the Java p
 | channel.typeId              | An identifier of the channel type definition the bridge/Thing provides | mandatory |
 
 
-The full XML schema for Thing type descriptions is specified in the <a href="https://openhab.org/schemas/thing-description-1.0.0.xsd">openHAB thing description XSD</a> file.
+The full XML schema for Thing type descriptions is specified in the <a href="https://opensmarthouse.org/schemas/thing-description-1.0.0.xsd">_OpenSmartHouse_ thing description XSD</a> file.
 
 **Hints:**
 
