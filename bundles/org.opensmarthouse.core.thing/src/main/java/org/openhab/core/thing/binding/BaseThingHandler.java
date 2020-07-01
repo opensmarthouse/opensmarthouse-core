@@ -22,6 +22,7 @@ import java.util.concurrent.ScheduledExecutorService;
 import org.eclipse.jdt.annotation.NonNullByDefault;
 import org.eclipse.jdt.annotation.Nullable;
 import org.openhab.core.common.ThreadPoolManager;
+import org.openhab.core.config.core.ConfigDescriptionParameter;
 import org.openhab.core.config.core.Configuration;
 import org.openhab.core.config.core.validation.ConfigValidationException;
 import org.openhab.core.thing.Bridge;
@@ -57,6 +58,7 @@ import org.slf4j.LoggerFactory;
  * @author Stefan Bußweiler - Added new thing status handling, refactorings thing/bridge life cycle
  * @author Kai Kreuzer - Refactored isLinked method to not use deprecated functions anymore
  * @author Christoph Weitkamp - Moved OSGI ServiceTracker from BaseThingHandler to ThingHandlerCallback
+ * @author Chris Jackson - Added getConfigParameterDescription method
  * @author Chris Jackson - Added thing type version support
  */
 @NonNullByDefault
@@ -212,6 +214,24 @@ public abstract class BaseThingHandler implements ThingHandler {
         } else {
             logger.warn("Handler {} tried validating its configuration although the handler was already disposed.",
                     this.getClass().getSimpleName());
+        }
+    }
+
+    /**
+     * Gets the {@link ConfigDescriptionParameter} for the requested parameter
+     * 
+     * @param parameter the parameter name
+     * @return the {@link ConfigDescriptionParameter} for the requested parameter
+     */
+    @Nullable
+    protected ConfigDescriptionParameter getConfigParameterDescription(String parameter) {
+        if (this.callback != null) {
+            return this.callback.getConfigurationParameterDescription(this.getThing(), parameter);
+        } else {
+            logger.warn(
+                    "Handler {} tried getting configuration parameter {}, although the handler was already disposed.",
+                    this.getClass().getSimpleName(), parameter);
+            return null;
         }
     }
 

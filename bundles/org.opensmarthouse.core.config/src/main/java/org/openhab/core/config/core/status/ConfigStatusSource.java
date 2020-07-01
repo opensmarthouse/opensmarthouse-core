@@ -24,7 +24,7 @@ import org.eclipse.jdt.annotation.NonNullByDefault;
 public abstract class ConfigStatusSource {
 
     /** The id of the entity whose new configuration status is to be propagated. */
-    public final String entityId;
+    private final String entityId;
 
     /**
      * Creates a new config status source object.
@@ -40,4 +40,11 @@ public abstract class ConfigStatusSource {
      * @return the topic over which the new configuration status is to be propagated
      */
     public abstract String getTopic();
+
+    /**
+     * @return the id of the entity whose new configuration status is to be propagated.
+     */
+    public String getEntityId() {
+        return entityId;
+    }
 }

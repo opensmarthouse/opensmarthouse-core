@@ -131,6 +131,8 @@ refactor $1 "bundles/org.openhab.core.config/src/test/java/org/openhab/core/conf
 refactor $1 "bundles/org.openhab.core.config/src/main/java/org/openhab/core/config/"                                      "bundles/org.opensmarthouse.core.config/src/main/java/org/openhab/core/config/"
 refactor $1 "bundles/org.openhab.core.config/src/test/java/org/openhab/core/config/"                                      "bundles/org.opensmarthouse.core.config/src/test/java/org/openhab/core/config/"
 
+refactor $1 "bundles/org.openhab.core.config.core/src/main/java/org/openhab/core/config/internal/net/"                     "bundles/org.opensmarthouse.core.config.net/src/main/java/org/openhab/core/config/internal/net/"
+
 # Discovery
 refactor $1 "bundles/org.openhab.core.config.discovery/src/main/java/org/openhab/core/config/discovery/internal/console/" "bundles/org.opensmarthouse.core.config.discovery.console/src/main/java/org/openhab/core/config/discovery/internal/console/"
 

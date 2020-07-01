@@ -15,24 +15,25 @@ package org.openhab.core.config.core;
 import static org.hamcrest.CoreMatchers.hasItems;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.nullValue;
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 
 import org.junit.Test;
-import org.openhab.core.config.core.ConfigDescriptionParameter;
 import org.openhab.core.config.core.ConfigDescriptionParameter.Type;
-import org.openhab.core.config.core.ConfigDescriptionParameterBuilder;
-import org.openhab.core.config.core.FilterCriteria;
-import org.openhab.core.config.core.ParameterOption;
 
 /**
  * Tests for {@link ConfigDescriptionParameterBuilder) class.
  *
  * @author Christoph Knauf - Initial contribution
+ * @author Chris Jackson - Add device properties test
  */
 public class ConfigDescriptionParameterBuilderTest {
 
@@ -209,5 +210,21 @@ public class ConfigDescriptionParameterBuilderTest {
     @Test(expected = IllegalArgumentException.class)
     public void assertThatAparameterWithAnInvalidUnitCannotBeCreated() {
         ConfigDescriptionParameterBuilder.create("Dummy", Type.BOOLEAN).withUnit("invalid").build();
+    }
+
+    @Test
+    public void testParameterDeviceProperty() {
+        List<ParameterDeviceProperty> deviceProperties = new ArrayList<>();
+        deviceProperties.add(new ParameterDeviceProperty("size", "2"));
+        deviceProperties.add(new ParameterDeviceProperty("param", "12"));
+        ConfigDescriptionParameter configDescription = ConfigDescriptionParameterBuilder.create("Dummy", Type.DECIMAL)
+                .withDeviceProperties(deviceProperties).build();
+
+        assertNotNull(configDescription.getDeviceProperties());
+        assertEquals(2, configDescription.getDeviceProperties().size());
+        assertEquals("size", configDescription.getDeviceProperties().get(0).getName());
+        assertEquals("2", configDescription.getDeviceProperties().get(0).getValue());
+        assertEquals("param", configDescription.getDeviceProperties().get(1).getName());
+        assertEquals("12", configDescription.getDeviceProperties().get(1).getValue());
     }
 }

@@ -22,6 +22,7 @@ import org.openhab.core.config.core.ConfigDescriptionParameter;
 import org.openhab.core.config.core.ConfigDescriptionParameterBuilder;
 import org.openhab.core.config.core.ConfigDescriptionParameterGroup;
 import org.openhab.core.config.core.FilterCriteria;
+import org.openhab.core.config.core.ParameterDeviceProperty;
 import org.openhab.core.config.core.ParameterOption;
 
 /**
@@ -30,6 +31,7 @@ import org.openhab.core.config.core.ParameterOption;
  *
  * @author Dennis Nobel - Initial contribution
  * @author Ana Dimova - converting ConfigDescriptionParameterDTO to ConfigDescriptionParameter
+ * @author Chris Jackson - Added device configuration parameter
  */
 public class ConfigDescriptionDTOMapper {
 
@@ -114,7 +116,8 @@ public class ConfigDescriptionDTOMapper {
                     configDescriptionParameter.getGroupName(), configDescriptionParameter.isAdvanced(),
                     configDescriptionParameter.getLimitToOptions(), configDescriptionParameter.getMultipleLimit(),
                     configDescriptionParameter.getUnit(), configDescriptionParameter.getUnitLabel(),
-                    configDescriptionParameter.isVerifyable());
+                    configDescriptionParameter.isVerifyable(),
+                    mapDeviceProperties(configDescriptionParameter.getDeviceProperties()));
             configDescriptionParameterBeans.add(configDescriptionParameterBean);
         }
         return configDescriptionParameterBeans;
@@ -160,4 +163,16 @@ public class ConfigDescriptionDTOMapper {
         }
         return result;
     }
+
+    protected static List<ParameterDevicePropertyDTO> mapDeviceProperties(List<ParameterDeviceProperty> properties) {
+        if (properties == null) {
+            return null;
+        }
+        List<ParameterDevicePropertyDTO> result = new LinkedList<>();
+        for (ParameterDeviceProperty property : properties) {
+            result.add(new ParameterDevicePropertyDTO(property.getName(), property.getValue()));
+        }
+        return result;
+    }
+
 }

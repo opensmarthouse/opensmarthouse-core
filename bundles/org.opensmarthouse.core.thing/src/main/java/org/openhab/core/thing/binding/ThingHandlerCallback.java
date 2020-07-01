@@ -17,6 +17,7 @@ import java.util.Map;
 
 import org.eclipse.jdt.annotation.NonNullByDefault;
 import org.eclipse.jdt.annotation.Nullable;
+import org.openhab.core.config.core.ConfigDescriptionParameter;
 import org.openhab.core.config.core.Configuration;
 import org.openhab.core.config.core.validation.ConfigValidationException;
 import org.openhab.core.thing.Bridge;
@@ -44,6 +45,7 @@ import org.openhab.core.types.State;
  * @author Stefan Bußweiler - Added new thing status info, added new configuration update info
  * @author Christoph Weitkamp - Moved OSGI ServiceTracker from BaseThingHandler to ThingHandlerCallback
  * @author Christoph Weitkamp - Added preconfigured ChannelGroupBuilder
+ * @author Chris Jackson - Added getConfigurationParameterDescription method
  */
 @NonNullByDefault
 public interface ThingHandlerCallback {
@@ -89,6 +91,16 @@ public interface ThingHandlerCallback {
      *             their declarations in the configuration description
      */
     void validateConfigurationParameters(Thing thing, Map<String, Object> configurationParameters);
+
+    /**
+     * Gets the {@link ConfigDescriptionParameter} for the requested parameter
+     * 
+     * @param thing thing with the updated configuration (must no be null)
+     * @param parameter the parameter name
+     * @return the {@link ConfigDescriptionParameter} for the requested parameter
+     */
+    @Nullable
+    ConfigDescriptionParameter getConfigurationParameterDescription(Thing thing, String parameter);
 
     /**
      * Informs about an updated configuration of a thing.

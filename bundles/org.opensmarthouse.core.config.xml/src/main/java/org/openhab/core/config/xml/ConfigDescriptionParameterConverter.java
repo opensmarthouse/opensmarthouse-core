@@ -21,6 +21,7 @@ import org.openhab.core.config.core.ConfigDescriptionParameter;
 import org.openhab.core.config.core.ConfigDescriptionParameter.Type;
 import org.openhab.core.config.core.ConfigDescriptionParameterBuilder;
 import org.openhab.core.config.core.FilterCriteria;
+import org.openhab.core.config.core.ParameterDeviceProperty;
 import org.openhab.core.config.core.ParameterOption;
 import org.openhab.core.config.xml.util.ConverterAttributeMapValidator;
 import org.openhab.core.config.xml.util.ConverterValueMap;
@@ -41,9 +42,9 @@ import com.thoughtworks.xstream.io.HierarchicalStreamReader;
  *
  * @author Michael Grammling - Initial contribution
  * @author Alex Tugarev - Extended for options and filter criteria
- * @author Chris Jackson - Modified to use config parameter builder. Added
- *         parameters.
+ * @author Chris Jackson - Modified to use config parameter builder. Added parameters.
  * @author Thomas Höfer - Added unit
+ * @author Chris Jackson - Added device properties.
  */
 public class ConfigDescriptionParameterConverter extends GenericUnmarshaller<ConfigDescriptionParameter> {
 
@@ -131,13 +132,16 @@ public class ConfigDescriptionParameterConverter extends GenericUnmarshaller<Con
         @SuppressWarnings("unchecked")
         List<FilterCriteria> filterCriteria = (List<FilterCriteria>) valueMap.getObject("filter");
 
+        List<ParameterDeviceProperty> deviceProperties = getDeviceProperties(valueMap.getObject("device-properties"));
+
         // create object
         configDescriptionParam = ConfigDescriptionParameterBuilder.create(name, type).withMinimum(min).withMaximum(max)
                 .withStepSize(step).withPattern(patternString).withRequired(required).withReadOnly(readOnly)
                 .withMultiple(multiple).withContext(parameterContext).withDefault(defaultValue).withLabel(label)
                 .withDescription(description).withOptions(options).withFilterCriteria(filterCriteria)
                 .withGroupName(groupName).withAdvanced(advanced).withVerify(verify).withLimitToOptions(limitToOptions)
-                .withMultipleLimit(multipleLimit).withUnit(unit).withUnitLabel(unitLabel).build();
+                .withMultipleLimit(multipleLimit).withUnit(unit).withUnitLabel(unitLabel)
+                .withDeviceProperties(deviceProperties).build();
 
         return configDescriptionParam;
     }
@@ -152,6 +156,23 @@ public class ConfigDescriptionParameterConverter extends GenericUnmarshaller<Con
                     String value = nodeValue.getAttributes().get("value");
                     String label = nodeValue.getValue().toString();
                     result.add(new ParameterOption(value, label));
+                }
+            }
+            return result;
+        }
+        return null;
+    }
+
+    private List<ParameterDeviceProperty> getDeviceProperties(Object rawNodeValueList) {
+        if (rawNodeValueList instanceof List<?>) {
+            List<?> list = (List<?>) rawNodeValueList;
+            List<ParameterDeviceProperty> result = new ArrayList<>();
+            for (Object object : list) {
+                if (object instanceof NodeValue) {
+                    NodeValue nodeValue = (NodeValue) object;
+                    String name = nodeValue.getAttributes().get("name");
+                    String value = nodeValue.getValue().toString();
+                    result.add(new ParameterDeviceProperty(name, value));
                 }
             }
             return result;

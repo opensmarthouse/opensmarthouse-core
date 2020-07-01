@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
-	xmlns:config-description="https://openhab.org/schemas/config-description/v1.0.0"
-	targetNamespace="https://openhab.org/schemas/config-description/v1.0.0">
+	xmlns:config-description="https://opensmarthouse.org/schemas/config-description/v1.0.0"
+	targetNamespace="https://opensmarthouse.org/schemas/config-description/v1.0.0">
 
 	<xs:element name="config-descriptions">
 		<xs:complexType>
@@ -44,7 +44,7 @@
 			<xs:element name="required" type="xs:boolean" default="false"
 				minOccurs="0" />
 			<xs:element name="default" type="xs:string" minOccurs="0" />
-			<xs:element name="label" type="xs:string" minOccurs="0" />
+			<xs:element name="label" type="xs:string" />
 			<xs:element name="description" type="xs:string" minOccurs="0" />
 			<xs:element name="options" type="config-description:optionsType"
 				minOccurs="0" />
@@ -56,6 +56,8 @@
             <xs:element name="verify" type="xs:boolean" minOccurs="0" />
 			<xs:element name="multipleLimit" type="xs:integer" minOccurs="0" />
             <xs:element name="unitLabel" type="xs:string" minOccurs="0" />
+			<xs:element name="device-properties" type="config-description:property"
+				minOccurs="0" />
 		</xs:all>
 		<xs:attribute name="name" type="xs:string" use="required" />
 		<xs:attribute name="type" type="config-description:parameterType"
@@ -107,6 +109,20 @@
 				</xs:complexType>
 			</xs:element>
 		</xs:sequence>
+	</xs:complexType>
+
+	<xs:complexType name="properties">
+		<xs:sequence>
+			<xs:element name="property" type="config-description:property" minOccurs="1" maxOccurs="unbounded" />
+		</xs:sequence>
+	</xs:complexType>
+
+	<xs:complexType name="property">
+		<xs:simpleContent>
+			<xs:extension base="xs:string">
+				<xs:attribute name="name" type="xs:string" use="required" />
+			</xs:extension>
+		</xs:simpleContent>
 	</xs:complexType>
 
 	<xs:simpleType name="parameterType">

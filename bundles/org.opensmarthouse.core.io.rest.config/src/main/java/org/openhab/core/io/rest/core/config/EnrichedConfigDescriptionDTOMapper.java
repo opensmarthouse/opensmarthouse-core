@@ -29,6 +29,7 @@ import org.openhab.core.config.core.dto.ConfigDescriptionParameterGroupDTO;
  * {@link EnrichedConfigDescriptionParameterDTO}.
  *
  * @author Christoph Weitkamp - Initial contribution
+ * @author Chris Jackson - Added Device configuration
  */
 @NonNullByDefault
 public class EnrichedConfigDescriptionDTOMapper extends ConfigDescriptionDTOMapper {
@@ -68,7 +69,8 @@ public class EnrichedConfigDescriptionDTOMapper extends ConfigDescriptionDTOMapp
                     configDescriptionParameter.getGroupName(), configDescriptionParameter.isAdvanced(),
                     configDescriptionParameter.getLimitToOptions(), configDescriptionParameter.getMultipleLimit(),
                     configDescriptionParameter.getUnit(), configDescriptionParameter.getUnitLabel(),
-                    configDescriptionParameter.isVerifyable());
+                    configDescriptionParameter.isVerifyable(),
+                    mapDeviceProperties(configDescriptionParameter.getDeviceProperties()));
             configDescriptionParameterBeans.add(configDescriptionParameterBean);
         }
         return configDescriptionParameterBeans;

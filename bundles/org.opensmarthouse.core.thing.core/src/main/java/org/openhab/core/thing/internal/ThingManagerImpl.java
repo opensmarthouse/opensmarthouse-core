@@ -297,6 +297,23 @@ public class ThingManagerImpl
             }
         }
 
+        @Nullable
+        @Override
+        public ConfigDescriptionParameter getConfigurationParameterDescription(Thing thing, String parameter) {
+            // TODO Auto-generated method stub
+            ThingType thingType = thingTypeRegistry.getThingType(thing.getThingTypeUID());
+            if (thingType == null || thingType.getConfigDescriptionURI() == null) {
+                return null;
+            }
+
+            ConfigDescription configDescription = configDescriptionRegistry
+                    .getConfigDescription(thingType.getConfigDescriptionURI());
+            if (configDescription == null) {
+                return null;
+            }
+            return configDescription.toParametersMap().get(parameter);
+        }
+
         @Override
         public void configurationUpdated(Thing thing) {
             if (!ThingHandlerHelper.isHandlerInitialized(thing)) {

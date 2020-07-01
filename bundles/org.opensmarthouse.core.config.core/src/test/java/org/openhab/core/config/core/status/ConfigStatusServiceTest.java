@@ -12,11 +12,14 @@
  */
 package org.openhab.core.config.core.status;
 
-import static org.hamcrest.CoreMatchers.*;
+import static org.hamcrest.CoreMatchers.equalTo;
+import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
-import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.*;
+import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.ArgumentMatchers.eq;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 import java.text.MessageFormat;
 import java.util.ArrayList;
@@ -25,12 +28,15 @@ import java.util.Locale;
 
 import org.junit.Before;
 import org.junit.Test;
+import org.mockito.Mockito;
+import org.openhab.core.common.osgi.BundleResolver;
 import org.openhab.core.config.core.status.ConfigStatusMessage.Type;
 import org.openhab.core.events.EventPublisher;
 import org.openhab.core.i18n.LocaleProvider;
 import org.openhab.core.i18n.TranslationProvider;
+import org.openhab.core.storage.Storage;
+import org.openhab.core.storage.StorageService;
 import org.openhab.core.test.java.JavaTest;
-import org.openhab.core.common.osgi.BundleResolver;
 
 /**
  * Testing the {@link ConfigStatusService} OSGi service.
@@ -38,6 +44,8 @@ import org.openhab.core.common.osgi.BundleResolver;
  * @author Thomas Höfer - Initial contribution
  */
 public class ConfigStatusServiceTest extends JavaTest {
+
+    private Storage<Object> storage;
 
     private ConfigStatusService configStatusService;
 
@@ -104,7 +112,12 @@ public class ConfigStatusServiceTest extends JavaTest {
         messagesEntity2En.add(buildConfigStatusMessage(PARAM3_MSG3.parameterName, PARAM3_MSG3.type,
                 MessageFormat.format(MSG3_EN, ARGS), PARAM3_MSG3.statusCode));
 
-        configStatusService = new ConfigStatusService();
+        StorageService storageService = mock(StorageService.class);
+        storage = mock(Storage.class);
+        storageService.getStorage(Mockito.anyString(), Mockito.any());
+        when(storageService.getStorage(eq("ConfigStatusService"), any(ClassLoader.class))).thenReturn(storage);
+
+        configStatusService = new ConfigStatusService(storageService);
 
         LocaleProvider localeProvider = mock(LocaleProvider.class);
         when(localeProvider.getLocale()).thenReturn(new Locale("en", "US"));

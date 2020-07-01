@@ -18,6 +18,7 @@ import org.eclipse.jdt.annotation.NonNullByDefault;
 import org.eclipse.jdt.annotation.Nullable;
 import org.openhab.core.config.core.Configuration;
 import org.openhab.core.config.core.status.ConfigStatusCallback;
+import org.openhab.core.config.core.status.ConfigStatusInfo;
 import org.openhab.core.config.core.status.ConfigStatusProvider;
 import org.openhab.core.thing.Bridge;
 
@@ -34,6 +35,7 @@ import org.openhab.core.thing.Bridge;
  * {@link ConfigStatusProvider#getConfigStatus()}.
  *
  * @author Thomas Höfer - Initial contribution
+ * @author Chris Jackson - Add getPersistedConfigStatusInfo to allow the binding to read back status from storage
  */
 @NonNullByDefault
 public abstract class ConfigStatusBridgeHandler extends BaseBridgeHandler implements ConfigStatusProvider {
@@ -47,6 +49,16 @@ public abstract class ConfigStatusBridgeHandler extends BaseBridgeHandler implem
      */
     public ConfigStatusBridgeHandler(Bridge bridge) {
         super(bridge);
+    }
+
+    @Override
+    public void handleRemoval() {
+        super.handleRemoval();
+        if (configStatusCallback != null) {
+            // We need to remember to remove any persisted data from storage
+            configStatusCallback
+                    .removePersistedConfigStatusInfo(new ThingConfigStatusSource(getThing().getUID().getAsString()));
+        }
     }
 
     @Override
@@ -73,5 +85,20 @@ public abstract class ConfigStatusBridgeHandler extends BaseBridgeHandler implem
         if (configStatusCallback != null) {
             configStatusCallback.configUpdated(new ThingConfigStatusSource(getThing().getUID().getAsString()));
         }
+    }
+
+    /**
+     * Gets the {@link ConfigStatusInfo} for the handler that was previously persisted. The framework will set the state
+     * the PENDING when changes are made for any device parameters.
+     * 
+     * @return the persisted {@link ConfigStatusInfo} for the handler (not null)
+     */
+    protected ConfigStatusInfo getPersistedConfigStatusInfo() {
+        if (configStatusCallback != null) {
+            return configStatusCallback
+                    .getPersistedConfigStatusInfo(new ThingConfigStatusSource(getThing().getUID().getAsString()));
+        }
+
+        return new ConfigStatusInfo();
     }
 }

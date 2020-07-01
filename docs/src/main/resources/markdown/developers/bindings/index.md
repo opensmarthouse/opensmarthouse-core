@@ -78,8 +78,7 @@ It is also possible to use the same handler for different *Things*, or use diffe
 
 A `ThingHandler` handles the communication between openHAB and an entity from the real world, e.g. a physical device, a web service, represented by a `Thing`.
 
-openHAB provides an abstract base class named `BaseThingHandler`.
-It is recommended to use this class, because it covers a lot of common logic.
+_OpenSmartHouse_ provides an abstract base class named `BaseThingHandler` and it is recommended to use this class, because it covers a lot of common logic.
 Most of the explanations are based on the assumption, that the binding inherits from the BaseThingHandler in all concrete `ThingHandler` implementations.
 Nevertheless if there are reasons why you can not use the base class, the binding can also directly implement the `ThingHandler` interface.
 
@@ -171,13 +170,26 @@ If the bridge returns to *ONLINE*, the thing status must be changed at least to 
 To retrieve the configuration of a *Thing* one can call `getThing().getConfiguration()` inside the `ThingHandler`.
 The configuration class has the equivalent methods as the `Map` interface, thus the method `get(String key)` can be used to retrieve a value for a given key.
 
-Moreover the configuration class has a utility method `as(Class<T> configurationClass)` that transforms the configuration into a Java object of the given type.
+Additionally the configuration class has a utility method `as(Class<T> configurationClass)` that transforms the configuration into a Java object of the given type.
 
-All configuration values will be mapped to properties of the class.
-The type of the property must match the type of the configuration.
+All configuration values will be mapped to properties of the class and the type of the property must match the type of the configuration.
 Only the following types are supported for configuration values: `Boolean`, `String` and `BigDecimal`.
 
-For example, the Yahoo Weather binding allows configuration of the location and the refresh frequency.
+### Configuration States
+
+A binding may extend `ConfigStatusThingHandler` instead of `BaseThingHandler` (or `ConfigStatusBridgeHandler` instead of `BaseBridgeHandler`) in order to provide configuration status information through the `ConfigStatusProvider`. This allows the binding to provide `ConfigStatusMessage` which includes status information for parameters that allow the user to know the parameter configuration state.
+
+The `ConfigStatusMessage` contains a status `Type` which allows the user to be notified if the parameter is in `PENDING`, `ERROR`, `WARNING` or `INFORMATION` state.
+
+### Handler Configuration
+
+_OpenSmartHouse_ assumes that by default, configuration parameters are to used to configure the `ThingHandler` - ie to directly change the way the `ThingHandler` works. Such parameters are assumed to be implemented immediated in the `handleConfigurationUpdate` method of the `ThingHandler`.
+
+### Device Configuration
+
+_OpenSmartHouse_ provides a means to differentiate configuration parameters that are to be configured in the remote device. A `ConfigurationParameter` may include a list of `ParameterDeviceProperties` which the binding can use to interpret how to configure the parameter in the device. The definition of these properties is up to the binding.
+
+Bindings implementing device configuration should consider providing `ConfigStatusMessage`s for device parameters as described above. This allows the user to be advised of the state of the device parameter update and is especially important for devices that may not be updated immediately (eg battery devices that may sleep for extended durations). The `ConfigStatusMessage` is persisted, and a binding may read the state of the persisted `ConfigStatusMessage` using the `getPersistedConfigStatusInfo` method which is provided by the `ConfigStatusThingHandler` base handler class. A binding may which to use this on startup to ensure that there are no `PENDING` parameters that still require to be configured in the device from a previous session.
 
 ## Properties
 
@@ -875,30 +887,3 @@ TODO
 # Frequently asked questions / FAQ
 
 Various binding related questions are answered in our [Binding development FAQ](faq.html).
-
-# Include the Binding in the Build
-
-Once you are happy with your implementation, you need to integrate it in the Maven build and add it to the official distro.
-
-* Add a new line in the [bundle pom.xml](https://github.com/openhab/openhab-addons/blob/master/bundles/pom.xml).
-* Add a new line in the [binding pom.xml](https://github.com/openhab/openhab-addons/blob/master/bom/openhab-addons/pom.xml).
-* If you have a dependency on a transport bundle (e.g. upnp, mdns or serial) or an external library,
-  make sure to add a line for this dependency in the `/src/main/feature/feature.xml` file in your binding folder. See the other bindings as an example.
-* Add your binding to the [CODEOWNERS](https://github.com/openhab/openhab-addons/blob/master/CODEOWNERS) file so that you get notified by Github when someone adds a pull request towards your binding.
-
-> Please make sure you add the above entries at their alphabetically correct position!
-
-Before you create a pull request on GitHub, you should now run
-
-```
-mvn clean install
-```
-
-from the repository root to ensure that the build works smoothly (that step takes about 30 minutes).
-
-The build includes [Tooling for static code analysis](https://github.com/openhab/static-code-analysis) that will validate your code against the openHAB Coding Guidelines and some additional best practices.
-Please fix all the priority 1 issues and all issues with priority 2 and 3 that are relevant (if you have any doubt don't hesitate to ask).
-
-You can always run the above command from within your bindings directory to speed the build up and fix and check reported errors.
-
-Re-run the build to confirm that the checks are passing.

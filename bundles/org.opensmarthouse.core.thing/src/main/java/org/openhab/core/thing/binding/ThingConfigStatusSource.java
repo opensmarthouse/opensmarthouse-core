@@ -37,6 +37,6 @@ public final class ThingConfigStatusSource extends ConfigStatusSource {
 
     @Override
     public String getTopic() {
-        return TOPIC.replace("{thingUID}", this.entityId);
+        return TOPIC.replace("{thingUID}", this.getEntityId());
     }
 }

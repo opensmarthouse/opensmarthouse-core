@@ -24,6 +24,7 @@ import org.openhab.core.config.core.ConfigDescriptionParameter.Type;
  *
  * @author Chris Jackson - Initial contribution
  * @author Thomas Höfer - Added unit
+ * @author Chris Jackson - Added device properties
  */
 public class ConfigDescriptionParameterBuilder {
 
@@ -54,6 +55,8 @@ public class ConfigDescriptionParameterBuilder {
 
     private List<ParameterOption> options = new ArrayList<>();
     private List<FilterCriteria> filterCriteria = new ArrayList<>();
+
+    private List<ParameterDeviceProperty> deviceProperties;
 
     private ConfigDescriptionParameterBuilder(String name, Type type) {
         this.name = name;
@@ -291,14 +294,24 @@ public class ConfigDescriptionParameterBuilder {
     }
 
     /**
+     * Sets the device properties for a device level configuration parameter
+     * 
+     * @param deviceProperties List of {@link ParameterDeviceProperty}
+     * @return the updated builder instance
+     */
+    public ConfigDescriptionParameterBuilder withDeviceProperties(List<ParameterDeviceProperty> deviceProperties) {
+        this.deviceProperties = deviceProperties;
+        return this;
+    }
+
+    /**
      * Builds a result with the settings of this builder.
      *
      * @return the desired result
      */
-    @SuppressWarnings("deprecation")
     public ConfigDescriptionParameter build() throws IllegalArgumentException {
         return new ConfigDescriptionParameter(name, type, min, max, step, pattern, required, readOnly, multiple,
                 context, defaultValue, label, description, options, filterCriteria, groupName, advanced, limitToOptions,
-                multipleLimit, unit, unitLabel, verify);
+                multipleLimit, unit, unitLabel, verify, deviceProperties);
     }
 }

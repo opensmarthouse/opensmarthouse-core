@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <thing:thing-descriptions bindingId="hue" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xmlns:thing="https://openhab.org/schemas/thing-description/v1.0.0"
-	xsi:schemaLocation="https://openhab.org/schemas/thing-description/v1.0.0 https://openhab.org/schemas/thing-description-1.0.0.xsd">
+	xmlns:thing="https://opensmarthouse.org/schemas/thing-description/v1.0.0"
+	xsi:schemaLocation="https://opensmarthouse.org/schemas/thing-description/v1.0.0 https://opensmarthouse.org/schemas/thing-description-1.0.0.xsd">
 
 	<!-- Hue Lamp -->
 	<thing-type id="lamp">
@@ -43,13 +43,15 @@
 			It is also possible to switch the
 			light on and off.
 		</description>
-		<tags>
-			<tag>Hue</tag>
-			<tag>DimmableLamp</tag>
-		</tags>
 
 		<config-description>
-			<parameter name="lastDimValue" type="boolean"/>
+			<parameter name="lastDimValue" type="boolean">
+	
+              <device-properties>
+                <property name="parameter">12</property>
+                <property name="size">2</property>
+              </device-properties>
+			</parameter>
 		</config-description>
 	</channel-type>
 

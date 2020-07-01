@@ -50,6 +50,7 @@ import com.thoughtworks.xstream.XStream;
  * @author Chris Jackson - Added parameter groups and channel properties
  * @author Moritz Kammerer - Added triggers
  * @author Łukasz Dywicki - Added XStream security handling, defer initialization of converters.
+ * @author Chris Jackson - Added device-properties
  */
 public class ThingDescriptionReader extends XmlDocumentReader<List<?>> {
 
@@ -123,10 +124,12 @@ public class ThingDescriptionReader extends XmlDocumentReader<List<?>> {
         xstream.alias("config-description-ref", NodeAttributes.class);
         xstream.alias("parameter", ConfigDescriptionParameter.class);
         xstream.alias("parameter-group", ConfigDescriptionParameterGroup.class);
+        xstream.alias("device-properties", NodeList.class);
         xstream.alias("filter", List.class);
         xstream.alias("criteria", FilterCriteria.class);
         xstream.alias("properties", NodeList.class);
         xstream.alias("property", NodeValue.class);
+        xstream.alias("discovery-properties", NodeValue.class);
         xstream.alias("representation-property", NodeValue.class);
         xstream.alias("command-options", NodeList.class);
         xstream.alias("autoUpdatePolicy", NodeValue.class);

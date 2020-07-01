@@ -64,6 +64,11 @@ These must be inside the XML escape sequence - eg.
       <filter>
         <criteria name="String">String</criteria>
       </filter>
+
+      <device-properties>
+        <property name="parameter">12</property>
+        <property name="size">2</property>
+      </device-properties>
     </parameter>
   </config-description>
 
@@ -89,10 +94,7 @@ These must be inside the XML escape sequence - eg.
   <tr><td>parameter.multiple</td><td>Specifies whether multiple selections of options are allowed (optional).</td></tr>
   <tr><td>parameter.groupName</td><td>Sets a group name for this parameter (optional).</td></tr>
   <tr><td>parameter.unit</td><td>Specifies the unit of measurements. The unit declaration in the parameter definition shown above contains the set of valid units. The unit must only be set if the type of the parameter is either integer or decimal (optional).</td></tr>
-
   <tr><td>parameter.device-properties</td><td>Specifies properties that link this parameter to the physical device. When this element is specified the parameter is considered to be a device parameter and may be treated differently than parameters which do not have this element which are expected to be ThingHandler configuration only.</td></tr>
-
-
   <tr><td>advanced</td><td>Specifies that this is an advanced parameter. Advanced parameters may be hidden by a UI (optional).</td></tr>
   <tr><td>verify</td><td>Specifies that this is parameter requires a verification stage with the user before sending. Parameters flagged with *verify=true* could be considered dangerous and should be protected from accidental use by a UI - e.g. by adding an "Are you sure" prompt (optional).</td></tr>
   <tr><td>context</td><td>The context of the configuration parameter (optional).</td></tr>

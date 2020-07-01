@@ -18,13 +18,17 @@ import java.util.Locale;
 import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.ExecutorService;
 
+import org.eclipse.jdt.annotation.Nullable;
 import org.openhab.core.common.ThreadPoolManager;
+import org.openhab.core.common.osgi.BundleResolver;
 import org.openhab.core.config.core.status.events.ConfigStatusInfoEvent;
 import org.openhab.core.events.EventPublisher;
 import org.openhab.core.i18n.LocaleProvider;
 import org.openhab.core.i18n.TranslationProvider;
-import org.openhab.core.common.osgi.BundleResolver;
+import org.openhab.core.storage.Storage;
+import org.openhab.core.storage.StorageService;
 import org.osgi.framework.Bundle;
+import org.osgi.service.component.annotations.Activate;
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Reference;
 import org.osgi.service.component.annotations.ReferenceCardinality;
@@ -36,10 +40,14 @@ import org.slf4j.LoggerFactory;
  * The {@link ConfigStatusService} provides the {@link ConfigStatusInfo} for a specific entity. For this purpose
  * it loops over all registered {@link ConfigStatusProvider}s and returns the {@link ConfigStatusInfo} for the matching
  * {@link ConfigStatusProvider}.
+ * <p>
+ * This uses the {@link Storage} to persist {@link ConfigStatusInfo} between restarts to allow bindings to know the
+ * state of device specific configuration parameters.
  *
  * @author Thomas Höfer - Initial contribution
  * @author Chris Jackson - Allow null messages
  * @author Markus Rathgeb - Add locale provider support
+ * @author Chris Jackson - Added persistence using {@link Storage}
  */
 @Component(immediate = true, service = { ConfigStatusService.class })
 public final class ConfigStatusService implements ConfigStatusCallback {
@@ -51,9 +59,21 @@ public final class ConfigStatusService implements ConfigStatusCallback {
     private LocaleProvider localeProvider;
     private TranslationProvider translationProvider;
     private BundleResolver bundleResolver;
+    private final Storage<ConfigStatusInfo> storage;
 
     private final ExecutorService executorService = ThreadPoolManager
             .getPool(ConfigStatusService.class.getSimpleName());
+
+    /**
+     * Constructs a service with the supplied storage
+     *
+     * @param storageService supporting storage service
+     */
+    @Activate
+    public ConfigStatusService(final @Reference StorageService storageService) {
+        this.storage = storageService.getStorage(ConfigStatusService.class.getSimpleName(),
+                this.getClass().getClassLoader());
+    }
 
     /**
      * Retrieves the {@link ConfigStatusInfo} of the entity by using the registered
@@ -90,14 +110,15 @@ public final class ConfigStatusService implements ConfigStatusCallback {
         executorService.submit(new Runnable() {
             @Override
             public void run() {
-                final ConfigStatusInfo info = getConfigStatus(configStatusSource.entityId, null);
+                final ConfigStatusInfo info = getConfigStatus(configStatusSource.getEntityId(), null);
 
                 if (info != null) {
+                    storage.put(configStatusSource.getEntityId(), info);
                     if (eventPublisher != null) {
                         eventPublisher.post(new ConfigStatusInfoEvent(configStatusSource.getTopic(), info));
                     } else {
                         logger.warn("EventPublisher not available. Cannot post new config status for entity {}",
-                                configStatusSource.entityId);
+                                configStatusSource.getEntityId());
                     }
                 }
             }
@@ -135,6 +156,22 @@ public final class ConfigStatusService implements ConfigStatusCallback {
         }
 
         return info;
+    }
+
+    @Override
+    public ConfigStatusInfo getPersistedConfigStatusInfo(final ConfigStatusSource configStatusSource) {
+        @Nullable
+        ConfigStatusInfo persistedConfigInfo = storage.get(configStatusSource.getEntityId());
+        if (persistedConfigInfo == null) {
+            return new ConfigStatusInfo();
+        } else {
+            return persistedConfigInfo;
+        }
+    }
+
+    @Override
+    public void removePersistedConfigStatusInfo(final ConfigStatusSource configStatusSource) {
+        storage.remove(configStatusSource.getEntityId());
     }
 
     @Reference(cardinality = ReferenceCardinality.MULTIPLE, policy = ReferencePolicy.DYNAMIC)

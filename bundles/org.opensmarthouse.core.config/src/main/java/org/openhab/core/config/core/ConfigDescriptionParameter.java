@@ -33,13 +33,13 @@ import com.google.gson.annotations.SerializedName;
  * contexts (see {@link ConfigDescriptionParameter#getContext()}).
  *
  * @author Michael Grammling - Initial contribution
- * @author Alex Tugarev - Added options, filter criteria, and more parameter
- *         attributes
+ * @author Alex Tugarev - Added options, filter criteria, and more parameter attributes
  * @author Chris Jackson - Added groupId, limitToOptions, advanced,
  *         multipleLimit, verify attributes
  * @author Christoph Knauf - Added default constructor, changed Boolean
  *         getter to return primitive types
  * @author Thomas Höfer - Added unit
+ * @author Chris Jackson - Added device properties.
  */
 public class ConfigDescriptionParameter {
 
@@ -100,6 +100,8 @@ public class ConfigDescriptionParameter {
     private List<ParameterOption> options = new ArrayList<>();
     private List<FilterCriteria> filterCriteria = new ArrayList<>();
 
+    private List<ParameterDeviceProperty> deviceProperties;
+
     private boolean limitToOptions = true;
     private boolean advanced = false;
     private boolean verify = false;
@@ -119,6 +121,18 @@ public class ConfigDescriptionParameter {
     /**
      * Creates a new instance of this class with the specified parameters.
      *
+     * @param name the name of the configuration parameter (must neither be null nor empty)
+     * @param type the data type of the configuration parameter (must not be null)
+     * @throws IllegalArgumentException if the name is null or empty, or the type is null
+     */
+    public ConfigDescriptionParameter(String name, Type type) throws IllegalArgumentException {
+        this(name, type, null, null, null, null, false, false, false, null, null, null, null, null, null, null, false,
+                true, null, null, null, false, null);
+    }
+
+    /**
+     * Creates a new instance of this class with the specified parameters.
+     *
      * @param name the name of the configuration parameter (must neither be null
      *            nor empty)
      * @param type the data type of the configuration parameter (nullable)
@@ -131,8 +145,7 @@ public class ConfigDescriptionParameter {
      * @param required specifies whether the value is required
      * @param readOnly specifies whether the value is read-only
      * @param multiple specifies whether multiple selections of options are allowed
-     * @param context the context of the configuration parameter (can be null or
-     *            empty)
+     * @param context the context of the configuration parameter (can be null or empty)
      * @param defaultValue the default value of the configuration parameter (can be null)
      * @param label a human readable label for the configuration parameter (can be
      *            null or empty)
@@ -156,8 +169,7 @@ public class ConfigDescriptionParameter {
      *            when multiple is true
      * @param unit specifies the unit of measurements for the configuration parameter (nullable)
      * @param unitLabel specifies the unit label for the configuration parameter. This attribute can also be used to
-     *            provide
-     *            natural language units as iterations, runs, etc.
+     *            provide natural language units as iterations, runs, etc.
      * @throws IllegalArgumentException
      *             <ul>
      *             <li>if the name is null or empty, or the type is null</li>
@@ -174,6 +186,66 @@ public class ConfigDescriptionParameter {
             String label, String description, List<ParameterOption> options, List<FilterCriteria> filterCriteria,
             String groupName, Boolean advanced, Boolean limitToOptions, Integer multipleLimit, String unit,
             String unitLabel, Boolean verify) throws IllegalArgumentException {
+    }
+
+    /**
+     * Creates a new instance of this class with the specified parameters.
+     *
+     * @param name the name of the configuration parameter (must neither be null
+     *            nor empty)
+     * @param type the data type of the configuration parameter (nullable)
+     * @param minimum the minimal value for numeric types, or the minimal length of
+     *            strings, or the minimal number of selected options (nullable)
+     * @param maximum the maximal value for numeric types, or the maximal length of
+     *            strings, or the maximal number of selected options (nullable)
+     * @param stepsize the value granularity for a numeric value (nullable)
+     * @param pattern the regular expression for a text type (nullable)
+     * @param required specifies whether the value is required
+     * @param readOnly specifies whether the value is read-only
+     * @param multiple specifies whether multiple selections of options are allowed
+     * @param context the context of the configuration parameter (can be null or empty)
+     * @param defaultValue the default value of the configuration parameter (can be null)
+     * @param label a human readable label for the configuration parameter (can be
+     *            null or empty)
+     * @param description a human readable description for the configuration parameter
+     *            (can be null or empty)
+     * @param filterCriteria a list of filter criteria for values of a dynamic selection
+     *            list (nullable)
+     * @param options a list of element definitions of a static selection list
+     *            (nullable)
+     * @param groupName a string used to group parameters together into logical blocks
+     *            so that the UI can display them together
+     * @param advanced specifies if this is an advanced parameter. An advanced
+     *            parameter can be hidden in the UI to focus the user on
+     *            important configuration
+     * @param limitToOptions specifies that the users input is limited to the options list.
+     *            When set to true without options, this should have no affect.
+     *            When set to true with options, the user can only select the
+     *            options from the list When set to false with options, the user
+     *            can enter values other than those in the list
+     * @param multipleLimit specifies the maximum number of options that can be selected
+     *            when multiple is true
+     * @param unit specifies the unit of measurements for the configuration parameter (nullable)
+     * @param unitLabel specifies the unit label for the configuration parameter. This attribute can also be used to
+     *            provide natural language units as iterations, runs, etc.
+     * @param deviceProperties2 a map of properties defined with the parameter is device level configuration. May be
+     *            null
+     *            if this is not a device parameter.
+     * @throws IllegalArgumentException
+     *             <ul>
+     *             <li>if the name is null or empty, or the type is null</li>
+     *             <li>if a unit or a unit label is provided for a parameter having type text or boolean</li>
+     *             <li>if an invalid unit was given (cp.
+     *             https://openhab.org/documentation/development/bindings/xml-reference.html for the list
+     *             of valid units)</li>
+     *             </ul>
+     */
+    ConfigDescriptionParameter(String name, Type type, BigDecimal minimum, BigDecimal maximum, BigDecimal stepsize,
+            String pattern, Boolean required, Boolean readOnly, Boolean multiple, String context, String defaultValue,
+            String label, String description, List<ParameterOption> options, List<FilterCriteria> filterCriteria,
+            String groupName, Boolean advanced, Boolean limitToOptions, Integer multipleLimit, String unit,
+            String unitLabel, Boolean verify, List<ParameterDeviceProperty> deviceProperties)
+            throws IllegalArgumentException {
         if ((name == null) || (name.isEmpty())) {
             throw new IllegalArgumentException("The name must neither be null nor empty!");
         }
@@ -204,6 +276,7 @@ public class ConfigDescriptionParameter {
         this.multipleLimit = multipleLimit;
         this.unit = unit;
         this.unitLabel = unitLabel;
+        this.deviceProperties = deviceProperties;
 
         if (verify != null) {
             this.verify = verify;
@@ -465,6 +538,18 @@ public class ConfigDescriptionParameter {
         return verify;
     }
 
+    /**
+     * Gets the device properties. Device properties are binding specific properties used to define the parameter
+     * configuration within the device.
+     * If set (not null), the system will assume that the configuration description relates to a device configuration
+     * and not a thing handler configuration.
+     * 
+     * @return List of {@link ParameterDeviceProperty} defining device properties
+     */
+    public List<ParameterDeviceProperty> getDeviceProperties() {
+        return deviceProperties;
+    }
+
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();
@@ -546,6 +631,11 @@ public class ConfigDescriptionParameter {
             sb.append(", ");
             sb.append("unitLabel=");
             sb.append(unitLabel);
+        }
+        if (deviceProperties != null) {
+            sb.append(", ");
+            sb.append("deviceProperties=");
+            sb.append(deviceProperties);
         }
         sb.append("]");
         return sb.toString();

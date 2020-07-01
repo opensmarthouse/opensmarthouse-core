@@ -73,7 +73,7 @@ public final class ConfigStatusMessage {
     /** The {@link Type} of the configuration status message. */
     public final Type type;
 
-    /** The key for the message to be internalized. */
+    /** The key for the message to be internationalized. */
     final transient String messageKey;
 
     /** The arguments to be injected into the internationalized message. */

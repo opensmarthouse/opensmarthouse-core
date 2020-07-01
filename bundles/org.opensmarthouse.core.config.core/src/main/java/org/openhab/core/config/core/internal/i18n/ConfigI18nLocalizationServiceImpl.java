@@ -39,6 +39,7 @@ import org.osgi.service.component.annotations.Reference;
  *
  * @author Markus Rathgeb - Initial contribution
  * @author Łuaksz Dywicki - Separated interface from implementation.
+ * @author Chris Jackson - Added device properties support for OpenSmartHouse
  */
 @Component(immediate = true, service = { ConfigI18nLocalizationService.class })
 @NonNullByDefault
@@ -148,7 +149,7 @@ public class ConfigI18nLocalizationServiceImpl implements ConfigI18nLocalization
                 .withAdvanced(parameter.isAdvanced()).withVerify(parameter.isVerifyable())
                 .withLimitToOptions(parameter.getLimitToOptions()).withMultipleLimit(parameter.getMultipleLimit())
                 .withUnit(parameter.getUnit()).withUnitLabel(unitLabel == null ? parameter.getUnitLabel() : unitLabel)
-                .build();
+                .withDeviceProperties(parameter.getDeviceProperties()).build();
     }
 
     /**

@@ -24,6 +24,7 @@ import org.eclipse.jdt.annotation.Nullable;
 import org.openhab.core.config.core.ConfigDescriptionParameter.Type;
 import org.openhab.core.config.core.dto.ConfigDescriptionParameterDTO;
 import org.openhab.core.config.core.dto.FilterCriteriaDTO;
+import org.openhab.core.config.core.dto.ParameterDevicePropertyDTO;
 import org.openhab.core.config.core.dto.ParameterOptionDTO;
 
 /**
@@ -31,6 +32,7 @@ import org.openhab.core.config.core.dto.ParameterOptionDTO;
  * default values if a configuration description defines <code>multiple="true"</code>.
  *
  * @author Christoph Weitkamp - Initial contribution
+ * @author Chris Jackson - Added Device configuration
  */
 @NonNullByDefault
 public class EnrichedConfigDescriptionParameterDTO extends ConfigDescriptionParameterDTO {
@@ -43,10 +45,11 @@ public class EnrichedConfigDescriptionParameterDTO extends ConfigDescriptionPara
             BigDecimal stepsize, String pattern, Boolean required, Boolean readOnly, Boolean multiple, String context,
             @Nullable String defaultValue, String label, String description, List<ParameterOptionDTO> options,
             List<FilterCriteriaDTO> filterCriteria, String groupName, Boolean advanced, Boolean limitToOptions,
-            Integer multipleLimit, String unit, String unitLabel, Boolean verify) {
+            Integer multipleLimit, String unit, String unitLabel, Boolean verify,
+            List<ParameterDevicePropertyDTO> deviceProperties) {
         super(name, type, minimum, maximum, stepsize, pattern, required, readOnly, multiple, context, defaultValue,
                 label, description, options, filterCriteria, groupName, advanced, limitToOptions, multipleLimit, unit,
-                unitLabel, verify);
+                unitLabel, verify, deviceProperties);
 
         if (multiple && defaultValue != null) {
             if (defaultValue.contains(DEFAULT_LIST_DELIMITER)) {
