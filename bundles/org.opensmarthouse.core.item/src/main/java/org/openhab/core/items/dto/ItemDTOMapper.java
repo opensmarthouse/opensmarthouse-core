@@ -23,8 +23,6 @@ import org.openhab.core.items.Item;
 import org.openhab.core.items.ItemBuilder;
 import org.openhab.core.items.ItemBuilderFactory;
 import org.openhab.core.types.State;
-import org.openhab.core.types.TypeParser;
-import org.slf4j.LoggerFactory;
 
 /**
  * The {@link ItemDTOMapper} is an utility class to map items into item data transfer objects (DTOs).
@@ -83,39 +81,7 @@ public class ItemDTOMapper {
     }
 
     public static GroupFunction mapFunction(@Nullable Item baseItem, GroupFunctionDTO function) {
-        List<State> args = parseStates(baseItem, function.params);
-
-        // return GROUP_FUNCTION_HELPER.createGroupFunction(function, args, getDimension(baseItem));
         throw new AbstractMethodError("This method has been moved!");
-    }
-    //
-    // private static @Nullable Class<? extends Quantity<?>> getDimension(@Nullable Item baseItem) {
-    // if (baseItem instanceof NumberItem) {
-    // return ((NumberItem) baseItem).getDimension();
-    // }
-    //
-    // return null;
-    // }
-
-    private static List<State> parseStates(@Nullable Item baseItem, String @Nullable [] params) {
-        List<State> states = new ArrayList<>();
-
-        if (params == null || baseItem == null) {
-            return states;
-        }
-
-        for (String param : params) {
-            State state = TypeParser.parseState(baseItem.getAcceptedDataTypes(), param);
-            if (state == null) {
-                LoggerFactory.getLogger(ItemDTOMapper.class).warn(
-                        "State '{}' is not valid for a group item with base type '{}'", param, baseItem.getType());
-                states.clear();
-                break;
-            } else {
-                states.add(state);
-            }
-        }
-        return states;
     }
 
     /**
@@ -136,8 +102,9 @@ public class ItemDTOMapper {
         if (item instanceof GroupItem) {
             GroupItem groupItem = (GroupItem) item;
             GroupItemDTO groupItemDTO = (GroupItemDTO) itemDTO;
-            if (groupItem.getBaseItem() != null) {
-                groupItemDTO.groupType = groupItem.getBaseItem().getType();
+            Item baseItem = groupItem.getBaseItem();
+            if (baseItem != null) {
+                groupItemDTO.groupType = baseItem.getType();
                 groupItemDTO.function = mapFunction(groupItem.getFunction());
             }
         }

@@ -12,16 +12,14 @@
  */
 package org.openhab.core.internal.items;
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import javax.measure.Quantity;
 
 import org.eclipse.jdt.annotation.NonNullByDefault;
 import org.eclipse.jdt.annotation.Nullable;
-import org.openhab.core.items.GroupFunction;
-import org.openhab.core.items.dto.GroupFunctionDTO;
-import org.openhab.core.library.types.StringType;
-import org.openhab.core.types.State;
 import org.openhab.core.internal.items.function.And;
 import org.openhab.core.internal.items.function.Avg;
 import org.openhab.core.internal.items.function.Count;
@@ -37,6 +35,13 @@ import org.openhab.core.internal.items.function.dimensional.DimensionalAvg;
 import org.openhab.core.internal.items.function.dimensional.DimensionalMax;
 import org.openhab.core.internal.items.function.dimensional.DimensionalMin;
 import org.openhab.core.internal.items.function.dimensional.DimensionalSum;
+import org.openhab.core.items.GroupFunction;
+import org.openhab.core.items.Item;
+import org.openhab.core.items.dto.GroupFunctionDTO;
+import org.openhab.core.library.items.NumberItem;
+import org.openhab.core.library.types.StringType;
+import org.openhab.core.types.State;
+import org.openhab.core.types.TypeParser;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -49,29 +54,55 @@ import org.slf4j.LoggerFactory;
 @NonNullByDefault
 public class GroupFunctionHelper {
 
-    private Logger logger = LoggerFactory.getLogger(GroupFunctionHelper.class);
+    private final Logger logger = LoggerFactory.getLogger(GroupFunctionHelper.class);
 
     /**
      * Creates a {@link GroupFunction} according to the given parameters. In case dimension is given the resulting
      * arithmetic group function will take unit conversion into account.
      *
      * @param function the {@link GroupFunctionDTO} describing the group function.
-     * @param args a list of {@link State}s as arguments for the resulting group function.
+     * @param baseItem
      * @param dimension an optional interface class from {@link Quantity} defining the dimension for unit conversion.
      * @return a {@link GroupFunction} according to the given parameters.
      */
-    public GroupFunction createGroupFunction(GroupFunctionDTO function, List<State> args,
-            @Nullable Class<? extends Quantity<?>> dimension) {
+    public GroupFunction createGroupFunction(GroupFunctionDTO function, @Nullable Item baseItem) {
+        Class<? extends Quantity<?>> dimension = getDimension(baseItem);
         if (dimension != null) {
-            return createDimensionGroupFunction(function, args, dimension);
+            return createDimensionGroupFunction(function, baseItem, dimension);
         }
 
-        return createDefaultGroupFunction(function, args);
+        return createDefaultGroupFunction(function, baseItem);
     }
 
-    private GroupFunction createDimensionGroupFunction(GroupFunctionDTO function, List<State> args,
+    private List<State> parseStates(@Nullable Item baseItem, String @Nullable [] params) {
+        if (params == null || baseItem == null) {
+            return Collections.emptyList();
+        }
+
+        List<State> states = new ArrayList<>();
+        for (String param : params) {
+            State state = TypeParser.parseState(baseItem.getAcceptedDataTypes(), param);
+            if (state == null) {
+                logger.warn("State '{}' is not valid for a group item with base type '{}'", param, baseItem.getType());
+                states.clear();
+                break;
+            } else {
+                states.add(state);
+            }
+        }
+        return states;
+    }
+
+    private @Nullable Class<? extends Quantity<?>> getDimension(@Nullable Item baseItem) {
+        if (baseItem instanceof NumberItem) {
+            return ((NumberItem) baseItem).getDimension();
+        }
+        return null;
+    }
+
+    private GroupFunction createDimensionGroupFunction(GroupFunctionDTO function, @Nullable Item baseItem,
             Class<? extends Quantity<?>> dimension) {
-        String functionName = function.name;
+        final String functionName = function.name;
         switch (functionName.toUpperCase()) {
             case "AVG":
                 return new DimensionalAvg(dimension);
@@ -82,15 +113,17 @@ public class GroupFunctionHelper {
             case "MAX":
                 return new DimensionalMax(dimension);
             default:
-                return createDefaultGroupFunction(function, args);
+                return createDefaultGroupFunction(function, baseItem);
         }
     }
 
-    private GroupFunction createDefaultGroupFunction(GroupFunctionDTO function, List<State> args) {
-        String functionName = function.name;
-        logger = LoggerFactory.getLogger(GroupFunctionHelper.class);
+    private GroupFunction createDefaultGroupFunction(GroupFunctionDTO function, @Nullable Item baseItem) {
+        final String functionName = function.name;
+        final List<State> args;
         switch (functionName.toUpperCase()) {
             case "AND":
+                args = parseStates(baseItem, function.params);
+
                 if (args.size() == 2) {
                     return new And(args.get(0), args.get(1));
                 } else {
@@ -98,6 +131,7 @@ public class GroupFunctionHelper {
                 }
                 break;
             case "OR":
+                args = parseStates(baseItem, function.params);
                 if (args.size() == 2) {
                     return new Or(args.get(0), args.get(1));
                 } else {
@@ -105,6 +139,7 @@ public class GroupFunctionHelper {
                 }
                 break;
             case "NAND":
+                args = parseStates(baseItem, function.params);
                 if (args.size() == 2) {
                     return new NAnd(args.get(0), args.get(1));
                 } else {
@@ -112,6 +147,7 @@ public class GroupFunctionHelper {
                 }
                 break;
             case "NOR":
+                args = parseStates(baseItem, function.params);
                 if (args.size() == 2) {
                     return new NOr(args.get(0), args.get(1));
                 } else {

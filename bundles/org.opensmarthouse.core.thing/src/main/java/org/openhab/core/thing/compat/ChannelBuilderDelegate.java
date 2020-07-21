@@ -15,6 +15,7 @@ package org.openhab.core.thing.compat;
 import java.util.Map;
 import java.util.Set;
 import java.util.function.Consumer;
+
 import org.eclipse.jdt.annotation.Nullable;
 import org.openhab.core.config.core.Configuration;
 import org.openhab.core.thing.Channel;
@@ -28,6 +29,7 @@ import org.openhab.core.thing.type.ChannelTypeUID;
  * For compatibility reasons only.
  *
  * @author Łukasz Dywicki - Initial contribution.
+ * @author Chris Jackson - Added withAcceptedItemType
  */
 public class ChannelBuilderDelegate implements ChannelBuilder {
 
@@ -72,6 +74,11 @@ public class ChannelBuilderDelegate implements ChannelBuilder {
     @Override
     public ChannelBuilder withKind(ChannelKind kind) {
         return channelBuilder.withKind(kind);
+    }
+
+    @Override
+    public ChannelBuilder withAcceptedItemType(@Nullable String acceptedItemType) {
+        return channelBuilder.withAcceptedItemType(acceptedItemType);
     }
 
     @Override

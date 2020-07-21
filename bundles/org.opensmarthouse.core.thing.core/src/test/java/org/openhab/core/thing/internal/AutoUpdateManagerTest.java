@@ -38,6 +38,7 @@ import org.openhab.core.items.events.ItemCommandEvent;
 import org.openhab.core.items.events.ItemEventFactory;
 import org.openhab.core.items.events.ItemStateEvent;
 import org.openhab.core.items.events.ItemStatePredictedEvent;
+import org.openhab.core.library.CoreItemFactory;
 import org.openhab.core.library.items.StringItem;
 import org.openhab.core.library.types.StringType;
 import org.openhab.core.thing.ChannelUID;

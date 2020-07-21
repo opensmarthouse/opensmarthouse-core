@@ -65,10 +65,15 @@ refactor $1 "bundles/org.openhab.core/src/test/java/org/openhab/core/library/typ
 
 refactor $1 "bundles/org.openhab.core/src/test/java/org/openhab/core/library/dimension/VolumetricFlowRateTest.java"                            "bundles/org.opensmarthouse.core.library.unit/src/test/java/org/openhab/core/library/unit/VolumetricFlowRateTest.java"
 
+
+refactor $1 "bundles/org.openhab.core.thing/src/test/java/org/openhab/core/thing/binding/builder/ChannelBuilderTest.java"                      "bundles/org.opensmarthouse.core.thing.core/src/test/java/org/openhab/core/thing/internal/builder/ChannelBuilderTest.java"
+refactor $1 "bundles/org.openhab.core.thing/src/test/java/org/openhab/core/thing/binding/builder/ThingBuilderTest.java"                        "bundles/org.opensmarthouse.core.thing.core/src/test/java/org/openhab/core/thing/internal/builder/ThingBuilderTest.java"
+
 refactor $1 "bundles/org.openhab.core/src/test/java/org/openhab/core/types/CommandDescriptionBuilderTest.java"                                 "bundles/org.opensmarthouse.core.type.core/src/test/java/org/openhab/core/types/CommandDescriptionBuilderTest.java"
 refactor $1 "bundles/org.openhab.core/src/test/java/org/openhab/core/types/StateDescriptionFragmentBuilderTest.java"                           "bundles/org.opensmarthouse.core.type.core/src/test/java/org/openhab/core/types/StateDescriptionFragmentBuilderTest.java"
 
 refactor $1 "bundles/org.openhab.core.config.core/src/main/java/org/openhab/core/config/core/internal/ConfigMapper.java"                        "bundles/org.opensmarthouse.core.config/src/main/java/org/openhab/core/config/core/ConfigMapper.java"
+refactor $1 "bundles/org.openhab.core.config.core/src/main/java/org/openhab/core/config/core/internal/net/NetworkConfigOptionProvider.java"     "bundles/org.opensmarthouse.core.config.net/src/main/java/org/openhab/core/config/core/internal/net/NetworkConfigOptionProvider.java"
 
 refactor $1 "bundles/org.openhab.core.config.core/src/main/java/org/openhab/core/config/core/i18n/ConfigI18nLocalizationService.java"           "bundles/org.opensmarthouse.core.config.core/src/main/java/org/openhab/core/config/core/internal/i18n/ConfigI18nLocalizationServiceImpl.java"
 refactor $1 "bundles/org.openhab.core.config.core/src/main/java/org/openhab/core/config/core/normalization/NormalizerFactory.java"              "bundles/org.opensmarthouse.core.config.core/src/main/java/org/openhab/core/config/core/internal/normalization/NormalizerFactoryImpl.java"

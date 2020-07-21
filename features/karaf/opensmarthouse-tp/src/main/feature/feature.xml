@@ -110,7 +110,7 @@
         <bundle dependency="true">mvn:com.fasterxml.jackson.core/jackson-databind/${jackson.version}</bundle>
         <bundle dependency="true">mvn:com.fasterxml.jackson.dataformat/jackson-dataformat-xml/${jackson.version}</bundle>
         <bundle dependency="true">mvn:com.fasterxml.jackson.dataformat/jackson-dataformat-yaml/${jackson.version}</bundle>
-        <bundle dependency="true">mvn:com.fasterxml.jackson.datatype/jackson-datatype-joda/${jackson.version}</bundle>
+        <bundle dependency="true">mvn:com.fasterxml.jackson.datatype/jackson-datatype-jsr310/${jackson.version}</bundle>
         <bundle dependency="true">mvn:com.fasterxml.jackson.jaxrs/jackson-jaxrs-base/${jackson.version}</bundle>
         <bundle dependency="true">mvn:com.fasterxml.jackson.jaxrs/jackson-jaxrs-json-provider/${jackson.version}</bundle>
         <bundle dependency="true">mvn:com.fasterxml.jackson.module/jackson-module-jaxb-annotations/${jackson.version}</bundle>
@@ -276,26 +276,22 @@
         <bundle dependency="true">mvn:org.eclipse.xtext/org.eclipse.xtext.xbase.ide/2.19.0</bundle>
     </feature>
 
-    <feature name="opensmarthouse.tp-jaxrswb-swagger-gen" description="JAX-RS Whiteboard Swagger generator" version="${project.version}">
-        <details>
-            This feature is currently only for external usage by products and not used by openHAB Core itself.
-        </details>
-        <capability>openhab.tp;feature=jaxrswb-swagger-gen;version=0.0.4</capability>
-        <bundle>mvn:de.maggu2810.jaxrswb.bundles/jaxrswb-swagger1-gen/0.0.4</bundle>
+    <feature name="opensmarthouse.tp-swagger-jax-rs" description="JAX-RS Whiteboard Swagger" version="${project.version}">
+		<capability>opensmarthouse.tp;feature=swagger-jaxrs;version=2.1.0</capability>
         <feature dependency="true">opensmarthouse.tp-jax-rs-whiteboard</feature>
         <feature dependency="true">opensmarthouse.tp-jackson</feature>
-        <bundle dependency="true">mvn:io.swagger/swagger-jaxrs/1.6.1</bundle>
-        <bundle dependency="true">mvn:io.swagger/swagger-models/1.6.1</bundle>
-        <bundle dependency="true">mvn:io.swagger/swagger-annotations/1.6.1</bundle>
-        <bundle dependency="true">mvn:io.swagger/swagger-core/1.6.1</bundle>
+		<bundle dependency="true">mvn:io.swagger.core.v3/swagger-annotations/2.1.0</bundle>
+		<bundle dependency="true">mvn:io.swagger.core.v3/swagger-core/2.1.0</bundle>
+		<bundle dependency="true">mvn:io.swagger.core.v3/swagger-integration/2.1.0</bundle>
+		<bundle dependency="true">mvn:io.swagger.core.v3/swagger-jaxrs2/2.1.0</bundle>
+		<bundle dependency="true">mvn:io.swagger.core.v3/swagger-models/2.1.0</bundle>
         <bundle dependency="true">mvn:com.google.guava/guava/27.1-jre</bundle>
         <bundle dependency="true">mvn:com.google.guava/failureaccess/1.0.1</bundle>
         <bundle dependency="true">mvn:javax.validation/validation-api/1.1.0.Final</bundle>
-        <bundle dependency="true">mvn:org.apache.commons/commons-lang3/3.2.1</bundle>
-        <bundle dependency="true">mvn:de.maggu2810.thirdparty.modified.org.reflections/reflections/0.9.10.v20160429-1435</bundle>
-        <config name="de.maggu2810.jaxrswb.swagger1.gen">
-            info.title=openHAB REST API
-        </config>
+		<bundle dependency="true">mvn:org.apache.commons/commons-lang3/3.11</bundle>
+		<bundle dependency="true">mvn:org.javassist/javassist/3.26.0-GA</bundle>
+		<bundle dependency="true">mvn:org.reflections/reflections/0.9.12</bundle>
+		<bundle dependency="true">mvn:io.github.classgraph/classgraph/4.8.87</bundle>
     </feature>
 
 </features>

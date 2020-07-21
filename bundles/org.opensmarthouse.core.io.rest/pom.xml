@@ -16,15 +16,15 @@
   <dependencies>
     <dependency>
       <groupId>org.opensmarthouse.core.bundles</groupId>
+      <artifactId>org.opensmarthouse.core.boot</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.opensmarthouse.core.bundles</groupId>
       <artifactId>org.opensmarthouse.core.i18n</artifactId>
     </dependency>
     <dependency>
       <groupId>org.eclipse.orbit.bundles</groupId>
       <artifactId>com.google.gson</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>org.osgi</groupId>
-      <artifactId>osgi.cmpn</artifactId>
     </dependency>
 
     <dependency>
@@ -32,18 +32,20 @@
       <artifactId>javax.ws.rs-api</artifactId>
     </dependency>
     <dependency>
-      <groupId>io.swagger</groupId>
+      <groupId>io.swagger.core.v3</groupId>
       <artifactId>swagger-annotations</artifactId>
     </dependency>
 
     <dependency>
       <groupId>junit</groupId>
       <artifactId>junit</artifactId>
+      <scope>test</scope>
     </dependency>
     <dependency>
       <groupId>org.mockito</groupId>
       <artifactId>mockito-core</artifactId>
-    </dependency>
+      <scope>test</scope>
+    </dependency>    
     <dependency>
       <groupId>org.apache.servicemix.bundles</groupId>
       <artifactId>org.apache.servicemix.bundles.jaxb-impl</artifactId>
@@ -52,6 +54,7 @@
     <dependency>
       <groupId>org.osgi</groupId>
       <artifactId>osgi.enroute.hamcrest.wrapper</artifactId>
+      <scope>test</scope>
     </dependency>
     <dependency>
       <groupId>org.glassfish.jersey.core</groupId>

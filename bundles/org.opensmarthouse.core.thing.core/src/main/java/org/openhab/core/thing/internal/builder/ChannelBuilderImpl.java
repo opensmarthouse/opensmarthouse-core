@@ -12,6 +12,7 @@
  */
 package org.openhab.core.thing.internal.builder;
 
+import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
@@ -38,7 +39,7 @@ import org.openhab.core.thing.type.ChannelTypeUID;
 public class ChannelBuilderImpl implements ChannelBuilder {
 
     private final ChannelUID channelUID;
-    private @Nullable final String acceptedItemType;
+    private @Nullable String acceptedItemType;
     private ChannelKind kind;
     private @Nullable Configuration configuration;
     private Set<String> defaultTags;
@@ -47,6 +48,16 @@ public class ChannelBuilderImpl implements ChannelBuilder {
     private @Nullable String description;
     private @Nullable ChannelTypeUID channelTypeUID;
     private @Nullable AutoUpdatePolicy autoUpdatePolicy;
+
+    /**
+     * Creates a {@link ChannelBuilder} for the given {@link ChannelUID}.
+     * 
+     * @param channelUID the {@link ChannelUID}
+     * @return channel builder
+     */
+    public static ChannelBuilder create(ChannelUID channelUID) {
+        return new ChannelBuilderImpl(channelUID, null, new HashSet<>());
+    }
 
     ChannelBuilderImpl(ChannelUID channelUID, @Nullable String acceptedItemType, Set<String> defaultTags) {
         this.channelUID = channelUID;
@@ -143,6 +154,12 @@ public class ChannelBuilderImpl implements ChannelBuilder {
         return this;
     }
 
+    @Override
+    public ChannelBuilder withAcceptedItemType(@Nullable String acceptedItemType) {
+        this.acceptedItemType = acceptedItemType;
+        return this;
+    }
+
     /**
      * Sets the auto update policy. See {@link AutoUpdatePolicy} for details.
      *
@@ -165,4 +182,5 @@ public class ChannelBuilderImpl implements ChannelBuilder {
         return new Channel(channelUID, channelTypeUID, acceptedItemType, kind, configuration, defaultTags, properties,
                 label, description, autoUpdatePolicy);
     }
+
 }

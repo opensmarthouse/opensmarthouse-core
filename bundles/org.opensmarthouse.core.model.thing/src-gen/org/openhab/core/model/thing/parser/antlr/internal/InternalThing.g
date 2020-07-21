@@ -1289,31 +1289,38 @@ ruleNUMBER returns [AntlrDatatypeRuleToken current=new AntlrDatatypeRuleToken()]
 	leaveRule();
 }:
 	(
-		this_ID_0=RULE_ID
+		(
+			kw='-'
+			{
+				$current.merge(kw);
+				newLeafNode(kw, grammarAccess.getNUMBERAccess().getHyphenMinusKeyword_0());
+			}
+		)?
+		this_ID_1=RULE_ID
 		{
-			$current.merge(this_ID_0);
+			$current.merge(this_ID_1);
 		}
 		{
-			newLeafNode(this_ID_0, grammarAccess.getNUMBERAccess().getIDTerminalRuleCall_0());
+			newLeafNode(this_ID_1, grammarAccess.getNUMBERAccess().getIDTerminalRuleCall_1());
 		}
 		(
 			kw='.'
 			{
 				$current.merge(kw);
-				newLeafNode(kw, grammarAccess.getNUMBERAccess().getFullStopKeyword_1_0());
+				newLeafNode(kw, grammarAccess.getNUMBERAccess().getFullStopKeyword_2_0());
 			}
-			this_ID_2=RULE_ID
+			this_ID_3=RULE_ID
 			{
-				$current.merge(this_ID_2);
+				$current.merge(this_ID_3);
 			}
 			{
-				newLeafNode(this_ID_2, grammarAccess.getNUMBERAccess().getIDTerminalRuleCall_1_1());
+				newLeafNode(this_ID_3, grammarAccess.getNUMBERAccess().getIDTerminalRuleCall_2_1());
 			}
 		)?
 	)
 ;
 
-RULE_ID : '^'? ('a'..'z'|'A'..'Z'|'_'|'-'|'0'..'9') ('a'..'z'|'A'..'Z'|'_'|'-'|'0'..'9')*;
+RULE_ID : '^'? ('a'..'z'|'A'..'Z'|'_'|'0'..'9') ('a'..'z'|'A'..'Z'|'_'|'-'|'0'..'9')*;
 
 RULE_STRING : ('"' ('\\' ('b'|'t'|'n'|'f'|'r'|'u'|'"'|'\''|'\\')|~(('\\'|'"')))* '"'|'\'' ('\\' ('b'|'t'|'n'|'f'|'r'|'u'|'"'|'\''|'\\')|~(('\\'|'\'')))* '\'');
 

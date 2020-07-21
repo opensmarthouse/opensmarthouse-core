@@ -17,36 +17,39 @@
     <dependency>
       <groupId>org.opensmarthouse.core.bundles</groupId>
       <artifactId>org.opensmarthouse.core.model.persistence</artifactId>
-      <version>${project.version}</version>
     </dependency>
     <dependency>
       <groupId>org.opensmarthouse.core.bundles</groupId>
       <artifactId>org.opensmarthouse.core.thing</artifactId>
-      <version>${project.version}</version>
     </dependency>
     <dependency>
       <groupId>org.opensmarthouse.core.bundles</groupId>
       <artifactId>org.opensmarthouse.core.ephemeris</artifactId>
-      <version>${project.version}</version>
     </dependency>
     <dependency>
       <groupId>org.opensmarthouse.core.bundles</groupId>
       <artifactId>org.opensmarthouse.core.transform</artifactId>
-      <version>${project.version}</version>
     </dependency>
     <dependency>
       <groupId>org.opensmarthouse.core.bundles</groupId>
       <artifactId>org.opensmarthouse.core.voice</artifactId>
-      <version>${project.version}</version>
     </dependency>
     <dependency>
       <groupId>org.opensmarthouse.core.bundles</groupId>
       <artifactId>org.opensmarthouse.core.io.net</artifactId>
-      <version>${project.version}</version>
     </dependency>
     <dependency>
-      <groupId>org.quartz-scheduler</groupId>
-      <artifactId>quartz</artifactId>
+      <groupId>org.opensmarthouse.core.bundles</groupId>
+      <artifactId>org.opensmarthouse.core.scheduler.core</artifactId>
+    </dependency>
+
+    <dependency>
+      <groupId>org.osgi</groupId>
+      <artifactId>osgi.enroute.hamcrest.wrapper</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.opensmarthouse.core.bundles</groupId>
+      <artifactId>org.opensmarthouse.core.test</artifactId>
     </dependency>
   </dependencies>
 
@@ -115,9 +118,8 @@
         <groupId>org.eclipse.xtend</groupId>
         <artifactId>xtend-maven-plugin</artifactId>
       </plugin>
-
     </plugins>
     <sourceDirectory>src</sourceDirectory>
-    <testSourceDirectory>notestsources</testSourceDirectory>
+    <testSourceDirectory>src.moved/test/java</testSourceDirectory>
   </build>
 </project>

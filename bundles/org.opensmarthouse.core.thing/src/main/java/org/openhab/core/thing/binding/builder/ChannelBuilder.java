@@ -14,9 +14,11 @@ package org.openhab.core.thing.binding.builder;
 
 import java.util.Map;
 import java.util.Set;
+
 import org.eclipse.jdt.annotation.NonNullByDefault;
 import org.eclipse.jdt.annotation.Nullable;
 import org.openhab.core.config.core.Configuration;
+import org.openhab.core.library.CoreItemFactory;
 import org.openhab.core.thing.Channel;
 import org.openhab.core.thing.type.AutoUpdatePolicy;
 import org.openhab.core.thing.type.ChannelKind;
@@ -30,6 +32,7 @@ import org.openhab.core.thing.type.ChannelTypeUID;
  * @author Alex Tugarev - Extended about default tags
  * @author Chris Jackson - Added properties and label/description
  * @author Łukasz Dywicki - Refactoring to interface.
+ * @author Chris Jackson - Added withAcceptedItemType
  */
 @NonNullByDefault
 public interface ChannelBuilder {
@@ -89,6 +92,15 @@ public interface ChannelBuilder {
      * @return channel builder
      */
     ChannelBuilder withKind(ChannelKind kind);
+
+    /**
+     * Sets the accepted item type of the {@link Channel} to be build. See
+     * {@link CoreItemFactory#getSupportedItemTypes()} for a list of available item types.
+     *
+     * @param acceptedItemType item type that is accepted by this channel
+     * @return channel builder
+     */
+    public ChannelBuilder withAcceptedItemType(@Nullable String acceptedItemType);
 
     /**
      * Sets the auto update policy. See {@link AutoUpdatePolicy} for details.

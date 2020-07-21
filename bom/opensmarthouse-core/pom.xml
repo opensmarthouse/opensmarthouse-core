@@ -269,6 +269,12 @@
     </dependency>
     <dependency>
       <groupId>org.opensmarthouse.core.bundles</groupId>
+      <artifactId>org.opensmarthouse.core.io.rest.swagger</artifactId>
+      <version>${project.version}</version>
+      <scope>compile</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.opensmarthouse.core.bundles</groupId>
       <artifactId>org.opensmarthouse.core.io.rest.ui</artifactId>
       <version>${project.version}</version>
       <scope>compile</scope>

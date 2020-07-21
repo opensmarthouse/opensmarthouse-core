@@ -373,6 +373,12 @@
       <scope>compile</scope>
     </dependency>
     <dependency>
+      <groupId>commons-lang</groupId>
+      <artifactId>commons-lang3</artifactId>
+      <version>3.11</version>
+      <scope>compile</scope>
+    </dependency>
+    <dependency>
       <groupId>commons-net</groupId>
       <artifactId>commons-net</artifactId>
       <version>3.3</version>
@@ -925,7 +931,7 @@
     </dependency>
     <dependency>
       <groupId>com.fasterxml.jackson.datatype</groupId>
-      <artifactId>jackson-datatype-joda</artifactId>
+      <artifactId>jackson-datatype-jsr310</artifactId>
       <version>${jackson.version}</version>
       <scope>compile</scope>
     </dependency>
@@ -950,41 +956,39 @@
 
     <!-- Swagger -->
     <dependency>
-      <groupId>io.swagger</groupId>
+      <groupId>io.swagger.core.v3</groupId>
       <artifactId>swagger-annotations</artifactId>
       <version>${swagger.version}</version>
       <scope>compile</scope>
     </dependency>
     <dependency>
-      <groupId>io.swagger</groupId>
+      <groupId>io.swagger.core.v3</groupId>
       <artifactId>swagger-core</artifactId>
       <version>${swagger.version}</version>
       <scope>compile</scope>
     </dependency>
     <dependency>
-      <groupId>io.swagger</groupId>
+      <groupId>io.swagger.core.v3</groupId>
       <artifactId>swagger-jaxrs</artifactId>
       <version>${swagger.version}</version>
       <scope>compile</scope>
     </dependency>
     <dependency>
-      <groupId>io.swagger</groupId>
+      <groupId>io.swagger.core.v3</groupId>
       <artifactId>swagger-models</artifactId>
       <version>${swagger.version}</version>
       <scope>compile</scope>
     </dependency>
-
-    <!-- JAX-RS Whiteboard Swagger 1 generator -->
     <dependency>
-      <groupId>de.maggu2810.jaxrswb.bundles</groupId>
-      <artifactId>jaxrswb-swagger1-gen</artifactId>
-      <version>0.0.4</version>
+      <groupId>org.javassist</groupId>
+      <artifactId>javassist</artifactId>
+      <version>3.26.0-GA</version>
       <scope>compile</scope>
     </dependency>
     <dependency>
-      <groupId>de.maggu2810.thirdparty.modified.org.reflections</groupId>
+      <groupId>org.reflections</groupId>
       <artifactId>reflections</artifactId>
-      <version>0.9.10.v20160429-1435</version>
+      <version>0.9.12</version>
       <scope>compile</scope>
     </dependency>
 

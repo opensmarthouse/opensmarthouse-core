@@ -22,7 +22,7 @@ import java.util.HashMap;
 @SuppressWarnings("all")
 public class InternalThingParser extends AbstractInternalAntlrParser {
     public static final String[] tokenNames = new String[] {
-        "<invalid>", "<EOR>", "<DOWN>", "<UP>", "RULE_STRING", "RULE_ID", "RULE_ML_COMMENT", "RULE_SL_COMMENT", "RULE_WS", "RULE_ANY_OTHER", "'Bridge'", "'@'", "'['", "','", "']'", "'{'", "'Things:'", "'Channels:'", "'}'", "'Thing'", "'('", "')'", "'State'", "'Trigger'", "'Type'", "':'", "'Number:'", "'Switch'", "'Rollershutter'", "'Number'", "'String'", "'Dimmer'", "'Contact'", "'DateTime'", "'Color'", "'Player'", "'Location'", "'Call'", "'Image'", "'='", "'#'", "'true'", "'false'", "'.'"
+        "<invalid>", "<EOR>", "<DOWN>", "<UP>", "RULE_STRING", "RULE_ID", "RULE_ML_COMMENT", "RULE_SL_COMMENT", "RULE_WS", "RULE_ANY_OTHER", "'Bridge'", "'@'", "'['", "','", "']'", "'{'", "'Things:'", "'Channels:'", "'}'", "'Thing'", "'('", "')'", "'State'", "'Trigger'", "'Type'", "':'", "'Number:'", "'Switch'", "'Rollershutter'", "'Number'", "'String'", "'Dimmer'", "'Contact'", "'DateTime'", "'Color'", "'Player'", "'Location'", "'Call'", "'Image'", "'='", "'#'", "'true'", "'false'", "'-'", "'.'"
     };
     public static final int T__19=19;
     public static final int T__15=15;
@@ -61,6 +61,7 @@ public class InternalThingParser extends AbstractInternalAntlrParser {
     public static final int T__32=32;
     public static final int RULE_WS=8;
     public static final int RULE_ANY_OTHER=9;
+    public static final int T__44=44;
     public static final int T__40=40;
     public static final int T__41=41;
     public static final int T__42=42;
@@ -2883,13 +2884,13 @@ public class InternalThingParser extends AbstractInternalAntlrParser {
                     if ( (LA35_1==RULE_ID) ) {
                         int LA35_3 = input.LA(3);
 
-                        if ( (LA35_3==EOF||(LA35_3>=13 && LA35_3<=14)||LA35_3==43) ) {
+                        if ( (LA35_3==EOF||(LA35_3>=13 && LA35_3<=14)||LA35_3==44) ) {
                             alt35=1;
                         }
 
 
                     }
-                    else if ( (LA35_1==RULE_STRING||(LA35_1>=41 && LA35_1<=42)) ) {
+                    else if ( (LA35_1==RULE_STRING||(LA35_1>=41 && LA35_1<=43)) ) {
                         alt35=1;
                     }
 
@@ -3497,6 +3498,7 @@ public class InternalThingParser extends AbstractInternalAntlrParser {
                 }
                 break;
             case RULE_ID:
+            case 43:
                 {
                 alt38=2;
                 }
@@ -3772,36 +3774,25 @@ public class InternalThingParser extends AbstractInternalAntlrParser {
 
 
     // $ANTLR start "ruleNUMBER"
-    // InternalThing.g:1284:1: ruleNUMBER returns [AntlrDatatypeRuleToken current=new AntlrDatatypeRuleToken()] : (this_ID_0= RULE_ID (kw= '.' this_ID_2= RULE_ID )? ) ;
+    // InternalThing.g:1284:1: ruleNUMBER returns [AntlrDatatypeRuleToken current=new AntlrDatatypeRuleToken()] : ( (kw= '-' )? this_ID_1= RULE_ID (kw= '.' this_ID_3= RULE_ID )? ) ;
     public final AntlrDatatypeRuleToken ruleNUMBER() throws RecognitionException {
         AntlrDatatypeRuleToken current = new AntlrDatatypeRuleToken();
 
-        Token this_ID_0=null;
         Token kw=null;
-        Token this_ID_2=null;
+        Token this_ID_1=null;
+        Token this_ID_3=null;
 
 
         	enterRule();
 
         try {
-            // InternalThing.g:1290:2: ( (this_ID_0= RULE_ID (kw= '.' this_ID_2= RULE_ID )? ) )
-            // InternalThing.g:1291:2: (this_ID_0= RULE_ID (kw= '.' this_ID_2= RULE_ID )? )
+            // InternalThing.g:1290:2: ( ( (kw= '-' )? this_ID_1= RULE_ID (kw= '.' this_ID_3= RULE_ID )? ) )
+            // InternalThing.g:1291:2: ( (kw= '-' )? this_ID_1= RULE_ID (kw= '.' this_ID_3= RULE_ID )? )
             {
-            // InternalThing.g:1291:2: (this_ID_0= RULE_ID (kw= '.' this_ID_2= RULE_ID )? )
-            // InternalThing.g:1292:3: this_ID_0= RULE_ID (kw= '.' this_ID_2= RULE_ID )?
+            // InternalThing.g:1291:2: ( (kw= '-' )? this_ID_1= RULE_ID (kw= '.' this_ID_3= RULE_ID )? )
+            // InternalThing.g:1292:3: (kw= '-' )? this_ID_1= RULE_ID (kw= '.' this_ID_3= RULE_ID )?
             {
-            this_ID_0=(Token)match(input,RULE_ID,FOLLOW_28); if (state.failed) return current;
-            if ( state.backtracking==0 ) {
-
-              			current.merge(this_ID_0);
-              		
-            }
-            if ( state.backtracking==0 ) {
-
-              			newLeafNode(this_ID_0, grammarAccess.getNUMBERAccess().getIDTerminalRuleCall_0());
-              		
-            }
-            // InternalThing.g:1299:3: (kw= '.' this_ID_2= RULE_ID )?
+            // InternalThing.g:1292:3: (kw= '-' )?
             int alt40=2;
             int LA40_0 = input.LA(1);
 
@@ -3810,24 +3801,59 @@ public class InternalThingParser extends AbstractInternalAntlrParser {
             }
             switch (alt40) {
                 case 1 :
-                    // InternalThing.g:1300:4: kw= '.' this_ID_2= RULE_ID
+                    // InternalThing.g:1293:4: kw= '-'
                     {
                     kw=(Token)match(input,43,FOLLOW_4); if (state.failed) return current;
                     if ( state.backtracking==0 ) {
 
                       				current.merge(kw);
-                      				newLeafNode(kw, grammarAccess.getNUMBERAccess().getFullStopKeyword_1_0());
+                      				newLeafNode(kw, grammarAccess.getNUMBERAccess().getHyphenMinusKeyword_0());
                       			
                     }
-                    this_ID_2=(Token)match(input,RULE_ID,FOLLOW_2); if (state.failed) return current;
+
+                    }
+                    break;
+
+            }
+
+            this_ID_1=(Token)match(input,RULE_ID,FOLLOW_28); if (state.failed) return current;
+            if ( state.backtracking==0 ) {
+
+              			current.merge(this_ID_1);
+              		
+            }
+            if ( state.backtracking==0 ) {
+
+              			newLeafNode(this_ID_1, grammarAccess.getNUMBERAccess().getIDTerminalRuleCall_1());
+              		
+            }
+            // InternalThing.g:1306:3: (kw= '.' this_ID_3= RULE_ID )?
+            int alt41=2;
+            int LA41_0 = input.LA(1);
+
+            if ( (LA41_0==44) ) {
+                alt41=1;
+            }
+            switch (alt41) {
+                case 1 :
+                    // InternalThing.g:1307:4: kw= '.' this_ID_3= RULE_ID
+                    {
+                    kw=(Token)match(input,44,FOLLOW_4); if (state.failed) return current;
                     if ( state.backtracking==0 ) {
 
-                      				current.merge(this_ID_2);
+                      				current.merge(kw);
+                      				newLeafNode(kw, grammarAccess.getNUMBERAccess().getFullStopKeyword_2_0());
+                      			
+                    }
+                    this_ID_3=(Token)match(input,RULE_ID,FOLLOW_2); if (state.failed) return current;
+                    if ( state.backtracking==0 ) {
+
+                      				current.merge(this_ID_3);
                       			
                     }
                     if ( state.backtracking==0 ) {
 
-                      				newLeafNode(this_ID_2, grammarAccess.getNUMBERAccess().getIDTerminalRuleCall_1_1());
+                      				newLeafNode(this_ID_3, grammarAccess.getNUMBERAccess().getIDTerminalRuleCall_2_1());
                       			
                     }
 
@@ -3913,10 +3939,10 @@ public class InternalThingParser extends AbstractInternalAntlrParser {
     public static final BitSet FOLLOW_21 = new BitSet(new long[]{0x0000000000001012L});
     public static final BitSet FOLLOW_22 = new BitSet(new long[]{0x0000000000001002L});
     public static final BitSet FOLLOW_23 = new BitSet(new long[]{0x0000008000000000L});
-    public static final BitSet FOLLOW_24 = new BitSet(new long[]{0x0000060000000030L});
+    public static final BitSet FOLLOW_24 = new BitSet(new long[]{0x00000E0000000030L});
     public static final BitSet FOLLOW_25 = new BitSet(new long[]{0x0000000000002002L});
     public static final BitSet FOLLOW_26 = new BitSet(new long[]{0x0000010000000002L});
     public static final BitSet FOLLOW_27 = new BitSet(new long[]{0x0000000002000002L});
-    public static final BitSet FOLLOW_28 = new BitSet(new long[]{0x0000080000000002L});
+    public static final BitSet FOLLOW_28 = new BitSet(new long[]{0x0000100000000002L});
 
 }

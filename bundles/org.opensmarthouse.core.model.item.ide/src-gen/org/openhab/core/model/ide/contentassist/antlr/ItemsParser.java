@@ -63,7 +63,7 @@ public class ItemsParser extends AbstractContentAssistParser {
 			builder.put(grammarAccess.getModelBindingAccess().getGroup_3_2(), "rule__ModelBinding__Group_3_2__0");
 			builder.put(grammarAccess.getModelPropertyAccess().getGroup(), "rule__ModelProperty__Group__0");
 			builder.put(grammarAccess.getNUMBERAccess().getGroup(), "rule__NUMBER__Group__0");
-			builder.put(grammarAccess.getNUMBERAccess().getGroup_1(), "rule__NUMBER__Group_1__0");
+			builder.put(grammarAccess.getNUMBERAccess().getGroup_2(), "rule__NUMBER__Group_2__0");
 			builder.put(grammarAccess.getItemModelAccess().getItemsAssignment_1(), "rule__ItemModel__ItemsAssignment_1");
 			builder.put(grammarAccess.getModelItemAccess().getNameAssignment_1(), "rule__ModelItem__NameAssignment_1");
 			builder.put(grammarAccess.getModelItemAccess().getLabelAssignment_2(), "rule__ModelItem__LabelAssignment_2");

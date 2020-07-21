@@ -12,13 +12,16 @@
  */
 package org.openhab.core.internal.items;
 
-import static org.junit.Assert.*;
-import static org.mockito.ArgumentMatchers.*;
-import static org.mockito.Mockito.*;
+import static org.junit.Assert.assertNull;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.same;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.verifyNoMoreInteractions;
+import static org.mockito.Mockito.when;
 import static org.mockito.MockitoAnnotations.initMocks;
 
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.Map;
 
 import org.junit.Before;
@@ -48,7 +51,8 @@ public class MetadataCommandDescriptionProviderTest {
     public static final String OPTION_2 = "OPTION2";
     public static final String OPTION_3_LABEL = "Option 3";
     public static final String OPTION_3_COMMAND = "3";
-    public static final String OPTIONS = OPTION_1 +"," + OPTION_2 +" , "+ OPTION_3_COMMAND +" =" + OPTION_3_LABEL + "  ";
+    public static final String OPTIONS = OPTION_1 + "," + OPTION_2 + " , " + OPTION_3_COMMAND + " =" + OPTION_3_LABEL
+            + "  ";
 
     @SuppressWarnings("rawtypes")
     private @Mock ServiceReference managedProviderRef;

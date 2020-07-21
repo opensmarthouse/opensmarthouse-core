@@ -77,7 +77,6 @@ import org.openhab.core.thing.binding.ThingBuilderFactory;
 import org.openhab.core.thing.binding.firmware.Firmware;
 import org.openhab.core.thing.dto.ChannelDTO;
 import org.openhab.core.thing.dto.ChannelDTOMapper;
-import org.openhab.core.thing.dto.StrippedThingTypeDTO;
 import org.openhab.core.thing.dto.ThingDTO;
 import org.openhab.core.thing.dto.ThingDTOMapper;
 import org.openhab.core.thing.firmware.FirmwareRegistry;
@@ -87,6 +86,7 @@ import org.openhab.core.thing.firmware.dto.FirmwareDTO;
 import org.openhab.core.thing.firmware.dto.FirmwareStatusDTO;
 import org.openhab.core.thing.i18n.ThingStatusInfoI18nLocalizationService;
 import org.openhab.core.thing.link.ItemChannelLinkRegistry;
+import org.openhab.core.thing.link.ManagedItemChannelLinkProvider;
 import org.openhab.core.thing.type.BridgeType;
 import org.openhab.core.thing.type.ChannelType;
 import org.openhab.core.thing.type.ChannelTypeRegistry;
@@ -105,11 +105,15 @@ import org.osgi.service.jaxrs.whiteboard.propertytypes.JaxrsResource;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiOperation;
-import io.swagger.annotations.ApiParam;
-import io.swagger.annotations.ApiResponse;
-import io.swagger.annotations.ApiResponses;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.media.ArraySchema;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
+import io.swagger.v3.oas.annotations.tags.Tag;
 
 /**
  * This class acts as a REST resource for things and is registered with the
@@ -127,6 +131,10 @@ import io.swagger.annotations.ApiResponses;
  * @author Franck Dechavanne - Added DTOs to ApiResponses
  * @author Dimitar Ivanov - replaced Firmware UID with thing UID and firmware version
  * @author Markus Rathgeb - Migrated to JAX-RS Whiteboard Specification
+ * @author Lukasz Dywicki - Used builder factories
+ * @author Chris Jackson - added migrate method
+ * @author Chris Jackson - removed limitation of only configuring managed things
+ * @author Wouter Born - Migrated to OpenAPI annotations
  */
 @Component
 @JaxrsResource
@@ -134,7 +142,7 @@ import io.swagger.annotations.ApiResponses;
 @JaxrsApplicationSelect("(" + JaxrsWhiteboardConstants.JAX_RS_NAME + "=" + RESTConstants.JAX_RS_NAME + ")")
 @JSONRequired
 @Path(ThingResource.PATH_THINGS)
-@Api(ThingResource.PATH_THINGS)
+@Tag(name = ThingResource.PATH_THINGS)
 @NonNullByDefault
 public class ThingResource implements RESTResource {
 
@@ -143,20 +151,20 @@ public class ThingResource implements RESTResource {
     /** The URI path to this resource */
     public static final String PATH_THINGS = "things";
 
-    private final ItemChannelLinkRegistry itemChannelLinkRegistry;
-    private final ManagedThingProvider managedThingProvider;
-    private final ThingRegistry thingRegistry;
+    private final ChannelTypeRegistry channelTypeRegistry;
     private final ConfigStatusService configStatusService;
     private final ConfigDescriptionRegistry configDescRegistry;
-    private final ThingTypeRegistry thingTypeRegistry;
-    private final ChannelTypeRegistry channelTypeRegistry;
-    private final ThingStatusInfoI18nLocalizationService thingStatusInfoI18nLocalizationService;
-    private final FirmwareUpdateService firmwareUpdateService;
     private final FirmwareRegistry firmwareRegistry;
-    private final ThingManager thingManager;
     private final ThingBuilderFactory thingBuilderFactory;
+    private final FirmwareUpdateService firmwareUpdateService;
+    private final ItemChannelLinkRegistry itemChannelLinkRegistry;
     private final LocaleService localeService;
     private final ThingTypeMigrationService thingMigrationService;
+    private final ManagedThingProvider managedThingProvider;
+    private final ThingManager thingManager;
+    private final ThingRegistry thingRegistry;
+    private final ThingStatusInfoI18nLocalizationService thingStatusInfoI18nLocalizationService;
+    private final ThingTypeRegistry thingTypeRegistry;
 
     private @Context @NonNullByDefault({}) UriInfo uriInfo;
 
@@ -168,13 +176,15 @@ public class ThingResource implements RESTResource {
             final @Reference FirmwareRegistry firmwareRegistry,
             final @Reference FirmwareUpdateService firmwareUpdateService,
             final @Reference ItemChannelLinkRegistry itemChannelLinkRegistry, //
-            final @Reference LocaleService localeService, final @Reference ManagedThingProvider managedThingProvider, //
+            final @Reference LocaleService localeService, //
+            final @Reference ManagedItemChannelLinkProvider managedItemChannelLinkProvider, //
+            final @Reference ManagedThingProvider managedThingProvider, //
             final @Reference ThingManager thingManager, //
+            final @Reference ThingTypeMigrationService thingMigrationService, //
             final @Reference ThingRegistry thingRegistry, //
             final @Reference ThingStatusInfoI18nLocalizationService thingStatusInfoI18nLocalizationService, //
-            final @Reference ThingTypeRegistry thingTypeRegistry, //
             final @Reference ThingBuilderFactory thingBuilderFactory, //
-            final @Reference ThingTypeMigrationService thingMigrationService) {
+            final @Reference ThingTypeRegistry thingTypeRegistry) {
         this.channelTypeRegistry = channelTypeRegistry;
         this.configStatusService = configStatusService;
         this.configDescRegistry = configDescRegistry;
@@ -200,13 +210,14 @@ public class ThingResource implements RESTResource {
     @POST
     @RolesAllowed({ Role.ADMIN })
     @Consumes(MediaType.APPLICATION_JSON)
-    @ApiOperation(value = "Creates a new thing and adds it to the registry.")
-    @ApiResponses(value = { @ApiResponse(code = 201, message = "Created", response = String.class),
-            @ApiResponse(code = 400, message = "A uid must be provided, if no binding can create a thing of this type."),
-            @ApiResponse(code = 409, message = "A thing with the same uid already exists.") })
+    @Operation(summary = "Creates a new thing and adds it to the registry.", security = {
+            @SecurityRequirement(name = "oauth2", scopes = { "admin" }) }, responses = {
+                    @ApiResponse(responseCode = "201", description = "Created", content = @Content(schema = @Schema(implementation = String.class))),
+                    @ApiResponse(responseCode = "400", description = "A uid must be provided, if no binding can create a thing of this type."),
+                    @ApiResponse(responseCode = "409", description = "A thing with the same uid already exists.") })
     public Response create(
-            @HeaderParam(HttpHeaders.ACCEPT_LANGUAGE) @ApiParam(value = "language") @Nullable String language,
-            @ApiParam(value = "thing data", required = true) ThingDTO thingBean) {
+            @HeaderParam(HttpHeaders.ACCEPT_LANGUAGE) @Parameter(description = "language") @Nullable String language,
+            @Parameter(description = "thing data", required = true) ThingDTO thingBean) {
         final Locale locale = localeService.getLocale(language);
 
         ThingUID thingUID = thingBean.UID == null ? null : new ThingUID(thingBean.UID);
@@ -273,11 +284,10 @@ public class ThingResource implements RESTResource {
     @GET
     @RolesAllowed({ Role.USER, Role.ADMIN })
     @Produces(MediaType.APPLICATION_JSON)
-    @ApiOperation(value = "Get all available things.", response = EnrichedThingDTO.class, responseContainer = "Set")
-    @ApiResponses(value = {
-            @ApiResponse(code = 200, message = "OK", response = EnrichedThingDTO.class, responseContainer = "Set") })
+    @Operation(summary = "Get all available things.", responses = {
+            @ApiResponse(responseCode = "200", description = "OK", content = @Content(array = @ArraySchema(schema = @Schema(implementation = EnrichedThingDTO.class), uniqueItems = true))) })
     public Response getAll(
-            @HeaderParam(HttpHeaders.ACCEPT_LANGUAGE) @ApiParam(value = "language") @Nullable String language) {
+            @HeaderParam(HttpHeaders.ACCEPT_LANGUAGE) @Parameter(description = "language") @Nullable String language) {
         final Locale locale = localeService.getLocale(language);
 
         Stream<EnrichedThingDTO> thingStream = thingRegistry.stream().map(t -> convertToEnrichedThingDTO(t, locale))
@@ -289,12 +299,13 @@ public class ThingResource implements RESTResource {
     @RolesAllowed({ Role.ADMIN })
     @Path("/{thingUID}")
     @Produces(MediaType.APPLICATION_JSON)
-    @ApiOperation(value = "Gets thing by UID.")
-    @ApiResponses(value = { @ApiResponse(code = 200, message = "OK", response = ThingDTO.class),
-            @ApiResponse(code = 404, message = "Thing not found.") })
+    @Operation(summary = "Gets thing by UID.", security = {
+            @SecurityRequirement(name = "oauth2", scopes = { "admin" }) }, responses = {
+                    @ApiResponse(responseCode = "200", description = "OK", content = @Content(schema = @Schema(implementation = ThingDTO.class))),
+                    @ApiResponse(responseCode = "404", description = "Thing not found.") })
     public Response getByUID(
-            @HeaderParam(HttpHeaders.ACCEPT_LANGUAGE) @ApiParam(value = "language") @Nullable String language,
-            @PathParam("thingUID") @ApiParam(value = "thingUID") String thingUID) {
+            @HeaderParam(HttpHeaders.ACCEPT_LANGUAGE) @Parameter(description = "language") @Nullable String language,
+            @PathParam("thingUID") @Parameter(description = "thingUID") String thingUID) {
         final Locale locale = localeService.getLocale(language);
 
         Thing thing = thingRegistry.get((new ThingUID(thingUID)));
@@ -319,15 +330,16 @@ public class ThingResource implements RESTResource {
     @DELETE
     @RolesAllowed({ Role.ADMIN })
     @Path("/{thingUID}")
-    @ApiOperation(value = "Removes a thing from the registry. Set \'force\' to __true__ if you want the thing te be removed immediately.")
-    @ApiResponses(value = { @ApiResponse(code = 200, message = "OK, was deleted."),
-            @ApiResponse(code = 202, message = "ACCEPTED for asynchronous deletion."),
-            @ApiResponse(code = 404, message = "Thing not found."),
-            @ApiResponse(code = 409, message = "Thing could not be deleted because it's not editable.") })
+    @Operation(summary = "Removes a thing from the registry. Set \'force\' to __true__ if you want the thing te be removed immediately.", security = {
+            @SecurityRequirement(name = "oauth2", scopes = { "admin" }) }, responses = {
+                    @ApiResponse(responseCode = "200", description = "OK, was deleted."),
+                    @ApiResponse(responseCode = "202", description = "ACCEPTED for asynchronous deletion."),
+                    @ApiResponse(responseCode = "404", description = "Thing not found."),
+                    @ApiResponse(responseCode = "409", description = "Thing could not be deleted because it's not editable.") })
     public Response remove(
-            @HeaderParam(HttpHeaders.ACCEPT_LANGUAGE) @ApiParam(value = "language") @Nullable String language,
-            @PathParam("thingUID") @ApiParam(value = "thingUID") String thingUID,
-            @DefaultValue("false") @QueryParam("force") @ApiParam(value = "force") boolean force) {
+            @HeaderParam(HttpHeaders.ACCEPT_LANGUAGE) @Parameter(description = "language") @Nullable String language,
+            @PathParam("thingUID") @Parameter(description = "thingUID") String thingUID,
+            @DefaultValue("false") @QueryParam("force") @Parameter(description = "force") boolean force) {
         final Locale locale = localeService.getLocale(language);
 
         ThingUID thingUIDObject = new ThingUID(thingUID);
@@ -377,14 +389,15 @@ public class ThingResource implements RESTResource {
     @RolesAllowed({ Role.ADMIN })
     @Path("/{thingUID}")
     @Consumes(MediaType.APPLICATION_JSON)
-    @ApiOperation(value = "Updates a thing.")
-    @ApiResponses(value = { @ApiResponse(code = 200, message = "OK", response = ThingDTO.class),
-            @ApiResponse(code = 404, message = "Thing not found."),
-            @ApiResponse(code = 409, message = "Thing could not be updated as it is not editable.") })
+    @Operation(summary = "Updates a thing.", security = {
+            @SecurityRequirement(name = "oauth2", scopes = { "admin" }) }, responses = {
+                    @ApiResponse(responseCode = "200", description = "OK", content = @Content(schema = @Schema(implementation = ThingDTO.class))),
+                    @ApiResponse(responseCode = "404", description = "Thing not found."),
+                    @ApiResponse(responseCode = "409", description = "Thing could not be updated as it is not editable.") })
     public Response update(
-            @HeaderParam(HttpHeaders.ACCEPT_LANGUAGE) @ApiParam(value = "language") @Nullable String language,
-            @PathParam("thingUID") @ApiParam(value = "thingUID") String thingUID,
-            @ApiParam(value = "thing", required = true) ThingDTO thingBean) throws IOException {
+            @HeaderParam(HttpHeaders.ACCEPT_LANGUAGE) @Parameter(description = "language") @Nullable String language,
+            @PathParam("thingUID") @Parameter(description = "thingUID") String thingUID,
+            @Parameter(description = "thing", required = true) ThingDTO thingBean) throws IOException {
         final Locale locale = localeService.getLocale(language);
 
         ThingUID thingUIDObject = new ThingUID(thingUID);
@@ -436,16 +449,16 @@ public class ThingResource implements RESTResource {
     @RolesAllowed({ Role.ADMIN })
     @Path("/{thingUID}/config")
     @Consumes(MediaType.APPLICATION_JSON)
-    @ApiOperation(value = "Updates thing's configuration.")
-    @ApiResponses(value = { @ApiResponse(code = 200, message = "OK", response = ThingDTO.class),
-            @ApiResponse(code = 202, message = "OK, Updates were not saved.", response = ThingDTO.class),
-            @ApiResponse(code = 400, message = "Configuration of the thing is not valid."),
-            @ApiResponse(code = 404, message = "Thing not found.") })
-
+    @Operation(summary = "Updates thing's configuration.", security = {
+            @SecurityRequirement(name = "oauth2", scopes = { "admin" }) }, responses = {
+                    @ApiResponse(responseCode = "200", description = "OK", content = @Content(schema = @Schema(implementation = ThingDTO.class))),
+                    @ApiResponse(responseCode = "400", description = "Configuration of the thing is not valid."),
+                    @ApiResponse(responseCode = "404", description = "Thing not found"),
+                    @ApiResponse(responseCode = "409", description = "Thing could not be updated as it is not editable.") })
     public Response updateConfiguration(
-            @HeaderParam(HttpHeaders.ACCEPT_LANGUAGE) @ApiParam(value = "language") @Nullable String language,
-            @PathParam("thingUID") @ApiParam(value = "thing") String thingUID,
-            @ApiParam(value = "configuration parameters") @Nullable Map<String, Object> configurationParameters)
+            @HeaderParam(HttpHeaders.ACCEPT_LANGUAGE) @Parameter(description = "language") @Nullable String language,
+            @PathParam("thingUID") @Parameter(description = "thing") String thingUID,
+            @Parameter(description = "configuration parameters") @Nullable Map<String, Object> configurationParameters)
             throws IOException {
         final Locale locale = localeService.getLocale(language);
 
@@ -490,12 +503,13 @@ public class ThingResource implements RESTResource {
     @RolesAllowed({ Role.USER, Role.ADMIN })
     @Path("/{thingUID}/status")
     @Produces(MediaType.APPLICATION_JSON)
-    @ApiOperation(value = "Gets thing's status.")
-    @ApiResponses(value = { @ApiResponse(code = 200, message = "OK", response = String.class),
-            @ApiResponse(code = 404, message = "Thing not found.") })
+    @Operation(summary = "Gets thing status.", security = {
+            @SecurityRequirement(name = "oauth2", scopes = { "admin" }) }, responses = {
+                    @ApiResponse(responseCode = "200", description = "OK", content = @Content(schema = @Schema(implementation = String.class))),
+                    @ApiResponse(responseCode = "404", description = "Thing not found.") })
     public Response getStatus(
-            @HeaderParam(HttpHeaders.ACCEPT_LANGUAGE) @ApiParam(value = "language") @Nullable String language,
-            @PathParam("thingUID") @ApiParam(value = "thing") String thingUID) throws IOException {
+            @HeaderParam(HttpHeaders.ACCEPT_LANGUAGE) @Parameter(description = "language") @Nullable String language,
+            @PathParam("thingUID") @Parameter(description = "thing") String thingUID) throws IOException {
         ThingUID thingUIDObject = new ThingUID(thingUID);
 
         // Check if the Thing exists, 404 if not
@@ -512,15 +526,16 @@ public class ThingResource implements RESTResource {
     }
 
     @PUT
-    @RolesAllowed({ Role.USER, Role.ADMIN })
+    @RolesAllowed({ Role.ADMIN })
     @Path("/{thingUID}/enable")
-    @ApiOperation(value = "Sets the thing enabled status.")
-    @ApiResponses(value = { @ApiResponse(code = 200, message = "OK", response = String.class),
-            @ApiResponse(code = 404, message = "Thing not found.") })
+    @Operation(summary = "Sets the thing enabled status.", security = {
+            @SecurityRequirement(name = "oauth2", scopes = { "admin" }) }, responses = {
+                    @ApiResponse(responseCode = "200", description = "OK", content = @Content(schema = @Schema(implementation = String.class))),
+                    @ApiResponse(responseCode = "404", description = "Thing not found.") })
     public Response setEnabled(
-            @HeaderParam(HttpHeaders.ACCEPT_LANGUAGE) @ApiParam(value = "language") @Nullable String language,
-            @PathParam("thingUID") @ApiParam(value = "thing") String thingUID,
-            @ApiParam(value = "enabled") String enabled) throws IOException {
+            @HeaderParam(HttpHeaders.ACCEPT_LANGUAGE) @Parameter(description = "language") @Nullable String language,
+            @PathParam("thingUID") @Parameter(description = "thing") String thingUID,
+            @Parameter(description = "enabled") String enabled) throws IOException {
         final Locale locale = localeService.getLocale(language);
 
         ThingUID thingUIDObject = new ThingUID(thingUID);
@@ -542,12 +557,13 @@ public class ThingResource implements RESTResource {
     @PUT
     @RolesAllowed({ Role.USER, Role.ADMIN })
     @Path("/{thingUID}/migrate")
-    @ApiOperation(value = "Migrates the thing to the latest ThingType version.")
-    @ApiResponses(value = { @ApiResponse(code = 200, message = "OK", response = String.class),
-            @ApiResponse(code = 404, message = "Thing not found.") })
+    @Operation(summary = "Migrates the thing to the latest ThingType version.")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "OK", content = @Content(schema = @Schema(implementation = String.class))),
+            @ApiResponse(responseCode = "404", description = "Thing not found.") })
     public Response mirateThingType(
-            @HeaderParam(HttpHeaders.ACCEPT_LANGUAGE) @ApiParam(value = "language") @Nullable String language,
-            @PathParam("thingUID") @ApiParam(value = "thing") String thingUID) throws IOException {
+            @HeaderParam(HttpHeaders.ACCEPT_LANGUAGE) @Parameter(description = "language") @Nullable String language,
+            @PathParam("thingUID") @Parameter(description = "thing") String thingUID) throws IOException {
         final Locale locale = localeService.getLocale(language);
 
         ThingUID thingUIDObject = new ThingUID(thingUID);
@@ -567,15 +583,16 @@ public class ThingResource implements RESTResource {
     }
 
     @GET
-    @RolesAllowed({ Role.USER, Role.ADMIN })
+    @RolesAllowed({ Role.ADMIN })
     @Path("/{thingUID}/config/status")
     @Produces(MediaType.APPLICATION_JSON)
-    @ApiOperation(value = "Gets thing's config status.")
-    @ApiResponses(value = { @ApiResponse(code = 200, message = "OK", response = String.class),
-            @ApiResponse(code = 404, message = "Thing not found.") })
+    @Operation(summary = "Gets thing config status.", security = {
+            @SecurityRequirement(name = "oauth2", scopes = { "admin" }) }, responses = {
+                    @ApiResponse(responseCode = "200", description = "OK", content = @Content(schema = @Schema(implementation = String.class))),
+                    @ApiResponse(responseCode = "404", description = "Thing not found.") })
     public Response getConfigStatus(
-            @HeaderParam(HttpHeaders.ACCEPT_LANGUAGE) @ApiParam(value = "language") String language,
-            @PathParam("thingUID") @ApiParam(value = "thing") String thingUID) throws IOException {
+            @HeaderParam(HttpHeaders.ACCEPT_LANGUAGE) @Parameter(description = "language") String language,
+            @PathParam("thingUID") @Parameter(description = "thing") String thingUID) throws IOException {
         ThingUID thingUIDObject = new ThingUID(thingUID);
 
         // Check if the Thing exists, 404 if not
@@ -594,16 +611,19 @@ public class ThingResource implements RESTResource {
     }
 
     @PUT
+    @RolesAllowed({ Role.ADMIN })
     @Path("/{thingUID}/firmware/{firmwareVersion}")
     @Consumes(MediaType.APPLICATION_JSON)
-    @ApiOperation(value = "Update thing firmware.")
-    @ApiResponses(value = { @ApiResponse(code = 200, message = "OK"),
-            @ApiResponse(code = 400, message = "Firmware update preconditions not satisfied."),
-            @ApiResponse(code = 404, message = "Thing not found.") })
+    @Operation(summary = "Update thing firmware.", security = {
+            @SecurityRequirement(name = "oauth2", scopes = { "admin" }) }, responses = {
+                    @ApiResponse(responseCode = "200", description = "OK"),
+                    @ApiResponse(responseCode = "400", description = "Firmware update preconditions not satisfied."),
+                    @ApiResponse(responseCode = "404", description = "Thing not found.") })
     public Response updateFirmware(
-            @HeaderParam(HttpHeaders.ACCEPT_LANGUAGE) @ApiParam(value = "language") @Nullable String language,
-            @PathParam("thingUID") @ApiParam(value = "thing") String thingUID,
-            @PathParam("firmwareVersion") @ApiParam(value = "version") String firmwareVersion) throws IOException {
+            @HeaderParam(HttpHeaders.ACCEPT_LANGUAGE) @Parameter(description = "language") @Nullable String language,
+            @PathParam("thingUID") @Parameter(description = "thing") String thingUID,
+            @PathParam("firmwareVersion") @Parameter(description = "version") String firmwareVersion)
+            throws IOException {
         Thing thing = thingRegistry.get(new ThingUID(thingUID));
         if (thing == null) {
             logger.info("Received HTTP PUT request for firmware update at '{}' for the unknown thing '{}'.",
@@ -629,13 +649,15 @@ public class ThingResource implements RESTResource {
     }
 
     @GET
+    @RolesAllowed({ Role.ADMIN })
     @Path("/{thingUID}/firmware/status")
-    @ApiOperation(value = "Gets thing's firmware status.")
-    @ApiResponses(value = { @ApiResponse(code = 200, message = "OK"),
-            @ApiResponse(code = 204, message = "No firmware status provided by this Thing.") })
+    @Operation(summary = "Gets thing's firmware status.", security = {
+            @SecurityRequirement(name = "oauth2", scopes = { "admin" }) }, responses = {
+                    @ApiResponse(responseCode = "200", description = "OK"),
+                    @ApiResponse(responseCode = "204", description = "No firmware status provided by this Thing.") })
     public Response getFirmwareStatus(
-            @HeaderParam(HttpHeaders.ACCEPT_LANGUAGE) @ApiParam(value = "language") @Nullable String language,
-            @PathParam("thingUID") @ApiParam(value = "thing") String thingUID) throws IOException {
+            @HeaderParam(HttpHeaders.ACCEPT_LANGUAGE) @Parameter(description = "language") @Nullable String language,
+            @PathParam("thingUID") @Parameter(description = "thing") String thingUID) throws IOException {
         ThingUID thingUIDObject = new ThingUID(thingUID);
         FirmwareStatusDTO firmwareStatusDto = getThingFirmwareStatusInfo(thingUIDObject);
         if (firmwareStatusDto == null) {
@@ -646,13 +668,15 @@ public class ThingResource implements RESTResource {
     }
 
     @GET
+    @RolesAllowed({ Role.ADMIN })
     @Path("/{thingUID}/firmwares")
     @Produces(MediaType.APPLICATION_JSON)
-    @ApiOperation(value = "Get all available firmwares for provided thing UID", response = StrippedThingTypeDTO.class, responseContainer = "Set")
-    @ApiResponses(value = { @ApiResponse(code = 200, message = "OK"),
-            @ApiResponse(code = 204, message = "No firmwares found.") })
-    public Response getFirmwares(@PathParam("thingUID") @ApiParam(value = "thingUID") String thingUID,
-            @HeaderParam(HttpHeaders.ACCEPT_LANGUAGE) @ApiParam(value = "language") @Nullable String language) {
+    @Operation(summary = "Get all available firmwares for provided thing UID", security = {
+            @SecurityRequirement(name = "oauth2", scopes = { "admin" }) }, responses = {
+                    @ApiResponse(responseCode = "200", description = "OK", content = @Content(array = @ArraySchema(schema = @Schema(implementation = FirmwareDTO.class), uniqueItems = true))),
+                    @ApiResponse(responseCode = "204", description = "No firmwares found.") })
+    public Response getFirmwares(@PathParam("thingUID") @Parameter(description = "thingUID") String thingUID,
+            @HeaderParam(HttpHeaders.ACCEPT_LANGUAGE) @Parameter(description = "language") @Nullable String language) {
         ThingUID aThingUID = new ThingUID(thingUID);
         Thing thing = thingRegistry.get(aThingUID);
         if (thing == null) {

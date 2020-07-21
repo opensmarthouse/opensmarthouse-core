@@ -73,7 +73,7 @@
     <jackson.version>2.10.3</jackson.version>
     <jetty.version>9.4.20.v20190813</jetty.version>
     <pax.web.version>7.2.14</pax.web.version>
-    <swagger.version>1.6.1</swagger.version>
+    <swagger.version>2.1.0</swagger.version>
     <netty.version>4.1.42.Final</netty.version>
 
     <bnd.version>4.3.0</bnd.version>
@@ -135,7 +135,7 @@
             <bnd><![CDATA[Bundle-SymbolicName: ${project.artifactId}
 Automatic-Module-Name: ${def;bsn}
 Import-Package: \\
-  io.swagger.annotations.*;resolution:=optional,\\
+  io.swagger.v3.oas.annotations.*;resolution:=optional,\\
   javax.annotation.security.*;resolution:=optional,\\
   org.eclipse.jdt.annotation.*;resolution:=optional,\\
   org.openhab.core.automation.annotation.*;resolution:=optional,\\

@@ -22,7 +22,7 @@ import java.util.ArrayList;
 @SuppressWarnings("all")
 public class InternalItemsParser extends AbstractInternalAntlrParser {
     public static final String[] tokenNames = new String[] {
-        "<invalid>", "<EOR>", "<DOWN>", "<UP>", "RULE_ID", "RULE_STRING", "RULE_ML_COMMENT", "RULE_SL_COMMENT", "RULE_WS", "RULE_ANY_OTHER", "'<'", "'>'", "'('", "','", "')'", "'['", "']'", "'{'", "'}'", "'Group'", "':'", "'Number'", "'Switch'", "'Rollershutter'", "'String'", "'Dimmer'", "'Contact'", "'DateTime'", "'Color'", "'Player'", "'Location'", "'Call'", "'Image'", "'='", "'true'", "'false'", "'.'", "'EQUALITY'", "'AND'", "'OR'", "'NAND'", "'NOR'", "'AVG'", "'SUM'", "'MAX'", "'MIN'", "'COUNT'", "'LATEST'", "'EARLIEST'"
+        "<invalid>", "<EOR>", "<DOWN>", "<UP>", "RULE_ID", "RULE_STRING", "RULE_ML_COMMENT", "RULE_SL_COMMENT", "RULE_WS", "RULE_ANY_OTHER", "'<'", "'>'", "'('", "','", "')'", "'['", "']'", "'{'", "'}'", "'Group'", "':'", "'Number'", "'Switch'", "'Rollershutter'", "'String'", "'Dimmer'", "'Contact'", "'DateTime'", "'Color'", "'Player'", "'Location'", "'Call'", "'Image'", "'='", "'true'", "'false'", "'-'", "'.'", "'EQUALITY'", "'AND'", "'OR'", "'NAND'", "'NOR'", "'AVG'", "'SUM'", "'MAX'", "'MIN'", "'COUNT'", "'LATEST'", "'EARLIEST'"
     };
     public static final int T__19=19;
     public static final int T__15=15;
@@ -62,6 +62,7 @@ public class InternalItemsParser extends AbstractInternalAntlrParser {
     public static final int RULE_WS=8;
     public static final int RULE_ANY_OTHER=9;
     public static final int T__48=48;
+    public static final int T__49=49;
     public static final int T__44=44;
     public static final int T__45=45;
     public static final int T__46=46;
@@ -2376,6 +2377,7 @@ public class InternalItemsParser extends AbstractInternalAntlrParser {
                 }
                 break;
             case RULE_ID:
+            case 36:
                 {
                 alt26=2;
                 }
@@ -2617,32 +2619,25 @@ public class InternalItemsParser extends AbstractInternalAntlrParser {
 
 
     // $ANTLR start "ruleNUMBER"
-    // InternalItems.g:1016:1: ruleNUMBER returns [AntlrDatatypeRuleToken current=new AntlrDatatypeRuleToken()] : (this_ID_0= RULE_ID (kw= '.' this_ID_2= RULE_ID )? ) ;
+    // InternalItems.g:1016:1: ruleNUMBER returns [AntlrDatatypeRuleToken current=new AntlrDatatypeRuleToken()] : ( (kw= '-' )? this_ID_1= RULE_ID (kw= '.' this_ID_3= RULE_ID )? ) ;
     public final AntlrDatatypeRuleToken ruleNUMBER() throws RecognitionException {
         AntlrDatatypeRuleToken current = new AntlrDatatypeRuleToken();
 
-        Token this_ID_0=null;
         Token kw=null;
-        Token this_ID_2=null;
+        Token this_ID_1=null;
+        Token this_ID_3=null;
 
 
         	enterRule();
 
         try {
-            // InternalItems.g:1022:2: ( (this_ID_0= RULE_ID (kw= '.' this_ID_2= RULE_ID )? ) )
-            // InternalItems.g:1023:2: (this_ID_0= RULE_ID (kw= '.' this_ID_2= RULE_ID )? )
+            // InternalItems.g:1022:2: ( ( (kw= '-' )? this_ID_1= RULE_ID (kw= '.' this_ID_3= RULE_ID )? ) )
+            // InternalItems.g:1023:2: ( (kw= '-' )? this_ID_1= RULE_ID (kw= '.' this_ID_3= RULE_ID )? )
             {
-            // InternalItems.g:1023:2: (this_ID_0= RULE_ID (kw= '.' this_ID_2= RULE_ID )? )
-            // InternalItems.g:1024:3: this_ID_0= RULE_ID (kw= '.' this_ID_2= RULE_ID )?
+            // InternalItems.g:1023:2: ( (kw= '-' )? this_ID_1= RULE_ID (kw= '.' this_ID_3= RULE_ID )? )
+            // InternalItems.g:1024:3: (kw= '-' )? this_ID_1= RULE_ID (kw= '.' this_ID_3= RULE_ID )?
             {
-            this_ID_0=(Token)match(input,RULE_ID,FOLLOW_24); 
-
-            			current.merge(this_ID_0);
-            		
-
-            			newLeafNode(this_ID_0, grammarAccess.getNUMBERAccess().getIDTerminalRuleCall_0());
-            		
-            // InternalItems.g:1031:3: (kw= '.' this_ID_2= RULE_ID )?
+            // InternalItems.g:1024:3: (kw= '-' )?
             int alt28=2;
             int LA28_0 = input.LA(1);
 
@@ -2651,19 +2646,48 @@ public class InternalItemsParser extends AbstractInternalAntlrParser {
             }
             switch (alt28) {
                 case 1 :
-                    // InternalItems.g:1032:4: kw= '.' this_ID_2= RULE_ID
+                    // InternalItems.g:1025:4: kw= '-'
                     {
                     kw=(Token)match(input,36,FOLLOW_4); 
 
                     				current.merge(kw);
-                    				newLeafNode(kw, grammarAccess.getNUMBERAccess().getFullStopKeyword_1_0());
-                    			
-                    this_ID_2=(Token)match(input,RULE_ID,FOLLOW_2); 
-
-                    				current.merge(this_ID_2);
+                    				newLeafNode(kw, grammarAccess.getNUMBERAccess().getHyphenMinusKeyword_0());
                     			
 
-                    				newLeafNode(this_ID_2, grammarAccess.getNUMBERAccess().getIDTerminalRuleCall_1_1());
+                    }
+                    break;
+
+            }
+
+            this_ID_1=(Token)match(input,RULE_ID,FOLLOW_24); 
+
+            			current.merge(this_ID_1);
+            		
+
+            			newLeafNode(this_ID_1, grammarAccess.getNUMBERAccess().getIDTerminalRuleCall_1());
+            		
+            // InternalItems.g:1038:3: (kw= '.' this_ID_3= RULE_ID )?
+            int alt29=2;
+            int LA29_0 = input.LA(1);
+
+            if ( (LA29_0==37) ) {
+                alt29=1;
+            }
+            switch (alt29) {
+                case 1 :
+                    // InternalItems.g:1039:4: kw= '.' this_ID_3= RULE_ID
+                    {
+                    kw=(Token)match(input,37,FOLLOW_4); 
+
+                    				current.merge(kw);
+                    				newLeafNode(kw, grammarAccess.getNUMBERAccess().getFullStopKeyword_2_0());
+                    			
+                    this_ID_3=(Token)match(input,RULE_ID,FOLLOW_2); 
+
+                    				current.merge(this_ID_3);
+                    			
+
+                    				newLeafNode(this_ID_3, grammarAccess.getNUMBERAccess().getIDTerminalRuleCall_2_1());
                     			
 
                     }
@@ -2694,7 +2718,7 @@ public class InternalItemsParser extends AbstractInternalAntlrParser {
 
 
     // $ANTLR start "ruleModelGroupFunction"
-    // InternalItems.g:1049:1: ruleModelGroupFunction returns [Enumerator current=null] : ( (enumLiteral_0= 'EQUALITY' ) | (enumLiteral_1= 'AND' ) | (enumLiteral_2= 'OR' ) | (enumLiteral_3= 'NAND' ) | (enumLiteral_4= 'NOR' ) | (enumLiteral_5= 'AVG' ) | (enumLiteral_6= 'SUM' ) | (enumLiteral_7= 'MAX' ) | (enumLiteral_8= 'MIN' ) | (enumLiteral_9= 'COUNT' ) | (enumLiteral_10= 'LATEST' ) | (enumLiteral_11= 'EARLIEST' ) ) ;
+    // InternalItems.g:1056:1: ruleModelGroupFunction returns [Enumerator current=null] : ( (enumLiteral_0= 'EQUALITY' ) | (enumLiteral_1= 'AND' ) | (enumLiteral_2= 'OR' ) | (enumLiteral_3= 'NAND' ) | (enumLiteral_4= 'NOR' ) | (enumLiteral_5= 'AVG' ) | (enumLiteral_6= 'SUM' ) | (enumLiteral_7= 'MAX' ) | (enumLiteral_8= 'MIN' ) | (enumLiteral_9= 'COUNT' ) | (enumLiteral_10= 'LATEST' ) | (enumLiteral_11= 'EARLIEST' ) ) ;
     public final Enumerator ruleModelGroupFunction() throws RecognitionException {
         Enumerator current = null;
 
@@ -2715,87 +2739,87 @@ public class InternalItemsParser extends AbstractInternalAntlrParser {
         	enterRule();
 
         try {
-            // InternalItems.g:1055:2: ( ( (enumLiteral_0= 'EQUALITY' ) | (enumLiteral_1= 'AND' ) | (enumLiteral_2= 'OR' ) | (enumLiteral_3= 'NAND' ) | (enumLiteral_4= 'NOR' ) | (enumLiteral_5= 'AVG' ) | (enumLiteral_6= 'SUM' ) | (enumLiteral_7= 'MAX' ) | (enumLiteral_8= 'MIN' ) | (enumLiteral_9= 'COUNT' ) | (enumLiteral_10= 'LATEST' ) | (enumLiteral_11= 'EARLIEST' ) ) )
-            // InternalItems.g:1056:2: ( (enumLiteral_0= 'EQUALITY' ) | (enumLiteral_1= 'AND' ) | (enumLiteral_2= 'OR' ) | (enumLiteral_3= 'NAND' ) | (enumLiteral_4= 'NOR' ) | (enumLiteral_5= 'AVG' ) | (enumLiteral_6= 'SUM' ) | (enumLiteral_7= 'MAX' ) | (enumLiteral_8= 'MIN' ) | (enumLiteral_9= 'COUNT' ) | (enumLiteral_10= 'LATEST' ) | (enumLiteral_11= 'EARLIEST' ) )
+            // InternalItems.g:1062:2: ( ( (enumLiteral_0= 'EQUALITY' ) | (enumLiteral_1= 'AND' ) | (enumLiteral_2= 'OR' ) | (enumLiteral_3= 'NAND' ) | (enumLiteral_4= 'NOR' ) | (enumLiteral_5= 'AVG' ) | (enumLiteral_6= 'SUM' ) | (enumLiteral_7= 'MAX' ) | (enumLiteral_8= 'MIN' ) | (enumLiteral_9= 'COUNT' ) | (enumLiteral_10= 'LATEST' ) | (enumLiteral_11= 'EARLIEST' ) ) )
+            // InternalItems.g:1063:2: ( (enumLiteral_0= 'EQUALITY' ) | (enumLiteral_1= 'AND' ) | (enumLiteral_2= 'OR' ) | (enumLiteral_3= 'NAND' ) | (enumLiteral_4= 'NOR' ) | (enumLiteral_5= 'AVG' ) | (enumLiteral_6= 'SUM' ) | (enumLiteral_7= 'MAX' ) | (enumLiteral_8= 'MIN' ) | (enumLiteral_9= 'COUNT' ) | (enumLiteral_10= 'LATEST' ) | (enumLiteral_11= 'EARLIEST' ) )
             {
-            // InternalItems.g:1056:2: ( (enumLiteral_0= 'EQUALITY' ) | (enumLiteral_1= 'AND' ) | (enumLiteral_2= 'OR' ) | (enumLiteral_3= 'NAND' ) | (enumLiteral_4= 'NOR' ) | (enumLiteral_5= 'AVG' ) | (enumLiteral_6= 'SUM' ) | (enumLiteral_7= 'MAX' ) | (enumLiteral_8= 'MIN' ) | (enumLiteral_9= 'COUNT' ) | (enumLiteral_10= 'LATEST' ) | (enumLiteral_11= 'EARLIEST' ) )
-            int alt29=12;
+            // InternalItems.g:1063:2: ( (enumLiteral_0= 'EQUALITY' ) | (enumLiteral_1= 'AND' ) | (enumLiteral_2= 'OR' ) | (enumLiteral_3= 'NAND' ) | (enumLiteral_4= 'NOR' ) | (enumLiteral_5= 'AVG' ) | (enumLiteral_6= 'SUM' ) | (enumLiteral_7= 'MAX' ) | (enumLiteral_8= 'MIN' ) | (enumLiteral_9= 'COUNT' ) | (enumLiteral_10= 'LATEST' ) | (enumLiteral_11= 'EARLIEST' ) )
+            int alt30=12;
             switch ( input.LA(1) ) {
-            case 37:
-                {
-                alt29=1;
-                }
-                break;
             case 38:
                 {
-                alt29=2;
+                alt30=1;
                 }
                 break;
             case 39:
                 {
-                alt29=3;
+                alt30=2;
                 }
                 break;
             case 40:
                 {
-                alt29=4;
+                alt30=3;
                 }
                 break;
             case 41:
                 {
-                alt29=5;
+                alt30=4;
                 }
                 break;
             case 42:
                 {
-                alt29=6;
+                alt30=5;
                 }
                 break;
             case 43:
                 {
-                alt29=7;
+                alt30=6;
                 }
                 break;
             case 44:
                 {
-                alt29=8;
+                alt30=7;
                 }
                 break;
             case 45:
                 {
-                alt29=9;
+                alt30=8;
                 }
                 break;
             case 46:
                 {
-                alt29=10;
+                alt30=9;
                 }
                 break;
             case 47:
                 {
-                alt29=11;
+                alt30=10;
                 }
                 break;
             case 48:
                 {
-                alt29=12;
+                alt30=11;
+                }
+                break;
+            case 49:
+                {
+                alt30=12;
                 }
                 break;
             default:
                 NoViableAltException nvae =
-                    new NoViableAltException("", 29, 0, input);
+                    new NoViableAltException("", 30, 0, input);
 
                 throw nvae;
             }
 
-            switch (alt29) {
+            switch (alt30) {
                 case 1 :
-                    // InternalItems.g:1057:3: (enumLiteral_0= 'EQUALITY' )
+                    // InternalItems.g:1064:3: (enumLiteral_0= 'EQUALITY' )
                     {
-                    // InternalItems.g:1057:3: (enumLiteral_0= 'EQUALITY' )
-                    // InternalItems.g:1058:4: enumLiteral_0= 'EQUALITY'
+                    // InternalItems.g:1064:3: (enumLiteral_0= 'EQUALITY' )
+                    // InternalItems.g:1065:4: enumLiteral_0= 'EQUALITY'
                     {
-                    enumLiteral_0=(Token)match(input,37,FOLLOW_2); 
+                    enumLiteral_0=(Token)match(input,38,FOLLOW_2); 
 
                     				current = grammarAccess.getModelGroupFunctionAccess().getEQUALITYEnumLiteralDeclaration_0().getEnumLiteral().getInstance();
                     				newLeafNode(enumLiteral_0, grammarAccess.getModelGroupFunctionAccess().getEQUALITYEnumLiteralDeclaration_0());
@@ -2807,12 +2831,12 @@ public class InternalItemsParser extends AbstractInternalAntlrParser {
                     }
                     break;
                 case 2 :
-                    // InternalItems.g:1065:3: (enumLiteral_1= 'AND' )
+                    // InternalItems.g:1072:3: (enumLiteral_1= 'AND' )
                     {
-                    // InternalItems.g:1065:3: (enumLiteral_1= 'AND' )
-                    // InternalItems.g:1066:4: enumLiteral_1= 'AND'
+                    // InternalItems.g:1072:3: (enumLiteral_1= 'AND' )
+                    // InternalItems.g:1073:4: enumLiteral_1= 'AND'
                     {
-                    enumLiteral_1=(Token)match(input,38,FOLLOW_2); 
+                    enumLiteral_1=(Token)match(input,39,FOLLOW_2); 
 
                     				current = grammarAccess.getModelGroupFunctionAccess().getANDEnumLiteralDeclaration_1().getEnumLiteral().getInstance();
                     				newLeafNode(enumLiteral_1, grammarAccess.getModelGroupFunctionAccess().getANDEnumLiteralDeclaration_1());
@@ -2824,12 +2848,12 @@ public class InternalItemsParser extends AbstractInternalAntlrParser {
                     }
                     break;
                 case 3 :
-                    // InternalItems.g:1073:3: (enumLiteral_2= 'OR' )
+                    // InternalItems.g:1080:3: (enumLiteral_2= 'OR' )
                     {
-                    // InternalItems.g:1073:3: (enumLiteral_2= 'OR' )
-                    // InternalItems.g:1074:4: enumLiteral_2= 'OR'
+                    // InternalItems.g:1080:3: (enumLiteral_2= 'OR' )
+                    // InternalItems.g:1081:4: enumLiteral_2= 'OR'
                     {
-                    enumLiteral_2=(Token)match(input,39,FOLLOW_2); 
+                    enumLiteral_2=(Token)match(input,40,FOLLOW_2); 
 
                     				current = grammarAccess.getModelGroupFunctionAccess().getOREnumLiteralDeclaration_2().getEnumLiteral().getInstance();
                     				newLeafNode(enumLiteral_2, grammarAccess.getModelGroupFunctionAccess().getOREnumLiteralDeclaration_2());
@@ -2841,12 +2865,12 @@ public class InternalItemsParser extends AbstractInternalAntlrParser {
                     }
                     break;
                 case 4 :
-                    // InternalItems.g:1081:3: (enumLiteral_3= 'NAND' )
+                    // InternalItems.g:1088:3: (enumLiteral_3= 'NAND' )
                     {
-                    // InternalItems.g:1081:3: (enumLiteral_3= 'NAND' )
-                    // InternalItems.g:1082:4: enumLiteral_3= 'NAND'
+                    // InternalItems.g:1088:3: (enumLiteral_3= 'NAND' )
+                    // InternalItems.g:1089:4: enumLiteral_3= 'NAND'
                     {
-                    enumLiteral_3=(Token)match(input,40,FOLLOW_2); 
+                    enumLiteral_3=(Token)match(input,41,FOLLOW_2); 
 
                     				current = grammarAccess.getModelGroupFunctionAccess().getNANDEnumLiteralDeclaration_3().getEnumLiteral().getInstance();
                     				newLeafNode(enumLiteral_3, grammarAccess.getModelGroupFunctionAccess().getNANDEnumLiteralDeclaration_3());
@@ -2858,12 +2882,12 @@ public class InternalItemsParser extends AbstractInternalAntlrParser {
                     }
                     break;
                 case 5 :
-                    // InternalItems.g:1089:3: (enumLiteral_4= 'NOR' )
+                    // InternalItems.g:1096:3: (enumLiteral_4= 'NOR' )
                     {
-                    // InternalItems.g:1089:3: (enumLiteral_4= 'NOR' )
-                    // InternalItems.g:1090:4: enumLiteral_4= 'NOR'
+                    // InternalItems.g:1096:3: (enumLiteral_4= 'NOR' )
+                    // InternalItems.g:1097:4: enumLiteral_4= 'NOR'
                     {
-                    enumLiteral_4=(Token)match(input,41,FOLLOW_2); 
+                    enumLiteral_4=(Token)match(input,42,FOLLOW_2); 
 
                     				current = grammarAccess.getModelGroupFunctionAccess().getNOREnumLiteralDeclaration_4().getEnumLiteral().getInstance();
                     				newLeafNode(enumLiteral_4, grammarAccess.getModelGroupFunctionAccess().getNOREnumLiteralDeclaration_4());
@@ -2875,12 +2899,12 @@ public class InternalItemsParser extends AbstractInternalAntlrParser {
                     }
                     break;
                 case 6 :
-                    // InternalItems.g:1097:3: (enumLiteral_5= 'AVG' )
+                    // InternalItems.g:1104:3: (enumLiteral_5= 'AVG' )
                     {
-                    // InternalItems.g:1097:3: (enumLiteral_5= 'AVG' )
-                    // InternalItems.g:1098:4: enumLiteral_5= 'AVG'
+                    // InternalItems.g:1104:3: (enumLiteral_5= 'AVG' )
+                    // InternalItems.g:1105:4: enumLiteral_5= 'AVG'
                     {
-                    enumLiteral_5=(Token)match(input,42,FOLLOW_2); 
+                    enumLiteral_5=(Token)match(input,43,FOLLOW_2); 
 
                     				current = grammarAccess.getModelGroupFunctionAccess().getAVGEnumLiteralDeclaration_5().getEnumLiteral().getInstance();
                     				newLeafNode(enumLiteral_5, grammarAccess.getModelGroupFunctionAccess().getAVGEnumLiteralDeclaration_5());
@@ -2892,12 +2916,12 @@ public class InternalItemsParser extends AbstractInternalAntlrParser {
                     }
                     break;
                 case 7 :
-                    // InternalItems.g:1105:3: (enumLiteral_6= 'SUM' )
+                    // InternalItems.g:1112:3: (enumLiteral_6= 'SUM' )
                     {
-                    // InternalItems.g:1105:3: (enumLiteral_6= 'SUM' )
-                    // InternalItems.g:1106:4: enumLiteral_6= 'SUM'
+                    // InternalItems.g:1112:3: (enumLiteral_6= 'SUM' )
+                    // InternalItems.g:1113:4: enumLiteral_6= 'SUM'
                     {
-                    enumLiteral_6=(Token)match(input,43,FOLLOW_2); 
+                    enumLiteral_6=(Token)match(input,44,FOLLOW_2); 
 
                     				current = grammarAccess.getModelGroupFunctionAccess().getSUMEnumLiteralDeclaration_6().getEnumLiteral().getInstance();
                     				newLeafNode(enumLiteral_6, grammarAccess.getModelGroupFunctionAccess().getSUMEnumLiteralDeclaration_6());
@@ -2909,12 +2933,12 @@ public class InternalItemsParser extends AbstractInternalAntlrParser {
                     }
                     break;
                 case 8 :
-                    // InternalItems.g:1113:3: (enumLiteral_7= 'MAX' )
+                    // InternalItems.g:1120:3: (enumLiteral_7= 'MAX' )
                     {
-                    // InternalItems.g:1113:3: (enumLiteral_7= 'MAX' )
-                    // InternalItems.g:1114:4: enumLiteral_7= 'MAX'
+                    // InternalItems.g:1120:3: (enumLiteral_7= 'MAX' )
+                    // InternalItems.g:1121:4: enumLiteral_7= 'MAX'
                     {
-                    enumLiteral_7=(Token)match(input,44,FOLLOW_2); 
+                    enumLiteral_7=(Token)match(input,45,FOLLOW_2); 
 
                     				current = grammarAccess.getModelGroupFunctionAccess().getMAXEnumLiteralDeclaration_7().getEnumLiteral().getInstance();
                     				newLeafNode(enumLiteral_7, grammarAccess.getModelGroupFunctionAccess().getMAXEnumLiteralDeclaration_7());
@@ -2926,12 +2950,12 @@ public class InternalItemsParser extends AbstractInternalAntlrParser {
                     }
                     break;
                 case 9 :
-                    // InternalItems.g:1121:3: (enumLiteral_8= 'MIN' )
+                    // InternalItems.g:1128:3: (enumLiteral_8= 'MIN' )
                     {
-                    // InternalItems.g:1121:3: (enumLiteral_8= 'MIN' )
-                    // InternalItems.g:1122:4: enumLiteral_8= 'MIN'
+                    // InternalItems.g:1128:3: (enumLiteral_8= 'MIN' )
+                    // InternalItems.g:1129:4: enumLiteral_8= 'MIN'
                     {
-                    enumLiteral_8=(Token)match(input,45,FOLLOW_2); 
+                    enumLiteral_8=(Token)match(input,46,FOLLOW_2); 
 
                     				current = grammarAccess.getModelGroupFunctionAccess().getMINEnumLiteralDeclaration_8().getEnumLiteral().getInstance();
                     				newLeafNode(enumLiteral_8, grammarAccess.getModelGroupFunctionAccess().getMINEnumLiteralDeclaration_8());
@@ -2943,12 +2967,12 @@ public class InternalItemsParser extends AbstractInternalAntlrParser {
                     }
                     break;
                 case 10 :
-                    // InternalItems.g:1129:3: (enumLiteral_9= 'COUNT' )
+                    // InternalItems.g:1136:3: (enumLiteral_9= 'COUNT' )
                     {
-                    // InternalItems.g:1129:3: (enumLiteral_9= 'COUNT' )
-                    // InternalItems.g:1130:4: enumLiteral_9= 'COUNT'
+                    // InternalItems.g:1136:3: (enumLiteral_9= 'COUNT' )
+                    // InternalItems.g:1137:4: enumLiteral_9= 'COUNT'
                     {
-                    enumLiteral_9=(Token)match(input,46,FOLLOW_2); 
+                    enumLiteral_9=(Token)match(input,47,FOLLOW_2); 
 
                     				current = grammarAccess.getModelGroupFunctionAccess().getCOUNTEnumLiteralDeclaration_9().getEnumLiteral().getInstance();
                     				newLeafNode(enumLiteral_9, grammarAccess.getModelGroupFunctionAccess().getCOUNTEnumLiteralDeclaration_9());
@@ -2960,12 +2984,12 @@ public class InternalItemsParser extends AbstractInternalAntlrParser {
                     }
                     break;
                 case 11 :
-                    // InternalItems.g:1137:3: (enumLiteral_10= 'LATEST' )
+                    // InternalItems.g:1144:3: (enumLiteral_10= 'LATEST' )
                     {
-                    // InternalItems.g:1137:3: (enumLiteral_10= 'LATEST' )
-                    // InternalItems.g:1138:4: enumLiteral_10= 'LATEST'
+                    // InternalItems.g:1144:3: (enumLiteral_10= 'LATEST' )
+                    // InternalItems.g:1145:4: enumLiteral_10= 'LATEST'
                     {
-                    enumLiteral_10=(Token)match(input,47,FOLLOW_2); 
+                    enumLiteral_10=(Token)match(input,48,FOLLOW_2); 
 
                     				current = grammarAccess.getModelGroupFunctionAccess().getLATESTEnumLiteralDeclaration_10().getEnumLiteral().getInstance();
                     				newLeafNode(enumLiteral_10, grammarAccess.getModelGroupFunctionAccess().getLATESTEnumLiteralDeclaration_10());
@@ -2977,12 +3001,12 @@ public class InternalItemsParser extends AbstractInternalAntlrParser {
                     }
                     break;
                 case 12 :
-                    // InternalItems.g:1145:3: (enumLiteral_11= 'EARLIEST' )
+                    // InternalItems.g:1152:3: (enumLiteral_11= 'EARLIEST' )
                     {
-                    // InternalItems.g:1145:3: (enumLiteral_11= 'EARLIEST' )
-                    // InternalItems.g:1146:4: enumLiteral_11= 'EARLIEST'
+                    // InternalItems.g:1152:3: (enumLiteral_11= 'EARLIEST' )
+                    // InternalItems.g:1153:4: enumLiteral_11= 'EARLIEST'
                     {
-                    enumLiteral_11=(Token)match(input,48,FOLLOW_2); 
+                    enumLiteral_11=(Token)match(input,49,FOLLOW_2); 
 
                     				current = grammarAccess.getModelGroupFunctionAccess().getEARLIESTEnumLiteralDeclaration_11().getEnumLiteral().getInstance();
                     				newLeafNode(enumLiteral_11, grammarAccess.getModelGroupFunctionAccess().getEARLIESTEnumLiteralDeclaration_11());
@@ -3035,13 +3059,13 @@ public class InternalItemsParser extends AbstractInternalAntlrParser {
     public static final BitSet FOLLOW_14 = new BitSet(new long[]{0x0000000000042000L});
     public static final BitSet FOLLOW_15 = new BitSet(new long[]{0x0000000000100002L});
     public static final BitSet FOLLOW_16 = new BitSet(new long[]{0x00000001FFE00000L});
-    public static final BitSet FOLLOW_17 = new BitSet(new long[]{0x0001FFE000000000L});
+    public static final BitSet FOLLOW_17 = new BitSet(new long[]{0x0003FFC000000000L});
     public static final BitSet FOLLOW_18 = new BitSet(new long[]{0x0000000000001002L});
     public static final BitSet FOLLOW_19 = new BitSet(new long[]{0x0000000200000000L});
     public static final BitSet FOLLOW_20 = new BitSet(new long[]{0x0000000000000020L});
     public static final BitSet FOLLOW_21 = new BitSet(new long[]{0x0000000000008002L});
     public static final BitSet FOLLOW_22 = new BitSet(new long[]{0x0000000000012010L});
-    public static final BitSet FOLLOW_23 = new BitSet(new long[]{0x0000000C00000030L});
-    public static final BitSet FOLLOW_24 = new BitSet(new long[]{0x0000001000000002L});
+    public static final BitSet FOLLOW_23 = new BitSet(new long[]{0x0000001C00000030L});
+    public static final BitSet FOLLOW_24 = new BitSet(new long[]{0x0000002000000002L});
 
 }

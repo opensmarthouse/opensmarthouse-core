@@ -27,9 +27,26 @@ import org.osgi.framework.FrameworkUtil;
  * @author Chris Jackson - Initial contribution
  */
 public class OpenSmartHouse {
+    /** The program argument name for setting the user data directory path */
+    public static final String USERDATA_DIR_PROG_ARGUMENT = "openhab.userdata";
+
+    /** The program argument name for setting the main config directory path */
+    public static final String CONFIG_DIR_PROG_ARGUMENT = "openhab.conf";
+
+    /** The default main configuration directory name */
+    public static final String DEFAULT_CONFIG_FOLDER = "conf";
+
+    /** The default user data directory name */
+    public static final String DEFAULT_USERDATA_FOLDER = "userdata";
 
     /** The service pid used for the definition of the base package and addons */
     public static final String ADDONS_SERVICE_PID = "org.opensmarthouse.addons";
+
+    /** The property to recognize a service instance created by a service factory */
+    public static final String SERVICE_CONTEXT = "openhab.servicecontext";
+
+    /** The property to separate service PIDs from their contexts */
+    public static final String SERVICE_CONTEXT_MARKER = "#";
 
     /** The configuration parameter name used for the base package */
     public static final String CFG_PACKAGE = "package";
@@ -52,6 +69,11 @@ public class OpenSmartHouse {
         return versionString;
     }
 
+    /**
+     * Provides the build number as it can be found in the version.properties file.
+     *
+     * @return The build string or "Unknown Build No." if none can be identified.
+     */
     public static String buildString() {
         Properties prop = new Properties();
         Path versionFilePath = Paths.get(ConfigConstants.getUserDataFolder(), "etc", "version.properties");
@@ -65,6 +87,38 @@ public class OpenSmartHouse {
             // Ignore if the file is not there or not readable
         }
         return "Unknown Build No.";
+    }
+
+    /**
+     * Returns the configuration folder path name. The main config folder <code>&lt;openhab-home&gt;/conf</code> can be
+     * overwritten by setting the System property <code>openhab.conf</code>.
+     *
+     * @return the configuration folder path name
+     */
+    public static String getConfigFolder() {
+        String progArg = System.getProperty(CONFIG_DIR_PROG_ARGUMENT);
+        if (progArg != null) {
+            return progArg;
+        } else {
+            return DEFAULT_CONFIG_FOLDER;
+        }
+    }
+
+    /**
+     * Returns the user data folder path name. The main user data folder <code>&lt;openhab-home&gt;/userdata</code> can
+     * be
+     * overwritten by setting
+     * the System property <code>openhab.userdata</code>.
+     *
+     * @return the user data folder path name
+     */
+    public static String getUserDataFolder() {
+        String progArg = System.getProperty(USERDATA_DIR_PROG_ARGUMENT);
+        if (progArg != null) {
+            return progArg;
+        } else {
+            return DEFAULT_USERDATA_FOLDER;
+        }
     }
 
     private static String substringAfterLast(String str, String separator) {

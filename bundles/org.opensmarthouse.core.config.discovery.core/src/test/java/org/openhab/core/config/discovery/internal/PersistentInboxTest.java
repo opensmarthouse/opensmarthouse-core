@@ -143,7 +143,7 @@ public class PersistentInboxTest {
     }
 
     @Test
-    public void testConfigUpdateNormalizationWithConfigDescription() throws Exception {
+    public void testConfigUpdateNormalizationWithConfigDescription() throws URISyntaxException {
         Map<String, Object> props = new HashMap<>();
         props.put("foo", "1");
         Configuration config = new Configuration(props);
@@ -165,7 +165,7 @@ public class PersistentInboxTest {
     }
 
     @Test
-    public void testApproveNormalization() throws Exception {
+    public void testApproveNormalization() throws URISyntaxException {
         DiscoveryResult result = new DiscoveryResultBuilderFactoryImpl().create(THING_UID).withProperty("foo", 3)
                 .build();
         configureConfigDescriptionRegistryMock("foo", Type.TEXT);

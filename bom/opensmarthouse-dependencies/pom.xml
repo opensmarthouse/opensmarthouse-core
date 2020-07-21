@@ -445,28 +445,34 @@
 
       <!-- Swagger -->
       <dependency>
-        <groupId>io.swagger</groupId>
+        <groupId>io.swagger.core.v3</groupId>
         <artifactId>swagger-annotations</artifactId>
         <version>${swagger.version}</version>
         <scope>compile</scope>
       </dependency>
       <dependency>
-        <groupId>io.swagger</groupId>
+        <groupId>io.swagger.core.v3</groupId>
         <artifactId>swagger-core</artifactId>
         <version>${swagger.version}</version>
         <scope>compile</scope>
       </dependency>
       <dependency>
-        <groupId>io.swagger</groupId>
-        <artifactId>swagger-jaxrs</artifactId>
+        <groupId>io.swagger.core.v3</groupId>
+        <artifactId>swagger-models</artifactId>
         <version>${swagger.version}</version>
         <scope>compile</scope>
       </dependency>
       <dependency>
-        <groupId>io.swagger</groupId>
-        <artifactId>swagger-models</artifactId>
+        <groupId>io.swagger.core.v3</groupId>
+        <artifactId>swagger-jaxrs2</artifactId>
         <version>${swagger.version}</version>
         <scope>compile</scope>
+      </dependency>
+
+      <dependency>
+        <groupId>io.github.classgraph</groupId>
+        <artifactId>classgraph</artifactId>
+        <version>4.8.87</version>
       </dependency>
 
       <!-- JAX-RS Whiteboard Swagger 1 generator -->

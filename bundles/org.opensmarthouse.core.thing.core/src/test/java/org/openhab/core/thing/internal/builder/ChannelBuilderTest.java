@@ -12,7 +12,9 @@
  */
 package org.openhab.core.thing.internal.builder;
 
-import static org.hamcrest.CoreMatchers.*;
+import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.CoreMatchers.not;
+import static org.hamcrest.collection.IsCollectionWithSize.hasSize;
 import static org.junit.Assert.assertThat;
 import static org.openhab.core.thing.DefaultSystemChannelTypeProvider.SYSTEM_OUTDOOR_TEMPERATURE;
 
@@ -22,12 +24,12 @@ import java.util.Map;
 
 import org.junit.Before;
 import org.junit.Test;
+import org.openhab.core.library.CoreItemFactory;
 import org.openhab.core.thing.Channel;
 import org.openhab.core.thing.ChannelUID;
 import org.openhab.core.thing.ThingTypeUID;
 import org.openhab.core.thing.ThingUID;
 import org.openhab.core.thing.binding.builder.ChannelBuilder;
-import org.openhab.core.thing.binding.builder.ChannelBuilderFactory;
 import org.openhab.core.thing.type.ChannelKind;
 import org.openhab.core.thing.type.ThingType;
 import org.openhab.core.thing.type.ThingTypeBuilder;
@@ -59,8 +61,7 @@ public class ChannelBuilderTest {
                 .build();
         ChannelUID channelUID = new ChannelUID(new ThingUID(thingType.getUID(), "thingId"), "temperature");
         builder = new ChannelBuilderFactoryImpl().create(channelUID, "Number:Temperature").withLabel("Test")
-                .withDescription("My test channel").withType(SYSTEM_OUTDOOR_TEMPERATURE)
-                .withProperties(properties);
+                .withDescription("My test channel").withType(SYSTEM_OUTDOOR_TEMPERATURE).withProperties(properties);
         channel = builder.build();
     }
 
@@ -84,7 +85,7 @@ public class ChannelBuilderTest {
         assertThat(otherChannel.getAcceptedItemType(), is(channel.getAcceptedItemType()));
         assertThat(otherChannel.getChannelTypeUID(), is(channel.getChannelTypeUID()));
         assertThat(otherChannel.getConfiguration(), is(channel.getConfiguration()));
-        assertThat(otherChannel.getDefaultTags().size(), is(channel.getDefaultTags().size()));
+        assertThat(otherChannel.getDefaultTags(), hasSize(channel.getDefaultTags().size()));
         assertThat(otherChannel.getDescription(), is(channel.getDescription()));
         assertThat(otherChannel.getKind(), is(channel.getKind()));
         assertThat(otherChannel.getLabel(), is(channel.getLabel()));
@@ -97,10 +98,11 @@ public class ChannelBuilderTest {
     @Test
     public void subsequentBuildsCreateIndependentChannels() {
         Channel otherChannel = builder.withLabel("Second Test").withDescription("My second test channel")
-                .withProperties(Collections.emptyMap()).build();
+                .withAcceptedItemType(CoreItemFactory.NUMBER).withProperties(Collections.emptyMap()).build();
 
         assertThat(otherChannel.getDescription(), is(not(channel.getDescription())));
         assertThat(otherChannel.getLabel(), is(not(channel.getLabel())));
+        assertThat(otherChannel.getAcceptedItemType(), is(not(channel.getAcceptedItemType())));
         assertThat(otherChannel.getProperties().size(), is(not(channel.getProperties().size())));
     }
 }

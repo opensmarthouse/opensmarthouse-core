@@ -301,15 +301,17 @@
     </feature>
 
     <feature name="opensmarthouse-core-io-rest" version="${project.version}">
-        <feature>opensmarthouse.tp-jax-rs-whiteboard</feature>
-        <feature dependency="true">opensmarthouse.tp-gson</feature>
+        <feature>opensmarthouse-core-boot</feature>
+        <feature>opensmarthouse.tp-jax-rs</feature>
+        <feature>opensmarthouse.tp-gson</feature>
         <feature>opensmarthouse-core-i18n</feature>
+        <feature>opensmarthouse.tp-jax-rs-whiteboard</feature>
         <bundle>mvn:org.opensmarthouse.core.bundles/org.opensmarthouse.core.io.rest/${project.version}</bundle>
     </feature>
 
     <feature name="opensmarthouse-core-io-rest-core" version="${project.version}">
         <details>
-            This feature enables REST interface handling in OSH.
+            This feature enables REST interface handling in OpenSmartHouse.
         </details>
         <feature>opensmarthouse-core-io-rest</feature>
         <bundle>mvn:org.opensmarthouse.core.bundles/org.opensmarthouse.core.io.rest.core/${project.version}</bundle>
@@ -820,18 +822,19 @@
         <feature>opensmarthouse-transport-mdns</feature>
         <feature>opensmarthouse-transport-http</feature>
 
+        <feature>opensmarthouse-core-boot</feature>
+
         <!-- This bundle needs to be started early as it registers the 404 and startup pages on Jetty -->
         <!-- It is temperarily disabled due to https://github.com/opensmarthouse/opensmarthouse-core/issues/422 -->
         <!-- <bundle start-level="30">mvn:org.opensmarthouse.core.bundles/org.opensmarthouse.ui.start/${project.version}</bundle> -->
 
-        <feature>opensmarthouse-runtime-boot</feature>
         <feature>opensmarthouse-runtime-karaf</feature>
         <feature>opensmarthouse-core-io-rest-core</feature>
     </feature>
 
-    <feature name="opensmarthouse-runtime-boot" version="${project.version}">
-        <feature>opensmarthouse-core-config</feature>
+    <feature name="opensmarthouse-core-boot" version="${project.version}">
         <bundle start-level="90">mvn:org.opensmarthouse.core.bundles/org.opensmarthouse.core.boot/${project.version}</bundle>
+        <feature>opensmarthouse-core-config</feature>
     </feature>
 
     <feature name="opensmarthouse-runtime-karaf" version="${project.version}">
@@ -995,7 +998,7 @@
     </feature>
 
     <feature name="opensmarthouse-core-io-rest-swagger" version="${project.version}">
-        <feature>opensmarthouse.tp-jaxrswb-swagger-gen</feature>
+        <feature>opensmarthouse.tp-swagger-jax-rs</feature>
         <feature>opensmarthouse-core-io-rest</feature>
         <bundle>mvn:org.opensmarthouse.core.bundles/org.opensmarthouse.core.io.rest.swagger/${project.version}</bundle>
     </feature>

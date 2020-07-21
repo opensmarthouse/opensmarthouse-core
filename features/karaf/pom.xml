@@ -13,7 +13,7 @@
   <artifactId>org.opensmarthouse.core.reactor.features.karaf</artifactId>
   <packaging>pom</packaging>
 
-  <name>OpenSmartHouse Core | Features | Core</name>
+  <name>OpenSmartHouse Core | Features | Karaf</name>
 
   <modules>
     <module>opensmarthouse-tp</module>

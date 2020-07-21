@@ -23,7 +23,7 @@ import java.util.HashMap;
 @SuppressWarnings("all")
 public class InternalThingParser extends AbstractInternalContentAssistParser {
     public static final String[] tokenNames = new String[] {
-        "<invalid>", "<EOR>", "<DOWN>", "<UP>", "RULE_ID", "RULE_STRING", "RULE_ML_COMMENT", "RULE_SL_COMMENT", "RULE_WS", "RULE_ANY_OTHER", "'State'", "'Trigger'", "'Switch'", "'Rollershutter'", "'Number'", "'String'", "'Dimmer'", "'Contact'", "'DateTime'", "'Color'", "'Player'", "'Location'", "'Call'", "'Image'", "'true'", "'false'", "'@'", "'['", "']'", "','", "'{'", "'Things:'", "'Channels:'", "'}'", "'Thing'", "'('", "')'", "':'", "'Type'", "'Number:'", "'='", "'#'", "'.'", "'Bridge'"
+        "<invalid>", "<EOR>", "<DOWN>", "<UP>", "RULE_ID", "RULE_STRING", "RULE_ML_COMMENT", "RULE_SL_COMMENT", "RULE_WS", "RULE_ANY_OTHER", "'State'", "'Trigger'", "'Switch'", "'Rollershutter'", "'Number'", "'String'", "'Dimmer'", "'Contact'", "'DateTime'", "'Color'", "'Player'", "'Location'", "'Call'", "'Image'", "'true'", "'false'", "'@'", "'['", "']'", "','", "'{'", "'Things:'", "'Channels:'", "'}'", "'Thing'", "'('", "')'", "':'", "'Type'", "'Number:'", "'='", "'#'", "'-'", "'.'", "'Bridge'"
     };
     public static final int T__19=19;
     public static final int T__15=15;
@@ -62,6 +62,7 @@ public class InternalThingParser extends AbstractInternalContentAssistParser {
     public static final int T__32=32;
     public static final int RULE_WS=8;
     public static final int RULE_ANY_OTHER=9;
+    public static final int T__44=44;
     public static final int T__40=40;
     public static final int T__41=41;
     public static final int T__42=42;
@@ -158,7 +159,7 @@ public class InternalThingParser extends AbstractInternalContentAssistParser {
                 int alt1=2;
                 int LA1_0 = input.LA(1);
 
-                if ( (LA1_0==RULE_ID||LA1_0==34||LA1_0==43) ) {
+                if ( (LA1_0==RULE_ID||LA1_0==34||LA1_0==44) ) {
                     alt1=1;
                 }
 
@@ -1229,7 +1230,7 @@ public class InternalThingParser extends AbstractInternalContentAssistParser {
             if ( (LA2_0==RULE_ID||LA2_0==34) ) {
                 alt2=1;
             }
-            else if ( (LA2_0==43) ) {
+            else if ( (LA2_0==44) ) {
                 alt2=2;
             }
             else {
@@ -1428,7 +1429,7 @@ public class InternalThingParser extends AbstractInternalContentAssistParser {
             if ( (LA4_0==RULE_ID||LA4_0==34) ) {
                 alt4=1;
             }
-            else if ( (LA4_0==43) ) {
+            else if ( (LA4_0==44) ) {
                 alt4=2;
             }
             else {
@@ -1516,11 +1517,11 @@ public class InternalThingParser extends AbstractInternalContentAssistParser {
             if ( (LA5_0==RULE_ID) ) {
                 int LA5_1 = input.LA(2);
 
-                if ( (LA5_1==37) ) {
-                    alt5=1;
-                }
-                else if ( (LA5_1==RULE_ID) ) {
+                if ( (LA5_1==RULE_ID) ) {
                     alt5=2;
+                }
+                else if ( (LA5_1==37) ) {
+                    alt5=1;
                 }
                 else {
                     if (state.backtracking>0) {state.failed=true; return ;}
@@ -2227,6 +2228,7 @@ public class InternalThingParser extends AbstractInternalContentAssistParser {
                 }
                 break;
             case RULE_ID:
+            case 42:
                 {
                 alt10=2;
                 }
@@ -4154,7 +4156,7 @@ public class InternalThingParser extends AbstractInternalContentAssistParser {
                 int alt19=2;
                 int LA19_0 = input.LA(1);
 
-                if ( (LA19_0==RULE_ID||LA19_0==34||LA19_0==43) ) {
+                if ( (LA19_0==RULE_ID||LA19_0==34||LA19_0==44) ) {
                     alt19=1;
                 }
 
@@ -8408,13 +8410,13 @@ public class InternalThingParser extends AbstractInternalContentAssistParser {
                     if ( (LA37_2==RULE_ID) ) {
                         int LA37_3 = input.LA(3);
 
-                        if ( (LA37_3==EOF||(LA37_3>=28 && LA37_3<=29)||LA37_3==42) ) {
+                        if ( (LA37_3==EOF||(LA37_3>=28 && LA37_3<=29)||LA37_3==43) ) {
                             alt37=1;
                         }
 
 
                     }
-                    else if ( (LA37_2==RULE_STRING||(LA37_2>=24 && LA37_2<=25)) ) {
+                    else if ( (LA37_2==RULE_STRING||(LA37_2>=24 && LA37_2<=25)||LA37_2==42) ) {
                         alt37=1;
                     }
 
@@ -9673,24 +9675,41 @@ public class InternalThingParser extends AbstractInternalContentAssistParser {
 
 
     // $ANTLR start "rule__NUMBER__Group__0__Impl"
-    // InternalThing.g:2880:1: rule__NUMBER__Group__0__Impl : ( RULE_ID ) ;
+    // InternalThing.g:2880:1: rule__NUMBER__Group__0__Impl : ( ( '-' )? ) ;
     public final void rule__NUMBER__Group__0__Impl() throws RecognitionException {
 
         		int stackSize = keepStackSize();
         	
         try {
-            // InternalThing.g:2884:1: ( ( RULE_ID ) )
-            // InternalThing.g:2885:1: ( RULE_ID )
+            // InternalThing.g:2884:1: ( ( ( '-' )? ) )
+            // InternalThing.g:2885:1: ( ( '-' )? )
             {
-            // InternalThing.g:2885:1: ( RULE_ID )
-            // InternalThing.g:2886:2: RULE_ID
+            // InternalThing.g:2885:1: ( ( '-' )? )
+            // InternalThing.g:2886:2: ( '-' )?
             {
             if ( state.backtracking==0 ) {
-               before(grammarAccess.getNUMBERAccess().getIDTerminalRuleCall_0()); 
+               before(grammarAccess.getNUMBERAccess().getHyphenMinusKeyword_0()); 
             }
-            match(input,RULE_ID,FOLLOW_2); if (state.failed) return ;
+            // InternalThing.g:2887:2: ( '-' )?
+            int alt40=2;
+            int LA40_0 = input.LA(1);
+
+            if ( (LA40_0==42) ) {
+                alt40=1;
+            }
+            switch (alt40) {
+                case 1 :
+                    // InternalThing.g:2887:3: '-'
+                    {
+                    match(input,42,FOLLOW_2); if (state.failed) return ;
+
+                    }
+                    break;
+
+            }
+
             if ( state.backtracking==0 ) {
-               after(grammarAccess.getNUMBERAccess().getIDTerminalRuleCall_0()); 
+               after(grammarAccess.getNUMBERAccess().getHyphenMinusKeyword_0()); 
             }
 
             }
@@ -9714,17 +9733,22 @@ public class InternalThingParser extends AbstractInternalContentAssistParser {
 
 
     // $ANTLR start "rule__NUMBER__Group__1"
-    // InternalThing.g:2895:1: rule__NUMBER__Group__1 : rule__NUMBER__Group__1__Impl ;
+    // InternalThing.g:2895:1: rule__NUMBER__Group__1 : rule__NUMBER__Group__1__Impl rule__NUMBER__Group__2 ;
     public final void rule__NUMBER__Group__1() throws RecognitionException {
 
         		int stackSize = keepStackSize();
         	
         try {
-            // InternalThing.g:2899:1: ( rule__NUMBER__Group__1__Impl )
-            // InternalThing.g:2900:2: rule__NUMBER__Group__1__Impl
+            // InternalThing.g:2899:1: ( rule__NUMBER__Group__1__Impl rule__NUMBER__Group__2 )
+            // InternalThing.g:2900:2: rule__NUMBER__Group__1__Impl rule__NUMBER__Group__2
             {
-            pushFollow(FOLLOW_2);
+            pushFollow(FOLLOW_25);
             rule__NUMBER__Group__1__Impl();
+
+            state._fsp--;
+            if (state.failed) return ;
+            pushFollow(FOLLOW_2);
+            rule__NUMBER__Group__2();
 
             state._fsp--;
             if (state.failed) return ;
@@ -9747,45 +9771,24 @@ public class InternalThingParser extends AbstractInternalContentAssistParser {
 
 
     // $ANTLR start "rule__NUMBER__Group__1__Impl"
-    // InternalThing.g:2906:1: rule__NUMBER__Group__1__Impl : ( ( rule__NUMBER__Group_1__0 )? ) ;
+    // InternalThing.g:2907:1: rule__NUMBER__Group__1__Impl : ( RULE_ID ) ;
     public final void rule__NUMBER__Group__1__Impl() throws RecognitionException {
 
         		int stackSize = keepStackSize();
         	
         try {
-            // InternalThing.g:2910:1: ( ( ( rule__NUMBER__Group_1__0 )? ) )
-            // InternalThing.g:2911:1: ( ( rule__NUMBER__Group_1__0 )? )
+            // InternalThing.g:2911:1: ( ( RULE_ID ) )
+            // InternalThing.g:2912:1: ( RULE_ID )
             {
-            // InternalThing.g:2911:1: ( ( rule__NUMBER__Group_1__0 )? )
-            // InternalThing.g:2912:2: ( rule__NUMBER__Group_1__0 )?
+            // InternalThing.g:2912:1: ( RULE_ID )
+            // InternalThing.g:2913:2: RULE_ID
             {
             if ( state.backtracking==0 ) {
-               before(grammarAccess.getNUMBERAccess().getGroup_1()); 
+               before(grammarAccess.getNUMBERAccess().getIDTerminalRuleCall_1()); 
             }
-            // InternalThing.g:2913:2: ( rule__NUMBER__Group_1__0 )?
-            int alt40=2;
-            int LA40_0 = input.LA(1);
-
-            if ( (LA40_0==42) ) {
-                alt40=1;
-            }
-            switch (alt40) {
-                case 1 :
-                    // InternalThing.g:2913:3: rule__NUMBER__Group_1__0
-                    {
-                    pushFollow(FOLLOW_2);
-                    rule__NUMBER__Group_1__0();
-
-                    state._fsp--;
-                    if (state.failed) return ;
-
-                    }
-                    break;
-
-            }
-
+            match(input,RULE_ID,FOLLOW_2); if (state.failed) return ;
             if ( state.backtracking==0 ) {
-               after(grammarAccess.getNUMBERAccess().getGroup_1()); 
+               after(grammarAccess.getNUMBERAccess().getIDTerminalRuleCall_1()); 
             }
 
             }
@@ -9808,23 +9811,118 @@ public class InternalThingParser extends AbstractInternalContentAssistParser {
     // $ANTLR end "rule__NUMBER__Group__1__Impl"
 
 
-    // $ANTLR start "rule__NUMBER__Group_1__0"
-    // InternalThing.g:2922:1: rule__NUMBER__Group_1__0 : rule__NUMBER__Group_1__0__Impl rule__NUMBER__Group_1__1 ;
-    public final void rule__NUMBER__Group_1__0() throws RecognitionException {
+    // $ANTLR start "rule__NUMBER__Group__2"
+    // InternalThing.g:2922:1: rule__NUMBER__Group__2 : rule__NUMBER__Group__2__Impl ;
+    public final void rule__NUMBER__Group__2() throws RecognitionException {
 
         		int stackSize = keepStackSize();
         	
         try {
-            // InternalThing.g:2926:1: ( rule__NUMBER__Group_1__0__Impl rule__NUMBER__Group_1__1 )
-            // InternalThing.g:2927:2: rule__NUMBER__Group_1__0__Impl rule__NUMBER__Group_1__1
+            // InternalThing.g:2926:1: ( rule__NUMBER__Group__2__Impl )
+            // InternalThing.g:2927:2: rule__NUMBER__Group__2__Impl
+            {
+            pushFollow(FOLLOW_2);
+            rule__NUMBER__Group__2__Impl();
+
+            state._fsp--;
+            if (state.failed) return ;
+
+            }
+
+        }
+        catch (RecognitionException re) {
+            reportError(re);
+            recover(input,re);
+        }
+        finally {
+
+            	restoreStackSize(stackSize);
+
+        }
+        return ;
+    }
+    // $ANTLR end "rule__NUMBER__Group__2"
+
+
+    // $ANTLR start "rule__NUMBER__Group__2__Impl"
+    // InternalThing.g:2933:1: rule__NUMBER__Group__2__Impl : ( ( rule__NUMBER__Group_2__0 )? ) ;
+    public final void rule__NUMBER__Group__2__Impl() throws RecognitionException {
+
+        		int stackSize = keepStackSize();
+        	
+        try {
+            // InternalThing.g:2937:1: ( ( ( rule__NUMBER__Group_2__0 )? ) )
+            // InternalThing.g:2938:1: ( ( rule__NUMBER__Group_2__0 )? )
+            {
+            // InternalThing.g:2938:1: ( ( rule__NUMBER__Group_2__0 )? )
+            // InternalThing.g:2939:2: ( rule__NUMBER__Group_2__0 )?
+            {
+            if ( state.backtracking==0 ) {
+               before(grammarAccess.getNUMBERAccess().getGroup_2()); 
+            }
+            // InternalThing.g:2940:2: ( rule__NUMBER__Group_2__0 )?
+            int alt41=2;
+            int LA41_0 = input.LA(1);
+
+            if ( (LA41_0==43) ) {
+                alt41=1;
+            }
+            switch (alt41) {
+                case 1 :
+                    // InternalThing.g:2940:3: rule__NUMBER__Group_2__0
+                    {
+                    pushFollow(FOLLOW_2);
+                    rule__NUMBER__Group_2__0();
+
+                    state._fsp--;
+                    if (state.failed) return ;
+
+                    }
+                    break;
+
+            }
+
+            if ( state.backtracking==0 ) {
+               after(grammarAccess.getNUMBERAccess().getGroup_2()); 
+            }
+
+            }
+
+
+            }
+
+        }
+        catch (RecognitionException re) {
+            reportError(re);
+            recover(input,re);
+        }
+        finally {
+
+            	restoreStackSize(stackSize);
+
+        }
+        return ;
+    }
+    // $ANTLR end "rule__NUMBER__Group__2__Impl"
+
+
+    // $ANTLR start "rule__NUMBER__Group_2__0"
+    // InternalThing.g:2949:1: rule__NUMBER__Group_2__0 : rule__NUMBER__Group_2__0__Impl rule__NUMBER__Group_2__1 ;
+    public final void rule__NUMBER__Group_2__0() throws RecognitionException {
+
+        		int stackSize = keepStackSize();
+        	
+        try {
+            // InternalThing.g:2953:1: ( rule__NUMBER__Group_2__0__Impl rule__NUMBER__Group_2__1 )
+            // InternalThing.g:2954:2: rule__NUMBER__Group_2__0__Impl rule__NUMBER__Group_2__1
             {
             pushFollow(FOLLOW_5);
-            rule__NUMBER__Group_1__0__Impl();
+            rule__NUMBER__Group_2__0__Impl();
 
             state._fsp--;
             if (state.failed) return ;
             pushFollow(FOLLOW_2);
-            rule__NUMBER__Group_1__1();
+            rule__NUMBER__Group_2__1();
 
             state._fsp--;
             if (state.failed) return ;
@@ -9843,28 +9941,28 @@ public class InternalThingParser extends AbstractInternalContentAssistParser {
         }
         return ;
     }
-    // $ANTLR end "rule__NUMBER__Group_1__0"
+    // $ANTLR end "rule__NUMBER__Group_2__0"
 
 
-    // $ANTLR start "rule__NUMBER__Group_1__0__Impl"
-    // InternalThing.g:2934:1: rule__NUMBER__Group_1__0__Impl : ( '.' ) ;
-    public final void rule__NUMBER__Group_1__0__Impl() throws RecognitionException {
+    // $ANTLR start "rule__NUMBER__Group_2__0__Impl"
+    // InternalThing.g:2961:1: rule__NUMBER__Group_2__0__Impl : ( '.' ) ;
+    public final void rule__NUMBER__Group_2__0__Impl() throws RecognitionException {
 
         		int stackSize = keepStackSize();
         	
         try {
-            // InternalThing.g:2938:1: ( ( '.' ) )
-            // InternalThing.g:2939:1: ( '.' )
+            // InternalThing.g:2965:1: ( ( '.' ) )
+            // InternalThing.g:2966:1: ( '.' )
             {
-            // InternalThing.g:2939:1: ( '.' )
-            // InternalThing.g:2940:2: '.'
+            // InternalThing.g:2966:1: ( '.' )
+            // InternalThing.g:2967:2: '.'
             {
             if ( state.backtracking==0 ) {
-               before(grammarAccess.getNUMBERAccess().getFullStopKeyword_1_0()); 
+               before(grammarAccess.getNUMBERAccess().getFullStopKeyword_2_0()); 
             }
-            match(input,42,FOLLOW_2); if (state.failed) return ;
+            match(input,43,FOLLOW_2); if (state.failed) return ;
             if ( state.backtracking==0 ) {
-               after(grammarAccess.getNUMBERAccess().getFullStopKeyword_1_0()); 
+               after(grammarAccess.getNUMBERAccess().getFullStopKeyword_2_0()); 
             }
 
             }
@@ -9884,21 +9982,21 @@ public class InternalThingParser extends AbstractInternalContentAssistParser {
         }
         return ;
     }
-    // $ANTLR end "rule__NUMBER__Group_1__0__Impl"
+    // $ANTLR end "rule__NUMBER__Group_2__0__Impl"
 
 
-    // $ANTLR start "rule__NUMBER__Group_1__1"
-    // InternalThing.g:2949:1: rule__NUMBER__Group_1__1 : rule__NUMBER__Group_1__1__Impl ;
-    public final void rule__NUMBER__Group_1__1() throws RecognitionException {
+    // $ANTLR start "rule__NUMBER__Group_2__1"
+    // InternalThing.g:2976:1: rule__NUMBER__Group_2__1 : rule__NUMBER__Group_2__1__Impl ;
+    public final void rule__NUMBER__Group_2__1() throws RecognitionException {
 
         		int stackSize = keepStackSize();
         	
         try {
-            // InternalThing.g:2953:1: ( rule__NUMBER__Group_1__1__Impl )
-            // InternalThing.g:2954:2: rule__NUMBER__Group_1__1__Impl
+            // InternalThing.g:2980:1: ( rule__NUMBER__Group_2__1__Impl )
+            // InternalThing.g:2981:2: rule__NUMBER__Group_2__1__Impl
             {
             pushFollow(FOLLOW_2);
-            rule__NUMBER__Group_1__1__Impl();
+            rule__NUMBER__Group_2__1__Impl();
 
             state._fsp--;
             if (state.failed) return ;
@@ -9917,28 +10015,28 @@ public class InternalThingParser extends AbstractInternalContentAssistParser {
         }
         return ;
     }
-    // $ANTLR end "rule__NUMBER__Group_1__1"
+    // $ANTLR end "rule__NUMBER__Group_2__1"
 
 
-    // $ANTLR start "rule__NUMBER__Group_1__1__Impl"
-    // InternalThing.g:2960:1: rule__NUMBER__Group_1__1__Impl : ( RULE_ID ) ;
-    public final void rule__NUMBER__Group_1__1__Impl() throws RecognitionException {
+    // $ANTLR start "rule__NUMBER__Group_2__1__Impl"
+    // InternalThing.g:2987:1: rule__NUMBER__Group_2__1__Impl : ( RULE_ID ) ;
+    public final void rule__NUMBER__Group_2__1__Impl() throws RecognitionException {
 
         		int stackSize = keepStackSize();
         	
         try {
-            // InternalThing.g:2964:1: ( ( RULE_ID ) )
-            // InternalThing.g:2965:1: ( RULE_ID )
+            // InternalThing.g:2991:1: ( ( RULE_ID ) )
+            // InternalThing.g:2992:1: ( RULE_ID )
             {
-            // InternalThing.g:2965:1: ( RULE_ID )
-            // InternalThing.g:2966:2: RULE_ID
+            // InternalThing.g:2992:1: ( RULE_ID )
+            // InternalThing.g:2993:2: RULE_ID
             {
             if ( state.backtracking==0 ) {
-               before(grammarAccess.getNUMBERAccess().getIDTerminalRuleCall_1_1()); 
+               before(grammarAccess.getNUMBERAccess().getIDTerminalRuleCall_2_1()); 
             }
             match(input,RULE_ID,FOLLOW_2); if (state.failed) return ;
             if ( state.backtracking==0 ) {
-               after(grammarAccess.getNUMBERAccess().getIDTerminalRuleCall_1_1()); 
+               after(grammarAccess.getNUMBERAccess().getIDTerminalRuleCall_2_1()); 
             }
 
             }
@@ -9958,27 +10056,27 @@ public class InternalThingParser extends AbstractInternalContentAssistParser {
         }
         return ;
     }
-    // $ANTLR end "rule__NUMBER__Group_1__1__Impl"
+    // $ANTLR end "rule__NUMBER__Group_2__1__Impl"
 
 
     // $ANTLR start "rule__ThingModel__ThingsAssignment"
-    // InternalThing.g:2976:1: rule__ThingModel__ThingsAssignment : ( ( rule__ThingModel__ThingsAlternatives_0 ) ) ;
+    // InternalThing.g:3003:1: rule__ThingModel__ThingsAssignment : ( ( rule__ThingModel__ThingsAlternatives_0 ) ) ;
     public final void rule__ThingModel__ThingsAssignment() throws RecognitionException {
 
         		int stackSize = keepStackSize();
         	
         try {
-            // InternalThing.g:2980:1: ( ( ( rule__ThingModel__ThingsAlternatives_0 ) ) )
-            // InternalThing.g:2981:2: ( ( rule__ThingModel__ThingsAlternatives_0 ) )
+            // InternalThing.g:3007:1: ( ( ( rule__ThingModel__ThingsAlternatives_0 ) ) )
+            // InternalThing.g:3008:2: ( ( rule__ThingModel__ThingsAlternatives_0 ) )
             {
-            // InternalThing.g:2981:2: ( ( rule__ThingModel__ThingsAlternatives_0 ) )
-            // InternalThing.g:2982:3: ( rule__ThingModel__ThingsAlternatives_0 )
+            // InternalThing.g:3008:2: ( ( rule__ThingModel__ThingsAlternatives_0 ) )
+            // InternalThing.g:3009:3: ( rule__ThingModel__ThingsAlternatives_0 )
             {
             if ( state.backtracking==0 ) {
                before(grammarAccess.getThingModelAccess().getThingsAlternatives_0()); 
             }
-            // InternalThing.g:2983:3: ( rule__ThingModel__ThingsAlternatives_0 )
-            // InternalThing.g:2983:4: rule__ThingModel__ThingsAlternatives_0
+            // InternalThing.g:3010:3: ( rule__ThingModel__ThingsAlternatives_0 )
+            // InternalThing.g:3010:4: rule__ThingModel__ThingsAlternatives_0
             {
             pushFollow(FOLLOW_2);
             rule__ThingModel__ThingsAlternatives_0();
@@ -10013,28 +10111,28 @@ public class InternalThingParser extends AbstractInternalContentAssistParser {
 
 
     // $ANTLR start "rule__ModelBridge__BridgeAssignment_1"
-    // InternalThing.g:2991:1: rule__ModelBridge__BridgeAssignment_1 : ( ( 'Bridge' ) ) ;
+    // InternalThing.g:3018:1: rule__ModelBridge__BridgeAssignment_1 : ( ( 'Bridge' ) ) ;
     public final void rule__ModelBridge__BridgeAssignment_1() throws RecognitionException {
 
         		int stackSize = keepStackSize();
         	
         try {
-            // InternalThing.g:2995:1: ( ( ( 'Bridge' ) ) )
-            // InternalThing.g:2996:2: ( ( 'Bridge' ) )
+            // InternalThing.g:3022:1: ( ( ( 'Bridge' ) ) )
+            // InternalThing.g:3023:2: ( ( 'Bridge' ) )
             {
-            // InternalThing.g:2996:2: ( ( 'Bridge' ) )
-            // InternalThing.g:2997:3: ( 'Bridge' )
-            {
-            if ( state.backtracking==0 ) {
-               before(grammarAccess.getModelBridgeAccess().getBridgeBridgeKeyword_1_0()); 
-            }
-            // InternalThing.g:2998:3: ( 'Bridge' )
-            // InternalThing.g:2999:4: 'Bridge'
+            // InternalThing.g:3023:2: ( ( 'Bridge' ) )
+            // InternalThing.g:3024:3: ( 'Bridge' )
             {
             if ( state.backtracking==0 ) {
                before(grammarAccess.getModelBridgeAccess().getBridgeBridgeKeyword_1_0()); 
             }
-            match(input,43,FOLLOW_2); if (state.failed) return ;
+            // InternalThing.g:3025:3: ( 'Bridge' )
+            // InternalThing.g:3026:4: 'Bridge'
+            {
+            if ( state.backtracking==0 ) {
+               before(grammarAccess.getModelBridgeAccess().getBridgeBridgeKeyword_1_0()); 
+            }
+            match(input,44,FOLLOW_2); if (state.failed) return ;
             if ( state.backtracking==0 ) {
                after(grammarAccess.getModelBridgeAccess().getBridgeBridgeKeyword_1_0()); 
             }
@@ -10066,17 +10164,17 @@ public class InternalThingParser extends AbstractInternalContentAssistParser {
 
 
     // $ANTLR start "rule__ModelBridge__IdAssignment_2_0"
-    // InternalThing.g:3010:1: rule__ModelBridge__IdAssignment_2_0 : ( ruleUID ) ;
+    // InternalThing.g:3037:1: rule__ModelBridge__IdAssignment_2_0 : ( ruleUID ) ;
     public final void rule__ModelBridge__IdAssignment_2_0() throws RecognitionException {
 
         		int stackSize = keepStackSize();
         	
         try {
-            // InternalThing.g:3014:1: ( ( ruleUID ) )
-            // InternalThing.g:3015:2: ( ruleUID )
+            // InternalThing.g:3041:1: ( ( ruleUID ) )
+            // InternalThing.g:3042:2: ( ruleUID )
             {
-            // InternalThing.g:3015:2: ( ruleUID )
-            // InternalThing.g:3016:3: ruleUID
+            // InternalThing.g:3042:2: ( ruleUID )
+            // InternalThing.g:3043:3: ruleUID
             {
             if ( state.backtracking==0 ) {
                before(grammarAccess.getModelBridgeAccess().getIdUIDParserRuleCall_2_0_0()); 
@@ -10111,17 +10209,17 @@ public class InternalThingParser extends AbstractInternalContentAssistParser {
 
 
     // $ANTLR start "rule__ModelBridge__ThingTypeIdAssignment_2_1_0"
-    // InternalThing.g:3025:1: rule__ModelBridge__ThingTypeIdAssignment_2_1_0 : ( ruleUID_SEGMENT ) ;
+    // InternalThing.g:3052:1: rule__ModelBridge__ThingTypeIdAssignment_2_1_0 : ( ruleUID_SEGMENT ) ;
     public final void rule__ModelBridge__ThingTypeIdAssignment_2_1_0() throws RecognitionException {
 
         		int stackSize = keepStackSize();
         	
         try {
-            // InternalThing.g:3029:1: ( ( ruleUID_SEGMENT ) )
-            // InternalThing.g:3030:2: ( ruleUID_SEGMENT )
+            // InternalThing.g:3056:1: ( ( ruleUID_SEGMENT ) )
+            // InternalThing.g:3057:2: ( ruleUID_SEGMENT )
             {
-            // InternalThing.g:3030:2: ( ruleUID_SEGMENT )
-            // InternalThing.g:3031:3: ruleUID_SEGMENT
+            // InternalThing.g:3057:2: ( ruleUID_SEGMENT )
+            // InternalThing.g:3058:3: ruleUID_SEGMENT
             {
             if ( state.backtracking==0 ) {
                before(grammarAccess.getModelBridgeAccess().getThingTypeIdUID_SEGMENTParserRuleCall_2_1_0_0()); 
@@ -10156,17 +10254,17 @@ public class InternalThingParser extends AbstractInternalContentAssistParser {
 
 
     // $ANTLR start "rule__ModelBridge__ThingIdAssignment_2_1_1"
-    // InternalThing.g:3040:1: rule__ModelBridge__ThingIdAssignment_2_1_1 : ( ruleUID_SEGMENT ) ;
+    // InternalThing.g:3067:1: rule__ModelBridge__ThingIdAssignment_2_1_1 : ( ruleUID_SEGMENT ) ;
     public final void rule__ModelBridge__ThingIdAssignment_2_1_1() throws RecognitionException {
 
         		int stackSize = keepStackSize();
         	
         try {
-            // InternalThing.g:3044:1: ( ( ruleUID_SEGMENT ) )
-            // InternalThing.g:3045:2: ( ruleUID_SEGMENT )
+            // InternalThing.g:3071:1: ( ( ruleUID_SEGMENT ) )
+            // InternalThing.g:3072:2: ( ruleUID_SEGMENT )
             {
-            // InternalThing.g:3045:2: ( ruleUID_SEGMENT )
-            // InternalThing.g:3046:3: ruleUID_SEGMENT
+            // InternalThing.g:3072:2: ( ruleUID_SEGMENT )
+            // InternalThing.g:3073:3: ruleUID_SEGMENT
             {
             if ( state.backtracking==0 ) {
                before(grammarAccess.getModelBridgeAccess().getThingIdUID_SEGMENTParserRuleCall_2_1_1_0()); 
@@ -10201,17 +10299,17 @@ public class InternalThingParser extends AbstractInternalContentAssistParser {
 
 
     // $ANTLR start "rule__ModelBridge__LabelAssignment_3"
-    // InternalThing.g:3055:1: rule__ModelBridge__LabelAssignment_3 : ( RULE_STRING ) ;
+    // InternalThing.g:3082:1: rule__ModelBridge__LabelAssignment_3 : ( RULE_STRING ) ;
     public final void rule__ModelBridge__LabelAssignment_3() throws RecognitionException {
 
         		int stackSize = keepStackSize();
         	
         try {
-            // InternalThing.g:3059:1: ( ( RULE_STRING ) )
-            // InternalThing.g:3060:2: ( RULE_STRING )
+            // InternalThing.g:3086:1: ( ( RULE_STRING ) )
+            // InternalThing.g:3087:2: ( RULE_STRING )
             {
-            // InternalThing.g:3060:2: ( RULE_STRING )
-            // InternalThing.g:3061:3: RULE_STRING
+            // InternalThing.g:3087:2: ( RULE_STRING )
+            // InternalThing.g:3088:3: RULE_STRING
             {
             if ( state.backtracking==0 ) {
                before(grammarAccess.getModelBridgeAccess().getLabelSTRINGTerminalRuleCall_3_0()); 
@@ -10242,17 +10340,17 @@ public class InternalThingParser extends AbstractInternalContentAssistParser {
 
 
     // $ANTLR start "rule__ModelBridge__LocationAssignment_4_1"
-    // InternalThing.g:3070:1: rule__ModelBridge__LocationAssignment_4_1 : ( RULE_STRING ) ;
+    // InternalThing.g:3097:1: rule__ModelBridge__LocationAssignment_4_1 : ( RULE_STRING ) ;
     public final void rule__ModelBridge__LocationAssignment_4_1() throws RecognitionException {
 
         		int stackSize = keepStackSize();
         	
         try {
-            // InternalThing.g:3074:1: ( ( RULE_STRING ) )
-            // InternalThing.g:3075:2: ( RULE_STRING )
+            // InternalThing.g:3101:1: ( ( RULE_STRING ) )
+            // InternalThing.g:3102:2: ( RULE_STRING )
             {
-            // InternalThing.g:3075:2: ( RULE_STRING )
-            // InternalThing.g:3076:3: RULE_STRING
+            // InternalThing.g:3102:2: ( RULE_STRING )
+            // InternalThing.g:3103:3: RULE_STRING
             {
             if ( state.backtracking==0 ) {
                before(grammarAccess.getModelBridgeAccess().getLocationSTRINGTerminalRuleCall_4_1_0()); 
@@ -10283,17 +10381,17 @@ public class InternalThingParser extends AbstractInternalContentAssistParser {
 
 
     // $ANTLR start "rule__ModelBridge__PropertiesAssignment_5_1"
-    // InternalThing.g:3085:1: rule__ModelBridge__PropertiesAssignment_5_1 : ( ruleModelProperty ) ;
+    // InternalThing.g:3112:1: rule__ModelBridge__PropertiesAssignment_5_1 : ( ruleModelProperty ) ;
     public final void rule__ModelBridge__PropertiesAssignment_5_1() throws RecognitionException {
 
         		int stackSize = keepStackSize();
         	
         try {
-            // InternalThing.g:3089:1: ( ( ruleModelProperty ) )
-            // InternalThing.g:3090:2: ( ruleModelProperty )
+            // InternalThing.g:3116:1: ( ( ruleModelProperty ) )
+            // InternalThing.g:3117:2: ( ruleModelProperty )
             {
-            // InternalThing.g:3090:2: ( ruleModelProperty )
-            // InternalThing.g:3091:3: ruleModelProperty
+            // InternalThing.g:3117:2: ( ruleModelProperty )
+            // InternalThing.g:3118:3: ruleModelProperty
             {
             if ( state.backtracking==0 ) {
                before(grammarAccess.getModelBridgeAccess().getPropertiesModelPropertyParserRuleCall_5_1_0()); 
@@ -10328,17 +10426,17 @@ public class InternalThingParser extends AbstractInternalContentAssistParser {
 
 
     // $ANTLR start "rule__ModelBridge__PropertiesAssignment_5_2_1"
-    // InternalThing.g:3100:1: rule__ModelBridge__PropertiesAssignment_5_2_1 : ( ruleModelProperty ) ;
+    // InternalThing.g:3127:1: rule__ModelBridge__PropertiesAssignment_5_2_1 : ( ruleModelProperty ) ;
     public final void rule__ModelBridge__PropertiesAssignment_5_2_1() throws RecognitionException {
 
         		int stackSize = keepStackSize();
         	
         try {
-            // InternalThing.g:3104:1: ( ( ruleModelProperty ) )
-            // InternalThing.g:3105:2: ( ruleModelProperty )
+            // InternalThing.g:3131:1: ( ( ruleModelProperty ) )
+            // InternalThing.g:3132:2: ( ruleModelProperty )
             {
-            // InternalThing.g:3105:2: ( ruleModelProperty )
-            // InternalThing.g:3106:3: ruleModelProperty
+            // InternalThing.g:3132:2: ( ruleModelProperty )
+            // InternalThing.g:3133:3: ruleModelProperty
             {
             if ( state.backtracking==0 ) {
                before(grammarAccess.getModelBridgeAccess().getPropertiesModelPropertyParserRuleCall_5_2_1_0()); 
@@ -10373,23 +10471,23 @@ public class InternalThingParser extends AbstractInternalContentAssistParser {
 
 
     // $ANTLR start "rule__ModelBridge__ThingsAssignment_6_2"
-    // InternalThing.g:3115:1: rule__ModelBridge__ThingsAssignment_6_2 : ( ( rule__ModelBridge__ThingsAlternatives_6_2_0 ) ) ;
+    // InternalThing.g:3142:1: rule__ModelBridge__ThingsAssignment_6_2 : ( ( rule__ModelBridge__ThingsAlternatives_6_2_0 ) ) ;
     public final void rule__ModelBridge__ThingsAssignment_6_2() throws RecognitionException {
 
         		int stackSize = keepStackSize();
         	
         try {
-            // InternalThing.g:3119:1: ( ( ( rule__ModelBridge__ThingsAlternatives_6_2_0 ) ) )
-            // InternalThing.g:3120:2: ( ( rule__ModelBridge__ThingsAlternatives_6_2_0 ) )
+            // InternalThing.g:3146:1: ( ( ( rule__ModelBridge__ThingsAlternatives_6_2_0 ) ) )
+            // InternalThing.g:3147:2: ( ( rule__ModelBridge__ThingsAlternatives_6_2_0 ) )
             {
-            // InternalThing.g:3120:2: ( ( rule__ModelBridge__ThingsAlternatives_6_2_0 ) )
-            // InternalThing.g:3121:3: ( rule__ModelBridge__ThingsAlternatives_6_2_0 )
+            // InternalThing.g:3147:2: ( ( rule__ModelBridge__ThingsAlternatives_6_2_0 ) )
+            // InternalThing.g:3148:3: ( rule__ModelBridge__ThingsAlternatives_6_2_0 )
             {
             if ( state.backtracking==0 ) {
                before(grammarAccess.getModelBridgeAccess().getThingsAlternatives_6_2_0()); 
             }
-            // InternalThing.g:3122:3: ( rule__ModelBridge__ThingsAlternatives_6_2_0 )
-            // InternalThing.g:3122:4: rule__ModelBridge__ThingsAlternatives_6_2_0
+            // InternalThing.g:3149:3: ( rule__ModelBridge__ThingsAlternatives_6_2_0 )
+            // InternalThing.g:3149:4: rule__ModelBridge__ThingsAlternatives_6_2_0
             {
             pushFollow(FOLLOW_2);
             rule__ModelBridge__ThingsAlternatives_6_2_0();
@@ -10424,17 +10522,17 @@ public class InternalThingParser extends AbstractInternalContentAssistParser {
 
 
     // $ANTLR start "rule__ModelBridge__ChannelsAssignment_6_4"
-    // InternalThing.g:3130:1: rule__ModelBridge__ChannelsAssignment_6_4 : ( ruleModelChannel ) ;
+    // InternalThing.g:3157:1: rule__ModelBridge__ChannelsAssignment_6_4 : ( ruleModelChannel ) ;
     public final void rule__ModelBridge__ChannelsAssignment_6_4() throws RecognitionException {
 
         		int stackSize = keepStackSize();
         	
         try {
-            // InternalThing.g:3134:1: ( ( ruleModelChannel ) )
-            // InternalThing.g:3135:2: ( ruleModelChannel )
+            // InternalThing.g:3161:1: ( ( ruleModelChannel ) )
+            // InternalThing.g:3162:2: ( ruleModelChannel )
             {
-            // InternalThing.g:3135:2: ( ruleModelChannel )
-            // InternalThing.g:3136:3: ruleModelChannel
+            // InternalThing.g:3162:2: ( ruleModelChannel )
+            // InternalThing.g:3163:3: ruleModelChannel
             {
             if ( state.backtracking==0 ) {
                before(grammarAccess.getModelBridgeAccess().getChannelsModelChannelParserRuleCall_6_4_0()); 
@@ -10469,17 +10567,17 @@ public class InternalThingParser extends AbstractInternalContentAssistParser {
 
 
     // $ANTLR start "rule__ModelThing__IdAssignment_1_0"
-    // InternalThing.g:3145:1: rule__ModelThing__IdAssignment_1_0 : ( ruleUID ) ;
+    // InternalThing.g:3172:1: rule__ModelThing__IdAssignment_1_0 : ( ruleUID ) ;
     public final void rule__ModelThing__IdAssignment_1_0() throws RecognitionException {
 
         		int stackSize = keepStackSize();
         	
         try {
-            // InternalThing.g:3149:1: ( ( ruleUID ) )
-            // InternalThing.g:3150:2: ( ruleUID )
+            // InternalThing.g:3176:1: ( ( ruleUID ) )
+            // InternalThing.g:3177:2: ( ruleUID )
             {
-            // InternalThing.g:3150:2: ( ruleUID )
-            // InternalThing.g:3151:3: ruleUID
+            // InternalThing.g:3177:2: ( ruleUID )
+            // InternalThing.g:3178:3: ruleUID
             {
             if ( state.backtracking==0 ) {
                before(grammarAccess.getModelThingAccess().getIdUIDParserRuleCall_1_0_0()); 
@@ -10514,17 +10612,17 @@ public class InternalThingParser extends AbstractInternalContentAssistParser {
 
 
     // $ANTLR start "rule__ModelThing__ThingTypeIdAssignment_1_1_0"
-    // InternalThing.g:3160:1: rule__ModelThing__ThingTypeIdAssignment_1_1_0 : ( ruleUID_SEGMENT ) ;
+    // InternalThing.g:3187:1: rule__ModelThing__ThingTypeIdAssignment_1_1_0 : ( ruleUID_SEGMENT ) ;
     public final void rule__ModelThing__ThingTypeIdAssignment_1_1_0() throws RecognitionException {
 
         		int stackSize = keepStackSize();
         	
         try {
-            // InternalThing.g:3164:1: ( ( ruleUID_SEGMENT ) )
-            // InternalThing.g:3165:2: ( ruleUID_SEGMENT )
+            // InternalThing.g:3191:1: ( ( ruleUID_SEGMENT ) )
+            // InternalThing.g:3192:2: ( ruleUID_SEGMENT )
             {
-            // InternalThing.g:3165:2: ( ruleUID_SEGMENT )
-            // InternalThing.g:3166:3: ruleUID_SEGMENT
+            // InternalThing.g:3192:2: ( ruleUID_SEGMENT )
+            // InternalThing.g:3193:3: ruleUID_SEGMENT
             {
             if ( state.backtracking==0 ) {
                before(grammarAccess.getModelThingAccess().getThingTypeIdUID_SEGMENTParserRuleCall_1_1_0_0()); 
@@ -10559,17 +10657,17 @@ public class InternalThingParser extends AbstractInternalContentAssistParser {
 
 
     // $ANTLR start "rule__ModelThing__ThingIdAssignment_1_1_1"
-    // InternalThing.g:3175:1: rule__ModelThing__ThingIdAssignment_1_1_1 : ( ruleUID_SEGMENT ) ;
+    // InternalThing.g:3202:1: rule__ModelThing__ThingIdAssignment_1_1_1 : ( ruleUID_SEGMENT ) ;
     public final void rule__ModelThing__ThingIdAssignment_1_1_1() throws RecognitionException {
 
         		int stackSize = keepStackSize();
         	
         try {
-            // InternalThing.g:3179:1: ( ( ruleUID_SEGMENT ) )
-            // InternalThing.g:3180:2: ( ruleUID_SEGMENT )
+            // InternalThing.g:3206:1: ( ( ruleUID_SEGMENT ) )
+            // InternalThing.g:3207:2: ( ruleUID_SEGMENT )
             {
-            // InternalThing.g:3180:2: ( ruleUID_SEGMENT )
-            // InternalThing.g:3181:3: ruleUID_SEGMENT
+            // InternalThing.g:3207:2: ( ruleUID_SEGMENT )
+            // InternalThing.g:3208:3: ruleUID_SEGMENT
             {
             if ( state.backtracking==0 ) {
                before(grammarAccess.getModelThingAccess().getThingIdUID_SEGMENTParserRuleCall_1_1_1_0()); 
@@ -10604,17 +10702,17 @@ public class InternalThingParser extends AbstractInternalContentAssistParser {
 
 
     // $ANTLR start "rule__ModelThing__LabelAssignment_2"
-    // InternalThing.g:3190:1: rule__ModelThing__LabelAssignment_2 : ( RULE_STRING ) ;
+    // InternalThing.g:3217:1: rule__ModelThing__LabelAssignment_2 : ( RULE_STRING ) ;
     public final void rule__ModelThing__LabelAssignment_2() throws RecognitionException {
 
         		int stackSize = keepStackSize();
         	
         try {
-            // InternalThing.g:3194:1: ( ( RULE_STRING ) )
-            // InternalThing.g:3195:2: ( RULE_STRING )
+            // InternalThing.g:3221:1: ( ( RULE_STRING ) )
+            // InternalThing.g:3222:2: ( RULE_STRING )
             {
-            // InternalThing.g:3195:2: ( RULE_STRING )
-            // InternalThing.g:3196:3: RULE_STRING
+            // InternalThing.g:3222:2: ( RULE_STRING )
+            // InternalThing.g:3223:3: RULE_STRING
             {
             if ( state.backtracking==0 ) {
                before(grammarAccess.getModelThingAccess().getLabelSTRINGTerminalRuleCall_2_0()); 
@@ -10645,17 +10743,17 @@ public class InternalThingParser extends AbstractInternalContentAssistParser {
 
 
     // $ANTLR start "rule__ModelThing__BridgeUIDAssignment_3_1"
-    // InternalThing.g:3205:1: rule__ModelThing__BridgeUIDAssignment_3_1 : ( ruleUID ) ;
+    // InternalThing.g:3232:1: rule__ModelThing__BridgeUIDAssignment_3_1 : ( ruleUID ) ;
     public final void rule__ModelThing__BridgeUIDAssignment_3_1() throws RecognitionException {
 
         		int stackSize = keepStackSize();
         	
         try {
-            // InternalThing.g:3209:1: ( ( ruleUID ) )
-            // InternalThing.g:3210:2: ( ruleUID )
+            // InternalThing.g:3236:1: ( ( ruleUID ) )
+            // InternalThing.g:3237:2: ( ruleUID )
             {
-            // InternalThing.g:3210:2: ( ruleUID )
-            // InternalThing.g:3211:3: ruleUID
+            // InternalThing.g:3237:2: ( ruleUID )
+            // InternalThing.g:3238:3: ruleUID
             {
             if ( state.backtracking==0 ) {
                before(grammarAccess.getModelThingAccess().getBridgeUIDUIDParserRuleCall_3_1_0()); 
@@ -10690,17 +10788,17 @@ public class InternalThingParser extends AbstractInternalContentAssistParser {
 
 
     // $ANTLR start "rule__ModelThing__LocationAssignment_4_1"
-    // InternalThing.g:3220:1: rule__ModelThing__LocationAssignment_4_1 : ( RULE_STRING ) ;
+    // InternalThing.g:3247:1: rule__ModelThing__LocationAssignment_4_1 : ( RULE_STRING ) ;
     public final void rule__ModelThing__LocationAssignment_4_1() throws RecognitionException {
 
         		int stackSize = keepStackSize();
         	
         try {
-            // InternalThing.g:3224:1: ( ( RULE_STRING ) )
-            // InternalThing.g:3225:2: ( RULE_STRING )
+            // InternalThing.g:3251:1: ( ( RULE_STRING ) )
+            // InternalThing.g:3252:2: ( RULE_STRING )
             {
-            // InternalThing.g:3225:2: ( RULE_STRING )
-            // InternalThing.g:3226:3: RULE_STRING
+            // InternalThing.g:3252:2: ( RULE_STRING )
+            // InternalThing.g:3253:3: RULE_STRING
             {
             if ( state.backtracking==0 ) {
                before(grammarAccess.getModelThingAccess().getLocationSTRINGTerminalRuleCall_4_1_0()); 
@@ -10731,17 +10829,17 @@ public class InternalThingParser extends AbstractInternalContentAssistParser {
 
 
     // $ANTLR start "rule__ModelThing__PropertiesAssignment_5_1"
-    // InternalThing.g:3235:1: rule__ModelThing__PropertiesAssignment_5_1 : ( ruleModelProperty ) ;
+    // InternalThing.g:3262:1: rule__ModelThing__PropertiesAssignment_5_1 : ( ruleModelProperty ) ;
     public final void rule__ModelThing__PropertiesAssignment_5_1() throws RecognitionException {
 
         		int stackSize = keepStackSize();
         	
         try {
-            // InternalThing.g:3239:1: ( ( ruleModelProperty ) )
-            // InternalThing.g:3240:2: ( ruleModelProperty )
+            // InternalThing.g:3266:1: ( ( ruleModelProperty ) )
+            // InternalThing.g:3267:2: ( ruleModelProperty )
             {
-            // InternalThing.g:3240:2: ( ruleModelProperty )
-            // InternalThing.g:3241:3: ruleModelProperty
+            // InternalThing.g:3267:2: ( ruleModelProperty )
+            // InternalThing.g:3268:3: ruleModelProperty
             {
             if ( state.backtracking==0 ) {
                before(grammarAccess.getModelThingAccess().getPropertiesModelPropertyParserRuleCall_5_1_0()); 
@@ -10776,17 +10874,17 @@ public class InternalThingParser extends AbstractInternalContentAssistParser {
 
 
     // $ANTLR start "rule__ModelThing__PropertiesAssignment_5_2_1"
-    // InternalThing.g:3250:1: rule__ModelThing__PropertiesAssignment_5_2_1 : ( ruleModelProperty ) ;
+    // InternalThing.g:3277:1: rule__ModelThing__PropertiesAssignment_5_2_1 : ( ruleModelProperty ) ;
     public final void rule__ModelThing__PropertiesAssignment_5_2_1() throws RecognitionException {
 
         		int stackSize = keepStackSize();
         	
         try {
-            // InternalThing.g:3254:1: ( ( ruleModelProperty ) )
-            // InternalThing.g:3255:2: ( ruleModelProperty )
+            // InternalThing.g:3281:1: ( ( ruleModelProperty ) )
+            // InternalThing.g:3282:2: ( ruleModelProperty )
             {
-            // InternalThing.g:3255:2: ( ruleModelProperty )
-            // InternalThing.g:3256:3: ruleModelProperty
+            // InternalThing.g:3282:2: ( ruleModelProperty )
+            // InternalThing.g:3283:3: ruleModelProperty
             {
             if ( state.backtracking==0 ) {
                before(grammarAccess.getModelThingAccess().getPropertiesModelPropertyParserRuleCall_5_2_1_0()); 
@@ -10821,17 +10919,17 @@ public class InternalThingParser extends AbstractInternalContentAssistParser {
 
 
     // $ANTLR start "rule__ModelThing__ChannelsAssignment_6_2"
-    // InternalThing.g:3265:1: rule__ModelThing__ChannelsAssignment_6_2 : ( ruleModelChannel ) ;
+    // InternalThing.g:3292:1: rule__ModelThing__ChannelsAssignment_6_2 : ( ruleModelChannel ) ;
     public final void rule__ModelThing__ChannelsAssignment_6_2() throws RecognitionException {
 
         		int stackSize = keepStackSize();
         	
         try {
-            // InternalThing.g:3269:1: ( ( ruleModelChannel ) )
-            // InternalThing.g:3270:2: ( ruleModelChannel )
+            // InternalThing.g:3296:1: ( ( ruleModelChannel ) )
+            // InternalThing.g:3297:2: ( ruleModelChannel )
             {
-            // InternalThing.g:3270:2: ( ruleModelChannel )
-            // InternalThing.g:3271:3: ruleModelChannel
+            // InternalThing.g:3297:2: ( ruleModelChannel )
+            // InternalThing.g:3298:3: ruleModelChannel
             {
             if ( state.backtracking==0 ) {
                before(grammarAccess.getModelThingAccess().getChannelsModelChannelParserRuleCall_6_2_0()); 
@@ -10866,23 +10964,23 @@ public class InternalThingParser extends AbstractInternalContentAssistParser {
 
 
     // $ANTLR start "rule__ModelChannel__ChannelKindAssignment_0_0_0"
-    // InternalThing.g:3280:1: rule__ModelChannel__ChannelKindAssignment_0_0_0 : ( ( rule__ModelChannel__ChannelKindAlternatives_0_0_0_0 ) ) ;
+    // InternalThing.g:3307:1: rule__ModelChannel__ChannelKindAssignment_0_0_0 : ( ( rule__ModelChannel__ChannelKindAlternatives_0_0_0_0 ) ) ;
     public final void rule__ModelChannel__ChannelKindAssignment_0_0_0() throws RecognitionException {
 
         		int stackSize = keepStackSize();
         	
         try {
-            // InternalThing.g:3284:1: ( ( ( rule__ModelChannel__ChannelKindAlternatives_0_0_0_0 ) ) )
-            // InternalThing.g:3285:2: ( ( rule__ModelChannel__ChannelKindAlternatives_0_0_0_0 ) )
+            // InternalThing.g:3311:1: ( ( ( rule__ModelChannel__ChannelKindAlternatives_0_0_0_0 ) ) )
+            // InternalThing.g:3312:2: ( ( rule__ModelChannel__ChannelKindAlternatives_0_0_0_0 ) )
             {
-            // InternalThing.g:3285:2: ( ( rule__ModelChannel__ChannelKindAlternatives_0_0_0_0 ) )
-            // InternalThing.g:3286:3: ( rule__ModelChannel__ChannelKindAlternatives_0_0_0_0 )
+            // InternalThing.g:3312:2: ( ( rule__ModelChannel__ChannelKindAlternatives_0_0_0_0 ) )
+            // InternalThing.g:3313:3: ( rule__ModelChannel__ChannelKindAlternatives_0_0_0_0 )
             {
             if ( state.backtracking==0 ) {
                before(grammarAccess.getModelChannelAccess().getChannelKindAlternatives_0_0_0_0()); 
             }
-            // InternalThing.g:3287:3: ( rule__ModelChannel__ChannelKindAlternatives_0_0_0_0 )
-            // InternalThing.g:3287:4: rule__ModelChannel__ChannelKindAlternatives_0_0_0_0
+            // InternalThing.g:3314:3: ( rule__ModelChannel__ChannelKindAlternatives_0_0_0_0 )
+            // InternalThing.g:3314:4: rule__ModelChannel__ChannelKindAlternatives_0_0_0_0
             {
             pushFollow(FOLLOW_2);
             rule__ModelChannel__ChannelKindAlternatives_0_0_0_0();
@@ -10917,17 +11015,17 @@ public class InternalThingParser extends AbstractInternalContentAssistParser {
 
 
     // $ANTLR start "rule__ModelChannel__TypeAssignment_0_0_1"
-    // InternalThing.g:3295:1: rule__ModelChannel__TypeAssignment_0_0_1 : ( ruleModelItemType ) ;
+    // InternalThing.g:3322:1: rule__ModelChannel__TypeAssignment_0_0_1 : ( ruleModelItemType ) ;
     public final void rule__ModelChannel__TypeAssignment_0_0_1() throws RecognitionException {
 
         		int stackSize = keepStackSize();
         	
         try {
-            // InternalThing.g:3299:1: ( ( ruleModelItemType ) )
-            // InternalThing.g:3300:2: ( ruleModelItemType )
+            // InternalThing.g:3326:1: ( ( ruleModelItemType ) )
+            // InternalThing.g:3327:2: ( ruleModelItemType )
             {
-            // InternalThing.g:3300:2: ( ruleModelItemType )
-            // InternalThing.g:3301:3: ruleModelItemType
+            // InternalThing.g:3327:2: ( ruleModelItemType )
+            // InternalThing.g:3328:3: ruleModelItemType
             {
             if ( state.backtracking==0 ) {
                before(grammarAccess.getModelChannelAccess().getTypeModelItemTypeParserRuleCall_0_0_1_0()); 
@@ -10962,17 +11060,17 @@ public class InternalThingParser extends AbstractInternalContentAssistParser {
 
 
     // $ANTLR start "rule__ModelChannel__ChannelTypeAssignment_0_1_1"
-    // InternalThing.g:3310:1: rule__ModelChannel__ChannelTypeAssignment_0_1_1 : ( ruleUID_SEGMENT ) ;
+    // InternalThing.g:3337:1: rule__ModelChannel__ChannelTypeAssignment_0_1_1 : ( ruleUID_SEGMENT ) ;
     public final void rule__ModelChannel__ChannelTypeAssignment_0_1_1() throws RecognitionException {
 
         		int stackSize = keepStackSize();
         	
         try {
-            // InternalThing.g:3314:1: ( ( ruleUID_SEGMENT ) )
-            // InternalThing.g:3315:2: ( ruleUID_SEGMENT )
+            // InternalThing.g:3341:1: ( ( ruleUID_SEGMENT ) )
+            // InternalThing.g:3342:2: ( ruleUID_SEGMENT )
             {
-            // InternalThing.g:3315:2: ( ruleUID_SEGMENT )
-            // InternalThing.g:3316:3: ruleUID_SEGMENT
+            // InternalThing.g:3342:2: ( ruleUID_SEGMENT )
+            // InternalThing.g:3343:3: ruleUID_SEGMENT
             {
             if ( state.backtracking==0 ) {
                before(grammarAccess.getModelChannelAccess().getChannelTypeUID_SEGMENTParserRuleCall_0_1_1_0()); 
@@ -11007,17 +11105,17 @@ public class InternalThingParser extends AbstractInternalContentAssistParser {
 
 
     // $ANTLR start "rule__ModelChannel__IdAssignment_2"
-    // InternalThing.g:3325:1: rule__ModelChannel__IdAssignment_2 : ( ruleCHANNEL_ID ) ;
+    // InternalThing.g:3352:1: rule__ModelChannel__IdAssignment_2 : ( ruleCHANNEL_ID ) ;
     public final void rule__ModelChannel__IdAssignment_2() throws RecognitionException {
 
         		int stackSize = keepStackSize();
         	
         try {
-            // InternalThing.g:3329:1: ( ( ruleCHANNEL_ID ) )
-            // InternalThing.g:3330:2: ( ruleCHANNEL_ID )
+            // InternalThing.g:3356:1: ( ( ruleCHANNEL_ID ) )
+            // InternalThing.g:3357:2: ( ruleCHANNEL_ID )
             {
-            // InternalThing.g:3330:2: ( ruleCHANNEL_ID )
-            // InternalThing.g:3331:3: ruleCHANNEL_ID
+            // InternalThing.g:3357:2: ( ruleCHANNEL_ID )
+            // InternalThing.g:3358:3: ruleCHANNEL_ID
             {
             if ( state.backtracking==0 ) {
                before(grammarAccess.getModelChannelAccess().getIdCHANNEL_IDParserRuleCall_2_0()); 
@@ -11052,17 +11150,17 @@ public class InternalThingParser extends AbstractInternalContentAssistParser {
 
 
     // $ANTLR start "rule__ModelChannel__LabelAssignment_3"
-    // InternalThing.g:3340:1: rule__ModelChannel__LabelAssignment_3 : ( RULE_STRING ) ;
+    // InternalThing.g:3367:1: rule__ModelChannel__LabelAssignment_3 : ( RULE_STRING ) ;
     public final void rule__ModelChannel__LabelAssignment_3() throws RecognitionException {
 
         		int stackSize = keepStackSize();
         	
         try {
-            // InternalThing.g:3344:1: ( ( RULE_STRING ) )
-            // InternalThing.g:3345:2: ( RULE_STRING )
+            // InternalThing.g:3371:1: ( ( RULE_STRING ) )
+            // InternalThing.g:3372:2: ( RULE_STRING )
             {
-            // InternalThing.g:3345:2: ( RULE_STRING )
-            // InternalThing.g:3346:3: RULE_STRING
+            // InternalThing.g:3372:2: ( RULE_STRING )
+            // InternalThing.g:3373:3: RULE_STRING
             {
             if ( state.backtracking==0 ) {
                before(grammarAccess.getModelChannelAccess().getLabelSTRINGTerminalRuleCall_3_0()); 
@@ -11093,17 +11191,17 @@ public class InternalThingParser extends AbstractInternalContentAssistParser {
 
 
     // $ANTLR start "rule__ModelChannel__PropertiesAssignment_4_1"
-    // InternalThing.g:3355:1: rule__ModelChannel__PropertiesAssignment_4_1 : ( ruleModelProperty ) ;
+    // InternalThing.g:3382:1: rule__ModelChannel__PropertiesAssignment_4_1 : ( ruleModelProperty ) ;
     public final void rule__ModelChannel__PropertiesAssignment_4_1() throws RecognitionException {
 
         		int stackSize = keepStackSize();
         	
         try {
-            // InternalThing.g:3359:1: ( ( ruleModelProperty ) )
-            // InternalThing.g:3360:2: ( ruleModelProperty )
+            // InternalThing.g:3386:1: ( ( ruleModelProperty ) )
+            // InternalThing.g:3387:2: ( ruleModelProperty )
             {
-            // InternalThing.g:3360:2: ( ruleModelProperty )
-            // InternalThing.g:3361:3: ruleModelProperty
+            // InternalThing.g:3387:2: ( ruleModelProperty )
+            // InternalThing.g:3388:3: ruleModelProperty
             {
             if ( state.backtracking==0 ) {
                before(grammarAccess.getModelChannelAccess().getPropertiesModelPropertyParserRuleCall_4_1_0()); 
@@ -11138,17 +11236,17 @@ public class InternalThingParser extends AbstractInternalContentAssistParser {
 
 
     // $ANTLR start "rule__ModelChannel__PropertiesAssignment_4_2_1"
-    // InternalThing.g:3370:1: rule__ModelChannel__PropertiesAssignment_4_2_1 : ( ruleModelProperty ) ;
+    // InternalThing.g:3397:1: rule__ModelChannel__PropertiesAssignment_4_2_1 : ( ruleModelProperty ) ;
     public final void rule__ModelChannel__PropertiesAssignment_4_2_1() throws RecognitionException {
 
         		int stackSize = keepStackSize();
         	
         try {
-            // InternalThing.g:3374:1: ( ( ruleModelProperty ) )
-            // InternalThing.g:3375:2: ( ruleModelProperty )
+            // InternalThing.g:3401:1: ( ( ruleModelProperty ) )
+            // InternalThing.g:3402:2: ( ruleModelProperty )
             {
-            // InternalThing.g:3375:2: ( ruleModelProperty )
-            // InternalThing.g:3376:3: ruleModelProperty
+            // InternalThing.g:3402:2: ( ruleModelProperty )
+            // InternalThing.g:3403:3: ruleModelProperty
             {
             if ( state.backtracking==0 ) {
                before(grammarAccess.getModelChannelAccess().getPropertiesModelPropertyParserRuleCall_4_2_1_0()); 
@@ -11183,17 +11281,17 @@ public class InternalThingParser extends AbstractInternalContentAssistParser {
 
 
     // $ANTLR start "rule__ModelProperty__KeyAssignment_0"
-    // InternalThing.g:3385:1: rule__ModelProperty__KeyAssignment_0 : ( RULE_ID ) ;
+    // InternalThing.g:3412:1: rule__ModelProperty__KeyAssignment_0 : ( RULE_ID ) ;
     public final void rule__ModelProperty__KeyAssignment_0() throws RecognitionException {
 
         		int stackSize = keepStackSize();
         	
         try {
-            // InternalThing.g:3389:1: ( ( RULE_ID ) )
-            // InternalThing.g:3390:2: ( RULE_ID )
+            // InternalThing.g:3416:1: ( ( RULE_ID ) )
+            // InternalThing.g:3417:2: ( RULE_ID )
             {
-            // InternalThing.g:3390:2: ( RULE_ID )
-            // InternalThing.g:3391:3: RULE_ID
+            // InternalThing.g:3417:2: ( RULE_ID )
+            // InternalThing.g:3418:3: RULE_ID
             {
             if ( state.backtracking==0 ) {
                before(grammarAccess.getModelPropertyAccess().getKeyIDTerminalRuleCall_0_0()); 
@@ -11224,17 +11322,17 @@ public class InternalThingParser extends AbstractInternalContentAssistParser {
 
 
     // $ANTLR start "rule__ModelProperty__ValueAssignment_2"
-    // InternalThing.g:3400:1: rule__ModelProperty__ValueAssignment_2 : ( ruleValueType ) ;
+    // InternalThing.g:3427:1: rule__ModelProperty__ValueAssignment_2 : ( ruleValueType ) ;
     public final void rule__ModelProperty__ValueAssignment_2() throws RecognitionException {
 
         		int stackSize = keepStackSize();
         	
         try {
-            // InternalThing.g:3404:1: ( ( ruleValueType ) )
-            // InternalThing.g:3405:2: ( ruleValueType )
+            // InternalThing.g:3431:1: ( ( ruleValueType ) )
+            // InternalThing.g:3432:2: ( ruleValueType )
             {
-            // InternalThing.g:3405:2: ( ruleValueType )
-            // InternalThing.g:3406:3: ruleValueType
+            // InternalThing.g:3432:2: ( ruleValueType )
+            // InternalThing.g:3433:3: ruleValueType
             {
             if ( state.backtracking==0 ) {
                before(grammarAccess.getModelPropertyAccess().getValueValueTypeParserRuleCall_2_0()); 
@@ -11269,17 +11367,17 @@ public class InternalThingParser extends AbstractInternalContentAssistParser {
 
 
     // $ANTLR start "rule__ModelProperty__ValueAssignment_3_1"
-    // InternalThing.g:3415:1: rule__ModelProperty__ValueAssignment_3_1 : ( ruleValueType ) ;
+    // InternalThing.g:3442:1: rule__ModelProperty__ValueAssignment_3_1 : ( ruleValueType ) ;
     public final void rule__ModelProperty__ValueAssignment_3_1() throws RecognitionException {
 
         		int stackSize = keepStackSize();
         	
         try {
-            // InternalThing.g:3419:1: ( ( ruleValueType ) )
-            // InternalThing.g:3420:2: ( ruleValueType )
+            // InternalThing.g:3446:1: ( ( ruleValueType ) )
+            // InternalThing.g:3447:2: ( ruleValueType )
             {
-            // InternalThing.g:3420:2: ( ruleValueType )
-            // InternalThing.g:3421:3: ruleValueType
+            // InternalThing.g:3447:2: ( ruleValueType )
+            // InternalThing.g:3448:3: ruleValueType
             {
             if ( state.backtracking==0 ) {
                before(grammarAccess.getModelPropertyAccess().getValueValueTypeParserRuleCall_3_1_0()); 
@@ -11319,14 +11417,14 @@ public class InternalThingParser extends AbstractInternalContentAssistParser {
 
     public static final BitSet FOLLOW_1 = new BitSet(new long[]{0x0000000000000000L});
     public static final BitSet FOLLOW_2 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_3 = new BitSet(new long[]{0x0000080400000012L});
-    public static final BitSet FOLLOW_4 = new BitSet(new long[]{0x0000080400000010L});
+    public static final BitSet FOLLOW_3 = new BitSet(new long[]{0x0000100400000012L});
+    public static final BitSet FOLLOW_4 = new BitSet(new long[]{0x0000100400000010L});
     public static final BitSet FOLLOW_5 = new BitSet(new long[]{0x0000000000000010L});
     public static final BitSet FOLLOW_6 = new BitSet(new long[]{0x000000004C000020L});
     public static final BitSet FOLLOW_7 = new BitSet(new long[]{0x0000000000000020L});
     public static final BitSet FOLLOW_8 = new BitSet(new long[]{0x0000000030000010L});
     public static final BitSet FOLLOW_9 = new BitSet(new long[]{0x0000000020000002L});
-    public static final BitSet FOLLOW_10 = new BitSet(new long[]{0x000008C780FFFC10L});
+    public static final BitSet FOLLOW_10 = new BitSet(new long[]{0x000010C780FFFC10L});
     public static final BitSet FOLLOW_11 = new BitSet(new long[]{0x000000C000FFFC02L});
     public static final BitSet FOLLOW_12 = new BitSet(new long[]{0x0000000400000010L});
     public static final BitSet FOLLOW_13 = new BitSet(new long[]{0x000000084C000020L});
@@ -11336,10 +11434,11 @@ public class InternalThingParser extends AbstractInternalContentAssistParser {
     public static final BitSet FOLLOW_17 = new BitSet(new long[]{0x0000000008000020L});
     public static final BitSet FOLLOW_18 = new BitSet(new long[]{0x0000008000FFFC00L});
     public static final BitSet FOLLOW_19 = new BitSet(new long[]{0x0000010000000000L});
-    public static final BitSet FOLLOW_20 = new BitSet(new long[]{0x0000000003000030L});
+    public static final BitSet FOLLOW_20 = new BitSet(new long[]{0x0000040003000030L});
     public static final BitSet FOLLOW_21 = new BitSet(new long[]{0x0000000020000000L});
     public static final BitSet FOLLOW_22 = new BitSet(new long[]{0x0000020000000000L});
     public static final BitSet FOLLOW_23 = new BitSet(new long[]{0x0000002000000002L});
-    public static final BitSet FOLLOW_24 = new BitSet(new long[]{0x0000040000000000L});
+    public static final BitSet FOLLOW_24 = new BitSet(new long[]{0x0000040000000010L});
+    public static final BitSet FOLLOW_25 = new BitSet(new long[]{0x0000080000000000L});
 
 }

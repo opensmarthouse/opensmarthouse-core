@@ -68,7 +68,7 @@ public class ThingParser extends AbstractContentAssistParser {
 			builder.put(grammarAccess.getUIDAccess().getGroup(), "rule__UID__Group__0");
 			builder.put(grammarAccess.getUIDAccess().getGroup_5(), "rule__UID__Group_5__0");
 			builder.put(grammarAccess.getNUMBERAccess().getGroup(), "rule__NUMBER__Group__0");
-			builder.put(grammarAccess.getNUMBERAccess().getGroup_1(), "rule__NUMBER__Group_1__0");
+			builder.put(grammarAccess.getNUMBERAccess().getGroup_2(), "rule__NUMBER__Group_2__0");
 			builder.put(grammarAccess.getThingModelAccess().getThingsAssignment(), "rule__ThingModel__ThingsAssignment");
 			builder.put(grammarAccess.getModelBridgeAccess().getBridgeAssignment_1(), "rule__ModelBridge__BridgeAssignment_1");
 			builder.put(grammarAccess.getModelBridgeAccess().getIdAssignment_2_0(), "rule__ModelBridge__IdAssignment_2_0");

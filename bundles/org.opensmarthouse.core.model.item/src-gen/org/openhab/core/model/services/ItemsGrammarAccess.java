@@ -600,29 +600,33 @@ public class ItemsGrammarAccess extends AbstractGrammarElementFinder {
 	public class NUMBERElements extends AbstractParserRuleElementFinder {
 		private final ParserRule rule = (ParserRule) GrammarUtil.findRuleForName(getGrammar(), "org.openhab.core.model.Items.NUMBER");
 		private final Group cGroup = (Group)rule.eContents().get(1);
-		private final RuleCall cIDTerminalRuleCall_0 = (RuleCall)cGroup.eContents().get(0);
-		private final Group cGroup_1 = (Group)cGroup.eContents().get(1);
-		private final Keyword cFullStopKeyword_1_0 = (Keyword)cGroup_1.eContents().get(0);
-		private final RuleCall cIDTerminalRuleCall_1_1 = (RuleCall)cGroup_1.eContents().get(1);
+		private final Keyword cHyphenMinusKeyword_0 = (Keyword)cGroup.eContents().get(0);
+		private final RuleCall cIDTerminalRuleCall_1 = (RuleCall)cGroup.eContents().get(1);
+		private final Group cGroup_2 = (Group)cGroup.eContents().get(2);
+		private final Keyword cFullStopKeyword_2_0 = (Keyword)cGroup_2.eContents().get(0);
+		private final RuleCall cIDTerminalRuleCall_2_1 = (RuleCall)cGroup_2.eContents().get(1);
 		
 		//NUMBER ecore::EBigDecimal:
-		//	ID ('.' ID)?;
+		//	'-'? ID ('.' ID)?;
 		@Override public ParserRule getRule() { return rule; }
 		
-		//ID ('.' ID)?
+		//'-'? ID ('.' ID)?
 		public Group getGroup() { return cGroup; }
 		
+		//'-'?
+		public Keyword getHyphenMinusKeyword_0() { return cHyphenMinusKeyword_0; }
+		
 		//ID
-		public RuleCall getIDTerminalRuleCall_0() { return cIDTerminalRuleCall_0; }
+		public RuleCall getIDTerminalRuleCall_1() { return cIDTerminalRuleCall_1; }
 		
 		//('.' ID)?
-		public Group getGroup_1() { return cGroup_1; }
+		public Group getGroup_2() { return cGroup_2; }
 		
 		//'.'
-		public Keyword getFullStopKeyword_1_0() { return cFullStopKeyword_1_0; }
+		public Keyword getFullStopKeyword_2_0() { return cFullStopKeyword_2_0; }
 		
 		//ID
-		public RuleCall getIDTerminalRuleCall_1_1() { return cIDTerminalRuleCall_1_1; }
+		public RuleCall getIDTerminalRuleCall_2_1() { return cIDTerminalRuleCall_2_1; }
 	}
 	
 	public class ModelGroupFunctionElements extends AbstractEnumRuleElementFinder {
@@ -917,7 +921,7 @@ public class ItemsGrammarAccess extends AbstractGrammarElementFinder {
 	}
 	
 	//NUMBER ecore::EBigDecimal:
-	//	ID ('.' ID)?;
+	//	'-'? ID ('.' ID)?;
 	public NUMBERElements getNUMBERAccess() {
 		return pNUMBER;
 	}
