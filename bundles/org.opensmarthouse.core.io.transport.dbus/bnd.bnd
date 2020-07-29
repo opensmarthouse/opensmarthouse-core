@@ -1,10 +1,12 @@
 Bundle-SymbolicName: ${project.artifactId}
 Export-Package: \
-  cx.ath.matthew.unix.*;version="0.5",\
-  org.freedesktop.*;version="2.7"
+  com.github.hypfvieh.classloader.*;version="1.0.6", \
+  com.github.hypfvieh.collections.*;version="1.0.6", \
+  com.github.hypfvieh.common.*;version="1.0.6", \
+  com.github.hypfvieh.system.*;version="1.0.6", \
+  com.github.hypfvieh.threads.*;version="1.0.6", \
+  com.github.hypfvieh.util.*;version="1.0.6", \
+  org.freedesktop.*;version="3.2.1"
 Import-Package: \
-  cx.ath.matthew.debug.*;resolution:=optional,\
-  cx.ath.matthew.utils.*;resolution:=optional,\
-  com.sun.security.auth.module.*;resolution:=optional,\
   *
 

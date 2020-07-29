@@ -530,6 +530,17 @@
 
     <feature name="opensmarthouse-core-io-transport-dbus" version="${project.version}">
         <feature>opensmarthouse-core-base</feature>
+        <feature prerequisite="true">wrap</feature>
+        <bundle>mvn:com.github.jnr/jffi/1.2.23/jar/complete</bundle>
+        <bundle>mvn:com.github.jnr/jffi/1.2.23/jar/native</bundle>
+        <bundle>mvn:com.github.jnr/jnr-constants/0.9.15</bundle>
+        <bundle>wrap:mvn:com.github.jnr/jnr-a64asm/1.0.0</bundle>
+        <bundle>wrap:mvn:com.github.jnr/jnr-x86asm/1.0.2</bundle>
+        <bundle>mvn:com.github.jnr/jnr-enxio/0.28</bundle>
+        <bundle>mvn:com.github.jnr/jnr-ffi/2.1.15</bundle>
+        <bundle>mvn:com.github.jnr/jnr-posix/3.0.58</bundle>
+        <bundle>mvn:com.github.jnr/jnr-unixsocket/0.33</bundle>
+        <bundle>mvn:org.ow2.asm/asm/7.1</bundle>
         <bundle>mvn:org.opensmarthouse.core.bundles/org.opensmarthouse.core.io.transport.dbus/${project.version}</bundle>
     </feature>
 
