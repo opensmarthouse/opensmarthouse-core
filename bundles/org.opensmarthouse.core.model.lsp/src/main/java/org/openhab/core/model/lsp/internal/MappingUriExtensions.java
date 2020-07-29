@@ -55,12 +55,10 @@ public class MappingUriExtensions extends UriExtensions {
         return removeTrailingSlash(configPathURI.toString());
     }
 
-    @Override
     public String toPath(URI uri) {
         return toPath(java.net.URI.create(uri.toString()));
     }
 
-    @Override
     public String toPath(java.net.URI uri) {
         java.net.URI ret = uri;
         try {

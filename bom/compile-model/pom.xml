@@ -14,14 +14,6 @@
 
   <name>OpenSmartHouse Core | BOM | Compile Model</name>
 
-  <properties>
-    <classgraph.version>4.8.35.v20190528-1517</classgraph.version>
-    <emf.1.version>2.12.0</emf.1.version>
-    <emf.3.version>2.11.0</emf.3.version>
-    <emf.mwe.version>1.5.0</emf.mwe.version>
-    <emf.mwe2.version>2.11.0</emf.mwe2.version>
-  </properties>
-
   <dependencies>
     <dependency>
       <groupId>org.eclipse.xtext</groupId>
@@ -40,37 +32,37 @@
     <dependency>
       <groupId>org.eclipse.emf</groupId>
       <artifactId>org.eclipse.emf.common</artifactId>
-      <version>${emf.1.version}</version>
+      <version>${emf-common.version}</version>
       <scope>compile</scope>
     </dependency>
     <dependency>
       <groupId>org.eclipse.emf</groupId>
       <artifactId>org.eclipse.emf.ecore</artifactId>
-      <version>${emf.1.version}</version>
+      <version>${emf-ecore.version}</version>
       <scope>compile</scope>
     </dependency>
     <dependency>
       <groupId>org.eclipse.emf</groupId>
       <artifactId>org.eclipse.emf.ecore.change</artifactId>
-      <version>${emf.3.version}</version>
+      <version>${emf-ecore-change.version}</version>
       <scope>compile</scope>
     </dependency>
     <dependency>
       <groupId>org.eclipse.emf</groupId>
       <artifactId>org.eclipse.emf.ecore.xmi</artifactId>
-      <version>${emf.1.version}</version>
+      <version>${emf-ecore-xmi.version}</version>
       <scope>compile</scope>
     </dependency>
     <dependency>
       <groupId>org.eclipse.emf</groupId>
       <artifactId>org.eclipse.emf.codegen</artifactId>
-      <version>${emf.3.version}</version>
+      <version>${emf-codegen.version}</version>
       <scope>compile</scope>
     </dependency>
     <dependency>
       <groupId>org.eclipse.emf</groupId>
       <artifactId>org.eclipse.emf.codegen.ecore</artifactId>
-      <version>${emf.1.version}</version>
+      <version>${emf-ecore.version}</version>
       <scope>compile</scope>
     </dependency>
 
@@ -78,7 +70,7 @@
     <dependency>
       <groupId>org.eclipse.emf</groupId>
       <artifactId>org.eclipse.emf.mwe2.launch</artifactId>
-      <version>${emf.mwe2.version}</version>
+      <version>${emf-mwe2.version}</version>
     </dependency>
 
     <dependency>
@@ -87,10 +79,6 @@
       <version>${xtext.version}</version>
       <scope>compile</scope>
       <exclusions>
-        <exclusion>
-          <groupId>io.github.classgraph</groupId>
-          <artifactId>classgraph</artifactId>
-        </exclusion>
         <exclusion>
           <groupId>org.eclipse.platform</groupId>
           <artifactId>org.eclipse.osgi</artifactId>
@@ -101,8 +89,8 @@
     <!-- Xtext is using a classgraph artifact from Eclipse Orbit -->
     <!-- Karaf feature validation fails when using classgraph from Maven Central -->
     <dependency>
-      <groupId>org.eclipse.orbit.bundles</groupId>
-      <artifactId>io.github.classgraph</artifactId>
+      <groupId>io.github.classgraph</groupId>
+      <artifactId>classgraph</artifactId>
       <version>${classgraph.version}</version>
     </dependency>
 

@@ -25,7 +25,7 @@
         <feature dependency="true">opensmarthouse.tp-base</feature>
         <feature dependency="true">opensmarthouse.tp-gson</feature>
 
-        <requirement>opensmarthouse.tp;filter:="(&amp;(feature=xtext)(version&gt;=2.19.0)(!(version&gt;=2.20.0)))"</requirement>
+        <requirement>opensmarthouse.tp;filter:="(&amp;(feature=xtext)(version&gt;=2.22.0)(!(version&gt;=2.23.0)))"</requirement>
         <feature dependency="true">opensmarthouse.tp-xtext</feature>
 
         <requirement>opensmarthouse.tp;filter:="(feature=jax-rs)"</requirement>
@@ -731,10 +731,12 @@
     </feature>
 
     <feature name="opensmarthouse-core-model-lsp" version="${project.version}">
-        <requirement>opensmarthouse.tp;filter:="(&amp;(feature=xtext-ide)(version&gt;=2.19.0)(!(version&gt;=2.20.0)))"</requirement>
+        <requirement>opensmarthouse.tp;filter:="(&amp;(feature=xtext-ide)(version&gt;=2.22.0)(!(version&gt;=2.23.0)))"</requirement>
         <feature dependency="true">opensmarthouse.tp-xtext-ide</feature>
 
-        <requirement>opensmarthouse.tp;filter:="(&amp;(feature=lsp4j)(version&gt;=0.8.0)(!(version&gt;=0.9.0)))"</requirement>
+        <!-- fails for no reason
+        <requirement>opensmarthouse.tp;filter:="(&amp;(feature=lsp4j)(version&gt;=0.9.0)(!(version&gt;=0.10.0)))"</requirement>
+        -->
         <feature dependency="true">opensmarthouse.tp-lsp4j</feature>
 
         <feature>opensmarthouse-core-model-item-ide</feature>

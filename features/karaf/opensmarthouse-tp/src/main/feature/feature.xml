@@ -203,9 +203,9 @@
     </feature>
 
     <feature name="opensmarthouse.tp-lsp4j" description="Eclipse LSP4J" version="${project.version}">
-        <capability>opensmarthouse.tp;feature=lsp4j;version=0.8.0</capability>
-        <bundle>mvn:org.eclipse.lsp4j/org.eclipse.lsp4j/0.8.0</bundle>
-        <bundle>mvn:org.eclipse.lsp4j/org.eclipse.lsp4j.jsonrpc/0.8.0</bundle>
+        <capability>opensmarthouse.tp;feature=lsp4j;version=0.9.0</capability>
+        <bundle>mvn:org.eclipse.lsp4j/org.eclipse.lsp4j/0.9.0</bundle>
+        <bundle>mvn:org.eclipse.lsp4j/org.eclipse.lsp4j.jsonrpc/0.9.0</bundle>
 
         <feature dependency="true">opensmarthouse.tp-gson</feature>
         <feature dependency="true">opensmarthouse.tp-xtext</feature>
@@ -225,26 +225,30 @@
 
     <feature name="opensmarthouse.tp-xtext" description="Xtext - Language Engineering Made Easy"
         version="${project.version}">
-        <capability>opensmarthouse.tp;feature=xtext;version=2.19.0</capability>
+        <capability>opensmarthouse.tp;feature=xtext;version=${xtext.version}</capability>
 
-        <bundle>mvn:org.eclipse.xtext/org.eclipse.xtext/2.19.0</bundle>
+        <bundle>mvn:org.eclipse.xtext/org.eclipse.xtext/${xtext.version}</bundle>
 
+        <!-- some day we will be able mock up Xtext and Karaf/Felix resolver with below
+        <feature prerequisite="true">wrap</feature>
+        <bundle dependency="true">wrap:mvn:io.github.classgraph/classgraph/${classgraph.version}$overwrite=merge&amp;Bundle-SymbolicName=io.github.classgraph</bundle>
+         -->
         <bundle dependency="true">mvn:org.eclipse.orbit.bundles/io.github.classgraph/4.8.35.v20190528-1517</bundle>
 
-        <bundle dependency="true">mvn:org.eclipse.emf/org.eclipse.emf.common/2.12.0</bundle>
-        <bundle dependency="true">mvn:org.eclipse.emf/org.eclipse.emf.ecore/2.12.0</bundle>
-        <bundle dependency="true">mvn:org.eclipse.emf/org.eclipse.emf.ecore.change/2.11.0</bundle>
-        <bundle dependency="true">mvn:org.eclipse.emf/org.eclipse.emf.ecore.xmi/2.12.0</bundle>
-        <bundle dependency="true">mvn:org.eclipse.xtext/org.eclipse.xtext.common.types/2.19.0</bundle>
+        <bundle dependency="true">mvn:org.eclipse.emf/org.eclipse.emf.common/${emf-common.version}</bundle>
+        <bundle dependency="true">mvn:org.eclipse.emf/org.eclipse.emf.ecore/${emf-ecore.version}</bundle>
+        <bundle dependency="true">mvn:org.eclipse.emf/org.eclipse.emf.ecore.change/${emf-ecore-change.version}</bundle>
+        <bundle dependency="true">mvn:org.eclipse.emf/org.eclipse.emf.ecore.xmi/${emf-ecore-xmi.version}</bundle>
+        <bundle dependency="true">mvn:org.eclipse.xtext/org.eclipse.xtext.common.types/${xtext.version}</bundle>
 
         <bundle dependency="true">mvn:javax.annotation/javax.annotation-api/1.2</bundle>
 
-        <bundle dependency="true">mvn:org.eclipse.xtext/org.eclipse.xtext.xbase/2.19.0</bundle>
-        <bundle dependency="true">mvn:org.eclipse.xtext/org.eclipse.xtext.xbase.lib/2.19.0</bundle>
-        <bundle dependency="true">mvn:org.eclipse.xtext/org.eclipse.xtext.smap/2.19.0</bundle>
-        <bundle dependency="true">mvn:org.eclipse.xtext/org.eclipse.xtext.util/2.19.0</bundle>
-        <bundle dependency="true">mvn:org.eclipse.xtend/org.eclipse.xtend.lib/2.19.0</bundle>
-        <bundle dependency="true">mvn:org.eclipse.xtend/org.eclipse.xtend.lib.macro/2.19.0</bundle>
+        <bundle dependency="true">mvn:org.eclipse.xtext/org.eclipse.xtext.xbase/${xtext.version}</bundle>
+        <bundle dependency="true">mvn:org.eclipse.xtext/org.eclipse.xtext.xbase.lib/${xtext.version}</bundle>
+        <bundle dependency="true">mvn:org.eclipse.xtext/org.eclipse.xtext.smap/${xtext.version}</bundle>
+        <bundle dependency="true">mvn:org.eclipse.xtext/org.eclipse.xtext.util/${xtext.version}</bundle>
+        <bundle dependency="true">mvn:org.eclipse.xtend/org.eclipse.xtend.lib/${xtext.version}</bundle>
+        <bundle dependency="true">mvn:org.eclipse.xtend/org.eclipse.xtend.lib.macro/${xtext.version}</bundle>
 
         <bundle dependency="true">mvn:com.google.guava/failureaccess/1.0.1</bundle>
         <bundle dependency="true">mvn:com.google.guava/guava/27.1-jre</bundle>
@@ -264,16 +268,16 @@
 
         <!-- Add ASM package -->
         <!-- org.eclipse.xtext.common.types is using Require-Bundle -->
-        <bundle dependency="true" start-level="20">mvn:org.ow2.asm/asm/7.1</bundle>
+        <bundle dependency="true" start-level="20">mvn:org.ow2.asm/asm/8.0.1</bundle>
     </feature>
 
     <feature name="opensmarthouse.tp-xtext-ide" description="Xtext - IDE Support" version="${project.version}">
-        <capability>opensmarthouse.tp;feature=xtext-ide;version=2.19.0</capability>
+        <capability>opensmarthouse.tp;feature=xtext-ide;version=2.22.0</capability>
         <feature dependency="true">opensmarthouse.tp-xtext</feature>
 
         <!-- Support for the Language Server Protocol -->
-        <bundle dependency="true">mvn:org.eclipse.xtext/org.eclipse.xtext.ide/2.19.0</bundle>
-        <bundle dependency="true">mvn:org.eclipse.xtext/org.eclipse.xtext.xbase.ide/2.19.0</bundle>
+        <bundle dependency="true">mvn:org.eclipse.xtext/org.eclipse.xtext.ide/2.22.0</bundle>
+        <bundle dependency="true">mvn:org.eclipse.xtext/org.eclipse.xtext.xbase.ide/2.22.0</bundle>
     </feature>
 
     <feature name="opensmarthouse.tp-swagger-jax-rs" description="JAX-RS Whiteboard Swagger" version="${project.version}">
