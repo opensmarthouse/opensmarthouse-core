@@ -34,11 +34,6 @@
       </dependency>
       <dependency>
         <groupId>org.opensmarthouse.core.bundles</groupId>
-        <artifactId>org.opensmarthouse.core.automation.module.script</artifactId>
-        <version>${project.version}</version>
-      </dependency>
-      <dependency>
-        <groupId>org.opensmarthouse.core.bundles</groupId>
         <artifactId>org.opensmarthouse.core.boot</artifactId>
         <version>${project.version}</version>
       </dependency>
@@ -85,11 +80,6 @@
       <dependency>
         <groupId>org.opensmarthouse.core.bundles</groupId>
         <artifactId>org.opensmarthouse.core.thing.console</artifactId>
-        <version>${project.version}</version>
-      </dependency>
-      <dependency>
-        <groupId>org.opensmarthouse.core.bundles</groupId>
-        <artifactId>org.opensmarthouse.core.thing.core</artifactId>
         <version>${project.version}</version>
       </dependency>
       <dependency>

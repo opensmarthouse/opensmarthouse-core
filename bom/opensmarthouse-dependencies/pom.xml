@@ -176,14 +176,6 @@
         <type>xml</type>
       </dependency>
 
-      <dependency>
-        <groupId>org.apache.karaf.features</groupId>
-        <artifactId>standard</artifactId>
-        <version>${karaf.compile.version}</version>
-        <classifier>features</classifier>
-        <type>xml</type>
-      </dependency>
-
       <!-- Netty -->
       <dependency>
         <groupId>io.netty</groupId>
