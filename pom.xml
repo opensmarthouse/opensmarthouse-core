@@ -53,6 +53,7 @@
   <properties>
     <!-- This is version tag for published/public openhab packages -->
     <openhab-api.version>3.0.0-SNAPSHOT</openhab-api.version>
+    <opensmarthouse-api.version>${project.version}</opensmarthouse-api.version>
 
     <snapshot.repository-id>zss-snapshots</snapshot.repository-id>
     <snapshot.repository-name>Z-SmartSystems Snapshots</snapshot.repository-name>
@@ -146,7 +147,9 @@ Import-Package: \\
   !*.internal.*,\\
   !*.impl.*, \\
   org.openhab.*;version=${openhab-api.version}},\\
-  org.openhab.core.*;version=${openhab-api.version}
+  org.openhab.core.*;version=${openhab-api.version},\\
+  org.opensmarthouse.*;version=${opensmarthouse-api.version}},\\
+  org.opensmarthouse.core.*;version=${opensmarthouse-api.version}
 -sources: false
 -removeheaders: Require-Capability,Provide-Capability
 -contract: *
