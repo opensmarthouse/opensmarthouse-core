@@ -1,5 +1,5 @@
 variables:
-  SNAPSHOT_REPOSITORY_ID: ""
+  MAVEN_SERVER_ID: ""
   SNAPSHOT_REPOSITORY_URL: ""
   SNAPSHOT_REPOSITORY_NAME: ""
   MAVEN_REPO_USER: ""
@@ -30,7 +30,6 @@ deploy:
       fi
     - mvn $MAVEN_CLI_OPTS $MAVEN_OPTS_EXTRA -s .gitlab/settings.xml
       package org.apache.maven.plugins:maven-deploy-plugin:3.0.0-M1:deploy
-      -Dorg.slf4j.simpleLogger.log.org.apache.maven.cli.transfer.Slf4jMavenTransferListener=debug
       -Dsnapshot.repository-id=${MAVEN_SERVER_ID}
       -Dsnapshot.repository-url=${SNAPSHOT_REPOSITORY_URL}
       -Dsnapshot.repository-name="${SNAPSHOT_REPOSITORY_NAME}"
