@@ -656,6 +656,12 @@
       <!-- Assembly & Features -->
       <dependency>
         <groupId>org.opensmarthouse.core.features.karaf</groupId>
+        <artifactId>framework</artifactId>
+        <version>${project.version}</version>
+        <type>kar</type>
+      </dependency>
+      <dependency>
+        <groupId>org.opensmarthouse.core.features.karaf</groupId>
         <artifactId>org.opensmarthouse.core.features.karaf.opensmarthouse-tp</artifactId>
         <version>${project.version}</version>
         <classifier>features</classifier>
