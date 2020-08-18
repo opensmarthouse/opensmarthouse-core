@@ -12,15 +12,21 @@
  */
 package org.openhab.core.config.core.internal.metadata;
 
-import static org.junit.Assert.*;
-import static org.mockito.ArgumentMatchers.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertTrue;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.when;
 import static org.mockito.MockitoAnnotations.initMocks;
-import static org.openhab.core.config.core.internal.metadata.MetadataConfigDescriptionProviderImpl.*;
+import static org.openhab.core.config.core.internal.metadata.MetadataConfigDescriptionProviderImpl.SCHEME;
+import static org.openhab.core.config.core.internal.metadata.MetadataConfigDescriptionProviderImpl.SEPARATOR;
 
 import java.net.URI;
-import java.util.Arrays;
 import java.util.Collection;
+import java.util.List;
 import java.util.Locale;
 
 import org.junit.Before;
@@ -60,11 +66,11 @@ public class MetadataConfigDescriptionProviderImplTest extends JavaTest {
 
         when(mockProviderRestricted.getNamespace()).thenReturn(RESTRICTED);
         when(mockProviderRestricted.getDescription(any())).thenReturn("Restricted");
-        when(mockProviderRestricted.getParameterOptions(any())).thenReturn(Arrays.asList( //
+        when(mockProviderRestricted.getParameterOptions(any())).thenReturn(List.of( //
                 new ParameterOption("dimmer", "Dimmer"), //
                 new ParameterOption("switch", "Switch") //
         ));
-        when(mockProviderRestricted.getParameters(eq("dimmer"), any())).thenReturn(Arrays.asList( //
+        when(mockProviderRestricted.getParameters(eq("dimmer"), any())).thenReturn(List.of( //
                 ConfigDescriptionParameterBuilder.create("width", Type.INTEGER).build(), //
                 ConfigDescriptionParameterBuilder.create("height", Type.INTEGER).build() //
         ));

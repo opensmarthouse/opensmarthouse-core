@@ -67,7 +67,7 @@ public class ItemUpdaterOSGiTest extends JavaOSGiTest {
 
             @Override
             public Set<String> getSubscribedEventTypes() {
-                return Collections.singleton(ItemStateChangedEvent.TYPE);
+                return Set.of(ItemStateChangedEvent.TYPE);
             }
 
             @Override

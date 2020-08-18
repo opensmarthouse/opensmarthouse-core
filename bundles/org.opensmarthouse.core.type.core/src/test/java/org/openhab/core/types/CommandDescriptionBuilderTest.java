@@ -39,19 +39,19 @@ public class CommandDescriptionBuilderTest {
 
     @Test
     public void builderWithEmptyOptions() {
-        List<CommandOption> options = Collections.emptyList();
+        List<CommandOption> options = List.of();
         assertThat(builder.withCommandOptions(options).build().getCommandOptions(), is(options));
     }
 
     @Test
     public void builderWithOption() {
         CommandOption option = new CommandOption("command", "label");
-        assertThat(builder.withCommandOption(option).build().getCommandOptions(), is(Arrays.asList(option)));
+        assertThat(builder.withCommandOption(option).build().getCommandOptions(), is(List.of(option)));
     }
 
     @Test
     public void builderWithOptions() {
-        List<CommandOption> options = Arrays.asList(new CommandOption("command1", "label1"),
+        List<CommandOption> options = List.of(new CommandOption("command1", "label1"),
                 new CommandOption("command2", "label2"));
         assertThat(builder.withCommandOptions(options).build().getCommandOptions(), is(options));
     }
@@ -59,7 +59,7 @@ public class CommandDescriptionBuilderTest {
     @Test
     public void subsequentBuildsCreateIndependentFragments() {
         CommandDescription commandDescription1 = builder
-                .withCommandOptions(Collections.singletonList(new CommandOption("command", "label"))).build();
+                .withCommandOptions(List.of(new CommandOption("command", "label"))).build();
         CommandDescription commandDescription2 = builder.withCommandOptions(Collections.emptyList()).build();
 
         assertThat(commandDescription1.getCommandOptions(), is(not(commandDescription2.getCommandOptions())));

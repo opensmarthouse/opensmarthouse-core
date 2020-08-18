@@ -197,7 +197,6 @@ public class ItemResource implements RESTResource {
     private UriBuilder uriBuilder(final UriInfo uriInfo, final HttpHeaders httpHeaders) {
         final UriBuilder uriBuilder = uriInfo.getAbsolutePathBuilder();
         respectForwarded(uriBuilder, httpHeaders);
-        uriBuilder.path("{itemName}");
         return uriBuilder;
     }
 
@@ -215,6 +214,8 @@ public class ItemResource implements RESTResource {
             @QueryParam("fields") @Parameter(description = "limit output to the given fields (comma separated)") @Nullable String fields) {
         final Locale locale = localeService.getLocale(language);
         final Set<String> namespaces = splitAndFilterNamespaces(namespaceSelector, locale);
+        final UriBuilder uriBuilder = uriBuilder(uriInfo, httpHeaders);
+        uriBuilder.path("{itemName}");
 
         Stream<EnrichedItemDTO> itemStream = getItems(type, tags).stream() //
                 .map(item -> EnrichedItemDTOMapper.map(bundleContext, stateDescriptionFragmentBuilderFactory, item,

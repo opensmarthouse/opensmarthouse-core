@@ -332,7 +332,7 @@ public class AutoUpdateManagerTest {
 
     @Test
     public void testAutoUpdateDisabled() {
-        aum.modified(Collections.singletonMap(AutoUpdateManager.PROPERTY_ENABLED, "false"));
+        aum.modified(Map.of(AutoUpdateManager.PROPERTY_ENABLED, "false"));
 
         aum.receiveCommand(event, item);
 
@@ -342,7 +342,7 @@ public class AutoUpdateManagerTest {
     @Test
     public void testAutoUpdateSendOptimisticUpdates() {
         links.add(new ItemChannelLink("test", CHANNEL_UID_ONLINE_1));
-        aum.modified(Collections.singletonMap(AutoUpdateManager.PROPERTY_SEND_OPTIMISTIC_UPDATES, "true"));
+        aum.modified(Map.of(AutoUpdateManager.PROPERTY_SEND_OPTIMISTIC_UPDATES, "true"));
 
         aum.receiveCommand(event, item);
 

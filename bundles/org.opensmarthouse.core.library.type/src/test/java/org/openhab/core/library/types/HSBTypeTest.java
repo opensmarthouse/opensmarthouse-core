@@ -13,9 +13,13 @@
 package org.openhab.core.library.types;
 
 import static org.hamcrest.CoreMatchers.is;
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertThat;
+import static org.junit.Assert.assertTrue;
 
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 
 import org.junit.Test;
 
@@ -51,8 +55,8 @@ public class HSBTypeTest {
     }
 
     private int convertPercentToByte(PercentType percent) {
-        return percent.value.multiply(BigDecimal.valueOf(255))
-                .divide(BigDecimal.valueOf(100), 2, BigDecimal.ROUND_HALF_UP).intValue();
+        return percent.value.multiply(BigDecimal.valueOf(255)).divide(BigDecimal.valueOf(100), 2, RoundingMode.HALF_UP)
+                .intValue();
     }
 
     private void compareHsbToRgbValues(String hsbValues, int red, int green, int blue) {

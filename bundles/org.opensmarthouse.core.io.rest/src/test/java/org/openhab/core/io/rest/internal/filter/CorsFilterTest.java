@@ -12,13 +12,23 @@
  */
 package org.openhab.core.io.rest.internal.filter;
 
-import static java.util.Collections.*;
+import static java.util.Collections.singletonMap;
 import static java.util.stream.Collectors.toList;
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 import static org.mockito.Mockito.when;
-import static org.openhab.core.io.rest.internal.filter.CorsFilter.*;
+import static org.openhab.core.io.rest.internal.filter.CorsFilter.ACCEPTED_HTTP_METHODS;
+import static org.openhab.core.io.rest.internal.filter.CorsFilter.ACCESS_CONTROL_ALLOW_HEADERS;
+import static org.openhab.core.io.rest.internal.filter.CorsFilter.ACCESS_CONTROL_ALLOW_METHODS_HEADER;
+import static org.openhab.core.io.rest.internal.filter.CorsFilter.ACCESS_CONTROL_ALLOW_ORIGIN_HEADER;
+import static org.openhab.core.io.rest.internal.filter.CorsFilter.ACCESS_CONTROL_REQUEST_METHOD;
+import static org.openhab.core.io.rest.internal.filter.CorsFilter.HTTP_GET_METHOD;
+import static org.openhab.core.io.rest.internal.filter.CorsFilter.HTTP_OPTIONS_METHOD;
+import static org.openhab.core.io.rest.internal.filter.CorsFilter.ORIGIN_HEADER;
+import static org.openhab.core.io.rest.internal.filter.CorsFilter.VARY_HEADER;
 
 import java.io.IOException;
+import java.util.List;
 import java.util.stream.Stream;
 
 import javax.ws.rs.container.ContainerRequestContext;
@@ -162,13 +172,13 @@ public class CorsFilterTest {
             String requestHeadersValue) {
         MultivaluedMap<String, String> headers = new MultivaluedHashMap<>();
         if (originValue != null) {
-            headers.put(ORIGIN_HEADER, singletonList(originValue));
+            headers.put(ORIGIN_HEADER, List.of(originValue));
         }
         if (requestMethodValue != null) {
-            headers.put(ACCESS_CONTROL_REQUEST_METHOD, singletonList(requestMethodValue));
+            headers.put(ACCESS_CONTROL_REQUEST_METHOD, List.of(requestMethodValue));
         }
         if (requestHeadersValue != null) {
-            headers.put(ACCESS_CONTROL_REQUEST_HEADERS, singletonList(requestHeadersValue));
+            headers.put(ACCESS_CONTROL_REQUEST_HEADERS, List.of(requestHeadersValue));
         }
 
         when(requestContext.getHeaders()).thenReturn(headers);

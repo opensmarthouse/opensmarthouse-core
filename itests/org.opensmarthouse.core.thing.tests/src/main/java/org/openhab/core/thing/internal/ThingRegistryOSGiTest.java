@@ -92,11 +92,7 @@ public class ThingRegistryOSGiTest extends JavaOSGiTest {
 
             @Override
             public Set<String> getSubscribedEventTypes() {
-                Set<String> types = new HashSet<>();
-                types.add(ThingAddedEvent.TYPE);
-                types.add(ThingRemovedEvent.TYPE);
-                types.add(ThingUpdatedEvent.TYPE);
-                return types;
+                return Set.of(ThingAddedEvent.TYPE, ThingRemovedEvent.TYPE, ThingUpdatedEvent.TYPE);
             }
 
             @Override
@@ -163,7 +159,7 @@ public class ThingRegistryOSGiTest extends JavaOSGiTest {
 
             @Override
             public Collection<Thing> getAll() {
-                return Collections.singleton(thing);
+                return Set.of(thing);
             }
 
             @Override
@@ -174,9 +170,7 @@ public class ThingRegistryOSGiTest extends JavaOSGiTest {
 
         ThingRegistry thingRegistry = getService(ThingRegistry.class);
 
-        Map<String, Object> parameters = new HashMap<>();
-        parameters.put("param1", "value1");
-        parameters.put("param2", 1);
+        Map<String, Object> parameters = Map.ofEntries(entry("param1", "value1"), entry("param2", 1));
 
         thingRegistry.updateConfiguration(thingUID, parameters);
 

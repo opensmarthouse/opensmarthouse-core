@@ -72,7 +72,7 @@ public class GenericItemTest {
         ItemStateChangedEvent change = captor.getValue();
 
         assertEquals(item.getName(), change.getItemName());
-        assertEquals("smarthome/items/member1/statechanged", change.getTopic());
+        assertEquals("openhab/items/member1/statechanged", change.getTopic());
         assertEquals(oldState, change.getOldItemState());
         assertEquals(item.getState(), change.getItemState());
         assertEquals(ItemStateChangedEvent.TYPE, change.getType());
@@ -157,7 +157,7 @@ public class GenericItemTest {
 
             @Override
             public List<CommandOption> getCommandOptions() {
-                return Arrays.asList(new CommandOption("ALERT", "Alert"), new CommandOption("REBOOT", "Reboot"));
+                return List.of(new CommandOption("ALERT", "Alert"), new CommandOption("REBOOT", "Reboot"));
             }
         });
         item.setCommandDescriptionService(commandDescriptionService);
@@ -175,7 +175,7 @@ public class GenericItemTest {
 
                     @Override
                     public List<CommandOption> getCommandOptions() {
-                        return Arrays.asList(new CommandOption("C1", "Command 1"), new CommandOption("C2", "Command 2"),
+                        return List.of(new CommandOption("C1", "Command 1"), new CommandOption("C2", "Command 2"),
                                 new CommandOption("C3", "Command 3"));
                     }
                 });

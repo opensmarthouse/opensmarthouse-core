@@ -19,12 +19,9 @@ import static org.openhab.core.thing.firmware.Constants.*;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Collections;
 import java.util.List;
 import java.util.Locale;
 import java.util.Set;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 import org.eclipse.jdt.annotation.NonNullByDefault;
 import org.eclipse.jdt.annotation.Nullable;
@@ -86,12 +83,12 @@ public class FirmwareRegistryOSGiTest extends JavaOSGiTest {
         @Override
         public @Nullable Set<Firmware> getFirmwares(Thing thing, @Nullable Locale locale) {
             if (!thing.equals(thing1)) {
-                return Collections.emptySet();
+                return Set.of();
             }
             if (Locale.ENGLISH.equals(locale)) {
-                return Stream.of(FW111_EN, FW112_EN).collect(Collectors.toSet());
+                return Set.of(FW111_EN, FW112_EN);
             } else {
-                return Stream.of(FW111_DE, FW112_DE).collect(Collectors.toSet());
+                return Set.of(FW111_DE, FW112_DE);
             }
         }
 

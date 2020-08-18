@@ -12,7 +12,9 @@
  */
 package org.openhab.core.transform;
 
-import static java.nio.file.StandardWatchEventKinds.*;
+import static java.nio.file.StandardWatchEventKinds.ENTRY_DELETE;
+import static java.nio.file.StandardWatchEventKinds.ENTRY_MODIFY;
+import static java.nio.file.StandardWatchEventKinds.OVERFLOW;
 
 import java.io.File;
 import java.io.IOException;
@@ -30,8 +32,8 @@ import java.util.concurrent.ConcurrentHashMap;
 
 import org.eclipse.jdt.annotation.NonNullByDefault;
 import org.eclipse.jdt.annotation.Nullable;
-import org.openhab.core.config.core.ConfigConstants;
 import org.openhab.core.i18n.LocaleProvider;
+import org.opensmarthouse.core.OpenSmartHouse;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.ServiceReference;
 import org.osgi.util.tracker.ServiceTracker;
@@ -293,7 +295,7 @@ public abstract class AbstractFileTransformationService<T> implements Transforma
      * Returns the path to the root of the transformation folder
      */
     protected String getSourcePath() {
-        return ConfigConstants.getConfigFolder() + File.separator + TransformationService.TRANSFORM_FOLDER_NAME
+        return OpenSmartHouse.getConfigFolder() + File.separator + TransformationService.TRANSFORM_FOLDER_NAME
                 + File.separator;
     }
 }

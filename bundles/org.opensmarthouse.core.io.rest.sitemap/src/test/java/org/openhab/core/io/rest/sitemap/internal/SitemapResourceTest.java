@@ -25,9 +25,9 @@ import static org.mockito.MockitoAnnotations.initMocks;
 
 import java.math.BigDecimal;
 import java.util.Collection;
-import java.util.Collections;
 import java.util.List;
 import java.util.Locale;
+import java.util.Set;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.core.HttpHeaders;
@@ -168,7 +168,7 @@ public class SitemapResourceTest extends JavaTest {
         }).start();
 
         // non-null is sufficient here.
-        when(headers.getRequestHeader(HTTP_HEADER_X_ATMOSPHERE_TRANSPORT)).thenReturn(Collections.emptyList());
+        when(headers.getRequestHeader(HTTP_HEADER_X_ATMOSPHERE_TRANSPORT)).thenReturn(List.of());
 
         Response response = sitemapResource.getPageData(headers, null, SITEMAP_MODEL_NAME, SITEMAP_NAME, null, false);
 
@@ -189,7 +189,7 @@ public class SitemapResourceTest extends JavaTest {
         }).start();
 
         // non-null is sufficient here.
-        when(headers.getRequestHeader(HTTP_HEADER_X_ATMOSPHERE_TRANSPORT)).thenReturn(Collections.emptyList());
+        when(headers.getRequestHeader(HTTP_HEADER_X_ATMOSPHERE_TRANSPORT)).thenReturn(List.of());
 
         Response response = sitemapResource.getPageData(headers, null, SITEMAP_MODEL_NAME, SITEMAP_NAME, null, false);
 
@@ -210,7 +210,7 @@ public class SitemapResourceTest extends JavaTest {
         }).start();
 
         // non-null is sufficient here.
-        when(headers.getRequestHeader(HTTP_HEADER_X_ATMOSPHERE_TRANSPORT)).thenReturn(Collections.emptyList());
+        when(headers.getRequestHeader(HTTP_HEADER_X_ATMOSPHERE_TRANSPORT)).thenReturn(List.of());
 
         Response response = sitemapResource.getPageData(headers, null, SITEMAP_MODEL_NAME, SITEMAP_NAME, null, false);
 
@@ -231,7 +231,7 @@ public class SitemapResourceTest extends JavaTest {
         }).start();
 
         // non-null is sufficient here.
-        when(headers.getRequestHeader(HTTP_HEADER_X_ATMOSPHERE_TRANSPORT)).thenReturn(Collections.emptyList());
+        when(headers.getRequestHeader(HTTP_HEADER_X_ATMOSPHERE_TRANSPORT)).thenReturn(List.of());
 
         Response response = sitemapResource.getPageData(headers, null, SITEMAP_MODEL_NAME, SITEMAP_NAME, null, false);
 
@@ -363,7 +363,7 @@ public class SitemapResourceTest extends JavaTest {
     }
 
     private void configureSitemapProviderMock() {
-        when(sitemapProvider.getSitemapNames()).thenReturn(Collections.singleton(SITEMAP_MODEL_NAME));
+        when(sitemapProvider.getSitemapNames()).thenReturn(Set.of(SITEMAP_MODEL_NAME));
         when(sitemapProvider.getSitemap(SITEMAP_MODEL_NAME)).thenReturn(defaultSitemap);
     }
 
@@ -375,12 +375,12 @@ public class SitemapResourceTest extends JavaTest {
 
         @Override
         public List<Class<? extends State>> getAcceptedDataTypes() {
-            return Collections.emptyList();
+            return List.of();
         }
 
         @Override
         public List<Class<? extends Command>> getAcceptedCommandTypes() {
-            return Collections.emptyList();
+            return List.of();
         }
     }
 }

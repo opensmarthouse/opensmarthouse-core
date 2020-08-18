@@ -17,6 +17,7 @@ import static org.junit.Assert.*;
 
 import java.io.ByteArrayInputStream;
 import java.math.BigDecimal;
+import java.nio.charset.StandardCharsets;
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.Set;
@@ -159,7 +160,8 @@ public class DSLRuleProviderTest extends JavaOSGiTest {
                 "   logInfo('Test', 'Test')\n" + //
                 "end\n\n";
 
-        modelRepository.addOrRefreshModel(TESTMODEL_NAME, new ByteArrayInputStream(model.getBytes()));
+        modelRepository.addOrRefreshModel(TESTMODEL_NAME,
+                new ByteArrayInputStream(model.getBytes(StandardCharsets.UTF_8)));
         Collection<Rule> actualRules = dslRuleProvider.getAll();
 
         assertThat(actualRules.size(), is(1));

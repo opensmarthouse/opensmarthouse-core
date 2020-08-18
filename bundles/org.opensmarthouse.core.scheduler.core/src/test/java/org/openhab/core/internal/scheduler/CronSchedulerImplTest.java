@@ -60,7 +60,7 @@ public class CronSchedulerImplTest {
         cronScheduler.schedule(foo -> {
             s.release();
             ref.set(foo.get("foo"));
-        }, Collections.singletonMap("foo", "bar"), "#\n" //
+        }, Map.of("foo", "bar"), "#\n" //
                 + "\n" //
                 + " foo = bar \n" //
                 + "# bla bla foo=foo\n" //
@@ -76,7 +76,7 @@ public class CronSchedulerImplTest {
     public void testAddRemoveScheduler() throws InterruptedException {
         Semaphore s = new Semaphore(0);
         CronJob cronJob = m -> s.release();
-        Map<String, Object> map = Collections.singletonMap(CronJob.CRON, "* * * * * *");
+        Map<String, Object> map = Map.of(CronJob.CRON, "* * * * * *");
         cronScheduler.addSchedule(cronJob, map);
         s.acquire();
         cronScheduler.removeSchedule(cronJob);

@@ -113,7 +113,7 @@ public class SysFsUsbSerialScannerTest {
     public void testNonReadableDeviceFilesAreSkipped() throws IOException {
         createDevice("ttyUSB0", 0xABCD, 0X1234, "sample manufacturer", "sample product", "123-456-789", 0,
                 "interfaceDesc");
-        setPosixFilePermissions(devPath.resolve("ttyUSB0"), new HashSet<>(asList(OWNER_WRITE)));
+        setPosixFilePermissions(devPath.resolve("ttyUSB0"), Set.of(OWNER_WRITE));
         assertThat(scanner.scan(), is(empty()));
     }
 
@@ -121,7 +121,7 @@ public class SysFsUsbSerialScannerTest {
     public void testNonWritableDeviceFilesAreSkipped() throws IOException {
         createDevice("ttyUSB0", 0xABCD, 0X1234, "sample manufacturer", "sample product", "123-456-789", 0,
                 "interfaceDesc");
-        setPosixFilePermissions(devPath.resolve("ttyUSB0"), new HashSet<>(asList(OWNER_READ)));
+        setPosixFilePermissions(devPath.resolve("ttyUSB0"), Set.of(OWNER_READ));
         assertThat(scanner.scan(), is(empty()));
     }
 
@@ -194,17 +194,17 @@ public class SysFsUsbSerialScannerTest {
         createDirectories(serialDevicePath);
 
         // Create the symlink into the USB device folder structure
-        if (!Arrays.asList(deviceCreationOptions).contains(DeviceCreationOption.NON_USB_DEVICE)) {
+        if (!List.of(deviceCreationOptions).contains(DeviceCreationOption.NON_USB_DEVICE)) {
             createSymbolicLink(sysfsTtyPath.resolve(serialPortName), serialDevicePath);
         } else {
             createSymbolicLink(sysfsTtyPath.resolve(serialPortName), devPath);
         }
 
         // Create the files containing information about the USB device
-        if (!Arrays.asList(deviceCreationOptions).contains(DeviceCreationOption.NO_VENDOR_ID)) {
+        if (!List.of(deviceCreationOptions).contains(DeviceCreationOption.NO_VENDOR_ID)) {
             write(createFile(usbDevicePath.resolve("idVendor")), toHexString(vendorId).getBytes());
         }
-        if (!Arrays.asList(deviceCreationOptions).contains(DeviceCreationOption.NO_PRODUCT_ID)) {
+        if (!List.of(deviceCreationOptions).contains(DeviceCreationOption.NO_PRODUCT_ID)) {
             write(createFile(usbDevicePath.resolve("idProduct")), toHexString(productId).getBytes());
         }
         if (manufacturer != null) {
@@ -218,7 +218,7 @@ public class SysFsUsbSerialScannerTest {
         }
 
         // Create the files containing information about the USB interface
-        if (!Arrays.asList(deviceCreationOptions).contains(DeviceCreationOption.NO_INTERFACE_NUMBER)) {
+        if (!List.of(deviceCreationOptions).contains(DeviceCreationOption.NO_INTERFACE_NUMBER)) {
             write(createFile(usbInterfacePath.resolve("bInterfaceNumber")), toHexString(interfaceNumber).getBytes());
         }
         if (interfaceDescription != null) {

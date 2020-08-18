@@ -101,6 +101,7 @@
     </feature>
 
     <feature name="opensmarthouse-core-transform" description="Open SmartHouse Core: Transform" version="${project.version}">
+        <feature>opensmarthouse-core-boot</feature>
         <feature>opensmarthouse-core-net</feature>
         <feature>opensmarthouse-core-i18n</feature>
         <feature>opensmarthouse-core-registry</feature>
@@ -183,7 +184,10 @@
     </feature>
 
     <feature name="opensmarthouse-core-audio" description="Open SmartHouse Core: Audio" version="${project.version}">
-        <feature dependency="true">opensmarthouse-core-library-type</feature>
+        <feature dependency="true">opensmarthouse.tp-javazoom</feature>
+        <feature>opensmarthouse-core-config-core</feature>
+        <feature>opensmarthouse-core-io-console</feature>
+        <feature>opensmarthouse-core-io-http</feature>
         <bundle>mvn:org.opensmarthouse.core.bundles/org.opensmarthouse.core.audio/${project.version}</bundle>
     </feature>
 
@@ -761,7 +765,7 @@
 
     <feature name="opensmarthouse-core-storage-json" version="${project.version}">
         <feature dependency="true">opensmarthouse.tp-gson</feature>
-        <feature>opensmarthouse-core-config</feature>
+        <feature>opensmarthouse-core-boot</feature>
         <feature>opensmarthouse-core-item</feature>
 
         <bundle>mvn:org.opensmarthouse.core.bundles/org.opensmarthouse.core.storage.json/${project.version}</bundle>

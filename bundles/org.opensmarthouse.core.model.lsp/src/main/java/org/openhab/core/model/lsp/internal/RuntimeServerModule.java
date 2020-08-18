@@ -14,6 +14,7 @@ package org.openhab.core.model.lsp.internal;
 
 import java.util.concurrent.ExecutorService;
 
+import org.opensmarthouse.core.OpenSmartHouse;
 import org.eclipse.lsp4j.services.LanguageServer;
 import org.eclipse.xtext.ide.ExecutorServiceProvider;
 import org.eclipse.xtext.ide.server.DefaultProjectDescriptionFactory;
@@ -26,7 +27,6 @@ import org.eclipse.xtext.ide.server.UriExtensions;
 import org.eclipse.xtext.resource.IContainer;
 import org.eclipse.xtext.resource.IResourceServiceProvider;
 import org.eclipse.xtext.resource.containers.ProjectDescriptionBasedContainerManager;
-import org.openhab.core.config.core.ConfigConstants;
 import org.openhab.core.model.script.ScriptServiceUtil;
 import org.openhab.core.model.script.engine.ScriptEngine;
 
@@ -51,7 +51,7 @@ public class RuntimeServerModule extends AbstractModule {
     protected void configure() {
         binder().bind(ExecutorService.class).toProvider(ExecutorServiceProvider.class);
 
-        bind(UriExtensions.class).toInstance(new MappingUriExtensions(ConfigConstants.getConfigFolder()));
+        bind(UriExtensions.class).toInstance(new MappingUriExtensions(OpenSmartHouse.getConfigFolder()));
         bind(LanguageServer.class).to(LanguageServerImpl.class);
         bind(IResourceServiceProvider.Registry.class).toProvider(new RegistryProvider(scriptServiceUtil, scriptEngine));
         bind(IMultiRootWorkspaceConfigFactory.class).to(MultiProjectWorkspaceConfigFactory.class);

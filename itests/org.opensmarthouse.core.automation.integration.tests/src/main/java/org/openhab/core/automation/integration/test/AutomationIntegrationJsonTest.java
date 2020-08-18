@@ -128,7 +128,7 @@ public class AutomationIntegrationJsonTest extends JavaOSGiTest {
 
             @Override
             public Set<String> getSubscribedEventTypes() {
-                return Collections.singleton(RuleStatusInfoEvent.TYPE);
+                return Set.of(RuleStatusInfoEvent.TYPE);
             }
 
             @Override
@@ -304,7 +304,7 @@ public class AutomationIntegrationJsonTest extends JavaOSGiTest {
 
             @Override
             public Set<String> getSubscribedEventTypes() {
-                return Collections.singleton(ItemCommandEvent.TYPE);
+                return Set.of(ItemCommandEvent.TYPE);
             }
 
             @Override
@@ -326,7 +326,7 @@ public class AutomationIntegrationJsonTest extends JavaOSGiTest {
         waitForAssert(() -> {
             assertThat(itemEvent, is(notNullValue()));
         }, 3000, 100);
-        assertThat(itemEvent.getTopic(), is(equalTo("smarthome/items/myLampItem/command")));
+        assertThat(itemEvent.getTopic(), is(equalTo("openhab/items/myLampItem/command")));
         assertThat(((ItemCommandEvent) itemEvent).getItemCommand(), is(OnOffType.ON));
     }
 
@@ -353,7 +353,7 @@ public class AutomationIntegrationJsonTest extends JavaOSGiTest {
 
             @Override
             public Set<String> getSubscribedEventTypes() {
-                return Collections.singleton(ItemCommandEvent.TYPE);
+                return Set.of(ItemCommandEvent.TYPE);
             }
 
             @Override

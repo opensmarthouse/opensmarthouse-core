@@ -12,7 +12,6 @@
  */
 package org.openhab.core.automation.internal.module.handler;
 
-import java.util.Collections;
 import java.util.Dictionary;
 import java.util.HashMap;
 import java.util.Hashtable;
@@ -73,13 +72,13 @@ public class ThingStatusTriggerHandler extends BaseTriggerModuleHandler implemen
         this.status = (String) module.getConfiguration().get(CFG_STATUS);
         this.previousStatus = (String) module.getConfiguration().get(CFG_PREVIOUS_STATUS);
         if (UPDATE_MODULE_TYPE_ID.equals(module.getTypeUID())) {
-            this.types = Collections.singleton(ThingStatusInfoEvent.TYPE);
+            this.types = Set.of(ThingStatusInfoEvent.TYPE);
         } else {
-            this.types = Collections.singleton(ThingStatusInfoChangedEvent.TYPE);
+            this.types = Set.of(ThingStatusInfoChangedEvent.TYPE);
         }
         this.bundleContext = bundleContext;
         Dictionary<String, Object> properties = new Hashtable<>();
-        properties.put("event.topics", "smarthome/things/" + thingUID + "/*");
+        properties.put("event.topics", "openhab/things/" + thingUID + "/*");
         eventSubscriberRegistration = this.bundleContext.registerService(EventSubscriber.class.getName(), this,
                 properties);
     }
@@ -144,6 +143,6 @@ public class ThingStatusTriggerHandler extends BaseTriggerModuleHandler implemen
     @Override
     public boolean apply(Event event) {
         logger.trace("->FILTER: {}: {}", event.getTopic(), thingUID);
-        return event.getTopic().contains("smarthome/things/" + thingUID + "/");
+        return event.getTopic().contains("openhab/things/" + thingUID + "/");
     }
 }

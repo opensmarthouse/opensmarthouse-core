@@ -23,6 +23,10 @@
       <artifactId>org.opensmarthouse.core.i18n</artifactId>
     </dependency>
     <dependency>
+      <groupId>org.opensmarthouse.core.bundles</groupId>
+      <artifactId>org.opensmarthouse.core.auth</artifactId>
+    </dependency>
+    <dependency>
       <groupId>org.eclipse.orbit.bundles</groupId>
       <artifactId>com.google.gson</artifactId>
     </dependency>

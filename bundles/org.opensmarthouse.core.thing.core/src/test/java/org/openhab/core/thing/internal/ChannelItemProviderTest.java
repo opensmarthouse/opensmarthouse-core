@@ -12,16 +12,24 @@
  */
 package org.openhab.core.thing.internal;
 
-import static org.mockito.ArgumentMatchers.*;
-import static org.mockito.Mockito.*;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.eq;
+import static org.mockito.ArgumentMatchers.same;
+import static org.mockito.Mockito.doAnswer;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.never;
+import static org.mockito.Mockito.only;
+import static org.mockito.Mockito.reset;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 import static org.mockito.MockitoAnnotations.initMocks;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
+import java.util.Set;
 import java.util.concurrent.TimeUnit;
 
 import org.eclipse.jdt.annotation.NonNull;
@@ -52,7 +60,8 @@ import org.openhab.core.thing.type.ChannelTypeRegistry;
 public class ChannelItemProviderTest {
 
     private static final ChannelUID CHANNEL_UID = new ChannelUID("test:test:test:test");
-    private static final Channel CHANNEL = new ChannelBuilderFactoryImpl().create(CHANNEL_UID, CoreItemFactory.NUMBER).build();
+    private static final Channel CHANNEL = new ChannelBuilderFactoryImpl().create(CHANNEL_UID, CoreItemFactory.NUMBER)
+            .build();
 
     private static final ThingTypeUID THING_TYPE_UID = new ThingTypeUID("test:test");
     private static final Thing THING = ThingBuilderImpl.create(THING_TYPE_UID, "test").withChannel(CHANNEL).build();
@@ -196,8 +205,8 @@ public class ChannelItemProviderTest {
             provider.itemRegistryListener.beforeAdding((Item) invocation.getArguments()[1]);
             return null;
         }).when(listenerMock).added(same(provider), any(Item.class));
-        when(linkRegistryMock.getBoundChannels(eq(ITEM_NAME))).thenReturn(Collections.singleton(CHANNEL_UID));
-        when(linkRegistryMock.getLinks(eq(CHANNEL_UID))).thenReturn(Collections.singleton(LINK));
+        when(linkRegistryMock.getBoundChannels(eq(ITEM_NAME))).thenReturn(Set.of(CHANNEL_UID));
+        when(linkRegistryMock.getLinks(eq(CHANNEL_UID))).thenReturn(Set.of(LINK));
     }
 
     private ChannelItemProvider createProvider() {

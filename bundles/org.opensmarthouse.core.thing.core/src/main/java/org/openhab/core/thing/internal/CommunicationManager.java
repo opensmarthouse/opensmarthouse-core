@@ -12,9 +12,6 @@
  */
 package org.openhab.core.thing.internal;
 
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -71,6 +68,7 @@ import org.openhab.core.thing.type.ChannelTypeUID;
 import org.openhab.core.types.Command;
 import org.openhab.core.types.State;
 import org.openhab.core.types.Type;
+import org.openhab.core.types.registry.TypeFactory;
 import org.openhab.core.types.util.UnitUtils;
 import org.osgi.service.component.annotations.Activate;
 import org.osgi.service.component.annotations.Component;
@@ -94,8 +92,8 @@ public class CommunicationManager implements EventSubscriber, RegistryChangeList
     // the timeout to use for any item event processing
     public static final long THINGHANDLER_EVENT_TIMEOUT = TimeUnit.SECONDS.toMillis(30);
 
-    private static final Set<String> SUBSCRIBED_EVENT_TYPES = Collections.unmodifiableSet(
-            new HashSet<>(Arrays.asList(ItemStateEvent.TYPE, ItemCommandEvent.TYPE, ChannelTriggeredEvent.TYPE)));
+    private static final Set<String> SUBSCRIBED_EVENT_TYPES = Set.of(ItemStateEvent.TYPE, ItemCommandEvent.TYPE,
+            ChannelTriggeredEvent.TYPE);
 
     private final Logger logger = LoggerFactory.getLogger(CommunicationManager.class);
 
@@ -108,6 +106,7 @@ public class CommunicationManager implements EventSubscriber, RegistryChangeList
     private final EventPublisher eventPublisher;
     private final SafeCaller safeCaller;
     private final ThingRegistry thingRegistry;
+    private final TypeFactory typeFactory;
 
     @Activate
     public CommunicationManager(final @Reference AutoUpdateManager autoUpdateManager,
@@ -118,7 +117,8 @@ public class CommunicationManager implements EventSubscriber, RegistryChangeList
             final @Reference ItemStateConverter itemStateConverter, //
             final @Reference EventPublisher eventPublisher, //
             final @Reference SafeCaller safeCaller, //
-            final @Reference ThingRegistry thingRegistry) {
+            final @Reference ThingRegistry thingRegistry, //
+            final @Reference TypeFactory typeFactory) {
         this.autoUpdateManager = autoUpdateManager;
         this.channelTypeRegistry = channelTypeRegistry;
         this.defaultProfileFactory = defaultProfileFactory;
@@ -128,6 +128,7 @@ public class CommunicationManager implements EventSubscriber, RegistryChangeList
         this.eventPublisher = eventPublisher;
         this.safeCaller = safeCaller;
         this.thingRegistry = thingRegistry;
+        this.typeFactory = typeFactory;
     }
 
     private final Set<ItemFactory> itemFactories = new CopyOnWriteArraySet<>();
@@ -187,7 +188,7 @@ public class CommunicationManager implements EventSubscriber, RegistryChangeList
     }
 
     private ProfileCallback createCallback(ItemChannelLink link) {
-        return new ProfileCallbackImpl(eventPublisher, safeCaller, itemStateConverter, link,
+        return new ProfileCallbackImpl(eventPublisher, safeCaller, itemStateConverter, typeFactory, link,
                 thingUID -> getThing(thingUID), itemName -> getItem(itemName));
     }
 

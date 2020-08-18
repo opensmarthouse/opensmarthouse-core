@@ -15,6 +15,8 @@ package org.openhab.core.io.rest.internal.resources.beans;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.eclipse.jdt.annotation.NonNullByDefault;
+import org.openhab.core.i18n.LocaleProvider;
 import org.openhab.core.io.rest.RESTConstants;
 import org.opensmarthouse.core.OpenSmartHouse;
 
@@ -25,13 +27,20 @@ import org.opensmarthouse.core.OpenSmartHouse;
  * @author Kai Kreuzer - Initial contribution
  * @author Yannick Schaus - Add runtime info
  */
+@NonNullByDefault
 public class RootBean {
 
     public final String version = RESTConstants.API_VERSION;
 
+    public final String locale;
+
     public final RuntimeInfo runtimeInfo = new RuntimeInfo();
 
     public final List<Links> links = new ArrayList<>();
+
+    public RootBean(LocaleProvider localeProvider) {
+        this.locale = localeProvider.getLocale().toString();
+    }
 
     public static class RuntimeInfo {
         public final String version = OpenSmartHouse.getVersion();

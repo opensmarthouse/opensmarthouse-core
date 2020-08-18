@@ -12,7 +12,6 @@
  */
 package org.openhab.core.automation.internal.module.handler;
 
-import java.util.Collections;
 import java.util.Dictionary;
 import java.util.HashMap;
 import java.util.Hashtable;
@@ -61,10 +60,10 @@ public class ItemCommandTriggerHandler extends BaseTriggerModuleHandler implemen
         super(module);
         this.itemName = (String) module.getConfiguration().get(CFG_ITEMNAME);
         this.command = (String) module.getConfiguration().get(CFG_COMMAND);
-        this.types = Collections.singleton(ItemCommandEvent.TYPE);
+        this.types = Set.of(ItemCommandEvent.TYPE);
         this.bundleContext = bundleContext;
         Dictionary<String, Object> properties = new Hashtable<>();
-        this.topic = "smarthome/items/" + itemName + "/command";
+        this.topic = "openhab/items/" + itemName + "/command";
         properties.put("event.topics", topic);
         eventSubscriberRegistration = this.bundleContext.registerService(EventSubscriber.class.getName(), this,
                 properties);

@@ -103,13 +103,11 @@ public class UsbSerialDiscoveryServiceTest extends JavaOSGiTest {
         ThingTypeUID thingTypeC = new ThingTypeUID("g:h:i");
 
         UsbSerialDiscoveryParticipant discoveryParticipantA = mock(UsbSerialDiscoveryParticipant.class);
-        when(discoveryParticipantA.getSupportedThingTypeUIDs())
-                .thenReturn(new HashSet<>(asList(thingTypeA, thingTypeB)));
+        when(discoveryParticipantA.getSupportedThingTypeUIDs()).thenReturn(Set.of(thingTypeA, thingTypeB));
         registerService(discoveryParticipantA);
 
         UsbSerialDiscoveryParticipant discoveryParticipantB = mock(UsbSerialDiscoveryParticipant.class);
-        when(discoveryParticipantB.getSupportedThingTypeUIDs())
-                .thenReturn(new HashSet<>(asList(thingTypeB, thingTypeC)));
+        when(discoveryParticipantB.getSupportedThingTypeUIDs()).thenReturn(Set.of(thingTypeB, thingTypeC));
         registerService(discoveryParticipantB);
 
         assertThat(usbSerialDiscoveryService.getSupportedThingTypes(),

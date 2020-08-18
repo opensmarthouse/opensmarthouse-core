@@ -13,9 +13,15 @@
 package org.openhab.core.library.types;
 
 import static org.hamcrest.CoreMatchers.is;
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertThat;
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
 import static org.openhab.core.library.unit.MetricPrefix.CENTI;
 
+import java.lang.reflect.InvocationTargetException;
 import java.math.BigDecimal;
 import java.text.DecimalFormatSymbols;
 
@@ -82,8 +88,9 @@ public class QuantityTypeTest {
     }
 
     @Test
-    public void testReflectiveInstantiation() throws InstantiationException, IllegalAccessException {
-        QuantityType.class.newInstance();
+    public void testReflectiveInstantiation() throws InstantiationException, IllegalAccessException,
+            IllegalArgumentException, InvocationTargetException, NoSuchMethodException, SecurityException {
+        QuantityType.class.getDeclaredConstructor().newInstance();
     }
 
     @SuppressWarnings({ "unchecked", "rawtypes" })

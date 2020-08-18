@@ -144,7 +144,7 @@ public class JsonStorageTest extends JavaTest {
             configuration.put("testBigDecimal", new BigDecimal(12));
             configuration.put("testBoolean", true);
             configuration.put("testString", "hello world");
-            configuration.put("multiInt", Arrays.asList(1, 2, 3));
+            configuration.put("multiInt", List.of(1, 2, 3));
 
             InnerObject inner = new InnerObject();
             inner.configuration.put("testChildLong", Long.valueOf("12"));

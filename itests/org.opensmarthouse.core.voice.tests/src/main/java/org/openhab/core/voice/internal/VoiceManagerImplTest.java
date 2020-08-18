@@ -50,6 +50,7 @@ public class VoiceManagerImplTest extends JavaOSGiTest {
     private static final String CONFIG_DEFAULT_TTS = "defaultTTS";
     private static final String CONFIG_KEYWORD = "keyword";
     private VoiceManagerImpl voiceManager;
+    private AudioManager audioManager;
     private SinkStub sink;
     private TTSServiceStub ttsService;
     private VoiceStub voice;
@@ -77,14 +78,24 @@ public class VoiceManagerImplTest extends JavaOSGiTest {
         registerService(sink);
         registerService(voice);
 
+        ConfigurationAdmin configAdmin = super.getService(ConfigurationAdmin.class);
+
+        audioManager = getService(AudioManager.class);
+        assertNotNull(audioManager);
+
+        Dictionary<String, Object> audioConfig = new Hashtable<>();
+        audioConfig.put("defaultSink", sink.getId());
+        Configuration configuration = configAdmin.getConfiguration("org.openhab.audio", null);
+        configuration.update(audioConfig);
+        configuration.update();
+
+        voiceManager = getService(VoiceManager.class, VoiceManagerImpl.class);
+        assertNotNull(voiceManager);
+
         Dictionary<String, Object> voiceConfig = new Hashtable<>();
         voiceConfig.put(CONFIG_DEFAULT_TTS, ttsService.getId());
-        ConfigurationAdmin configAdmin = super.getService(ConfigurationAdmin.class);
-        Configuration configuration = configAdmin.getConfiguration(VoiceManagerImpl.CONFIGURATION_PID);
+        configuration = configAdmin.getConfiguration(VoiceManagerImpl.CONFIGURATION_PID);
         configuration.update(voiceConfig);
-
-        audioManager = new AudioManagerStub();
-        registerService(audioManager);
     }
 
     @Test

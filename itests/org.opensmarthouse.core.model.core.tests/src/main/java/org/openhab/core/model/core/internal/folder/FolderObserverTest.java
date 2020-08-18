@@ -25,7 +25,6 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardOpenOption;
-import java.util.Collections;
 import java.util.Comparator;
 import java.util.Dictionary;
 import java.util.Hashtable;
@@ -411,7 +410,10 @@ public class FolderObserverTest extends JavaOSGiTest {
             File file = new File(UNWATCHED_DIRECTORY, filename);
             file.createNewFile();
             Files.setAttribute(file.toPath(), "dos:hidden", true);
-            Files.move(file.toPath(), EXISTING_SUBDIR_PATH.toPath());
+            try {
+                Files.move(file.toPath(), EXISTING_SUBDIR_PATH.toPath());
+            } catch (java.nio.file.FileAlreadyExistsException e) {
+            }
             try (Stream<Path> walk = Files.walk(UNWATCHED_DIRECTORY.toPath())) {
                 walk.sorted(Comparator.reverseOrder()).map(Path::toFile).forEach(File::delete);
             }
@@ -456,8 +458,7 @@ public class FolderObserverTest extends JavaOSGiTest {
          */
         @Override
         public Iterable<String> getAllModelNamesOfType(String modelType) {
-            List<String> arrayOfModelsToBeRemoved = Collections.singletonList(MOCK_MODEL_TO_BE_REMOVED);
-            return arrayOfModelsToBeRemoved;
+            return List.of(MOCK_MODEL_TO_BE_REMOVED);
         }
 
         @Override
@@ -486,7 +487,7 @@ public class FolderObserverTest extends JavaOSGiTest {
 
         @Override
         public Set<String> removeAllModelsOfType(String modelType) {
-            return Collections.emptySet();
+            return Set.of();
         }
     }
 }

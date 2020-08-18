@@ -26,7 +26,6 @@ import java.nio.file.SimpleFileVisitor;
 import java.nio.file.attribute.BasicFileAttributes;
 import java.nio.file.attribute.FileTime;
 import java.time.Instant;
-import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
@@ -181,29 +180,27 @@ public class ConfigDispatcherOSGiTest extends JavaOSGiTest {
         /*
          * Assert that the configuration is updated with a list containing one value for a file in the root directory.
          */
-        verifyValuesOfConfigurationProperty("local.default.pid", "default.property", 1,
-                Collections.singletonList("default.value"));
+        verifyValuesOfConfigurationProperty("local.default.pid", "default.property", 1, List.of("default.value"));
 
         /*
          * Assert that the configuration is updated with a list containing one value for a file in the services
          * directory.
          */
-        verifyValuesOfConfigurationProperty("local.service.first.pid", "service.property", 1,
-                Collections.singletonList("service.value"));
+        verifyValuesOfConfigurationProperty("local.service.first.pid", "service.property", 1, List.of("service.value"));
 
         /*
          * Assert that the configuration is updated with a list containing more than one values for a file in the
          * services directory.
          */
         verifyValuesOfConfigurationProperty("local.service.second.pid", "service.property", 3,
-                Arrays.asList("first value", "second value", "third value"));
+                List.of("first value", "second value", "third value"));
 
         /*
          * Assert that the configuration is updated with a list containing trimmed values for a file in the
          * services directory.
          */
         verifyValuesOfConfigurationProperty("local.service.third.pid", "service.property", 3,
-                Arrays.asList("first value", "second value", "third value"));
+                List.of("first value", "second value", "third value"));
 
         /*
          * Assert that the configuration is updated with an empty list for a file in the services directory.
@@ -936,16 +933,16 @@ public class ConfigDispatcherOSGiTest extends JavaOSGiTest {
     private Configuration getConfigurationWithContext(String pidWithContext) {
         String pid = null;
         String configContext = null;
-        if (pidWithContext.contains(ConfigConstants.SERVICE_CONTEXT_MARKER)) {
-            pid = pidWithContext.split(ConfigConstants.SERVICE_CONTEXT_MARKER)[0];
-            configContext = pidWithContext.split(ConfigConstants.SERVICE_CONTEXT_MARKER)[1];
+        if (pidWithContext.contains(OpenHAB.SERVICE_CONTEXT_MARKER)) {
+            pid = pidWithContext.split(OpenHAB.SERVICE_CONTEXT_MARKER)[0];
+            configContext = pidWithContext.split(OpenHAB.SERVICE_CONTEXT_MARKER)[1];
         } else {
             throw new IllegalArgumentException("PID does not have a context");
         }
         Configuration[] configs = null;
         try {
-            configs = configAdmin.listConfigurations("(&(service.factoryPid=" + pid + ")("
-                    + ConfigConstants.SERVICE_CONTEXT + "=" + configContext + "))");
+            configs = configAdmin.listConfigurations(
+                    "(&(service.factoryPid=" + pid + ")(" + OpenHAB.SERVICE_CONTEXT + "=" + configContext + "))");
         } catch (IOException e) {
             throw new IllegalArgumentException(
                     "IOException occured while retrieving configuration for pid " + pidWithContext, e);

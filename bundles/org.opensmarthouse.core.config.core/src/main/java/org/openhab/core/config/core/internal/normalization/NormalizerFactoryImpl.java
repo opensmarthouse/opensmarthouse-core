@@ -12,12 +12,9 @@
  */
 package org.openhab.core.config.core.internal.normalization;
 
-import java.util.AbstractMap.SimpleEntry;
-import java.util.Collections;
+import static java.util.Map.entry;
+
 import java.util.Map;
-import java.util.Map.Entry;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 import org.openhab.core.config.core.ConfigDescriptionParameter;
 import org.openhab.core.config.core.ConfigDescriptionParameter.Type;
@@ -36,12 +33,9 @@ import org.osgi.service.component.annotations.Component;
 @Component(service = NormalizerFactory.class)
 public final class NormalizerFactoryImpl implements NormalizerFactory {
 
-    private static final Map<Type, Normalizer> NORMALIZERS = Collections.unmodifiableMap(Stream
-            .of(new SimpleEntry<>(Type.BOOLEAN, new BooleanNormalizer()),
-                    new SimpleEntry<>(Type.TEXT, new TextNormalizer()),
-                    new SimpleEntry<>(Type.INTEGER, new IntNormalizer()),
-                    new SimpleEntry<>(Type.DECIMAL, new DecimalNormalizer()))
-            .collect(Collectors.toMap(Entry::getKey, Entry::getValue)));
+    private static final Map<Type, Normalizer> NORMALIZERS = Map.ofEntries(entry(Type.BOOLEAN, new BooleanNormalizer()),
+            entry(Type.TEXT, new TextNormalizer()), entry(Type.INTEGER, new IntNormalizer()),
+            entry(Type.DECIMAL, new DecimalNormalizer()));
 
     /**
      * Returns the {@link Normalizer} for the type of the given config description parameter.
@@ -50,6 +44,7 @@ public final class NormalizerFactoryImpl implements NormalizerFactory {
      * @return the corresponding {@link Normalizer} (not null)
      * @throws IllegalArgumentException if the given config description parameter is null
      */
+    @Override
     public Normalizer getNormalizer(ConfigDescriptionParameter configDescriptionParameter) {
         if (configDescriptionParameter == null) {
             throw new IllegalArgumentException("The config description parameter must not be null.");

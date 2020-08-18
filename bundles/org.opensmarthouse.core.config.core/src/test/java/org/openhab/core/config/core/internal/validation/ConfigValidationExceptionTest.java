@@ -58,11 +58,11 @@ public class ConfigValidationExceptionTest {
             MAX);
 
     private static final ConfigValidationMessage MSG1 = createMessage(PARAM1, TXT_DEFAULT1,
-            MessageKey.PARAMETER_REQUIRED.key, emptyList());
+            MessageKey.PARAMETER_REQUIRED.key, List.of());
     private static final ConfigValidationMessage MSG2 = createMessage(PARAM2, TXT_DEFAULT2,
-            MessageKey.MAX_VALUE_TXT_VIOLATED.key, singletonList(MAX));
+            MessageKey.MAX_VALUE_TXT_VIOLATED.key, List.of(MAX));
 
-    private static final List<ConfigValidationMessage> ALL = Stream.of(MSG1, MSG2).collect(toList());
+    private static final List<ConfigValidationMessage> ALL = List.of(MSG1, MSG2);
 
     private static final Bundle BUNDLE = Mockito.mock(Bundle.class);
 

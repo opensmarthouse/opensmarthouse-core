@@ -71,8 +71,7 @@ public class SyntheticBundleInstaller {
     /**
      * A list of default extensions to be included in the synthetic bundle.
      */
-    private static final Set<String> DEFAULT_EXTENSIONS = Collections
-            .unmodifiableSet(Stream.of("*.xml", "*.properties", "*.json", ".keep").collect(Collectors.toSet()));
+    private static final Set<String> DEFAULT_EXTENSIONS = Set.of("*.xml", "*.properties", "*.json", ".keep");
 
     /**
      * Install synthetic bundle, denoted by its name, into the test runtime (by using the given bundle context). Only

@@ -201,8 +201,7 @@ public class CommunicationManagerOSGiTest extends JavaOSGiTest {
 
             @Override
             public Collection<ItemChannelLink> getAll() {
-                return Arrays.asList(LINK_1_S1, LINK_1_S2, LINK_2_S2, LINK_1_T1, LINK_1_T2, LINK_2_T2, LINK_3_S3,
-                        LINK_4_S4);
+                return List.of(LINK_1_S1, LINK_1_S2, LINK_2_S2, LINK_1_T1, LINK_1_T2, LINK_2_T2, LINK_3_S3, LINK_4_S4);
             }
         });
 

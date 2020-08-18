@@ -12,7 +12,8 @@
  */
 package org.openhab.core.karaf.internal.command;
 
-import static org.apache.karaf.shell.support.ansi.SimpleAnsi.*;
+import static org.apache.karaf.shell.support.ansi.SimpleAnsi.INTENSITY_BOLD;
+import static org.apache.karaf.shell.support.ansi.SimpleAnsi.INTENSITY_NORMAL;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -48,7 +49,7 @@ import org.slf4j.LoggerFactory;
  *
  * @author Davy Vanherbergen - Initial contribution
  */
-@Command(scope = "openhab", name = "install-service", description = "Install openHAB as a system service.")
+@Command(scope = "openhab", name = "install-service", description = "Install OpenSmartHouse as a system service.")
 @Service
 public class InstallServiceCommand implements Action {
 
@@ -58,7 +59,7 @@ public class InstallServiceCommand implements Action {
 
     private static final String SERVICE_DISPLAY_NAME = "openHAB runtime";
 
-    private static final String SERVICE_DESCRIPTION = "System service for openHAB.";
+    private static final String SERVICE_DESCRIPTION = "System service for OpenSmartHouse.";
 
     private static final String SERVICE_START_TYPE = "AUTO_START";
 
@@ -346,14 +347,14 @@ public class InstallServiceCommand implements Action {
         System.out.println("");
         System.out.println("To test your service: ");
         System.out.println("> launchctl load ~/Library/LaunchAgents/" + serviceFile.getName());
-        System.out.println("> launchctl start openHAB");
-        System.out.println("> launchctl stop openHAB");
+        System.out.println("> launchctl start OpenSmartHouse");
+        System.out.println("> launchctl stop OpenSmartHouse");
         System.out.println("");
         System.out.println(
                 "After restart of your session or system you can use the launchctl command to start and stop your service");
         System.out.println("");
         System.out.println("For removing the service call:");
-        System.out.println("> launchctl remove openHAB");
+        System.out.println("> launchctl remove OpenSmartHouse");
     }
 
     /**

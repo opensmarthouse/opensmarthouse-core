@@ -12,10 +12,8 @@
  */
 package org.openhab.core.automation.internal.module.handler;
 
-import java.util.Collections;
 import java.util.Dictionary;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.Hashtable;
 import java.util.Map;
 import java.util.Set;
@@ -68,16 +66,13 @@ public class ItemStateTriggerHandler extends BaseTriggerModuleHandler implements
         this.state = (String) module.getConfiguration().get(CFG_STATE);
         this.previousState = (String) module.getConfiguration().get(CFG_PREVIOUS_STATE);
         if (UPDATE_MODULE_TYPE_ID.equals(module.getTypeUID())) {
-            this.types = Collections.singleton(ItemStateEvent.TYPE);
+            this.types = Set.of(ItemStateEvent.TYPE);
         } else {
-            Set<String> set = new HashSet<>();
-            set.add(ItemStateChangedEvent.TYPE);
-            set.add(GroupItemStateChangedEvent.TYPE);
-            this.types = Collections.unmodifiableSet(set);
+            this.types = Set.of(ItemStateChangedEvent.TYPE, GroupItemStateChangedEvent.TYPE);
         }
         this.bundleContext = bundleContext;
         Dictionary<String, Object> properties = new Hashtable<>();
-        properties.put("event.topics", "smarthome/items/" + itemName + "/*");
+        properties.put("event.topics", "openhab/items/" + itemName + "/*");
         eventSubscriberRegistration = this.bundleContext.registerService(EventSubscriber.class.getName(), this,
                 properties);
     }
@@ -143,6 +138,6 @@ public class ItemStateTriggerHandler extends BaseTriggerModuleHandler implements
     @Override
     public boolean apply(Event event) {
         logger.trace("->FILTER: {}:{}", event.getTopic(), itemName);
-        return event.getTopic().contains("smarthome/items/" + itemName + "/");
+        return event.getTopic().contains("openhab/items/" + itemName + "/");
     }
 }

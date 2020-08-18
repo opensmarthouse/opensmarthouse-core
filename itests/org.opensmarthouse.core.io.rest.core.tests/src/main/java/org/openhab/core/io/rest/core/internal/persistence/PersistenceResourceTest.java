@@ -66,8 +66,8 @@ public class PersistenceResourceTest {
             final int year = i;
             items.add(new HistoricItem() {
                 @Override
-                public Date getTimestamp() {
-                    return new Date(year - 1900, 0, 1);
+                public ZonedDateTime getTimestamp() {
+                    return ZonedDateTime.of(year, 1, 1, 0, 0, 0, 0, ZoneId.systemDefault());
                 }
 
                 @Override

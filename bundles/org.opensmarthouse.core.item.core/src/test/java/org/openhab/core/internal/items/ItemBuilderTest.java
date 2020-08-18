@@ -24,8 +24,8 @@ import static org.mockito.Mockito.verifyNoMoreInteractions;
 import static org.mockito.Mockito.when;
 import static org.mockito.MockitoAnnotations.initMocks;
 
-import java.util.Arrays;
 import java.util.Collections;
+import java.util.List;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -87,14 +87,14 @@ public class ItemBuilderTest {
 
         Item res = itemBuilderFactory.newItemBuilder("String", "test") //
                 .withCategory("category") //
-                .withGroups(Arrays.asList("a", "b")) //
+                .withGroups(List.of("a", "b")) //
                 .withLabel("label") //
                 .build();
 
         assertSame(mockItem, res);
         verify(mockFactory).createItem(eq("String"), eq("test"));
         verify(mockItem).setCategory(eq("category"));
-        verify(mockItem).addGroupNames(eq(Arrays.asList("a", "b")));
+        verify(mockItem).addGroupNames(eq(List.of("a", "b")));
         verify(mockItem).setLabel(eq("label"));
     }
 
@@ -105,7 +105,7 @@ public class ItemBuilderTest {
 
         Item resItem = itemBuilderFactory.newItemBuilder("Group", "test") //
                 .withCategory("category") //
-                .withGroups(Arrays.asList("a", "b")) //
+                .withGroups(List.of("a", "b")) //
                 .withLabel("label") //
                 .withBaseItem(baseItem)//
                 .withGroupFunction(mockFunction) //
@@ -115,7 +115,7 @@ public class ItemBuilderTest {
         GroupItem res = (GroupItem) resItem;
         verifyNoMoreInteractions(mockFactory);
         assertEquals("category", res.getCategory());
-        assertEquals(Arrays.asList("a", "b"), res.getGroupNames());
+        assertEquals(List.of("a", "b"), res.getGroupNames());
         assertEquals("label", res.getLabel());
         assertSame(mockFunction, res.getFunction());
         assertSame(baseItem, res.getBaseItem());
@@ -127,7 +127,7 @@ public class ItemBuilderTest {
         when(originalItem.getName()).thenReturn("name");
         when(originalItem.getLabel()).thenReturn("label");
         when(originalItem.getCategory()).thenReturn("category");
-        when(originalItem.getGroupNames()).thenReturn(Arrays.asList("a", "b"));
+        when(originalItem.getGroupNames()).thenReturn(List.of("a", "b"));
 
         when(mockFactory.createItem(anyString(), anyString())).thenReturn(mockItem);
 
@@ -136,7 +136,7 @@ public class ItemBuilderTest {
         assertSame(mockItem, res);
         verify(mockFactory).createItem(eq("type"), eq("name"));
         verify(mockItem).setCategory(eq("category"));
-        verify(mockItem).addGroupNames(eq(Arrays.asList("a", "b")));
+        verify(mockItem).addGroupNames(eq(List.of("a", "b")));
         verify(mockItem).setLabel(eq("label"));
     }
 
@@ -155,7 +155,7 @@ public class ItemBuilderTest {
         GroupItem res = (GroupItem) resItem;
         verifyNoMoreInteractions(mockFactory);
         assertEquals("category", res.getCategory());
-        assertEquals(Arrays.asList("a", "b"), res.getGroupNames());
+        assertEquals(List.of("a", "b"), res.getGroupNames());
         assertEquals("label", res.getLabel());
         assertSame(mockFunction, res.getFunction());
         assertSame(baseItem, res.getBaseItem());

@@ -298,4 +298,8 @@
 		<bundle dependency="true">mvn:io.github.classgraph/classgraph/4.8.87</bundle>
     </feature>
 
+    <feature name="opensmarthouse.tp-javazoom" version="${project.version}">
+        <bundle dependency="true">mvn:org.openhab.osgiify/javazoom.jlayer/1.0.1</bundle>
+    </feature>
+
 </features>

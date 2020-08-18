@@ -12,11 +12,14 @@
  */
 package org.openhab.core.automation.internal.module.factory;
 
-import static org.hamcrest.CoreMatchers.*;
+import static org.hamcrest.CoreMatchers.instanceOf;
+import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.junit.Assert.assertThat;
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
-import java.util.Collections;
+import java.util.Map;
 
 import org.eclipse.jdt.annotation.NonNullByDefault;
 import org.junit.Before;
@@ -61,7 +64,7 @@ public class EphemerisModuleHandlerFactoryTest {
     public void testFactoryCreatesModuleHandlerForDaysetCondition() {
         when(moduleMock.getTypeUID()).thenReturn(EphemerisConditionHandler.DAYSET_MODULE_TYPE_ID);
 
-        when(moduleMock.getConfiguration()).thenReturn(new Configuration(Collections.singletonMap("dayset", "school")));
+        when(moduleMock.getConfiguration()).thenReturn(new Configuration(Map.of("dayset", "school")));
         ModuleHandler handler = factory.internalCreate(moduleMock, "My second rule");
         assertThat(handler, is(notNullValue()));
         assertThat(handler, instanceOf(EphemerisConditionHandler.class));
@@ -76,7 +79,7 @@ public class EphemerisModuleHandlerFactoryTest {
         assertThat(handler, is(notNullValue()));
         assertThat(handler, instanceOf(EphemerisConditionHandler.class));
 
-        when(moduleMock.getConfiguration()).thenReturn(new Configuration(Collections.singletonMap("offset", 5)));
+        when(moduleMock.getConfiguration()).thenReturn(new Configuration(Map.of("offset", 5)));
         handler = factory.internalCreate(moduleMock, "My second rule");
         assertThat(handler, is(notNullValue()));
         assertThat(handler, instanceOf(EphemerisConditionHandler.class));

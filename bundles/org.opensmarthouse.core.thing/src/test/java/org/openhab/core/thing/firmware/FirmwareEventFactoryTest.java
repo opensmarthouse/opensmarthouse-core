@@ -12,11 +12,12 @@
  */
 package org.openhab.core.thing.firmware;
 
-import static org.hamcrest.CoreMatchers.*;
+import static org.hamcrest.CoreMatchers.instanceOf;
+import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.collection.IsIterableContainingInAnyOrder.containsInAnyOrder;
 import static org.junit.Assert.assertThat;
 
-import java.util.Arrays;
+import java.util.List;
 import java.util.Set;
 
 import org.junit.Before;
@@ -92,7 +93,7 @@ public class FirmwareEventFactoryTest extends JavaTest {
     public void testSerializationAndDeserializationFirmwareUpdateProgressInfo() throws Exception {
         FirmwareUpdateProgressInfo firmwareUpdateProgressInfo = FirmwareUpdateProgressInfo
                 .createFirmwareUpdateProgressInfo(thingUID, "1.2.3", ProgressStep.UPDATING,
-                        Arrays.asList(ProgressStep.WAITING, ProgressStep.UPDATING), false, 10);
+                        List.of(ProgressStep.WAITING, ProgressStep.UPDATING), false, 10);
         FirmwareUpdateProgressInfoEvent progressInfoEvent = FirmwareEventFactory
                 .createFirmwareUpdateProgressInfoEvent(firmwareUpdateProgressInfo);
 
