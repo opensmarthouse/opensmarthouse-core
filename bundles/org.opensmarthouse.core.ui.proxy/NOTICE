@@ -1,6 +1,17 @@
+<<<<<<< HEAD
 This content is produced and maintained by the openHAB project.
 
 * Project home: https://www.openhab.org
+=======
+This content is produced and maintained by the OpenSmartHouse project.
+
+* Project home: https://opensmarthouse.org
+
+Elements of this bundle are copyright to the following -:
+
+* The Eclipse Foundation, having come from the Eclipse SmartHome project
+* The openHAB project
+>>>>>>> a6d609a7... Update NOTICE file to reflect ESH heritage
 
 == Declared Project Licenses
 
@@ -10,6 +21,7 @@ https://www.eclipse.org/legal/epl-2.0/.
 
 == Source Code
 
+<<<<<<< HEAD
 https://github.com/openhab/openhab-core
 
 
@@ -225,3 +237,6 @@ xchart-2.6.1
    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
    See the License for the specific language governing permissions and
    limitations under the License.
+=======
+https://github.com/opensmarthouse/opensmarthouse-core
+>>>>>>> a6d609a7... Update NOTICE file to reflect ESH heritage

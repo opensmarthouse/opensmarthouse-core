@@ -4,13 +4,13 @@
   <modelVersion>4.0.0</modelVersion>
 
   <parent>
-    <groupId>org.openhab.addons.bundles</groupId>
-    <artifactId>org.openhab.addons.reactor.bundles</artifactId>
+    <groupId>org.opensmarthouse.addons.bundles</groupId>
+    <artifactId>org.opensmarthouse.addons.reactor.bundles</artifactId>
     <version>@${version}</version>
   </parent>
 
   <artifactId>${rootArtifactId}</artifactId>
 
-  <name>openHAB Add-ons :: Bundles :: ${bindingIdCamelCase} Binding</name>
+  <name>OpenSmartHouse Add-ons :: Bundles :: ${bindingIdCamelCase} Binding</name>
 
 </project>

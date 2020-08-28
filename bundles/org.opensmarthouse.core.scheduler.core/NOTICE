@@ -1,6 +1,11 @@
-This content is produced and maintained by the openHAB project.
+This content is produced and maintained by the OpenSmartHouse project.
 
-* Project home: https://www.openhab.org
+* Project home: https://opensmarthouse.org
+
+Elements of this bundle are copyright to the following -:
+
+* The Eclipse Foundation, having come from the Eclipse SmartHome project
+* The openHAB project
 
 == Declared Project Licenses
 
@@ -10,7 +15,7 @@ https://www.eclipse.org/legal/epl-2.0/.
 
 == Source Code
 
-https://github.com/openhab/openhab-core
+https://github.com/opensmarthouse/opensmarthouse-core
 
 
 == Third-party Content
