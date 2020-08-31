@@ -18,6 +18,7 @@
       <plugin>
         <groupId>org.apache.karaf.tooling</groupId>
         <artifactId>karaf-maven-plugin</artifactId>
+        <version>${karaf.tooling.version}</version>
       </plugin>
     </plugins>
   </build>

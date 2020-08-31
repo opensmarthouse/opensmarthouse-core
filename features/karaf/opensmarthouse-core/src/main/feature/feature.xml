@@ -1,8 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
 
-    Copyright (c) 2020-2020 Contributors to the OpenSmartHouse project
-    Copyright (c) 2010-2020 Contributors to the openHAB project
+	Copyright (c) 2019-2020 Contributors to the OpenSmartHouse project
 
     See the NOTICE file(s) distributed with this work for additional
     information.
@@ -21,18 +20,18 @@
     <feature name="opensmarthouse-core-base" description="Open SmartHouse Core" version="${project.version}">
         <details>Open SmartHouse Core Bundles</details>
 
-        <requirement>opensmarthouse.tp;filter:="(feature=base)"</requirement>
-        <feature dependency="true">opensmarthouse.tp-base</feature>
-        <feature dependency="true">opensmarthouse.tp-gson</feature>
+        <requirement>opensmarthouse-tp;filter:="(feature=base)"</requirement>
+        <feature dependency="true">opensmarthouse-tp-base</feature>
+        <feature dependency="true">opensmarthouse-tp-gson</feature>
 
-        <requirement>opensmarthouse.tp;filter:="(&amp;(feature=xtext)(version&gt;=2.22.0)(!(version&gt;=2.23.0)))"</requirement>
-        <feature dependency="true">opensmarthouse.tp-xtext</feature>
+        <requirement>opensmarthouse-tp;filter:="(&amp;(feature=xtext)(version&gt;=2.22.0)(!(version&gt;=2.23.0)))"</requirement>
+        <feature dependency="true">opensmarthouse-tp-xtext</feature>
 
-        <requirement>opensmarthouse.tp;filter:="(feature=jax-rs)"</requirement>
-        <feature dependency="true">opensmarthouse.tp-jax-rs</feature>
+        <requirement>opensmarthouse-tp;filter:="(feature=jax-rs)"</requirement>
+        <feature dependency="true">opensmarthouse-tp-jax-rs</feature>
 
-        <requirement>opensmarthouse.tp;filter:="(feature=httpclient)"</requirement>
-        <feature dependency="true">opensmarthouse.tp-httpclient</feature>
+        <requirement>opensmarthouse-tp;filter:="(feature=httpclient)"</requirement>
+        <feature dependency="true">opensmarthouse-tp-httpclient</feature>
 
         <feature>opensmarthouse-core-config-core</feature>
         <feature>opensmarthouse-core-config-discovery</feature>
@@ -114,7 +113,7 @@
     </feature>
 
     <feature name="opensmarthouse-core-item" description="Open SmartHouse Core: Item" version="${project.version}">
-        <feature dependency="true">opensmarthouse.tp-gson</feature>
+        <feature dependency="true">opensmarthouse-tp-gson</feature>
         <feature>opensmarthouse-core-common</feature>
         <feature>opensmarthouse-core-registry</feature>
         <feature>opensmarthouse-core-i18n</feature>
@@ -123,7 +122,7 @@
     </feature>
 
     <feature name="opensmarthouse-core-i18n" description="Open SmartHouse Core: i18n" version="${project.version}">
-        <feature dependency="true">opensmarthouse.tp-unit-of-measurement</feature>
+        <feature dependency="true">opensmarthouse-tp-unit-of-measurement</feature>
         <feature>opensmarthouse-core-type</feature>
         <feature>opensmarthouse-core-library-type</feature>
         <bundle>mvn:org.opensmarthouse.core.bundles/org.opensmarthouse.core.i18n/${project.version}</bundle>
@@ -136,7 +135,7 @@
     </feature>
 
     <feature name="opensmarthouse-core-library-unit" description="Open SmartHouse Core: Unit Library" version="${project.version}">
-        <feature dependency="true">opensmarthouse.tp-unit-of-measurement</feature>
+        <feature dependency="true">opensmarthouse-tp-unit-of-measurement</feature>
         <feature>opensmarthouse-core-i18n</feature>
         <bundle>mvn:org.opensmarthouse.core.bundles/org.opensmarthouse.core.library.dimension/${project.version}</bundle>
         <bundle>mvn:org.opensmarthouse.core.bundles/org.opensmarthouse.core.library.unit/${project.version}</bundle>
@@ -153,7 +152,7 @@
     </feature>
 
     <feature name="opensmarthouse-core-io-net" description="Open SmartHouse Core: IO HTTP Client" version="${project.version}">
-        <feature dependency="true">opensmarthouse.tp-http</feature>
+        <feature dependency="true">opensmarthouse-tp-http</feature>
         <feature dependency="true">pax-http-whiteboard</feature>
         <feature>opensmarthouse-core-library-type</feature>
 
@@ -184,7 +183,7 @@
     </feature>
 
     <feature name="opensmarthouse-core-audio" description="Open SmartHouse Core: Audio" version="${project.version}">
-        <feature dependency="true">opensmarthouse.tp-javazoom</feature>
+        <feature dependency="true">opensmarthouse-tp-javazoom</feature>
         <feature>opensmarthouse-core-config-core</feature>
         <feature>opensmarthouse-core-io-console</feature>
         <feature>opensmarthouse-core-io-http</feature>
@@ -205,7 +204,7 @@
     </feature>
 
     <feature name="opensmarthouse-core-common" description="Open SmartHouse Core: Common services" version="${project.version}">
-        <feature dependency="true">opensmarthouse.tp-scr</feature>
+        <feature dependency="true">opensmarthouse-tp-scr</feature>
         <bundle>mvn:org.opensmarthouse.core.bundles/org.opensmarthouse.core.common/${project.version}</bundle>
     </feature>
 
@@ -221,12 +220,12 @@
     </feature>
 
     <feature name="opensmarthouse-core-event" description="Open SmartHouse Core: Event API" version="${project.version}">
-        <feature dependency="true">opensmarthouse.tp-gson</feature>
+        <feature dependency="true">opensmarthouse-tp-gson</feature>
         <bundle>mvn:org.opensmarthouse.core.bundles/org.opensmarthouse.core.event/${project.version}</bundle>
     </feature>
 
     <feature name="opensmarthouse-core-event-core" description="Open SmartHouse Core: Event Service" version="${project.version}">
-        <feature dependency="true">opensmarthouse.tp-event</feature>
+        <feature dependency="true">opensmarthouse-tp-event</feature>
         <feature>opensmarthouse-core-event</feature>
         <feature>opensmarthouse-core-common</feature>
         <bundle>mvn:org.opensmarthouse.core.bundles/org.opensmarthouse.core.event.core/${project.version}</bundle>
@@ -263,8 +262,8 @@
     </feature>
 
     <feature name="opensmarthouse-core-auth-oauth2client-core" version="${project.version}">
-        <feature dependency="true">opensmarthouse.tp-gson</feature>
-        <feature dependency="true">opensmarthouse.tp-httpclient</feature>
+        <feature dependency="true">opensmarthouse-tp-gson</feature>
+        <feature dependency="true">opensmarthouse-tp-httpclient</feature>
         <feature>opensmarthouse-core-io-net</feature>
         <feature>opensmarthouse-core-auth-oauth2client</feature>
         <feature>opensmarthouse-core-storage</feature>
@@ -272,7 +271,7 @@
     </feature>
 
     <feature name="opensmarthouse-core-automation" version="${project.version}">
-        <feature dependency="true">opensmarthouse.tp-gson</feature>
+        <feature dependency="true">opensmarthouse-tp-gson</feature>
         <feature>opensmarthouse-core-io-console</feature>
         <feature>opensmarthouse-core-net</feature>
         <feature>opensmarthouse-core-config-core</feature>
@@ -306,10 +305,10 @@
 
     <feature name="opensmarthouse-core-io-rest" version="${project.version}">
         <feature>opensmarthouse-core-boot</feature>
-        <feature>opensmarthouse.tp-jax-rs</feature>
-        <feature>opensmarthouse.tp-gson</feature>
+        <feature>opensmarthouse-tp-jax-rs</feature>
+        <feature>opensmarthouse-tp-gson</feature>
         <feature>opensmarthouse-core-i18n</feature>
-        <feature>opensmarthouse.tp-jax-rs-whiteboard</feature>
+        <feature>opensmarthouse-tp-jax-rs-whiteboard</feature>
         <bundle>mvn:org.opensmarthouse.core.bundles/org.opensmarthouse.core.io.rest/${project.version}</bundle>
     </feature>
 
@@ -328,7 +327,7 @@
     </feature>
 
     <feature name="opensmarthouse-core-config" version="${project.version}">
-        <feature>opensmarthouse.tp-gson</feature>
+        <feature>opensmarthouse-tp-gson</feature>
         <feature>opensmarthouse-core-common</feature>
         <feature>opensmarthouse-core-registry</feature>
         <feature>opensmarthouse-core-i18n</feature>
@@ -336,14 +335,14 @@
     </feature>
 
     <feature name="opensmarthouse-core-config-core" version="${project.version}">
-        <feature dependency="true">opensmarthouse.tp-gson</feature>
+        <feature dependency="true">opensmarthouse-tp-gson</feature>
         <feature>opensmarthouse-core-net</feature>
         <feature>opensmarthouse-core-config</feature>
         <bundle>mvn:org.opensmarthouse.core.bundles/org.opensmarthouse.core.config.core/${project.version}</bundle>
     </feature>
 
     <feature name="opensmarthouse-core-config-xml" version="${project.version}">
-        <feature dependency="true">opensmarthouse.tp-xstream</feature>
+        <feature dependency="true">opensmarthouse-tp-xstream</feature>
         <feature>opensmarthouse-core-config</feature>
         <feature>opensmarthouse-core-service</feature>
         <bundle start-level="75">mvn:org.opensmarthouse.core.bundles/org.opensmarthouse.core.config.xml/${project.version}</bundle>
@@ -359,7 +358,7 @@
     </feature>
 
     <feature name="opensmarthouse-core-config-dispatch" version="${project.version}">
-        <feature dependency="true">opensmarthouse.tp-gson</feature>
+        <feature dependency="true">opensmarthouse-tp-gson</feature>
         <feature>opensmarthouse-core-config</feature>
         <feature>opensmarthouse-core-service</feature>
         <bundle>mvn:org.opensmarthouse.core.bundles/org.opensmarthouse.core.config.dispatch/${project.version}</bundle>
@@ -379,7 +378,7 @@
     </feature>
 
     <feature name="opensmarthouse-core-ephemeris" version="${project.version}">
-        <feature dependency="true">opensmarthouse.tp-jollyday</feature>
+        <feature dependency="true">opensmarthouse-tp-jollyday</feature>
         <feature>opensmarthouse-core-config</feature>
         <feature>opensmarthouse-core-i18n</feature>
         <bundle>mvn:org.opensmarthouse.core.bundles/org.opensmarthouse.core.ephemeris/${project.version}</bundle>
@@ -390,11 +389,11 @@
     </feature>
 
     <feature name="opensmarthouse-core-io-bin2json" description="Binary to JSON converter" version="${project.version}">
-        <feature dependency="true">opensmarthouse.tp-gson</feature>
+        <feature dependency="true">opensmarthouse-tp-gson</feature>
         <feature>opensmarthouse-core-util</feature>
         <bundle>mvn:org.opensmarthouse.core.bundles/org.opensmarthouse.core.io.bin2json/${project.version}</bundle>
-        <requirement>opensmarthouse.tp;filter:="(feature=jbbp)"</requirement>
-        <feature dependency="true">opensmarthouse.tp-jbbp</feature>
+        <requirement>opensmarthouse-tp;filter:="(feature=jbbp)"</requirement>
+        <feature dependency="true">opensmarthouse-tp-jbbp</feature>
     </feature>
 
     <feature name="opensmarthouse-core-thing" description="Thing API" version="${project.version}">
@@ -439,7 +438,7 @@
     </feature>
 
     <feature name="opensmarthouse-core-io-http-auth" version="${project.version}">
-        <feature dependency="true">opensmarthouse.tp-jax-rs</feature>
+        <feature dependency="true">opensmarthouse-tp-jax-rs</feature>
         <feature>opensmarthouse-core-io-http</feature>
         <feature>opensmarthouse-core-auth-jaas</feature>
         <bundle>mvn:org.opensmarthouse.core.bundles/org.opensmarthouse.core.io.http.auth/${project.version}</bundle>
@@ -460,8 +459,8 @@
         <feature>opensmarthouse-core-io-rest</feature>
         <feature>opensmarthouse-core-config</feature>
         <bundle>mvn:org.opensmarthouse.core.bundles/org.opensmarthouse.core.io.rest.auth/${project.version}</bundle>
-        <requirement>opensmarthouse.tp;filter:="(feature=jose4j)"</requirement>
-        <feature dependency="true">opensmarthouse.tp-jose4j</feature>
+        <requirement>opensmarthouse-tp;filter:="(feature=jose4j)"</requirement>
+        <feature dependency="true">opensmarthouse-tp-jose4j</feature>
     </feature>
 
     <feature name="opensmarthouse-core-io-rest-log" version="${project.version}">
@@ -491,7 +490,7 @@
     </feature>
 
     <feature name="opensmarthouse-core-io-rest-sse" version="${project.version}">
-        <feature dependency="true">opensmarthouse.tp-javax-inject</feature>
+        <feature dependency="true">opensmarthouse-tp-javax-inject</feature>
         <feature>opensmarthouse-core-io-rest</feature>
         <feature>opensmarthouse-core-item</feature>
         <feature>opensmarthouse-core-transform</feature>
@@ -528,8 +527,8 @@
     <feature name="opensmarthouse-core-io-transport-coap" version="${project.version}">
         <feature>opensmarthouse-core-base</feature>
 
-        <requirement>opensmarthouse.tp;filter:="(feature=coap)"</requirement>
-        <feature dependency="true">opensmarthouse.tp-coap</feature>
+        <requirement>opensmarthouse-tp;filter:="(feature=coap)"</requirement>
+        <feature dependency="true">opensmarthouse-tp-coap</feature>
     </feature>
 
     <feature name="opensmarthouse-core-io-transport-dbus" version="${project.version}">
@@ -551,16 +550,16 @@
     <feature name="opensmarthouse-core-io-transport-http" version="${project.version}">
         <feature>opensmarthouse-core-base</feature>
 
-        <requirement>opensmarthouse.tp;filter:="(feature=httpclient)"</requirement>
-        <feature dependency="true">opensmarthouse.tp-httpclient</feature>
+        <requirement>opensmarthouse-tp;filter:="(feature=httpclient)"</requirement>
+        <feature dependency="true">opensmarthouse-tp-httpclient</feature>
     </feature>
 
     <feature name="opensmarthouse-core-io-transport-mdns" version="${project.version}">
         <feature>opensmarthouse-core-config-discovery</feature>
         <feature>opensmarthouse-core-net</feature>
 
-        <requirement>opensmarthouse.tp;filter:="(feature=jmdns)"</requirement>
-        <feature dependency="true">opensmarthouse.tp-jmdns</feature>
+        <requirement>opensmarthouse-tp;filter:="(feature=jmdns)"</requirement>
+        <feature dependency="true">opensmarthouse-tp-jmdns</feature>
 
         <bundle>mvn:org.opensmarthouse.core.bundles/org.opensmarthouse.core.io.transport.mdns/${project.version}</bundle>
         <bundle>mvn:org.opensmarthouse.core.bundles/org.opensmarthouse.core.config.discovery.mdns/${project.version}</bundle>
@@ -569,8 +568,8 @@
     <feature name="opensmarthouse-core-io-transport-mqtt" version="${project.version}">
         <feature>opensmarthouse-core-config</feature>
 
-        <requirement>opensmarthouse.tp;filter:="(feature=hivemqclient)"</requirement>
-        <feature dependency="true">opensmarthouse.tp-hivemqclient</feature>
+        <requirement>opensmarthouse-tp;filter:="(feature=hivemqclient)"</requirement>
+        <feature dependency="true">opensmarthouse-tp-hivemqclient</feature>
 
         <bundle>mvn:org.opensmarthouse.core.bundles/org.opensmarthouse.core.io.transport.mqtt/${project.version}</bundle>
     </feature>
@@ -586,14 +585,14 @@
     </feature>
 
     <feature name="opensmarthouse-core-io-transport-serial-javacomm" version="${project.version}">
-        <feature>opensmarthouse.tp-serial-javacomm</feature>
+        <feature>opensmarthouse-tp-serial-javacomm</feature>
         <feature>opensmarthouse-core-io-transport-serial</feature>
 
         <bundle>mvn:org.opensmarthouse.core.bundles/org.opensmarthouse.core.io.transport.serial.javacomm/${project.version}</bundle>
     </feature>
 
     <feature name="opensmarthouse-core-io-transport-serial-rxtx" version="${project.version}">
-        <feature>opensmarthouse.tp-serial-rxtx</feature>
+        <feature>opensmarthouse-tp-serial-rxtx</feature>
         <feature>opensmarthouse-core-io-transport-serial</feature>
 
         <bundle>mvn:org.opensmarthouse.core.bundles/org.opensmarthouse.core.io.transport.serial.rxtx/${project.version}</bundle>
@@ -602,7 +601,7 @@
     <feature name="opensmarthouse-core-io-transport-serial-rfc2217" version="${project.version}">
         <feature>opensmarthouse-core-io-transport-serial</feature>
         <feature>opensmarthouse-core-io-transport-serial-rxtx</feature>
-        <feature>opensmarthouse.tp-commons-net</feature>
+        <feature>opensmarthouse-tp-commons-net</feature>
 
         <bundle>mvn:org.opensmarthouse.core.bundles/org.opensmarthouse.core.io.transport.serial.rxtx.rfc2217/${project.version}</bundle>
     </feature>
@@ -612,15 +611,15 @@
         <feature>opensmarthouse-core-config-discovery</feature>
         <feature>opensmarthouse-core-net</feature>
 
-        <requirement>opensmarthouse.tp;filter:="(feature=jupnp)"</requirement>
-        <feature dependency="true">opensmarthouse.tp-jupnp</feature>
+        <requirement>opensmarthouse-tp;filter:="(feature=jupnp)"</requirement>
+        <feature dependency="true">opensmarthouse-tp-jupnp</feature>
 
         <bundle>mvn:org.opensmarthouse.core.bundles/org.opensmarthouse.core.io.transport.upnp/${project.version}</bundle>
         <bundle>mvn:org.opensmarthouse.core.bundles/org.opensmarthouse.core.config.discovery.upnp/${project.version}</bundle>
     </feature>
 
     <feature name="opensmarthouse.inc-model-core" version="${project.version}">
-        <feature dependency="true">opensmarthouse.tp-xtext</feature>
+        <feature dependency="true">opensmarthouse-tp-xtext</feature>
         <feature>opensmarthouse-core-config</feature>
         <bundle>mvn:org.opensmarthouse.core.bundles/org.opensmarthouse.core.model.core/${project.version}</bundle>
     </feature>
@@ -636,8 +635,8 @@
     <feature name="opensmarthouse-core-model-item-ide" version="${project.version}">
         <feature dependency="true">opensmarthouse-core-model-item</feature>
 
-        <requirement>opensmarthouse.tp;filter:="(feature=xtext-ide)"</requirement>
-        <feature dependency="true">opensmarthouse.tp-xtext-ide</feature>
+        <requirement>opensmarthouse-tp;filter:="(feature=xtext-ide)"</requirement>
+        <feature dependency="true">opensmarthouse-tp-xtext-ide</feature>
 
         <bundle>mvn:org.opensmarthouse.core.bundles/org.opensmarthouse.core.model.item.ide/${project.version}</bundle>
     </feature>
@@ -662,8 +661,8 @@
     <feature name="opensmarthouse-core-model-persistence-ide" version="${project.version}">
         <feature dependency="true">opensmarthouse-core-model-persistence</feature>
 
-        <requirement>opensmarthouse.tp;filter:="(feature=xtext-ide)"</requirement>
-        <feature dependency="true">opensmarthouse.tp-xtext-ide</feature>
+        <requirement>opensmarthouse-tp;filter:="(feature=xtext-ide)"</requirement>
+        <feature dependency="true">opensmarthouse-tp-xtext-ide</feature>
 
         <bundle>mvn:org.opensmarthouse.core.bundles/org.opensmarthouse.core.model.persistence.ide/${project.version}</bundle>
     </feature>
@@ -683,8 +682,8 @@
     <feature name="opensmarthouse-core-model-rule-ide" version="${project.version}">
         <feature dependency="true">opensmarthouse-core-model-rule</feature>
 
-        <requirement>opensmarthouse.tp;filter:="(feature=xtext-ide)"</requirement>
-        <feature dependency="true">opensmarthouse.tp-xtext-ide</feature>
+        <requirement>opensmarthouse-tp;filter:="(feature=xtext-ide)"</requirement>
+        <feature dependency="true">opensmarthouse-tp-xtext-ide</feature>
 
         <bundle>mvn:org.opensmarthouse.core.bundles/org.opensmarthouse.core.model.rule.ide/${project.version}</bundle>
     </feature>
@@ -706,8 +705,8 @@
     <feature name="opensmarthouse-core-model-script-ide" version="${project.version}">
         <feature dependency="true">opensmarthouse-core-model-script</feature>
 
-        <requirement>opensmarthouse.tp;filter:="(feature=xtext-ide)"</requirement>
-        <feature dependency="true">opensmarthouse.tp-xtext-ide</feature>
+        <requirement>opensmarthouse-tp;filter:="(feature=xtext-ide)"</requirement>
+        <feature dependency="true">opensmarthouse-tp-xtext-ide</feature>
 
         <bundle>mvn:org.opensmarthouse.core.bundles/org.opensmarthouse.core.model.script.ide/${project.version}</bundle>
     </feature>
@@ -723,8 +722,8 @@
     <feature name="opensmarthouse-core-model-sitemap-ide" version="${project.version}">
         <feature dependency="true">opensmarthouse-core-model-sitemap</feature>
 
-        <requirement>opensmarthouse.tp;filter:="(feature=xtext-ide)"</requirement>
-        <feature dependency="true">opensmarthouse.tp-xtext-ide</feature>
+        <requirement>opensmarthouse-tp;filter:="(feature=xtext-ide)"</requirement>
+        <feature dependency="true">opensmarthouse-tp-xtext-ide</feature>
 
         <bundle>mvn:org.opensmarthouse.core.bundles/org.opensmarthouse.core.model.sitemap.ide/${project.version}</bundle>
     </feature>
@@ -739,20 +738,20 @@
     <feature name="opensmarthouse-core-model-thing-ide" version="${project.version}">
         <feature dependency="true">opensmarthouse-core-model-thing</feature>
 
-        <requirement>opensmarthouse.tp;filter:="(feature=xtext-ide)"</requirement>
-        <feature dependency="true">opensmarthouse.tp-xtext-ide</feature>
+        <requirement>opensmarthouse-tp;filter:="(feature=xtext-ide)"</requirement>
+        <feature dependency="true">opensmarthouse-tp-xtext-ide</feature>
 
         <bundle>mvn:org.opensmarthouse.core.bundles/org.opensmarthouse.core.model.thing.ide/${project.version}</bundle>
     </feature>
 
     <feature name="opensmarthouse-core-model-lsp" version="${project.version}">
-        <requirement>opensmarthouse.tp;filter:="(&amp;(feature=xtext-ide)(version&gt;=2.22.0)(!(version&gt;=2.23.0)))"</requirement>
-        <feature dependency="true">opensmarthouse.tp-xtext-ide</feature>
+        <requirement>opensmarthouse-tp;filter:="(&amp;(feature=xtext-ide)(version&gt;=2.22.0)(!(version&gt;=2.23.0)))"</requirement>
+        <feature dependency="true">opensmarthouse-tp-xtext-ide</feature>
 
         <!-- fails for no reason
-        <requirement>opensmarthouse.tp;filter:="(&amp;(feature=lsp4j)(version&gt;=0.9.0)(!(version&gt;=0.10.0)))"</requirement>
+        <requirement>opensmarthouse-tp;filter:="(&amp;(feature=lsp4j)(version&gt;=0.9.0)(!(version&gt;=0.10.0)))"</requirement>
         -->
-        <feature dependency="true">opensmarthouse.tp-lsp4j</feature>
+        <feature dependency="true">opensmarthouse-tp-lsp4j</feature>
 
         <feature>opensmarthouse-core-model-item-ide</feature>
         <feature>opensmarthouse-core-model-persistence-ide</feature>
@@ -764,7 +763,7 @@
     </feature>
 
     <feature name="opensmarthouse-core-storage-json" version="${project.version}">
-        <feature dependency="true">opensmarthouse.tp-gson</feature>
+        <feature dependency="true">opensmarthouse-tp-gson</feature>
         <feature>opensmarthouse-core-boot</feature>
         <feature>opensmarthouse-core-item</feature>
 
@@ -811,8 +810,8 @@
 
     <feature name="opensmarthouse-runtime-base" description="Open SmartHouse Runtime Base" version="${project.version}">
         <bundle>mvn:com.google.guava/guava/18.0</bundle>
-        <requirement>opensmarthouse.tp;filter:="(feature=commons-net)"</requirement>
-        <feature dependency="true">opensmarthouse.tp-commons-net</feature>
+        <requirement>opensmarthouse-tp;filter:="(feature=commons-net)"</requirement>
+        <feature dependency="true">opensmarthouse-tp-commons-net</feature>
         <feature>opensmarthouse-core-base</feature>
         <feature>opensmarthouse-core-auth-jaas</feature>
         <feature>opensmarthouse-core-ephemeris</feature>
@@ -891,7 +890,7 @@
     </feature>
 
     <feature name="opensmarthouse-transport-http" description="HTTP Transport" version="${project.version}">
-        <capability>opensmarthouse.tp;feature=httpclient;version=${jetty.version}</capability>
+        <capability>opensmarthouse-tp;feature=httpclient;version=${jetty.version}</capability>
         <feature>opensmarthouse-core-auth-oauth2client</feature>
         <bundle dependency="true">mvn:javax.servlet/javax.servlet-api/3.1.0</bundle>
         <bundle dependency="true">mvn:org.eclipse.jetty/jetty-client/${jetty.version}</bundle>
@@ -929,7 +928,7 @@
     </feature>
 
     <feature name="opensmarthouse-core-thing-xml" description="Thing Core XML" version="${project.version}">
-        <feature dependency="true">opensmarthouse.tp-xstream</feature>
+        <feature dependency="true">opensmarthouse-tp-xstream</feature>
         <feature>opensmarthouse-core-thing-core</feature>
         <feature>opensmarthouse-core-config-xml</feature>
         <bundle start-level="75">mvn:org.opensmarthouse.core.bundles/org.opensmarthouse.core.thing.xml/${project.version}</bundle>
@@ -960,7 +959,7 @@
     </feature>
 
     <feature name="opensmarthouse-core-binding-xml" version="${project.version}">
-        <feature dependency="true">opensmarthouse.tp-xstream</feature>
+        <feature dependency="true">opensmarthouse-tp-xstream</feature>
         <feature>opensmarthouse-core-binding</feature>
         <feature>opensmarthouse-core-config-xml</feature>
         <bundle>mvn:org.opensmarthouse.core.bundles/org.opensmarthouse.core.binding.xml/${project.version}</bundle>
@@ -1015,7 +1014,7 @@
     </feature>
 
     <feature name="opensmarthouse-core-io-rest-swagger" version="${project.version}">
-        <feature>opensmarthouse.tp-swagger-jax-rs</feature>
+        <feature>opensmarthouse-tp-swagger-jax-rs</feature>
         <feature>opensmarthouse-core-io-rest</feature>
         <bundle>mvn:org.opensmarthouse.core.bundles/org.opensmarthouse.core.io.rest.swagger/${project.version}</bundle>
     </feature>

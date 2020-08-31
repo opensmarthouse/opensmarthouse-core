@@ -1,8 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
 
-    Copyright (c) 2020-2020 Contributors to the OpenSmartHouse project
-    Copyright (c) 2010-2020 Contributors to the openHAB project
+	Copyright (c) 2019-2020 Contributors to the OpenSmartHouse project
 
     See the NOTICE file(s) distributed with this work for additional
     information.
@@ -16,33 +15,33 @@
 -->
 <features name="${project.artifactId}-${project.version}" xmlns="http://karaf.apache.org/xmlns/features/v1.4.0">
 
-    <feature name="opensmarthouse.tp-scr" description="Runtime - IoC layer" version="${project.version}">
+    <feature name="opensmarthouse-tp-scr" description="Runtime - IoC layer" version="${project.version}">
         <feature dependency="true">scr</feature>
     </feature>
 
-    <feature name="opensmarthouse.tp-event" description="Runtime - Event Admin" version="${project.version}">
+    <feature name="opensmarthouse-tp-event" description="Runtime - Event Admin" version="${project.version}">
         <feature dependency="true">eventadmin</feature>
     </feature>
 
-    <feature name="opensmarthouse.tp-http" description="Runtime - HTTP" version="${project.version}">
+    <feature name="opensmarthouse-tp-http" description="Runtime - HTTP" version="${project.version}">
         <feature dependency="true">http</feature>
     </feature>
 
-    <feature name="opensmarthouse.tp-javax-inject" description="Runtime - Javax Inject" version="${project.version}">
+    <feature name="opensmarthouse-tp-javax-inject" description="Runtime - Javax Inject" version="${project.version}">
         <bundle dependency="true">mvn:org.apache.geronimo.specs/geronimo-atinject_1.0_spec/1.2</bundle>
     </feature>
 
-    <feature name="opensmarthouse.tp-unit-of-measurement" description="Runtime - Units of Measurement" version="${project.version}">
+    <feature name="opensmarthouse-tp-unit-of-measurement" description="Runtime - Units of Measurement" version="${project.version}">
         <bundle dependency="true">mvn:javax.measure/unit-api/1.0</bundle>
         <bundle dependency="true">mvn:tec.uom/uom-se/1.0.10</bundle>
         <bundle dependency="true">mvn:tec.uom.lib/uom-lib-common/1.0.3</bundle>
     </feature>
 
-    <feature name="opensmarthouse.tp-base" description="Open SmartHouse Core Target Platform Base" version="${project.version}">
-        <capability>opensmarthouse.tp;feature=base;version=1.0.0</capability>
+    <feature name="opensmarthouse-tp-base" description="Open SmartHouse Core Target Platform Base" version="${project.version}">
+        <capability>opensmarthouse-tp;feature=base;version=1.0.0</capability>
 
-        <feature>opensmarthouse.tp-scr</feature>
-        <feature>opensmarthouse.tp-event</feature>
+        <feature>opensmarthouse-tp-scr</feature>
+        <feature>opensmarthouse-tp-event</feature>
 
         <!-- Apache Commons -->
         <bundle dependency="true">mvn:commons-codec/commons-codec/1.6</bundle>
@@ -52,36 +51,36 @@
         <bundle dependency="true">mvn:tec.uom/uom-se/1.0.10</bundle>
         <bundle dependency="true">mvn:tec.uom.lib/uom-lib-common/1.0.3</bundle>
 
-        <feature>opensmarthouse.tp-xstream</feature>
+        <feature>opensmarthouse-tp-xstream</feature>
     </feature>
 
-    <feature name="opensmarthouse.tp-xstream" description="XStream library" version="${project.version}">
+    <feature name="opensmarthouse-tp-xstream" description="XStream library" version="${project.version}">
         <!-- TODO: Unbundled libraries -->
         <bundle dependency="true">mvn:org.apache.servicemix.bundles/org.apache.servicemix.bundles.xstream/1.4.11.1_1</bundle>
     </feature>
 
-    <feature name="opensmarthouse.tp-coap" description="Californium CoAP library" version="${project.version}">
-        <capability>opensmarthouse.tp;feature=coap;version=2.0.0</capability>
+    <feature name="opensmarthouse-tp-coap" description="Californium CoAP library" version="${project.version}">
+        <capability>opensmarthouse-tp;feature=coap;version=2.0.0</capability>
         <bundle>mvn:org.eclipse.californium/californium-osgi/2.0.0</bundle>
         <bundle>mvn:org.eclipse.californium/californium-core/2.0.0</bundle>
         <bundle>mvn:org.eclipse.californium/element-connector/2.0.0</bundle>
         <bundle>mvn:org.eclipse.californium/scandium/2.0.0</bundle>
     </feature>
 
-    <feature name="opensmarthouse.tp-commons-net" description="The Apache Commons Net library"
+    <feature name="opensmarthouse-tp-commons-net" description="The Apache Commons Net library"
         version="${project.version}">
-        <capability>opensmarthouse.tp;feature=commons-net;version=3.3</capability>
+        <capability>opensmarthouse-tp;feature=commons-net;version=3.3</capability>
         <bundle dependency="true">mvn:commons-net/commons-net/3.3</bundle>
     </feature>
 
-    <feature name="opensmarthouse.tp-gson" description="Gson" version="${project.version}">
-        <capability>opensmarthouse.tp;feature=gson;version=2.8.2.v20180104-1110</capability>
+    <feature name="opensmarthouse-tp-gson" description="Gson" version="${project.version}">
+        <capability>opensmarthouse-tp;feature=gson;version=2.8.2.v20180104-1110</capability>
         <bundle>mvn:org.eclipse.orbit.bundles/com.google.gson/2.8.2.v20180104-1110</bundle>
     </feature>
 
-    <feature name="opensmarthouse.tp-hivemqclient" description="MQTT Client" version="${project.version}">
-        <capability>opensmarthouse.tp;feature=hivemqclient;version=1.1.4</capability>
-        <feature dependency="true">opensmarthouse.tp-netty</feature>
+    <feature name="opensmarthouse-tp-hivemqclient" description="MQTT Client" version="${project.version}">
+        <capability>opensmarthouse-tp;feature=hivemqclient;version=1.1.4</capability>
+        <feature dependency="true">opensmarthouse-tp-netty</feature>
         <bundle dependency="true">mvn:org.jctools/jctools-core/2.1.2</bundle>
         <bundle dependency="true">mvn:io.reactivex.rxjava2/rxjava/2.2.5</bundle>
         <bundle dependency="true">mvn:org.reactivestreams/reactive-streams/1.0.2</bundle>
@@ -90,8 +89,8 @@
         <bundle>mvn:com.hivemq/hivemq-mqtt-client/1.1.2</bundle>
     </feature>
 
-    <feature name="opensmarthouse.tp-httpclient" version="${project.version}">
-        <capability>opensmarthouse.tp;feature=httpclient;version=${jetty.version}</capability>
+    <feature name="opensmarthouse-tp-httpclient" version="${project.version}">
+        <capability>opensmarthouse-tp;feature=httpclient;version=${jetty.version}</capability>
         <bundle dependency="true">mvn:javax.servlet/javax.servlet-api/3.1.0</bundle>
         <bundle dependency="true">mvn:org.eclipse.jetty/jetty-client/${jetty.version}</bundle>
         <bundle dependency="true">mvn:org.eclipse.jetty/jetty-http/${jetty.version}</bundle>
@@ -103,8 +102,8 @@
         <bundle dependency="true">mvn:org.eclipse.jetty.websocket/websocket-client/${jetty.version}</bundle>
     </feature>
 
-    <feature name="opensmarthouse.tp-jackson" description="FasterXML Jackson bundles" version="${project.version}">
-        <capability>opensmarthouse.tp;feature=jackson;version=${jackson.version}</capability>
+    <feature name="opensmarthouse-tp-jackson" description="FasterXML Jackson bundles" version="${project.version}">
+        <capability>opensmarthouse-tp;feature=jackson;version=${jackson.version}</capability>
         <bundle dependency="true">mvn:com.fasterxml.jackson.core/jackson-annotations/${jackson.version}</bundle>
         <bundle dependency="true">mvn:com.fasterxml.jackson.core/jackson-core/${jackson.version}</bundle>
         <bundle dependency="true">mvn:com.fasterxml.jackson.core/jackson-databind/${jackson.version}</bundle>
@@ -117,19 +116,19 @@
         <bundle dependency="true">mvn:org.yaml/snakeyaml/1.24</bundle>
     </feature>
 
-    <feature name="opensmarthouse.tp-jax-rs" version="${project.version}">
-        <capability>opensmarthouse.tp;feature=jax-rs;version=5.3.1</capability>
+    <feature name="opensmarthouse-tp-jax-rs" version="${project.version}">
+        <capability>opensmarthouse-tp;feature=jax-rs;version=5.3.1</capability>
         <bundle dependency="true">mvn:javax.ws.rs/javax.ws.rs-api/2.1.1</bundle>
     </feature>
 
-    <feature name="opensmarthouse.tp-jax-rs-whiteboard" version="${project.version}">
-        <capability>opensmarthouse.tp;feature=jax-rs-whiteboard;version=1.0.8</capability>
+    <feature name="opensmarthouse-tp-jax-rs-whiteboard" version="${project.version}">
+        <capability>opensmarthouse-tp;feature=jax-rs-whiteboard;version=1.0.8</capability>
 
         <!-- BEG: https://issues.apache.org/jira/browse/KARAF-6536 -->
         <!-- Add it here, so we do not use to rely on a feature that is using version ranges. -->
         <feature>http-whiteboard</feature>
-        <feature dependency="true">opensmarthouse.tp-jaxws</feature>
-        <feature dependency="true">opensmarthouse.tp-jax-rs</feature>
+        <feature dependency="true">opensmarthouse-tp-jaxws</feature>
+        <feature dependency="true">opensmarthouse-tp-jax-rs</feature>
         <bundle dependency="true">mvn:org.apache.aries.spec/org.apache.aries.javax.jax.rs-api/1.0.1</bundle>
         <bundle dependency="true">mvn:org.osgi/org.osgi.util.function/1.1.0</bundle>
         <bundle dependency="true">mvn:org.osgi/org.osgi.util.promise/1.1.0</bundle>
@@ -144,13 +143,13 @@
         </config>
     </feature>
 
-    <feature name="opensmarthouse.tp-jbbp" description="Java Binary Block Parser library" version="${project.version}">
-        <capability>opensmarthouse.tp;feature=jbbp;version=1.4.1</capability>
+    <feature name="opensmarthouse-tp-jbbp" description="Java Binary Block Parser library" version="${project.version}">
+        <capability>opensmarthouse-tp;feature=jbbp;version=1.4.1</capability>
         <bundle dependency="true">mvn:org.openhab.osgiify/com.igormaznitsa.jbbp/1.4.1</bundle>
     </feature>
 
-    <feature name="opensmarthouse.tp-netty" description="Netty bundles" version="${project.version}">
-        <capability>opensmarthouse.tp;feature=netty;version=4.1.42.Final</capability>
+    <feature name="opensmarthouse-tp-netty" description="Netty bundles" version="${project.version}">
+        <capability>opensmarthouse-tp;feature=netty;version=4.1.42.Final</capability>
         <bundle dependency="true">mvn:io.netty/netty-buffer/4.1.42.Final</bundle>
         <bundle dependency="true">mvn:io.netty/netty-common/4.1.42.Final</bundle>
         <bundle dependency="true">mvn:io.netty/netty-codec/4.1.42.Final</bundle>
@@ -163,69 +162,69 @@
         <bundle dependency="true">mvn:io.netty/netty-transport-native-unix-common/4.1.42.Final</bundle>
     </feature>
 
-    <feature name="opensmarthouse.tp-jaxb" description="JAXB bundles" version="${project.version}">
-        <capability>opensmarthouse.tp;feature=jaxb;version=2.9.0</capability>
+    <feature name="opensmarthouse-tp-jaxb" description="JAXB bundles" version="${project.version}">
+        <capability>opensmarthouse-tp;feature=jaxb;version=2.9.0</capability>
         <bundle start-level="10">mvn:org.apache.servicemix.specs/org.apache.servicemix.specs.activation-api-1.1/2.9.0</bundle>
         <bundle start-level="10">mvn:org.apache.servicemix.specs/org.apache.servicemix.specs.jaxb-api-2.2/2.9.0</bundle>
         <bundle start-level="20">mvn:org.apache.servicemix.bundles/org.apache.servicemix.bundles.jaxb-impl/2.2.11_1</bundle>
     </feature>
 
-    <feature name="opensmarthouse.tp-jaxws" description="JAX-WS (SOAP) bundles" version="${project.version}">
-        <capability>opensmarthouse.tp;feature=jax-ws;version=2.9.0</capability>
+    <feature name="opensmarthouse-tp-jaxws" description="JAX-WS (SOAP) bundles" version="${project.version}">
+        <capability>opensmarthouse-tp;feature=jax-ws;version=2.9.0</capability>
         <bundle start-level="10">mvn:org.apache.servicemix.specs/org.apache.servicemix.specs.saaj-api-1.3/2.9.0</bundle>
         <bundle start-level="20">mvn:org.apache.servicemix.bundles/org.apache.servicemix.bundles.saaj-impl/1.3.23_2</bundle>
         <bundle start-level="20">mvn:org.jvnet.staxex/stax-ex/1.7.4</bundle>
     </feature>
 
-    <feature name="opensmarthouse.tp-jollyday" description="Jollyday library" version="${project.version}">
-        <capability>opensmarthouse.tp;feature=jollyday;version=0.5.8</capability>
+    <feature name="opensmarthouse-tp-jollyday" description="Jollyday library" version="${project.version}">
+        <capability>opensmarthouse-tp;feature=jollyday;version=0.5.8</capability>
         <bundle>mvn:org.threeten/threeten-extra/1.4</bundle>
         <bundle>mvn:de.jollyday/jollyday/0.5.8</bundle>
     </feature>
 
-    <feature name="opensmarthouse.tp-jmdns" description="An implementation of multi-cast DNS in Java."
+    <feature name="opensmarthouse-tp-jmdns" description="An implementation of multi-cast DNS in Java."
         version="${project.version}">
-        <capability>opensmarthouse.tp;feature=jmdns;version=3.5.5</capability>
+        <capability>opensmarthouse-tp;feature=jmdns;version=3.5.5</capability>
         <bundle>mvn:org.jmdns/jmdns/3.5.5</bundle>
     </feature>
 
-    <feature name="opensmarthouse.tp-jose4j" description="jose4j JWT library" version="${project.version}">
-        <capability>opensmarthouse.tp;feature=jose4j;version=0.7.0</capability>
+    <feature name="opensmarthouse-tp-jose4j" description="jose4j JWT library" version="${project.version}">
+        <capability>opensmarthouse-tp;feature=jose4j;version=0.7.0</capability>
         <bundle>mvn:org.bitbucket.b_c/jose4j/0.7.0</bundle>
     </feature>
 
-    <feature name="opensmarthouse.tp-jupnp" description="UPnP/DLNA library for Java" version="${project.version}">
-        <capability>opensmarthouse.tp;feature=jupnp;version=2.5.2</capability>
+    <feature name="opensmarthouse-tp-jupnp" description="UPnP/DLNA library for Java" version="${project.version}">
+        <capability>opensmarthouse-tp;feature=jupnp;version=2.5.2</capability>
         <feature dependency="true">http</feature>
         <feature dependency="true">scr</feature>
-        <feature dependency="true">opensmarthouse.tp-httpclient</feature>
+        <feature dependency="true">opensmarthouse-tp-httpclient</feature>
         <bundle>mvn:org.jupnp/org.jupnp/2.5.2</bundle>
     </feature>
 
-    <feature name="opensmarthouse.tp-lsp4j" description="Eclipse LSP4J" version="${project.version}">
-        <capability>opensmarthouse.tp;feature=lsp4j;version=0.9.0</capability>
+    <feature name="opensmarthouse-tp-lsp4j" description="Eclipse LSP4J" version="${project.version}">
+        <capability>opensmarthouse-tp;feature=lsp4j;version=0.9.0</capability>
         <bundle>mvn:org.eclipse.lsp4j/org.eclipse.lsp4j/0.9.0</bundle>
         <bundle>mvn:org.eclipse.lsp4j/org.eclipse.lsp4j.jsonrpc/0.9.0</bundle>
 
-        <feature dependency="true">opensmarthouse.tp-gson</feature>
-        <feature dependency="true">opensmarthouse.tp-xtext</feature>
+        <feature dependency="true">opensmarthouse-tp-gson</feature>
+        <feature dependency="true">opensmarthouse-tp-xtext</feature>
     </feature>
 
-    <feature name="opensmarthouse.tp-serial-javacomm" version="${project.version}">
-        <capability>opensmarthouse.tp;feature=serial;impl=javacomm</capability>
+    <feature name="opensmarthouse-tp-serial-javacomm" version="${project.version}">
+        <capability>opensmarthouse-tp;feature=serial;impl=javacomm</capability>
         <bundle>mvn:org.eclipse.kura/org.eclipse.soda.dk.comm/1.2.201</bundle>
         <bundle>mvn:org.eclipse.kura/org.eclipse.soda.dk.comm.armv6hf/1.2.201</bundle>
         <bundle>mvn:org.eclipse.kura/org.eclipse.soda.dk.comm.aarch64/1.2.201</bundle>
         <bundle>mvn:org.eclipse.kura/org.eclipse.soda.dk.comm.x86_64/1.2.201</bundle>
     </feature>
 
-    <feature name="opensmarthouse.tp-serial-rxtx" version="${project.version}">
-        <bundle>mvn:com.neuronrobotics/nrjavaserial/5.2.1</bundle>
+    <feature name="opensmarthouse-tp-serial-rxtx" version="${project.version}">
+        <bundle>mvn:com.neuronrobotics/nrjavaserial/5.1.1</bundle>
     </feature>
 
-    <feature name="opensmarthouse.tp-xtext" description="Xtext - Language Engineering Made Easy"
+    <feature name="opensmarthouse-tp-xtext" description="Xtext - Language Engineering Made Easy"
         version="${project.version}">
-        <capability>opensmarthouse.tp;feature=xtext;version=${xtext.version}</capability>
+        <capability>opensmarthouse-tp;feature=xtext;version=${xtext.version}</capability>
 
         <bundle>mvn:org.eclipse.xtext/org.eclipse.xtext/${xtext.version}</bundle>
 
@@ -271,19 +270,19 @@
         <bundle dependency="true" start-level="20">mvn:org.ow2.asm/asm/8.0.1</bundle>
     </feature>
 
-    <feature name="opensmarthouse.tp-xtext-ide" description="Xtext - IDE Support" version="${project.version}">
-        <capability>opensmarthouse.tp;feature=xtext-ide;version=2.22.0</capability>
-        <feature dependency="true">opensmarthouse.tp-xtext</feature>
+    <feature name="opensmarthouse-tp-xtext-ide" description="Xtext - IDE Support" version="${project.version}">
+        <capability>opensmarthouse-tp;feature=xtext-ide;version=2.22.0</capability>
+        <feature dependency="true">opensmarthouse-tp-xtext</feature>
 
         <!-- Support for the Language Server Protocol -->
         <bundle dependency="true">mvn:org.eclipse.xtext/org.eclipse.xtext.ide/2.22.0</bundle>
         <bundle dependency="true">mvn:org.eclipse.xtext/org.eclipse.xtext.xbase.ide/2.22.0</bundle>
     </feature>
 
-    <feature name="opensmarthouse.tp-swagger-jax-rs" description="JAX-RS Whiteboard Swagger" version="${project.version}">
-		<capability>opensmarthouse.tp;feature=swagger-jaxrs;version=2.1.0</capability>
-        <feature dependency="true">opensmarthouse.tp-jax-rs-whiteboard</feature>
-        <feature dependency="true">opensmarthouse.tp-jackson</feature>
+    <feature name="opensmarthouse-tp-swagger-jax-rs" description="JAX-RS Whiteboard Swagger" version="${project.version}">
+		<capability>opensmarthouse-tp;feature=swagger-jaxrs;version=2.1.0</capability>
+        <feature dependency="true">opensmarthouse-tp-jax-rs-whiteboard</feature>
+        <feature dependency="true">opensmarthouse-tp-jackson</feature>
 		<bundle dependency="true">mvn:io.swagger.core.v3/swagger-annotations/2.1.0</bundle>
 		<bundle dependency="true">mvn:io.swagger.core.v3/swagger-core/2.1.0</bundle>
 		<bundle dependency="true">mvn:io.swagger.core.v3/swagger-integration/2.1.0</bundle>
@@ -298,7 +297,7 @@
 		<bundle dependency="true">mvn:io.github.classgraph/classgraph/4.8.87</bundle>
     </feature>
 
-    <feature name="opensmarthouse.tp-javazoom" version="${project.version}">
+    <feature name="opensmarthouse-tp-javazoom" version="${project.version}">
         <bundle dependency="true">mvn:org.openhab.osgiify/javazoom.jlayer/1.0.1</bundle>
     </feature>
 
