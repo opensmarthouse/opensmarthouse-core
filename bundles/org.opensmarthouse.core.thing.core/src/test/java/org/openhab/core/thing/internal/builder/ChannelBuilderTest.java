@@ -16,7 +16,7 @@ import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.not;
 import static org.hamcrest.collection.IsCollectionWithSize.hasSize;
 import static org.junit.Assert.assertThat;
-import static org.openhab.core.thing.DefaultSystemChannelTypeProvider.SYSTEM_OUTDOOR_TEMPERATURE;
+import static org.openhab.core.thing.SystemChannelTypeConstants.SYSTEM_OUTDOOR_TEMPERATURE;
 
 import java.util.Collections;
 import java.util.HashMap;

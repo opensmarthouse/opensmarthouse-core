@@ -220,7 +220,7 @@
     </feature>
 
     <feature name="opensmarthouse.tp-serial-rxtx" version="${project.version}">
-        <bundle>mvn:com.neuronrobotics/nrjavaserial/5.1.1</bundle>
+        <bundle>mvn:com.neuronrobotics/nrjavaserial/5.2.1</bundle>
     </feature>
 
     <feature name="opensmarthouse.tp-xtext" description="Xtext - Language Engineering Made Easy"

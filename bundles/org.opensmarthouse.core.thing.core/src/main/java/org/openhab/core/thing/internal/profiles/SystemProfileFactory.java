@@ -29,7 +29,7 @@ import org.eclipse.jdt.annotation.Nullable;
 import org.openhab.core.i18n.LocalizedKey;
 import org.openhab.core.library.CoreItemFactory;
 import org.openhab.core.thing.Channel;
-import org.openhab.core.thing.DefaultSystemChannelTypeProvider;
+import org.openhab.core.thing.SystemChannelTypeConstants;
 import org.openhab.core.thing.UID;
 import org.openhab.core.thing.profiles.Profile;
 import org.openhab.core.thing.profiles.ProfileAdvisor;
@@ -80,56 +80,56 @@ public class SystemProfileFactory implements ProfileFactory, ProfileAdvisor, Pro
     Function<ProfileTypeBuilderFactory, ProfileType> RAWBUTTON_ON_OFF_SWITCH_TYPE = profileTypeBuilderFactory -> profileTypeBuilderFactory
             .newTrigger(RAWBUTTON_ON_OFF_SWITCH, "Raw Button To On Off")
             .withSupportedItemTypes(CoreItemFactory.SWITCH, CoreItemFactory.DIMMER, CoreItemFactory.COLOR)
-            .withSupportedChannelTypeUIDs(DefaultSystemChannelTypeProvider.SYSTEM_RAWBUTTON).build();
+            .withSupportedChannelTypeUIDs(SystemChannelTypeConstants.SYSTEM_RAWBUTTON).build();
 
     Function<ProfileTypeBuilderFactory, TriggerProfileType> RAWBUTTON_TOGGLE_PLAYER_TYPE = profileTypeBuilderFactory -> profileTypeBuilderFactory
             .newTrigger(RAWBUTTON_TOGGLE_PLAYER, "Raw Button Toggle Player")
             .withSupportedItemTypes(CoreItemFactory.PLAYER)
-            .withSupportedChannelTypeUIDs(DefaultSystemChannelTypeProvider.SYSTEM_RAWBUTTON).build();
+            .withSupportedChannelTypeUIDs(SystemChannelTypeConstants.SYSTEM_RAWBUTTON).build();
 
     Function<ProfileTypeBuilderFactory, TriggerProfileType> RAWBUTTON_TOGGLE_ROLLERSHUTTER_TYPE = profileTypeBuilderFactory -> profileTypeBuilderFactory
             .newTrigger(RAWBUTTON_TOGGLE_ROLLERSHUTTER, "Raw Button Toggle Rollershutter")
             .withSupportedItemTypes(CoreItemFactory.ROLLERSHUTTER)
-            .withSupportedChannelTypeUIDs(DefaultSystemChannelTypeProvider.SYSTEM_RAWBUTTON).build();
+            .withSupportedChannelTypeUIDs(SystemChannelTypeConstants.SYSTEM_RAWBUTTON).build();
 
     Function<ProfileTypeBuilderFactory, TriggerProfileType> RAWBUTTON_TOGGLE_SWITCH_TYPE = profileTypeBuilderFactory -> profileTypeBuilderFactory
             .newTrigger(RAWBUTTON_TOGGLE_SWITCH, "Raw Button Toggle Switch")
             .withSupportedItemTypes(CoreItemFactory.SWITCH, CoreItemFactory.DIMMER, CoreItemFactory.COLOR)
-            .withSupportedChannelTypeUIDs(DefaultSystemChannelTypeProvider.SYSTEM_RAWBUTTON).build();
+            .withSupportedChannelTypeUIDs(SystemChannelTypeConstants.SYSTEM_RAWBUTTON).build();
 
     Function<ProfileTypeBuilderFactory, TriggerProfileType> RAWROCKER_ON_OFF_TYPE = profileTypeBuilderFactory -> profileTypeBuilderFactory
             .newTrigger(RAWROCKER_ON_OFF, "Raw Rocker To On Off")
             .withSupportedItemTypes(CoreItemFactory.SWITCH, CoreItemFactory.DIMMER, CoreItemFactory.COLOR)
-            .withSupportedChannelTypeUIDs(DefaultSystemChannelTypeProvider.SYSTEM_RAWROCKER).build();
+            .withSupportedChannelTypeUIDs(SystemChannelTypeConstants.SYSTEM_RAWROCKER).build();
 
     Function<ProfileTypeBuilderFactory, TriggerProfileType> RAWROCKER_DIMMER_TYPE = profileTypeBuilderFactory -> profileTypeBuilderFactory
             .newTrigger(RAWROCKER_DIMMER, "Raw Rocker To Dimmer")
             .withSupportedItemTypes(CoreItemFactory.DIMMER)
-            .withSupportedChannelTypeUIDs(DefaultSystemChannelTypeProvider.SYSTEM_RAWROCKER).build();
+            .withSupportedChannelTypeUIDs(SystemChannelTypeConstants.SYSTEM_RAWROCKER).build();
 
     Function<ProfileTypeBuilderFactory, TriggerProfileType> RAWROCKER_NEXT_PREVIOUS_TYPE = profileTypeBuilderFactory -> profileTypeBuilderFactory
             .newTrigger(RAWROCKER_NEXT_PREVIOUS, "Raw Rocker To Next/Previous")
             .withSupportedItemTypes(CoreItemFactory.PLAYER)
-            .withSupportedChannelTypeUIDs(DefaultSystemChannelTypeProvider.SYSTEM_RAWROCKER).build();
+            .withSupportedChannelTypeUIDs(SystemChannelTypeConstants.SYSTEM_RAWROCKER).build();
 
     Function<ProfileTypeBuilderFactory, TriggerProfileType> RAWROCKER_PLAY_PAUSE_TYPE = profileTypeBuilderFactory -> profileTypeBuilderFactory
             .newTrigger(RAWROCKER_PLAY_PAUSE, "Raw Rocker To Play/Pause").withSupportedItemTypes(CoreItemFactory.PLAYER)
-            .withSupportedChannelTypeUIDs(DefaultSystemChannelTypeProvider.SYSTEM_RAWROCKER).build();
+            .withSupportedChannelTypeUIDs(SystemChannelTypeConstants.SYSTEM_RAWROCKER).build();
 
     Function<ProfileTypeBuilderFactory, TriggerProfileType> RAWROCKER_REWIND_FASTFORWARD_TYPE = profileTypeBuilderFactory -> profileTypeBuilderFactory
             .newTrigger(RAWROCKER_REWIND_FASTFORWARD, "Raw Rocker To Rewind/Fastforward")
             .withSupportedItemTypes(CoreItemFactory.PLAYER)
-            .withSupportedChannelTypeUIDs(DefaultSystemChannelTypeProvider.SYSTEM_RAWROCKER).build();
+            .withSupportedChannelTypeUIDs(SystemChannelTypeConstants.SYSTEM_RAWROCKER).build();
 
     Function<ProfileTypeBuilderFactory, TriggerProfileType> RAWROCKER_STOP_MOVE_TYPE = profileTypeBuilderFactory -> profileTypeBuilderFactory
             .newTrigger(RAWROCKER_STOP_MOVE, "Raw Rocker To Stop/Move")
             .withSupportedItemTypes(CoreItemFactory.ROLLERSHUTTER)
-            .withSupportedChannelTypeUIDs(DefaultSystemChannelTypeProvider.SYSTEM_RAWROCKER).build();
+            .withSupportedChannelTypeUIDs(SystemChannelTypeConstants.SYSTEM_RAWROCKER).build();
 
     Function<ProfileTypeBuilderFactory, TriggerProfileType> RAWROCKER_UP_DOWN_TYPE = profileTypeBuilderFactory -> profileTypeBuilderFactory
             .newTrigger(RAWROCKER_UP_DOWN, "Raw Rocker To Up/Down")
             .withSupportedItemTypes(CoreItemFactory.ROLLERSHUTTER)
-            .withSupportedChannelTypeUIDs(DefaultSystemChannelTypeProvider.SYSTEM_RAWROCKER).build();
+            .withSupportedChannelTypeUIDs(SystemChannelTypeConstants.SYSTEM_RAWROCKER).build();
 
     Function<ProfileTypeBuilderFactory, StateProfileType> TIMESTAMP_CHANGE_TYPE = profileTypeBuilderFactory -> profileTypeBuilderFactory
             .newState(TIMESTAMP_CHANGE, "Timestamp on change")
@@ -220,7 +220,7 @@ public class SystemProfileFactory implements ProfileFactory, ProfileAdvisor, Pro
             case STATE:
                 return DEFAULT;
             case TRIGGER:
-                if (DefaultSystemChannelTypeProvider.SYSTEM_RAWBUTTON.equals(channelType.getUID())) {
+                if (SystemChannelTypeConstants.SYSTEM_RAWBUTTON.equals(channelType.getUID())) {
                     if (CoreItemFactory.PLAYER.equalsIgnoreCase(itemType)) {
                         return RAWBUTTON_TOGGLE_PLAYER;
                     } else if (CoreItemFactory.ROLLERSHUTTER.equalsIgnoreCase(itemType)) {
@@ -228,7 +228,7 @@ public class SystemProfileFactory implements ProfileFactory, ProfileAdvisor, Pro
                     } else if (CoreItemFactory.SWITCH.equalsIgnoreCase(itemType)) {
                         return RAWBUTTON_TOGGLE_SWITCH;
                     }
-                } else if (DefaultSystemChannelTypeProvider.SYSTEM_RAWROCKER.equals(channelType.getUID())) {
+                } else if (SystemChannelTypeConstants.SYSTEM_RAWROCKER.equals(channelType.getUID())) {
                     if (CoreItemFactory.DIMMER.equalsIgnoreCase(itemType)) {
                         return RAWROCKER_DIMMER;
                     } else if (CoreItemFactory.PLAYER.equalsIgnoreCase(itemType)) {

@@ -16,9 +16,12 @@ import java.util.List;
 
 import org.eclipse.jdt.annotation.Nullable;
 import org.openhab.core.types.registry.TypeFactory;
+import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Reference;
 import org.osgi.service.component.annotations.ReferenceCardinality;
 import org.osgi.service.component.annotations.ReferencePolicy;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * This is a helper class that helps parsing a string into an OpenSmartHouse type (state or command).
@@ -32,13 +35,17 @@ import org.osgi.service.component.annotations.ReferencePolicy;
  * @deprecated OpenSmartHouse users should use the {@link TypeFactory}
  */
 @Deprecated
+@Component(immediate = true)
 public final class TypeParser {
+
+    private final static Logger LOGGER = LoggerFactory.getLogger(TypeParser.class);;
     private @Nullable static TypeFactory typeRegistry;
 
     /**
-     * No instances allowed.
+     * Instantiation of this type is allowed, however it will emmit warning.
      */
-    private TypeParser() {
+    public TypeParser() {
+        warning();
     }
 
     @Reference(cardinality = ReferenceCardinality.MANDATORY, policy = ReferencePolicy.DYNAMIC)
@@ -58,6 +65,7 @@ public final class TypeParser {
      * @return Parsed type or null, if the type couldn't be parsed.
      */
     public static Type parseType(String typeName, String input) {
+        warning();
         if (typeRegistry == null) {
             return null;
         }
@@ -76,6 +84,7 @@ public final class TypeParser {
      * @return the corresponding State instance or <code>null</code>
      */
     public static State parseState(List<Class<? extends State>> types, String input) {
+        warning();
         if (typeRegistry == null) {
             return null;
         }
@@ -94,9 +103,20 @@ public final class TypeParser {
      * @return the corresponding Command instance or <code>null</code>
      */
     public static Command parseCommand(List<Class<? extends Command>> types, String input) {
+        warning();
         if (typeRegistry == null) {
             return null;
         }
         return typeRegistry.parseCommand(types, input);
+    }
+
+    /**
+     * Prints out warning about direct use of type parser.
+     *
+     * It is compatibility spot for some bindings, which hopefuly will transition to new API at
+     * some point.
+     */
+    private static void warning() {
+        LOGGER.warn("Detected use of legacy TypeParser API. Please port your code to use TypeFactory/TypeProvider service instead.");
     }
 }

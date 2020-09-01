@@ -86,7 +86,7 @@ public class FolderObserver extends AbstractWatchService {
         this.readyService = readyService;
     }
 
-    @Reference(cardinality = ReferenceCardinality.AT_LEAST_ONE, policy = ReferencePolicy.DYNAMIC)
+    @Reference(cardinality = ReferenceCardinality.OPTIONAL, policy = ReferencePolicy.DYNAMIC)
     protected void addModelParser(ModelParser modelParser) {
         parsers.add(modelParser.getExtension());
 

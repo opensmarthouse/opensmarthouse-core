@@ -12,142 +12,223 @@
  */
 package org.openhab.core.thing;
 
+import java.util.Collection;
+import java.util.Objects;
+import java.util.concurrent.atomic.AtomicReference;
+import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.NonNullByDefault;
+import org.eclipse.jdt.annotation.Nullable;
 import org.openhab.core.thing.type.ChannelType;
+import org.openhab.core.thing.type.ChannelTypeProvider;
 import org.openhab.core.thing.type.ChannelTypeUID;
+import org.osgi.framework.Bundle;
+import org.osgi.framework.FrameworkUtil;
+import org.osgi.framework.InvalidSyntaxException;
+import org.osgi.framework.ServiceReference;
 
 /**
  * Default, system wide, channel types which can be used across multiple places.
  * Extracted from {@link org.openhab.core.thing.internal.DefaultSystemChannelTypeProvider}.
  *
- * @author Łukasz Dywicki - Initial contribution
+ * Earlier this class was used as supplier of constants and channel types. Given mixed responsibilities
+ * it was separated and split. Constants now live in {@link SystemChannelTypeConstants} while
+ * implementation is now moved to internal package and can not be called directly.
+ *
+ * @@deprecated This class is kept to provide compatibility for OH 2.x APIs and will not receive any
+ * other updates. Please migrate your code to use of @{@link SystemChannelTypeConstants} to refer
+ * common channel types.
+ *
+ * @author Łukasz Dywicki - Extraction from past code base.
  */
+@Deprecated
 @NonNullByDefault
-public interface DefaultSystemChannelTypeProvider {
+public class DefaultSystemChannelTypeProvider {
 
-    String BINDING_ID = "system";
+    public final static String BINDING_ID = SystemChannelTypeConstants.BINDING_ID;
 
     /**
      * Signal strength default system wide {@link ChannelType}. Represents signal strength of a device as a number
      * with values 0, 1, 2, 3 or 4, 0 being worst strength and 4 being best strength.
      */
-    ChannelTypeUID SYSTEM_CHANNEL_SIGNAL_STRENGTH = new ChannelTypeUID(BINDING_ID, "signal-strength");
+    public final static ChannelType SYSTEM_CHANNEL_SIGNAL_STRENGTH;
 
     /**
      * Low battery default system wide {@link ChannelType}. Represents a low battery warning with possible values
      * on (low battery) and off (battery ok).
      */
-    ChannelTypeUID SYSTEM_CHANNEL_LOW_BATTERY = new ChannelTypeUID(BINDING_ID, "low-battery");
+    public final static ChannelType SYSTEM_CHANNEL_LOW_BATTERY;
 
     /**
      * Battery level default system wide {@link ChannelType}. Represents the battery level as a percentage.
      */
-    ChannelTypeUID SYSTEM_CHANNEL_BATTERY_LEVEL = new ChannelTypeUID(BINDING_ID, "battery-level");
+    public final static ChannelType SYSTEM_CHANNEL_BATTERY_LEVEL;
 
     /**
      * System wide trigger {@link ChannelType} without event options.
      */
-    ChannelTypeUID SYSTEM_TRIGGER = new ChannelTypeUID(BINDING_ID, "trigger");
+    public final static ChannelType SYSTEM_TRIGGER;
 
     /**
      * System wide trigger {@link ChannelType} which triggers "PRESSED" and "RELEASED" events.
      */
-    ChannelTypeUID SYSTEM_RAWBUTTON = new ChannelTypeUID(BINDING_ID, "rawbutton");
+    public final static ChannelType SYSTEM_RAWBUTTON;
 
     /**
      * System wide trigger {@link ChannelType} which triggers "SHORT_PRESSED", "DOUBLE_PRESSED" and "LONG_PRESSED"
      * events.
      */
-    ChannelTypeUID SYSTEM_BUTTON = new ChannelTypeUID(BINDING_ID, "button");
+    public final static ChannelType SYSTEM_BUTTON;
 
     /**
      * System wide trigger {@link ChannelType} which triggers "DIR1_PRESSED", "DIR1_RELEASED", "DIR2_PRESSED" and
      * "DIR2_RELEASED" events.
      */
-    ChannelTypeUID SYSTEM_RAWROCKER = new ChannelTypeUID(BINDING_ID, "rawrocker");
+    public final static ChannelType SYSTEM_RAWROCKER;
 
     /**
      * Power: default system wide {@link ChannelType} which allows turning off (potentially on) a device
      */
-    ChannelTypeUID SYSTEM_POWER = new ChannelTypeUID(BINDING_ID, "power");
+    public final static ChannelType SYSTEM_POWER;
 
     /**
      * Location: default system wide {@link ChannelType} which displays a location
      */
-    ChannelTypeUID SYSTEM_LOCATION = new ChannelTypeUID(BINDING_ID, "location");
+    public final static ChannelType SYSTEM_LOCATION;
 
     /**
      * Motion: default system wide {@link ChannelType} which indications whether motion was detected (state ON)
      */
-    ChannelTypeUID SYSTEM_MOTION = new ChannelTypeUID(BINDING_ID, "motion");
+    public final static ChannelType SYSTEM_MOTION;
 
     /**
      * Brightness: default system wide {@link ChannelType} which allows changing the brightness from 0-100%
      */
-    ChannelTypeUID SYSTEM_BRIGHTNESS = new ChannelTypeUID(BINDING_ID, "brightness");
+    public final static ChannelType SYSTEM_BRIGHTNESS;
 
     /**
      * Color: default system wide {@link ChannelType} which allows changing the color
      */
-    ChannelTypeUID SYSTEM_COLOR = new ChannelTypeUID(BINDING_ID, "color");
+    public final static ChannelType SYSTEM_COLOR;
 
     /**
      * Color-temperature: default system wide {@link ChannelType} which allows changing the color temperature
      */
-    ChannelTypeUID SYSTEM_COLOR_TEMPERATURE = new ChannelTypeUID(BINDING_ID, "color-temperature");
+    public final static ChannelType SYSTEM_COLOR_TEMPERATURE;
 
     // media channels
 
     /**
      * Volume: default system wide {@link ChannelType} which allows changing the audio volume from 0-100%
      */
-    ChannelTypeUID SYSTEM_VOLUME = new ChannelTypeUID(BINDING_ID, "volume");
+    public final static ChannelType SYSTEM_VOLUME;
 
     /**
      * Mute: default system wide {@link ChannelType} which allows muting and un-muting audio
      */
-    ChannelTypeUID SYSTEM_MUTE = new ChannelTypeUID(BINDING_ID, "mute");
+    public final static ChannelType SYSTEM_MUTE;
 
     /**
      * Media-control: system wide {@link ChannelType} which controls a media player
      */
-    ChannelTypeUID SYSTEM_MEDIA_CONTROL = new ChannelTypeUID(BINDING_ID, "media-control");
+    public final static ChannelType SYSTEM_MEDIA_CONTROL;
 
     /**
      * Media-title: default system wide {@link ChannelType} which displays the title of a (played) song
      */
-    ChannelTypeUID SYSTEM_MEDIA_TITLE = new ChannelTypeUID(BINDING_ID, "media-title");
+    public final static ChannelType SYSTEM_MEDIA_TITLE;
 
     /**
      * Media-artist: default system wide {@link ChannelType} which displays the artist of a (played) song
      */
-    ChannelTypeUID SYSTEM_MEDIA_ARTIST = new ChannelTypeUID(BINDING_ID, "media-artist");
+    public final static ChannelType SYSTEM_MEDIA_ARTIST;
 
     // weather channels
 
     /**
      * Wind-direction: system wide {@link ChannelType} which shows the wind direction in degrees 0-360
      */
-    ChannelTypeUID SYSTEM_WIND_DIRECTION = new ChannelTypeUID(BINDING_ID, "wind-direction");
+    public final static ChannelType SYSTEM_WIND_DIRECTION;
 
     /**
      * Wind-speed: system wide {@link ChannelType} which shows the wind speed
      */
-    ChannelTypeUID SYSTEM_WIND_SPEED = new ChannelTypeUID(BINDING_ID, "wind-speed");
+    public final static ChannelType SYSTEM_WIND_SPEED;
 
     /**
      * Outdoor-temperature: system wide {@link ChannelType} which shows the outdoor temperature
      */
-    ChannelTypeUID SYSTEM_OUTDOOR_TEMPERATURE = new ChannelTypeUID(BINDING_ID, "outdoor-temperature");
+    public final static ChannelType SYSTEM_OUTDOOR_TEMPERATURE;
 
     /**
      * Atmospheric-humidity: system wide {@link ChannelType} which shows the atmospheric humidity
      */
-    ChannelTypeUID SYSTEM_ATMOSPHERIC_HUMIDITY = new ChannelTypeUID(BINDING_ID, "atmospheric-humidity");
+    public final static ChannelType SYSTEM_ATMOSPHERIC_HUMIDITY;
 
     /**
      * Barometric-pressure: system wide {@link ChannelType} which shows the barometric pressure
      */
-    ChannelTypeUID SYSTEM_BAROMETRIC_PRESSURE = new ChannelTypeUID(BINDING_ID, "barometric-pressure");
+    public final static ChannelType SYSTEM_BAROMETRIC_PRESSURE;
+
+    public final static AtomicReference<ChannelTypeProvider> PROVIDER = new AtomicReference<>();
+
+    static {
+        Bundle bundle = FrameworkUtil.getBundle(DefaultSystemChannelTypeProvider.class);
+
+        if (bundle == null) {
+            throw new ExceptionInInitializerError("DefaultSystemChannelTypeProvider is legacy API working only under OSGi to bridge OH 2.x bindings.");
+        }
+
+        @Nullable ServiceReference<ChannelTypeProvider> lookup = null;
+        int waitTime = 0;
+        while (waitTime < 10000) {
+            // lets wait up to 10 seconds to get default channel type provider in place
+            // it might not be very fortunate way unless we get bindings using specific
+            try {
+                Collection<ServiceReference<ChannelTypeProvider>> reference = bundle.getBundleContext()
+                    .getServiceReferences(ChannelTypeProvider.class, "(component.name=org.openhab.core.thing.internal.DefaultSystemChannelTypeProvider)");
+                if (reference != null && reference.size() > 0) {
+                    lookup = reference.iterator().next();
+                    break;
+                }
+                waitTime += 100;
+                Thread.sleep(100);
+            } catch (InterruptedException | InvalidSyntaxException e) {
+                throw new RuntimeException(e);
+            }
+        }
+
+        @NonNull ChannelTypeProvider provider = bundle.getBundleContext().getService(lookup);
+
+        SYSTEM_CHANNEL_SIGNAL_STRENGTH = getChannel(provider, SystemChannelTypeConstants.SYSTEM_CHANNEL_SIGNAL_STRENGTH);
+        SYSTEM_CHANNEL_LOW_BATTERY = getChannel(provider, SystemChannelTypeConstants.SYSTEM_CHANNEL_LOW_BATTERY);
+        SYSTEM_CHANNEL_BATTERY_LEVEL = getChannel(provider, SystemChannelTypeConstants.SYSTEM_CHANNEL_BATTERY_LEVEL);
+        SYSTEM_TRIGGER = getChannel(provider, SystemChannelTypeConstants.SYSTEM_TRIGGER);
+        SYSTEM_RAWBUTTON = getChannel(provider, SystemChannelTypeConstants.SYSTEM_RAWBUTTON);
+        SYSTEM_BUTTON = getChannel(provider, SystemChannelTypeConstants.SYSTEM_BUTTON);
+        SYSTEM_RAWROCKER = getChannel(provider, SystemChannelTypeConstants.SYSTEM_RAWROCKER);
+        SYSTEM_POWER = getChannel(provider, SystemChannelTypeConstants.SYSTEM_POWER);
+        SYSTEM_LOCATION = getChannel(provider, SystemChannelTypeConstants.SYSTEM_LOCATION);
+        SYSTEM_MOTION = getChannel(provider, SystemChannelTypeConstants.SYSTEM_MOTION);
+        SYSTEM_BRIGHTNESS = getChannel(provider, SystemChannelTypeConstants.SYSTEM_BRIGHTNESS);
+        SYSTEM_COLOR = getChannel(provider, SystemChannelTypeConstants.SYSTEM_COLOR);
+        SYSTEM_COLOR_TEMPERATURE = getChannel(provider, SystemChannelTypeConstants.SYSTEM_COLOR_TEMPERATURE);
+        SYSTEM_VOLUME = getChannel(provider, SystemChannelTypeConstants.SYSTEM_VOLUME);
+        SYSTEM_MUTE = getChannel(provider, SystemChannelTypeConstants.SYSTEM_MUTE);
+        SYSTEM_MEDIA_CONTROL = getChannel(provider, SystemChannelTypeConstants.SYSTEM_MEDIA_CONTROL);
+        SYSTEM_MEDIA_TITLE = getChannel(provider, SystemChannelTypeConstants.SYSTEM_MEDIA_TITLE);
+        SYSTEM_MEDIA_ARTIST = getChannel(provider, SystemChannelTypeConstants.SYSTEM_MEDIA_ARTIST);
+        SYSTEM_WIND_DIRECTION = getChannel(provider, SystemChannelTypeConstants.SYSTEM_WIND_DIRECTION);
+        SYSTEM_WIND_SPEED = getChannel(provider, SystemChannelTypeConstants.SYSTEM_WIND_SPEED);
+        SYSTEM_OUTDOOR_TEMPERATURE = getChannel(provider, SystemChannelTypeConstants.SYSTEM_OUTDOOR_TEMPERATURE);
+        SYSTEM_ATMOSPHERIC_HUMIDITY = getChannel(provider, SystemChannelTypeConstants.SYSTEM_ATMOSPHERIC_HUMIDITY);
+        SYSTEM_BAROMETRIC_PRESSURE = getChannel(provider, SystemChannelTypeConstants.SYSTEM_BAROMETRIC_PRESSURE);
+
+        bundle.getBundleContext().ungetService(lookup);
+    }
+
+    @NonNull
+    private static ChannelType getChannel(@NonNull ChannelTypeProvider provider, ChannelTypeUID constant) {
+        return Objects.requireNonNull(provider.getChannelType(constant, null));
+    }
 
 }
