@@ -22,14 +22,14 @@ import org.openhab.core.types.Command;
  * @author Chris Jackson - Rewrite type system for OpenSmartHouse
  */
 @NonNullByDefault
-public class RefreshType extends AbstractBaseType implements Command {
+public class RefreshType extends PrimitiveType<RefreshType> implements Command {
     private static String CONST_REFRESH = "REFRESH";
-    public static RefreshType REFRESH = new RefreshType(CONST_REFRESH);
+    public static RefreshType REFRESH = new RefreshType(CONST_REFRESH, 0);
 
-    private final String value;
+    private static RefreshType[] values = new RefreshType[] { REFRESH };
 
-    private RefreshType(String value) {
-        this.value = value;
+    private RefreshType(String name, int ordinal) {
+        super(name, ordinal);
     }
 
     public static @Nullable RefreshType valueOf(String value) {
@@ -39,29 +39,7 @@ public class RefreshType extends AbstractBaseType implements Command {
         return null;
     }
 
-    @Override
-    public String format(String pattern) {
-        return String.format(pattern, this.toString());
-    }
-
-    @Override
-    public String toString() {
-        return value;
-    }
-
-    @Override
-    public String toFullString() {
-        return value;
-    }
-
-    /**
-     * Gets the string name of this value
-     * 
-     * @return the name of the value
-     * @deprecated use {@link #toString()} instead
-     */
-    @Deprecated
-    public String name() {
-        return toString();
+    public static RefreshType[] values() {
+        return values;
     }
 }

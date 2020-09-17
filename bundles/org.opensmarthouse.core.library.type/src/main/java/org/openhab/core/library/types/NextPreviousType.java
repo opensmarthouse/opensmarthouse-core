@@ -23,17 +23,16 @@ import org.openhab.core.types.Command;
  * @author Chris Jackson - Rewrite type system for OpenSmartHouse
  */
 @NonNullByDefault
-public class NextPreviousType extends AbstractBaseType implements Command {
+public class NextPreviousType extends PrimitiveType<NextPreviousType> implements Command {
 
     private static String CONST_NEXT = "NEXT";
     private static String CONST_PREVIOUS = "PREVIOUS";
-    public static NextPreviousType NEXT = new NextPreviousType(CONST_NEXT);
-    public static NextPreviousType PREVIOUS = new NextPreviousType(CONST_PREVIOUS);
+    public static NextPreviousType NEXT = new NextPreviousType(CONST_NEXT, 0);
+    public static NextPreviousType PREVIOUS = new NextPreviousType(CONST_PREVIOUS, 1);
+    private static NextPreviousType[] values = new NextPreviousType[] { NEXT, PREVIOUS };
 
-    private final String value;
-
-    private NextPreviousType(String value) {
-        this.value = value;
+    private NextPreviousType(String name, int ordinal) {
+        super(name, ordinal);
     }
 
     public static @Nullable NextPreviousType valueOf(String value) {
@@ -46,29 +45,7 @@ public class NextPreviousType extends AbstractBaseType implements Command {
         return null;
     }
 
-    @Override
-    public String format(String pattern) {
-        return String.format(pattern, this.toString());
-    }
-
-    @Override
-    public String toString() {
-        return value;
-    }
-
-    @Override
-    public String toFullString() {
-        return value;
-    }
-
-    /**
-     * Gets the string name of this value
-     * 
-     * @return the name of the value
-     * @deprecated use {@link #toString()} instead
-     */
-    @Deprecated
-    public String name() {
-        return toString();
+    public static NextPreviousType[] values() {
+        return values;
     }
 }

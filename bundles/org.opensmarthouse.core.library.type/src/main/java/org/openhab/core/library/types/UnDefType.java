@@ -27,16 +27,16 @@ import org.openhab.core.types.State;
  * @author Chris Jackson - Rewrite type system for OpenSmartHouse
  */
 @NonNullByDefault
-public class UnDefType extends AbstractBaseType implements State {
+public class UnDefType extends PrimitiveType<UnDefType> implements State {
     private static String CONST_NULL = "NULL";
     private static String CONST_UNDEF = "UNDEF";
-    public static UnDefType NULL = new UnDefType(CONST_NULL);
-    public static UnDefType UNDEF = new UnDefType(CONST_UNDEF);
+    public static UnDefType NULL = new UnDefType(CONST_NULL, 0);
+    public static UnDefType UNDEF = new UnDefType(CONST_UNDEF, 1);
 
-    private final String value;
+    private static UnDefType[] values = new UnDefType[] { NULL, UNDEF };
 
-    private UnDefType(String value) {
-        this.value = value;
+    private UnDefType(String name, int ordinal) {
+        super(name, ordinal);
     }
 
     public static @Nullable UnDefType valueOf(String value) {
@@ -49,29 +49,7 @@ public class UnDefType extends AbstractBaseType implements State {
         return null;
     }
 
-    @Override
-    public String format(String pattern) {
-        return String.format(pattern, this.toString());
-    }
-
-    @Override
-    public String toString() {
-        return value;
-    }
-
-    @Override
-    public String toFullString() {
-        return value;
-    }
-
-    /**
-     * Gets the string name of this value
-     * 
-     * @return the name of the value
-     * @deprecated use {@link #toString()} instead
-     */
-    @Deprecated
-    public String name() {
-        return toString();
+    public static UnDefType[] values() {
+        return values;
     }
 }

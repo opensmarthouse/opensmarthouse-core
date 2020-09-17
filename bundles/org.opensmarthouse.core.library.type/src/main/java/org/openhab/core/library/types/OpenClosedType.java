@@ -23,22 +23,17 @@ import org.openhab.core.types.State;
  * @author Chris Jackson - Refactor type system for OpenSmartHouse
  */
 @NonNullByDefault
-public class OpenClosedType extends AbstractBaseType implements State, Command {
+public class OpenClosedType extends PrimitiveType<OpenClosedType> implements State, Command {
     private static String CONST_OPEN = "OPEN";
     private static String CONST_CLOSED = "CLOSED";
 
-    public static OpenClosedType OPEN = new OpenClosedType(CONST_OPEN);
-    public static OpenClosedType CLOSED = new OpenClosedType(CONST_CLOSED);
+    public static OpenClosedType OPEN = new OpenClosedType(CONST_OPEN, 0);
+    public static OpenClosedType CLOSED = new OpenClosedType(CONST_CLOSED, 1);
 
-    private String value;
+    private static OpenClosedType[] values = new OpenClosedType[] { OPEN, CLOSED };
 
-    private OpenClosedType(String value) {
-        this.value = value;
-    }
-
-    @Override
-    public String format(String pattern) {
-        return String.format(pattern, this.toString());
+    private OpenClosedType(String name, int ordinal) {
+        super(name, ordinal);
     }
 
     public static @Nullable OpenClosedType valueOf(String value) {
@@ -49,16 +44,6 @@ public class OpenClosedType extends AbstractBaseType implements State, Command {
             return CLOSED;
         }
         return null;
-    }
-
-    @Override
-    public String toString() {
-        return toFullString();
-    }
-
-    @Override
-    public String toFullString() {
-        return value;
     }
 
     @Override
@@ -77,14 +62,7 @@ public class OpenClosedType extends AbstractBaseType implements State, Command {
         return null;
     }
 
-    /**
-     * Gets the string name of this value
-     * 
-     * @return the name of the value
-     * @deprecated use {@link #toString()} instead
-     */
-    @Deprecated
-    public String name() {
-        return toString();
+    public static OpenClosedType[] values() {
+        return values;
     }
 }

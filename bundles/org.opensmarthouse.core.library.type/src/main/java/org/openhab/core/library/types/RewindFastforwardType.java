@@ -24,17 +24,17 @@ import org.openhab.core.types.State;
  * @author Chris Jackson - Rewrite type system for OpenSmartHouse
  */
 @NonNullByDefault
-public class RewindFastforwardType extends AbstractBaseType implements State, Command {
+public class RewindFastforwardType extends PrimitiveType<RewindFastforwardType> implements State, Command {
 
     private static String CONST_REWIND = "REWIND";
     private static String CONST_FASTFORWARD = "FASTFORWARD";
-    public static RewindFastforwardType REWIND = new RewindFastforwardType(CONST_REWIND);
-    public static RewindFastforwardType FASTFORWARD = new RewindFastforwardType(CONST_FASTFORWARD);
+    public static RewindFastforwardType REWIND = new RewindFastforwardType(CONST_REWIND, 0);
+    public static RewindFastforwardType FASTFORWARD = new RewindFastforwardType(CONST_FASTFORWARD, 1);
 
-    private final String value;
+    private static RewindFastforwardType[] values = new RewindFastforwardType[] { REWIND, FASTFORWARD };
 
-    private RewindFastforwardType(String value) {
-        this.value = value;
+    private RewindFastforwardType(String name, int ordinal) {
+        super(name, ordinal);
     }
 
     public static @Nullable RewindFastforwardType valueOf(String value) {
@@ -47,29 +47,7 @@ public class RewindFastforwardType extends AbstractBaseType implements State, Co
         return null;
     }
 
-    @Override
-    public String format(String pattern) {
-        return String.format(pattern, this.toString());
-    }
-
-    @Override
-    public String toString() {
-        return value;
-    }
-
-    @Override
-    public String toFullString() {
-        return value;
-    }
-
-    /**
-     * Gets the string name of this value
-     * 
-     * @return the name of the value
-     * @deprecated use {@link #toString()} instead
-     */
-    @Deprecated
-    public String name() {
-        return toString();
+    public static RewindFastforwardType[] values() {
+        return values;
     }
 }

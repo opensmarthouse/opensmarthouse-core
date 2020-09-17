@@ -23,16 +23,15 @@ import org.openhab.core.types.State;
  * @author Chris Jackson - Refactor type system for OpenSmartHouse
  */
 @NonNullByDefault
-public class OnOffType extends AbstractBaseType implements State, Command {
+public class OnOffType extends PrimitiveType<OnOffType> implements State, Command {
     private static String CONST_ON = "ON";
     private static String CONST_OFF = "OFF";
-    public static OnOffType ON = new OnOffType(CONST_ON);
-    public static OnOffType OFF = new OnOffType(CONST_OFF);
+    public static OnOffType ON = new OnOffType(CONST_ON, 0);
+    public static OnOffType OFF = new OnOffType(CONST_OFF, 1);
+    private static OnOffType[] values = new OnOffType[] { ON, OFF };
 
-    private final String value;
-
-    private OnOffType(String value) {
-        this.value = value;
+    private OnOffType(String name, int ordinal) {
+        super(name, ordinal);
     }
 
     /**
@@ -64,21 +63,6 @@ public class OnOffType extends AbstractBaseType implements State, Command {
     }
 
     @Override
-    public String format(String pattern) {
-        return String.format(pattern, this.toString());
-    }
-
-    @Override
-    public String toString() {
-        return toFullString();
-    }
-
-    @Override
-    public String toFullString() {
-        return value;
-    }
-
-    @Override
     public <T extends State> @Nullable T as(@Nullable Class<T> target) {
         if (target == DecimalType.class) {
             return target.cast(this == ON ? new DecimalType(1) : DecimalType.ZERO);
@@ -92,5 +76,9 @@ public class OnOffType extends AbstractBaseType implements State, Command {
             return target.cast(this);
         }
         return null;
+    }
+
+    public static OnOffType[] values() {
+        return values;
     }
 }

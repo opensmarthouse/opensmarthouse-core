@@ -22,17 +22,16 @@ import org.openhab.core.types.Command;
  * @author Chris Jackson - Rewrite type system for OpenSmartHouse
  */
 @NonNullByDefault
-public class IncreaseDecreaseType extends AbstractBaseType implements Command {
+public class IncreaseDecreaseType extends PrimitiveType<IncreaseDecreaseType> implements Command {
 
     private static String CONST_INCREASE = "INCREASE";
     private static String CONST_DECREASE = "DECREASE";
-    public static IncreaseDecreaseType INCREASE = new IncreaseDecreaseType(CONST_INCREASE);
-    public static IncreaseDecreaseType DECREASE = new IncreaseDecreaseType(CONST_DECREASE);
+    public static IncreaseDecreaseType INCREASE = new IncreaseDecreaseType(CONST_INCREASE, 0);
+    public static IncreaseDecreaseType DECREASE = new IncreaseDecreaseType(CONST_DECREASE, 1);
+    private static IncreaseDecreaseType[] values = new IncreaseDecreaseType[] { INCREASE, DECREASE };
 
-    private final String value;
-
-    private IncreaseDecreaseType(String value) {
-        this.value = value;
+    private IncreaseDecreaseType(String name, int ordinal) {
+        super(name, ordinal);
     }
 
     public static @Nullable IncreaseDecreaseType valueOf(String value) {
@@ -45,29 +44,7 @@ public class IncreaseDecreaseType extends AbstractBaseType implements Command {
         return null;
     }
 
-    @Override
-    public String format(String pattern) {
-        return String.format(pattern, this.toString());
-    }
-
-    @Override
-    public String toString() {
-        return value;
-    }
-
-    @Override
-    public String toFullString() {
-        return value;
-    }
-
-    /**
-     * Gets the string name of this value
-     * 
-     * @return the name of the value
-     * @deprecated use {@link #toString()} instead
-     */
-    @Deprecated
-    public String name() {
-        return toString();
+    public static IncreaseDecreaseType[] values() {
+        return values;
     }
 }

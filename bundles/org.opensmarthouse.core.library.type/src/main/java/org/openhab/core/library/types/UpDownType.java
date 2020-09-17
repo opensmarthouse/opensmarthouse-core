@@ -25,17 +25,17 @@ import org.openhab.core.types.State;
  * @author Chris Jackson - Rewrite type system for OpenSmartHouse
  */
 @NonNullByDefault
-public class UpDownType extends AbstractBaseType implements State, Command {
+public class UpDownType extends PrimitiveType<UpDownType> implements State, Command {
 
     private static String CONST_UP = "UP";
     private static String CONST_DOWN = "DOWN";
-    public static UpDownType UP = new UpDownType(CONST_UP);
-    public static UpDownType DOWN = new UpDownType(CONST_DOWN);
+    public static UpDownType UP = new UpDownType(CONST_UP, 0);
+    public static UpDownType DOWN = new UpDownType(CONST_DOWN, 1);
 
-    private final String value;
+    private static UpDownType[] values = new UpDownType[] { UP, DOWN };
 
-    private UpDownType(String value) {
-        this.value = value;
+    private UpDownType(String name, int ordinal) {
+        super(name, ordinal);
     }
 
     public static @Nullable UpDownType valueOf(String value) {
@@ -49,21 +49,6 @@ public class UpDownType extends AbstractBaseType implements State, Command {
     }
 
     @Override
-    public String format(String pattern) {
-        return String.format(pattern, this.toString());
-    }
-
-    @Override
-    public String toString() {
-        return value;
-    }
-
-    @Override
-    public String toFullString() {
-        return value;
-    }
-
-    @Override
     public <T extends State> @Nullable T as(@Nullable Class<T> target) {
         if (target == DecimalType.class) {
             return target.cast(equals(UP) ? DecimalType.ZERO : new DecimalType(new BigDecimal("1.0")));
@@ -74,14 +59,7 @@ public class UpDownType extends AbstractBaseType implements State, Command {
         }
     }
 
-    /**
-     * Gets the string name of this value
-     * 
-     * @return the name of the value
-     * @deprecated use {@link #toString()} instead
-     */
-    @Deprecated
-    public String name() {
-        return toString();
+    public static UpDownType[] values() {
+        return values;
     }
 }

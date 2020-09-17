@@ -22,17 +22,17 @@ import org.openhab.core.types.Command;
  * @author Chris Jackson - Rewrite type system for OpenSmartHouse
  */
 @NonNullByDefault
-public class StopMoveType extends AbstractBaseType implements Command {
+public class StopMoveType extends PrimitiveType<StopMoveType> implements Command {
 
     private static String CONST_STOP = "STOP";
     private static String CONST_MOVE = "MOVE";
-    public static StopMoveType STOP = new StopMoveType(CONST_STOP);
-    public static StopMoveType MOVE = new StopMoveType(CONST_MOVE);
+    public static StopMoveType STOP = new StopMoveType(CONST_STOP, 0);
+    public static StopMoveType MOVE = new StopMoveType(CONST_MOVE, 1);
 
-    private final String value;
+    private static StopMoveType[] values = new StopMoveType[] { STOP, MOVE };
 
-    private StopMoveType(String value) {
-        this.value = value;
+    private StopMoveType(String name, int ordinal) {
+        super(name, ordinal);
     }
 
     public static @Nullable StopMoveType valueOf(String value) {
@@ -45,29 +45,7 @@ public class StopMoveType extends AbstractBaseType implements Command {
         return null;
     }
 
-    @Override
-    public String format(String pattern) {
-        return String.format(pattern, this.toString());
-    }
-
-    @Override
-    public String toString() {
-        return value;
-    }
-
-    @Override
-    public String toFullString() {
-        return value;
-    }
-
-    /**
-     * Gets the string name of this value
-     * 
-     * @return the name of the value
-     * @deprecated use {@link #toString()} instead
-     */
-    @Deprecated
-    public String name() {
-        return toString();
+    public static StopMoveType[] values() {
+        return values;
     }
 }

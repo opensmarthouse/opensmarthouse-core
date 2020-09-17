@@ -24,17 +24,17 @@ import org.openhab.core.types.State;
  * @author Chris Jackson - Rewrite type system for OpenSmartHouse
  */
 @NonNullByDefault
-public class PlayPauseType extends AbstractBaseType implements State, Command {
+public class PlayPauseType extends PrimitiveType<PlayPauseType> implements State, Command {
 
     private static String CONST_PLAY = "PLAY";
     private static String CONST_PAUSE = "PAUSE";
-    public static PlayPauseType PLAY = new PlayPauseType(CONST_PLAY);
-    public static PlayPauseType PAUSE = new PlayPauseType(CONST_PAUSE);
+    public static PlayPauseType PLAY = new PlayPauseType(CONST_PLAY, 0);
+    public static PlayPauseType PAUSE = new PlayPauseType(CONST_PAUSE, 1);
 
-    private final String value;
+    private static PlayPauseType[] values = new PlayPauseType[] { PLAY, PAUSE };
 
-    private PlayPauseType(String value) {
-        this.value = value;
+    private PlayPauseType(String name, int ordinal) {
+        super(name, ordinal);
     }
 
     public static @Nullable PlayPauseType valueOf(String value) {
@@ -47,29 +47,7 @@ public class PlayPauseType extends AbstractBaseType implements State, Command {
         return null;
     }
 
-    @Override
-    public String format(String pattern) {
-        return String.format(pattern, this.toString());
-    }
-
-    @Override
-    public String toString() {
-        return value;
-    }
-
-    @Override
-    public String toFullString() {
-        return value;
-    }
-
-    /**
-     * Gets the string name of this value
-     * 
-     * @return the name of the value
-     * @deprecated use {@link #toString()} instead
-     */
-    @Deprecated
-    public String name() {
-        return toString();
+    public static PlayPauseType[] values() {
+        return values;
     }
 }
