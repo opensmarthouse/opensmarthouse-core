@@ -14,6 +14,8 @@ package org.openhab.core.thing.internal.profiles;
 
 import java.util.function.Function;
 
+import org.eclipse.jdt.annotation.NonNullByDefault;
+import org.eclipse.jdt.annotation.Nullable;
 import org.openhab.core.common.SafeCaller;
 import org.openhab.core.events.EventPublisher;
 import org.openhab.core.items.Item;
@@ -39,21 +41,22 @@ import org.slf4j.LoggerFactory;
  *
  * @author Simon Kaufmann - Initial contribution
  */
+@NonNullByDefault
 public class ProfileCallbackImpl implements ProfileCallback {
 
     private final Logger logger = LoggerFactory.getLogger(ProfileCallbackImpl.class);
 
     private final EventPublisher eventPublisher;
     private final ItemChannelLink link;
-    private final Function<ThingUID, Thing> thingProvider;
-    private final Function<String, Item> itemProvider;
+    private final Function<ThingUID, @Nullable Thing> thingProvider;
+    private final Function<String, @Nullable Item> itemProvider;
     private final SafeCaller safeCaller;
     private final ItemStateConverter itemStateConverter;
     private final TypeFactory typeFactory;
 
     public ProfileCallbackImpl(EventPublisher eventPublisher, SafeCaller safeCaller,
             ItemStateConverter itemStateConverter, TypeFactory typeFactory, ItemChannelLink link,
-            Function<ThingUID, Thing> thingProvider, Function<String, Item> itemProvider) {
+            Function<ThingUID, @Nullable Thing> thingProvider, Function<String, @Nullable Item> itemProvider) {
         this.eventPublisher = eventPublisher;
         this.safeCaller = safeCaller;
         this.itemStateConverter = itemStateConverter;
@@ -136,6 +139,12 @@ public class ProfileCallbackImpl implements ProfileCallback {
     @Override
     public void sendUpdate(State state) {
         Item item = itemProvider.apply(link.getItemName());
+        if (item == null) {
+            logger.warn("Cannot post update event '{}' for item '{}', because no item could be found.", state,
+                    link.getItemName());
+            return;
+        }
+
         State acceptedState;
         if (state instanceof StringType && !(item instanceof StringItem)) {
             acceptedState = typeFactory.parseState(item.getAcceptedDataTypes(), state.toString());
@@ -145,6 +154,7 @@ public class ProfileCallbackImpl implements ProfileCallback {
         } else {
             acceptedState = itemStateConverter.convertToAcceptedState(state, item);
         }
+
         eventPublisher.post(
                 ItemEventFactory.createStateEvent(link.getItemName(), acceptedState, link.getLinkedUID().toString()));
     }

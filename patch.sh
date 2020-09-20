@@ -88,6 +88,8 @@ refactor $1 "bundles/org.openhab.core.io.transport.serial/src/main/java/org/open
 
 refactor $1 "bundles/org.openhab.core/src/main/java/org/openhab/core/addon/AddonEventFactory.java"                                              "bundles/org.opensmarthouse.core.extension/src/main/java/org/openhab/core/extension/ExtensionEventFactory.java"
 
+refactor $1 "bundles/org.openhab.core.ui/src/main/java/org/openhab/core/ui/internal/items/ItemUIRegistryImpl.java"                              "bundles/org.opensmarthouse.core.ui.sitemap/src/main/java/org/openhab/core/ui/internal/items/ItemUIRegistryImpl.java"
+refactor $1 "bundles/org.openhab.core.ui/src/test/java/org/openhab/core/ui/internal/items/ItemUIRegistryImplTest.java"                          "bundles/org.opensmarthouse.core.ui.sitemap/src/test/java/org/openhab/core/ui/internal/items/ItemUIRegistryImplTest.java"
 
 
 # Patch and refactored bundles - migrating packages to new bundles

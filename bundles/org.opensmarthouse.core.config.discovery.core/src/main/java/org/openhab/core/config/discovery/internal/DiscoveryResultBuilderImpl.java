@@ -12,8 +12,12 @@
  */
 package org.openhab.core.config.discovery.internal;
 
+import java.security.AccessController;
+import java.security.PrivilegedAction;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 import org.eclipse.jdt.annotation.NonNullByDefault;
 import org.eclipse.jdt.annotation.Nullable;
@@ -21,6 +25,8 @@ import org.openhab.core.config.discovery.DiscoveryResult;
 import org.openhab.core.config.discovery.DiscoveryResultBuilder;
 import org.openhab.core.thing.ThingTypeUID;
 import org.openhab.core.thing.ThingUID;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * The {@link DiscoveryResultBuilder} helps creating a {@link DiscoveryResult} through the builder pattern.
@@ -34,6 +40,7 @@ import org.openhab.core.thing.ThingUID;
  */
 @NonNullByDefault
 public class DiscoveryResultBuilderImpl implements DiscoveryResultBuilder {
+    private Logger logger = LoggerFactory.getLogger(DiscoveryResultBuilderImpl.class);
 
     private final ThingUID thingUID;
 
@@ -47,7 +54,7 @@ public class DiscoveryResultBuilderImpl implements DiscoveryResultBuilder {
     public DiscoveryResultBuilderImpl(ThingUID thingUID) {
         this.thingTypeUID = thingUID.getThingTypeUID();
         this.thingUID = thingUID;
-    };
+    }
 
     /**
      * Explicitly sets the thing type.
@@ -83,7 +90,7 @@ public class DiscoveryResultBuilderImpl implements DiscoveryResultBuilder {
      */
     @Override
     public DiscoveryResultBuilder withProperty(String key, Object value) {
-        this.properties.put(key, value);
+        properties.put(key, value);
         return this;
     }
 
@@ -140,9 +147,26 @@ public class DiscoveryResultBuilderImpl implements DiscoveryResultBuilder {
      *
      * @return the desired result
      */
-    @Override@SuppressWarnings("deprecation")
+    @Override
+    @SuppressWarnings("deprecation")
     public DiscoveryResult build() {
+        if (representationProperty != null && !properties.containsKey(representationProperty)) {
+            logger.warn(
+                    "Representation property '{}' of discovery result for thing '{}' is missing in properties map. It has to be fixed by the bindings developer.\n{}",
+                    representationProperty, thingUID, getStackTrace(Thread.currentThread()));
+        }
+
         return new DiscoveryResultImpl(thingTypeUID, thingUID, bridgeUID, properties, representationProperty, label,
                 ttl);
+    }
+
+    private String getStackTrace(final Thread thread) {
+        StackTraceElement[] elements = AccessController.doPrivileged(new PrivilegedAction<StackTraceElement[]>() {
+            @Override
+            public StackTraceElement[] run() {
+                return thread.getStackTrace();
+            }
+        });
+        return Arrays.stream(elements).map(element -> "\tat " + element.toString()).collect(Collectors.joining("\n"));
     }
 }

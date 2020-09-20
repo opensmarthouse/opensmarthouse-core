@@ -20,20 +20,8 @@
     <module>opensmarthouse</module>
     <module>opensmarthouse-test</module>
     <module>opensmarthouse-dependencies</module>
-    <!-- below are bnd related
-    <module>compile</module>
-    -->
     <module>compile-model</module>
-    <!--
-    <module>runtime</module>
-    <module>runtime-index</module>
-    <module>test</module>
-    <module>test-index</module>
-    -->
     <module>opensmarthouse-core</module>
-    <!--
-    <module>opensmarthouse-core-index</module>
-    -->
   </modules>
 
 </project>

@@ -14,11 +14,13 @@ package org.openhab.core.config.discovery.inbox;
 
 import java.util.function.Predicate;
 
+import org.eclipse.jdt.annotation.NonNullByDefault;
 import org.openhab.core.config.discovery.DiscoveryResult;
 import org.osgi.service.component.annotations.Component;
 
 /**
- * {@link Component}s implementing this interface participate in the {@link org.openhab.core.config.discovery.internal.AutomaticInboxProcessor}'s
+ * {@link Component}s implementing this interface participate in the
+ * {@link org.openhab.core.config.discovery.internal.AutomaticInboxProcessor}'s
  * decision whether to automatically approve an inbox result or not.
  * <p/>
  * If this {@link Predicate} returns <code>true</code> the {@link DiscoveryResult} will be automatically approved by the
@@ -33,6 +35,7 @@ import org.osgi.service.component.annotations.Component;
  *
  * @author Henning Sudbrock - Initial contribution
  */
+@NonNullByDefault
 public interface InboxAutoApprovePredicate extends Predicate<DiscoveryResult> {
 
 }

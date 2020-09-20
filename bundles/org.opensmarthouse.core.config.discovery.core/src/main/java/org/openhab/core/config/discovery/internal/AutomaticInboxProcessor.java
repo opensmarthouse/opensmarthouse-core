@@ -12,7 +12,9 @@
  */
 package org.openhab.core.config.discovery.internal;
 
-import static org.openhab.core.config.discovery.inbox.InboxPredicates.*;
+import static org.openhab.core.config.discovery.inbox.InboxPredicates.forThingTypeUID;
+import static org.openhab.core.config.discovery.inbox.InboxPredicates.withFlag;
+import static org.openhab.core.config.discovery.inbox.InboxPredicates.withRepresentationPropertyValue;
 
 import java.util.List;
 import java.util.Map;

@@ -14,15 +14,14 @@ package org.openhab.core.ui.internal.items;
 
 import static org.hamcrest.CoreMatchers.instanceOf;
 import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.collection.IsCollectionWithSize.hasSize;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNull;
-import static org.junit.Assert.assertThat;
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
-import static org.mockito.MockitoAnnotations.initMocks;
 
 import java.text.DecimalFormatSymbols;
 import java.util.ArrayList;
@@ -32,12 +31,16 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import org.eclipse.emf.common.util.BasicEList;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
+import org.mockito.junit.jupiter.MockitoSettings;
+import org.mockito.quality.Strictness;
 import org.openhab.core.i18n.UnitProvider;
-import org.openhab.core.internal.types.CoreCommandDescriptionBuilder;
-import org.openhab.core.internal.types.CoreStateDescriptionFragmentBuilder;
+import org.openhab.core.internal.types.CoreCommandDescriptionBuilderFactory;
+import org.openhab.core.internal.types.CoreStateDescriptionFragmentBuilderFactory;
 import org.openhab.core.items.GroupItem;
 import org.openhab.core.items.Item;
 import org.openhab.core.items.ItemNotFoundException;
@@ -86,6 +89,8 @@ import org.openhab.core.ui.items.ItemUIProvider;
 /**
  * @author Kai Kreuzer - Initial contribution
  */
+@ExtendWith(MockitoExtension.class)
+@MockitoSettings(strictness = Strictness.WARN)
 public class ItemUIRegistryImplTest {
 
     // we need to get the decimal separator of the default locale for our tests
@@ -95,18 +100,13 @@ public class ItemUIRegistryImplTest {
     private ItemUIRegistryImpl uiRegistry;
 
     private @Mock ItemRegistry registry;
-
     private @Mock Widget widget;
-
     private @Mock Item item;
-
     private @Mock UnitProvider unitProvider;
 
-    @Before
+    @BeforeEach
     public void setup() throws Exception {
-        initMocks(this);
-        uiRegistry = new ItemUIRegistryImpl();
-        uiRegistry.setItemRegistry(registry);
+        uiRegistry = new ItemUIRegistryImpl(registry);
 
         when(widget.getItem()).thenReturn(ITEM_NAME);
         when(registry.getItem(ITEM_NAME)).thenReturn(item);
@@ -160,8 +160,8 @@ public class ItemUIRegistryImplTest {
         when(widget.getLabel()).thenReturn(testLabel);
         when(item.getState()).thenReturn(new DecimalType(20));
         when(item.getStateAs(DecimalType.class)).thenReturn(new DecimalType(20));
-        StateDescription value = stateDescription("%d");
-        when(item.getStateDescription()).thenReturn(value);
+        when(item.getStateDescription()).thenReturn(new CoreStateDescriptionFragmentBuilderFactory().create()
+                .withPattern("%d").build().toStateDescription());
         String label = uiRegistry.getLabel(widget);
         assertEquals("Label [20]", label);
     }
@@ -173,16 +173,10 @@ public class ItemUIRegistryImplTest {
         when(widget.getLabel()).thenReturn(testLabel);
         when(item.getState()).thenReturn(new DecimalType(20.5));
         when(item.getStateAs(DecimalType.class)).thenReturn(new DecimalType(20.5));
-        StateDescription value = stateDescription("%d");
-        when(item.getStateDescription()).thenReturn(value);
+        when(item.getStateDescription()).thenReturn(new CoreStateDescriptionFragmentBuilderFactory().create()
+                .withPattern("%d").build().toStateDescription());
         String label = uiRegistry.getLabel(widget);
         assertEquals("Label [21]", label);
-    }
-
-    private StateDescription stateDescription(String pattern) {
-        StateDescription description = mock(StateDescription.class);
-        when(description.getPattern()).thenReturn(pattern);
-        return description;
     }
 
     @Test
@@ -537,7 +531,6 @@ public class ItemUIRegistryImplTest {
         when(widget.getLabel()).thenReturn(testLabel);
         when(widget.eClass()).thenReturn(SitemapFactory.eINSTANCE.createText().eClass());
         when(registry.getItem(ITEM_NAME)).thenThrow(new ItemNotFoundException(ITEM_NAME));
-        when(item.getState()).thenReturn(new StringType("State"));
         String label = uiRegistry.getLabel(widget);
         assertEquals("Label [-]", label);
     }
@@ -827,7 +820,7 @@ public class ItemUIRegistryImplTest {
         assertThat(defaultWidget, is(instanceOf(Text.class)));
 
         // NumberItem with one to four CommandOptions should return Switch element
-        final CommandDescriptionBuilder builder = CoreCommandDescriptionBuilder.create()
+        final CommandDescriptionBuilder builder = new CoreCommandDescriptionBuilderFactory().create()
                 .withCommandOptions(Stream
                         .of(new CommandOption("command1", "label1"), new CommandOption("command2", "label2"),
                                 new CommandOption("command3", "label3"), new CommandOption("command4", "label4"))
@@ -843,7 +836,7 @@ public class ItemUIRegistryImplTest {
         assertThat(defaultWidget, is(instanceOf(Selection.class)));
 
         // NumberItem with one or more StateOptions should return Selection element
-        when(item.getStateDescription()).thenReturn(CoreStateDescriptionFragmentBuilder.create()
+        when(item.getStateDescription()).thenReturn(new CoreStateDescriptionFragmentBuilderFactory().create()
                 .withOption(new StateOption("value", "label")).build().toStateDescription());
         defaultWidget = uiRegistry.getDefaultWidget(NumberItem.class, ITEM_NAME);
         assertThat(defaultWidget, is(instanceOf(Selection.class)));
@@ -856,7 +849,7 @@ public class ItemUIRegistryImplTest {
         assertThat(defaultWidget, is(instanceOf(Text.class)));
 
         // StringItem with one to four CommandOptions should return Switch element
-        final CommandDescriptionBuilder builder = CoreCommandDescriptionBuilder.create()
+        final CommandDescriptionBuilder builder = new CoreCommandDescriptionBuilderFactory().create()
                 .withCommandOptions(Stream
                         .of(new CommandOption("command1", "label1"), new CommandOption("command2", "label2"),
                                 new CommandOption("command3", "label3"), new CommandOption("command4", "label4"))
@@ -872,7 +865,7 @@ public class ItemUIRegistryImplTest {
         assertThat(defaultWidget, is(instanceOf(Selection.class)));
 
         // StringItem with one or more StateOptions should return Selection element
-        when(item.getStateDescription()).thenReturn(CoreStateDescriptionFragmentBuilder.create()
+        when(item.getStateDescription()).thenReturn(new CoreStateDescriptionFragmentBuilderFactory().create()
                 .withOption(new StateOption("value", "label")).build().toStateDescription());
         defaultWidget = uiRegistry.getDefaultWidget(StringItem.class, ITEM_NAME);
         assertThat(defaultWidget, is(instanceOf(Selection.class)));
