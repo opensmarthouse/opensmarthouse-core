@@ -99,7 +99,7 @@
     </feature>
 
     <feature name="opensmarthouse-core-transform" description="Open SmartHouse Core: Transform" version="${project.version}">
-        <feature>opensmarthouse-core-boot</feature>
+        <feature>opensmarthouse-core</feature>
         <feature>opensmarthouse-core-net</feature>
         <feature>opensmarthouse-core-i18n</feature>
         <feature>opensmarthouse-core-registry</feature>
@@ -154,6 +154,7 @@
         <feature dependency="true">opensmarthouse-tp-http</feature>
         <feature dependency="true">pax-http-whiteboard</feature>
         <feature>opensmarthouse-core-library-type</feature>
+        <feature>opensmarthouse-core-common</feature>
 
         <bundle>mvn:org.opensmarthouse.core.bundles/org.opensmarthouse.core.io.net/${project.version}</bundle>
     </feature>
@@ -191,6 +192,7 @@
 
     <feature name="opensmarthouse-core-audio-core" description="Open SmartHouse Core: Audio Core" version="${project.version}">
         <feature dependency="true">http</feature>
+        <feature>opensmarthouse-core</feature>
         <feature>opensmarthouse-core-audio</feature>
         <feature>opensmarthouse-core-net</feature>
         <feature>opensmarthouse-core-config-core</feature>
@@ -271,6 +273,7 @@
 
     <feature name="opensmarthouse-core-automation" version="${project.version}">
         <feature dependency="true">opensmarthouse-tp-gson</feature>
+        <feature>opensmarthouse-core</feature>
         <feature>opensmarthouse-core-io-console</feature>
         <feature>opensmarthouse-core-net</feature>
         <feature>opensmarthouse-core-config-core</feature>
@@ -303,7 +306,7 @@
     </feature>
 
     <feature name="opensmarthouse-core-io-rest" version="${project.version}">
-        <feature>opensmarthouse-core-boot</feature>
+        <feature>opensmarthouse-core</feature>
         <feature>opensmarthouse-tp-jax-rs</feature>
         <feature>opensmarthouse-tp-gson</feature>
         <feature>opensmarthouse-core-i18n</feature>
@@ -358,6 +361,7 @@
 
     <feature name="opensmarthouse-core-config-dispatch" version="${project.version}">
         <feature dependency="true">opensmarthouse-tp-gson</feature>
+        <feature>opensmarthouse-core</feature>
         <feature>opensmarthouse-core-config</feature>
         <feature>opensmarthouse-core-service</feature>
         <bundle>mvn:org.opensmarthouse.core.bundles/org.opensmarthouse.core.config.dispatch/${project.version}</bundle>
@@ -469,7 +473,7 @@
     </feature>
 
     <feature name="opensmarthouse-core-id" version="${project.version}">
-        <feature>opensmarthouse-core-config</feature>
+        <feature>opensmarthouse-core</feature>
         <bundle>mvn:org.opensmarthouse.core.bundles/org.opensmarthouse.core.id/${project.version}</bundle>
     </feature>
 
@@ -529,22 +533,6 @@
 
         <requirement>opensmarthouse-tp;filter:="(feature=coap)"</requirement>
         <feature dependency="true">opensmarthouse-tp-coap</feature>
-    </feature>
-
-    <feature name="opensmarthouse-core-io-transport-dbus" version="${project.version}">
-        <feature>opensmarthouse-core-base</feature>
-        <feature prerequisite="true">wrap</feature>
-        <bundle>mvn:com.github.jnr/jffi/1.2.23/jar/complete</bundle>
-        <bundle>mvn:com.github.jnr/jffi/1.2.23/jar/native</bundle>
-        <bundle>mvn:com.github.jnr/jnr-constants/0.9.15</bundle>
-        <bundle>wrap:mvn:com.github.jnr/jnr-a64asm/1.0.0</bundle>
-        <bundle>wrap:mvn:com.github.jnr/jnr-x86asm/1.0.2</bundle>
-        <bundle>mvn:com.github.jnr/jnr-enxio/0.28</bundle>
-        <bundle>mvn:com.github.jnr/jnr-ffi/2.1.15</bundle>
-        <bundle>mvn:com.github.jnr/jnr-posix/3.0.58</bundle>
-        <bundle>mvn:com.github.jnr/jnr-unixsocket/0.33</bundle>
-        <bundle>mvn:org.ow2.asm/asm/7.1</bundle>
-        <bundle>mvn:org.opensmarthouse.core.bundles/org.opensmarthouse.core.io.transport.dbus/${project.version}</bundle>
     </feature>
 
     <feature name="opensmarthouse-core-io-transport-http" version="${project.version}">
@@ -620,7 +608,7 @@
 
     <feature name="opensmarthouse.inc-model-core" version="${project.version}">
         <feature dependency="true">opensmarthouse-tp-xtext</feature>
-        <feature>opensmarthouse-core-config</feature>
+        <feature>opensmarthouse-core</feature>
         <bundle>mvn:org.opensmarthouse.core.bundles/org.opensmarthouse.core.model.core/${project.version}</bundle>
     </feature>
 
@@ -764,7 +752,7 @@
 
     <feature name="opensmarthouse-core-storage-json" version="${project.version}">
         <feature dependency="true">opensmarthouse-tp-gson</feature>
-        <feature>opensmarthouse-core-boot</feature>
+        <feature>opensmarthouse-core</feature>
         <feature>opensmarthouse-core-item</feature>
 
         <bundle>mvn:org.opensmarthouse.core.bundles/org.opensmarthouse.core.storage.json/${project.version}</bundle>
@@ -838,7 +826,7 @@
         <feature>opensmarthouse-transport-mdns</feature>
         <feature>opensmarthouse-transport-http</feature>
 
-        <feature>opensmarthouse-core-boot</feature>
+        <feature>opensmarthouse-core</feature>
 
         <!-- This bundle needs to be started early as it registers the 404 and startup pages on Jetty -->
         <!-- It is temperarily disabled due to https://github.com/opensmarthouse/opensmarthouse-core/issues/422 -->
@@ -848,8 +836,8 @@
         <feature>opensmarthouse-core-io-rest-core</feature>
     </feature>
 
-    <feature name="opensmarthouse-core-boot" version="${project.version}">
-        <bundle start-level="90">mvn:org.opensmarthouse.core.bundles/org.opensmarthouse.core.boot/${project.version}</bundle>
+    <feature name="opensmarthouse-core" version="${project.version}">
+        <bundle start-level="90">mvn:org.opensmarthouse.core.bundles/org.opensmarthouse.core/${project.version}</bundle>
         <feature>opensmarthouse-core-config</feature>
     </feature>
 
@@ -857,9 +845,9 @@
         <feature prerequisite="true">shell</feature>
         <feature prerequisite="true">wrapper</feature>
         <feature prerequisite="true">jaas</feature>
+        <feature>opensmarthouse-core</feature>
         <feature>opensmarthouse-core-extension</feature>
         <feature>opensmarthouse-core-auth</feature>
-        <feature>opensmarthouse-core-config</feature>
         <bundle>mvn:org.opensmarthouse.core.bundles/org.opensmarthouse.core.karaf/${project.version}</bundle>
     </feature>
 

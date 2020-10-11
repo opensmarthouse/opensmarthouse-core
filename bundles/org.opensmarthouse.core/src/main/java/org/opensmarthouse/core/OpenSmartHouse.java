@@ -18,7 +18,6 @@ import java.nio.file.Paths;
 import java.util.Properties;
 import java.util.regex.Pattern;
 
-import org.openhab.core.config.core.ConfigConstants;
 import org.osgi.framework.FrameworkUtil;
 
 /**
@@ -76,7 +75,7 @@ public class OpenSmartHouse {
      */
     public static String buildString() {
         Properties prop = new Properties();
-        Path versionFilePath = Paths.get(ConfigConstants.getUserDataFolder(), "etc", "version.properties");
+        Path versionFilePath = Paths.get(getUserDataFolder(), "etc", "version.properties");
         try (FileInputStream fis = new FileInputStream(versionFilePath.toFile())) {
             prop.load(fis);
             String buildNo = prop.getProperty("build-no");

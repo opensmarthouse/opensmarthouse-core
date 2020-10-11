@@ -36,7 +36,7 @@ import org.openhab.core.automation.type.ModuleType;
 import org.openhab.core.automation.type.ModuleTypeProvider;
 import org.openhab.core.common.registry.Provider;
 import org.openhab.core.common.registry.ProviderChangeListener;
-import org.openhab.core.config.core.ConfigConstants;
+import org.opensmarthouse.core.OpenSmartHouse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -87,7 +87,7 @@ public abstract class AbstractFileProvider<@NonNull E> implements Provider<E> {
 
     public AbstractFileProvider(String root) {
         this.rootSubdirectory = root;
-        configurationRoots = new String[] { ConfigConstants.getConfigFolder() + File.separator + "automation" };
+        configurationRoots = new String[] { OpenSmartHouse.getConfigFolder() + File.separator + "automation" };
     }
 
     public void activate(Map<String, Object> config) {

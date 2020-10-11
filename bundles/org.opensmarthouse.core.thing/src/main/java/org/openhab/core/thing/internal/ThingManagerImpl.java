@@ -122,6 +122,7 @@ import org.slf4j.LoggerFactory;
  * @author Christoph Weitkamp - Added preconfigured ChannelGroupBuilder
  * @author Yordan Zhelev - Added thing disabling mechanism
  * @author Chris Jackson - Set channels to UnDef when thing is OFFLINE
+ * @author Chris Jackson - Added ThingHandlerCallback.getConfigurationParameterDescription method
  */
 @NonNullByDefault
 @Component(immediate = true, service = { ThingTypeMigrationService.class, ThingManager.class })
@@ -298,14 +299,17 @@ public class ThingManagerImpl
         @Nullable
         @Override
         public ConfigDescriptionParameter getConfigurationParameterDescription(Thing thing, String parameter) {
-            // TODO Auto-generated method stub
             ThingType thingType = thingTypeRegistry.getThingType(thing.getThingTypeUID());
             if (thingType == null || thingType.getConfigDescriptionURI() == null) {
                 return null;
             }
 
-            ConfigDescription configDescription = configDescriptionRegistry
-                    .getConfigDescription(thingType.getConfigDescriptionURI());
+            @Nullable
+            URI uri = thingType.getConfigDescriptionURI();
+            if (uri == null) {
+                return null;
+            }
+            ConfigDescription configDescription = configDescriptionRegistry.getConfigDescription(uri);
             if (configDescription == null) {
                 return null;
             }

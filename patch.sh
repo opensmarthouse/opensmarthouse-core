@@ -41,7 +41,7 @@ then
       exit 1
    fi
 
-   git checkout -b $commit
+#   git checkout -b $commit
 fi
 
 # Preserve the original file

@@ -25,7 +25,7 @@
     </dependency>
     <dependency>
       <groupId>org.opensmarthouse.core.bundles</groupId>
-      <artifactId>org.opensmarthouse.core.config</artifactId>
+      <artifactId>org.opensmarthouse.core</artifactId>
     </dependency>
 
     <dependency>

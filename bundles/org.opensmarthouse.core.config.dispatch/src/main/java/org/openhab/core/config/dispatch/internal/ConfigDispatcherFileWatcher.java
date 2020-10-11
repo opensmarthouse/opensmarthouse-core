@@ -12,15 +12,17 @@
  */
 package org.openhab.core.config.dispatch.internal;
 
-import static java.nio.file.StandardWatchEventKinds.*;
+import static java.nio.file.StandardWatchEventKinds.ENTRY_CREATE;
+import static java.nio.file.StandardWatchEventKinds.ENTRY_DELETE;
+import static java.nio.file.StandardWatchEventKinds.ENTRY_MODIFY;
 
 import java.io.File;
 import java.nio.file.Path;
 import java.nio.file.WatchEvent;
 import java.nio.file.WatchEvent.Kind;
 
-import org.openhab.core.config.core.ConfigConstants;
 import org.openhab.core.service.AbstractWatchService;
+import org.opensmarthouse.core.OpenSmartHouse;
 import org.osgi.service.component.annotations.Activate;
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Deactivate;
@@ -52,9 +54,9 @@ public class ConfigDispatcherFileWatcher extends AbstractWatchService {
     private static String getPathToWatch() {
         String progArg = System.getProperty(SERVICEDIR_PROG_ARGUMENT);
         if (progArg != null) {
-            return ConfigConstants.getConfigFolder() + File.separator + progArg;
+            return OpenSmartHouse.getConfigFolder() + File.separator + progArg;
         } else {
-            return ConfigConstants.getConfigFolder() + File.separator + SERVICES_FOLDER;
+            return OpenSmartHouse.getConfigFolder() + File.separator + SERVICES_FOLDER;
         }
     }
 

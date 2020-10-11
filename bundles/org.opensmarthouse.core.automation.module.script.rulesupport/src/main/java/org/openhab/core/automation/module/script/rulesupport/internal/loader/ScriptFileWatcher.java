@@ -12,7 +12,9 @@
  */
 package org.openhab.core.automation.module.script.rulesupport.internal.loader;
 
-import static java.nio.file.StandardWatchEventKinds.*;
+import static java.nio.file.StandardWatchEventKinds.ENTRY_CREATE;
+import static java.nio.file.StandardWatchEventKinds.ENTRY_DELETE;
+import static java.nio.file.StandardWatchEventKinds.ENTRY_MODIFY;
 
 import java.io.BufferedInputStream;
 import java.io.File;
@@ -41,8 +43,8 @@ import java.util.concurrent.TimeUnit;
 import org.eclipse.jdt.annotation.Nullable;
 import org.openhab.core.automation.module.script.ScriptEngineContainer;
 import org.openhab.core.automation.module.script.ScriptEngineManager;
-import org.openhab.core.config.core.ConfigConstants;
 import org.openhab.core.service.AbstractWatchService;
+import org.opensmarthouse.core.OpenSmartHouse;
 import org.osgi.service.component.annotations.Activate;
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Deactivate;
@@ -73,7 +75,7 @@ public class ScriptFileWatcher extends AbstractWatchService {
 
     @Activate
     public ScriptFileWatcher(final @Reference ScriptEngineManager manager) {
-        super(ConfigConstants.getConfigFolder() + File.separator + FILE_DIRECTORY);
+        super(OpenSmartHouse.getConfigFolder() + File.separator + FILE_DIRECTORY);
         this.manager = manager;
     }
 

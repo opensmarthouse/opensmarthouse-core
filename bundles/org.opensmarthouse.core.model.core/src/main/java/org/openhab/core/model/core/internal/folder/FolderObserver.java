@@ -12,7 +12,9 @@
  */
 package org.openhab.core.model.core.internal.folder;
 
-import static java.nio.file.StandardWatchEventKinds.*;
+import static java.nio.file.StandardWatchEventKinds.ENTRY_CREATE;
+import static java.nio.file.StandardWatchEventKinds.ENTRY_DELETE;
+import static java.nio.file.StandardWatchEventKinds.ENTRY_MODIFY;
 
 import java.io.File;
 import java.io.FilenameFilter;
@@ -34,12 +36,12 @@ import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.stream.Collectors;
 
-import org.openhab.core.config.core.ConfigConstants;
 import org.openhab.core.model.core.ModelParser;
 import org.openhab.core.model.core.ModelRepository;
 import org.openhab.core.service.AbstractWatchService;
 import org.openhab.core.service.ReadyMarker;
 import org.openhab.core.service.ReadyService;
+import org.opensmarthouse.core.OpenSmartHouse;
 import org.osgi.service.component.ComponentContext;
 import org.osgi.service.component.annotations.Activate;
 import org.osgi.service.component.annotations.Component;
@@ -80,7 +82,7 @@ public class FolderObserver extends AbstractWatchService {
 
     @Activate
     public FolderObserver(final @Reference ModelRepository modelRepo, final @Reference ReadyService readyService) {
-        super(ConfigConstants.getConfigFolder());
+        super(OpenSmartHouse.getConfigFolder());
 
         this.modelRepository = modelRepo;
         this.readyService = readyService;
@@ -123,7 +125,7 @@ public class FolderObserver extends AbstractWatchService {
                 folderFileExtMap.put(foldername, fileExts);
             } else {
                 logger.warn("Directory '{}' does not exist in '{}'. Please check your configuration settings!",
-                        foldername, ConfigConstants.getConfigFolder());
+                        foldername, OpenSmartHouse.getConfigFolder());
             }
         }
 
@@ -291,7 +293,7 @@ public class FolderObserver extends AbstractWatchService {
      * @return the corresponding {@link File}
      */
     private File getFile(String filename) {
-        return new File(ConfigConstants.getConfigFolder() + File.separator + filename);
+        return new File(OpenSmartHouse.getConfigFolder() + File.separator + filename);
     }
 
     /**

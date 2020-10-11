@@ -86,7 +86,7 @@
 
     <!-- xtext / emf / core -->
     <classgraph.version>4.8.87</classgraph.version>
-    <emf-common.version>2.19.0</emf-common.version>
+    <emf-common.version>2.20.0</emf-common.version>
     <emf-ecore.version>2.22.0</emf-ecore.version>
     <emf-ecore-change.version>2.14.0</emf-ecore-change.version>
     <emf-ecore-xmi.version>2.16.0</emf-ecore-xmi.version>
@@ -298,7 +298,7 @@ Import-Package: \\
         <plugin>
           <groupId>org.apache.maven.plugins</groupId>
           <artifactId>maven-compiler-plugin</artifactId>
-          <version>3.8.0</version>
+          <version>3.8.1</version>
           <configuration>
             <compilerId>eclipse</compilerId>
             <compilerArgs>

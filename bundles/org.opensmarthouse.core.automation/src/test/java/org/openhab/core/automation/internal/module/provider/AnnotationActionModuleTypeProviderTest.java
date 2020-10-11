@@ -12,9 +12,12 @@
  */
 package org.openhab.core.automation.internal.module.provider;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 import java.util.Collection;
 import java.util.HashMap;
@@ -36,10 +39,10 @@ import org.openhab.core.automation.type.ActionType;
 import org.openhab.core.automation.type.Input;
 import org.openhab.core.automation.type.ModuleType;
 import org.openhab.core.automation.type.Output;
-import org.openhab.core.config.core.ConfigConstants;
 import org.openhab.core.config.core.ConfigDescriptionParameter;
 import org.openhab.core.config.core.ParameterOption;
 import org.openhab.core.test.java.JavaTest;
+import org.opensmarthouse.core.OpenSmartHouse;
 
 /**
  * Tests for the {@link AnnotatedActionModuleTypeProvider}
@@ -87,7 +90,7 @@ public class AnnotationActionModuleTypeProviderTest extends JavaTest {
         AnnotatedActionModuleTypeProvider prov = new AnnotatedActionModuleTypeProvider(moduleTypeI18nService);
 
         Map<String, Object> properties1 = new HashMap<>();
-        properties1.put(ConfigConstants.SERVICE_CONTEXT, "conf1");
+        properties1.put(OpenSmartHouse.SERVICE_CONTEXT, "conf1");
         prov.addActionProvider(actionProviderConf1, properties1);
 
         Collection<String> types = prov.getTypes();
@@ -95,7 +98,7 @@ public class AnnotationActionModuleTypeProviderTest extends JavaTest {
         assertTrue(types.contains(TEST_ACTION_TYPE_ID));
 
         Map<String, Object> properties2 = new HashMap<>();
-        properties2.put(ConfigConstants.SERVICE_CONTEXT, "conf2");
+        properties2.put(OpenSmartHouse.SERVICE_CONTEXT, "conf2");
         prov.addActionProvider(actionProviderConf2, properties2);
 
         // we only have ONE type but TWO configurations for it

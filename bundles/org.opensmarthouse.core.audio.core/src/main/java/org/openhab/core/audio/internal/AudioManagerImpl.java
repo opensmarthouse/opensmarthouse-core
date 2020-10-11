@@ -37,11 +37,11 @@ import org.openhab.core.audio.FileAudioStream;
 import org.openhab.core.audio.URLAudioStream;
 import org.openhab.core.audio.UnsupportedAudioFormatException;
 import org.openhab.core.audio.UnsupportedAudioStreamException;
-import org.openhab.core.config.core.ConfigConstants;
 import org.openhab.core.config.core.ConfigOptionProvider;
 import org.openhab.core.config.core.ConfigurableService;
 import org.openhab.core.config.core.ParameterOption;
 import org.openhab.core.library.types.PercentType;
+import org.opensmarthouse.core.OpenSmartHouse;
 import org.osgi.framework.Constants;
 import org.osgi.service.component.annotations.Activate;
 import org.osgi.service.component.annotations.Component;
@@ -175,8 +175,7 @@ public class AudioManagerImpl implements AudioManager, ConfigOptionProvider {
     public void playFile(String fileName, @Nullable String sinkId, @Nullable PercentType volume) throws AudioException {
         Objects.requireNonNull(fileName, "File cannot be played as fileName is null.");
 
-        File file = new File(
-                ConfigConstants.getConfigFolder() + File.separator + SOUND_DIR + File.separator + fileName);
+        File file = new File(OpenSmartHouse.getConfigFolder() + File.separator + SOUND_DIR + File.separator + fileName);
         FileAudioStream is = new FileAudioStream(file);
         play(is, sinkId, volume);
     }

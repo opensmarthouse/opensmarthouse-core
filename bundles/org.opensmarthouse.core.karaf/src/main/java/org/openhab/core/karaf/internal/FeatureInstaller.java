@@ -38,7 +38,6 @@ import java.util.stream.Collectors;
 
 import org.apache.karaf.features.Feature;
 import org.apache.karaf.features.FeaturesService;
-import org.openhab.core.config.core.ConfigConstants;
 import org.openhab.core.config.core.ConfigurableService;
 import org.openhab.core.events.Event;
 import org.openhab.core.events.EventPublisher;
@@ -205,12 +204,11 @@ public class FeatureInstaller implements ConfigurationListener {
                 // properties can be empty if PID does not exist
                 props = new Hashtable<>();
             }
-            String[] addonIds = Optional.of(props)
-                .map(dict -> dict.get(type)) //
-                .filter(Objects::nonNull) //
-                .map(Object::toString) //
-                .map(str -> str.split(",")) //
-                .orElse(new String[0]);
+            String[] addonIds = Optional.of(props).map(dict -> dict.get(type)) //
+                    .filter(Objects::nonNull) //
+                    .map(Object::toString) //
+                    .map(str -> str.split(",")) //
+                    .orElse(new String[0]);
             List<String> trimmedAddonIds = Arrays.stream(addonIds).map(addonId -> addonId.trim())
                     .collect(Collectors.toList());
             if (!trimmedAddonIds.contains(id)) {
@@ -257,7 +255,7 @@ public class FeatureInstaller implements ConfigurationListener {
     private void setOnlineRepoUrl() {
         Properties prop = new Properties();
 
-        Path versionFilePath = Paths.get(ConfigConstants.getUserDataFolder(), "etc", "version.properties");
+        Path versionFilePath = Paths.get(OpenSmartHouse.getUserDataFolder(), "etc", "version.properties");
         try (FileInputStream fis = new FileInputStream(versionFilePath.toFile())) {
             prop.load(fis);
         } catch (Exception e) {

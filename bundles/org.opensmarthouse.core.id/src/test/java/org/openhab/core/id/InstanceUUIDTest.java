@@ -12,7 +12,8 @@
  */
 package org.openhab.core.id;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotEquals;
 
 import java.io.IOException;
 import java.nio.file.Files;
@@ -20,7 +21,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 
 import org.junit.Test;
-import org.openhab.core.config.core.ConfigConstants;
+import org.opensmarthouse.core.OpenSmartHouse;
 
 /**
  * @author Kai Kreuzer - Initial contribution
@@ -39,7 +40,7 @@ public class InstanceUUIDTest {
     public void readFromPersistedFile() throws IOException {
         // we first need to remove the cached value
         InstanceUUID.uuid = null;
-        Path path = Paths.get(ConfigConstants.getUserDataFolder(), InstanceUUID.UUID_FILE_NAME);
+        Path path = Paths.get(OpenSmartHouse.getUserDataFolder(), InstanceUUID.UUID_FILE_NAME);
         Files.createDirectories(path.getParent());
         Files.write(path, "123".getBytes());
         String uuid = InstanceUUID.get();
@@ -50,7 +51,7 @@ public class InstanceUUIDTest {
     public void ignoreEmptyFile() throws IOException {
         // we first need to remove the cached value
         InstanceUUID.uuid = null;
-        Path path = Paths.get(ConfigConstants.getUserDataFolder(), InstanceUUID.UUID_FILE_NAME);
+        Path path = Paths.get(OpenSmartHouse.getUserDataFolder(), InstanceUUID.UUID_FILE_NAME);
         Files.createDirectories(path.getParent());
         Files.write(path, "".getBytes());
         String uuid = InstanceUUID.get();

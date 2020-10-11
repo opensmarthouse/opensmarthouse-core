@@ -37,7 +37,7 @@ import org.openhab.core.automation.type.ActionType;
 import org.openhab.core.automation.type.ModuleType;
 import org.openhab.core.automation.type.ModuleTypeProvider;
 import org.openhab.core.common.registry.ProviderChangeListener;
-import org.openhab.core.config.core.ConfigConstants;
+import org.opensmarthouse.core.OpenSmartHouse;
 import org.osgi.framework.Bundle;
 import org.osgi.framework.FrameworkUtil;
 import org.osgi.service.component.annotations.Activate;
@@ -196,7 +196,7 @@ public class AnnotatedActionModuleTypeProvider extends BaseModuleHandlerFactory 
     }
 
     private @Nullable String getConfigNameFromService(Map<String, Object> properties) {
-        Object o = properties.get(ConfigConstants.SERVICE_CONTEXT);
+        Object o = properties.get(OpenSmartHouse.SERVICE_CONTEXT);
         String configName = null;
         if (o instanceof String) {
             configName = (String) o;

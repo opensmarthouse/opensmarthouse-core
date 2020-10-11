@@ -338,7 +338,7 @@
         <artifactId>jollyday</artifactId>
         <!-- Upgrading to 0.5.9 causes Java 11 builds to fail -->
         <!-- On Java 11 the bundle requires JAXB 2.3 whereas we depend on JAXB 2.2 for Java 8 compatibility -->
-        <version>0.5.8</version>
+        <version>0.5.10</version>
         <scope>compile</scope>
       </dependency>
 
@@ -447,6 +447,12 @@
         <artifactId>swagger-core</artifactId>
         <version>${swagger.version}</version>
         <scope>compile</scope>
+        <exclusions>
+          <exclusion>
+            <groupId>javax.xml.bind</groupId>
+            <artifactId>jaxb-api</artifactId>
+          </exclusion>
+        </exclusions>
       </dependency>
       <dependency>
         <groupId>io.swagger.core.v3</groupId>
