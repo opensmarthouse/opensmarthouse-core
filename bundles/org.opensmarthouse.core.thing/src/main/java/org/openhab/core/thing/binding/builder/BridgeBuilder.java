@@ -21,7 +21,9 @@ import org.openhab.core.config.core.Configuration;
 import org.openhab.core.thing.Bridge;
 import org.openhab.core.thing.Channel;
 import org.openhab.core.thing.ChannelUID;
+import org.openhab.core.thing.ThingTypeUID;
 import org.openhab.core.thing.ThingUID;
+import org.openhab.core.thing.internal.BridgeImpl;
 
 /**
  * This class allows the easy construction of a {@link Bridge} instance using the builder pattern.
@@ -33,45 +35,85 @@ import org.openhab.core.thing.ThingUID;
  * @author Chris Jackson - Added thing type version support
  */
 @NonNullByDefault
-public interface BridgeBuilder extends ThingBuilder {
+public class BridgeBuilder extends ThingBuilder {
+
+    private BridgeBuilder(ThingTypeUID thingTypeUID, ThingUID thingUID) {
+        super(thingTypeUID, thingUID);
+    }
+
+    public static BridgeBuilder create(ThingTypeUID thingTypeUID, String bridgeId) {
+        return new BridgeBuilder(thingTypeUID,
+                new ThingUID(thingTypeUID.getBindingId(), thingTypeUID.getId(), bridgeId));
+    }
+
+    public static BridgeBuilder create(ThingTypeUID thingTypeUID, ThingUID thingUID) {
+        return new BridgeBuilder(thingTypeUID, thingUID);
+    }
 
     @Override
-    Bridge build();
+    public Bridge build() {
+        final BridgeImpl bridge = new BridgeImpl(thingTypeUID, thingUID);
+        return (Bridge) super.populate(bridge);
+    }
 
     @Override
-    BridgeBuilder withLabel(@Nullable String label);
+    public BridgeBuilder withLabel(@Nullable String label) {
+        return (BridgeBuilder) super.withLabel(label);
+    }
 
     @Override
-    BridgeBuilder withChannel(Channel channel);
+    public BridgeBuilder withChannel(Channel channel) {
+        return (BridgeBuilder) super.withChannel(channel);
+    }
 
     @Override
-    BridgeBuilder withChannels(Channel... channels);
+    public BridgeBuilder withChannels(Channel... channels) {
+        return (BridgeBuilder) super.withChannels(channels);
+    }
 
     @Override
-    BridgeBuilder withChannels(List<Channel> channels);
+    public BridgeBuilder withChannels(List<Channel> channels) {
+        return (BridgeBuilder) super.withChannels(channels);
+    }
 
     @Override
-    BridgeBuilder withoutChannel(ChannelUID channelUID);
+    public BridgeBuilder withoutChannel(ChannelUID channelUID) {
+        return (BridgeBuilder) super.withoutChannel(channelUID);
+    }
 
     @Override
-    BridgeBuilder withoutChannels(Channel... channels);
+    public BridgeBuilder withoutChannels(Channel... channels) {
+        return (BridgeBuilder) super.withoutChannels(channels);
+    }
 
     @Override
-    BridgeBuilder withoutChannels(List<Channel> channels);
+    public BridgeBuilder withoutChannels(List<Channel> channels) {
+        return (BridgeBuilder) super.withoutChannels(channels);
+    }
 
     @Override
-    BridgeBuilder withConfiguration(Configuration thingConfiguration);
+    public BridgeBuilder withConfiguration(Configuration thingConfiguration) {
+        return (BridgeBuilder) super.withConfiguration(thingConfiguration);
+    }
 
     @Override
-    BridgeBuilder withBridge(@Nullable ThingUID bridgeUID);
+    public BridgeBuilder withBridge(@Nullable ThingUID bridgeUID) {
+        return (BridgeBuilder) super.withBridge(bridgeUID);
+    }
 
     @Override
-    BridgeBuilder withProperties(Map<String, String> properties);
+    public BridgeBuilder withProperties(Map<String, String> properties) {
+        return (BridgeBuilder) super.withProperties(properties);
+    }
 
     @Override
-    BridgeBuilder withLocation(@Nullable String location);
+    public BridgeBuilder withLocation(@Nullable String location) {
+        return (BridgeBuilder) super.withLocation(location);
+    }
 
     @Override
-    BridgeBuilder withThingTypeVersion(@Nullable Integer version);
+    public BridgeBuilder withThingTypeVersion(@Nullable Integer version) {
+        return (BridgeBuilder) super.withThingTypeVersion(version);
+    }
 
 }

@@ -26,7 +26,6 @@ import java.util.concurrent.TimeUnit;
 import org.eclipse.jdt.annotation.NonNullByDefault;
 import org.eclipse.jdt.annotation.Nullable;
 import org.openhab.core.common.ThreadPoolManager;
-import org.openhab.core.config.discovery.compat.DiscoveryResultBuilderFactoryDelegate;
 import org.openhab.core.i18n.I18nUtil;
 import org.openhab.core.i18n.LocaleProvider;
 import org.openhab.core.i18n.TranslationProvider;
@@ -59,7 +58,6 @@ public abstract class AbstractDiscoveryService implements DiscoveryService {
     protected final ScheduledExecutorService scheduler = ThreadPoolManager.getScheduledPool(DISCOVERY_THREADPOOL_NAME);
 
     private final Set<DiscoveryListener> discoveryListeners = new CopyOnWriteArraySet<>();
-    private final DiscoveryResultBuilderFactory discoveryResultBuilderFactory;
     protected @Nullable ScanListener scanListener = null;
 
     private boolean backgroundDiscoveryEnabled;
@@ -79,7 +77,6 @@ public abstract class AbstractDiscoveryService implements DiscoveryService {
     /**
      * Creates a new instance of this class with the specified parameters.
      *
-     * @param discoveryResultBuilderFactory Factory used to produce discovery result builders.
      * @param supportedThingTypes the list of Thing types which are supported (can be null)
      * @param timeout the discovery timeout in seconds after which the discovery
      *            service automatically stops its forced discovery process (>= 0).
@@ -87,35 +84,14 @@ public abstract class AbstractDiscoveryService implements DiscoveryService {
      *            enable background discovery or not.
      * @throws IllegalArgumentException if the timeout < 0
      */
-    public AbstractDiscoveryService(DiscoveryResultBuilderFactory discoveryResultBuilderFactory,
-            @Nullable Set<ThingTypeUID> supportedThingTypes, int timeout, boolean backgroundDiscoveryEnabledByDefault)
-            throws IllegalArgumentException {
-        this.discoveryResultBuilderFactory = discoveryResultBuilderFactory;
-
+    public AbstractDiscoveryService(@Nullable Set<ThingTypeUID> supportedThingTypes, int timeout,
+            boolean backgroundDiscoveryEnabledByDefault) throws IllegalArgumentException {
         if (timeout < 0) {
             throw new IllegalArgumentException("The timeout must be >= 0!");
         }
         this.supportedThingTypes = supportedThingTypes == null ? Set.of() : Set.copyOf(supportedThingTypes);
-
         this.timeout = timeout;
         this.backgroundDiscoveryEnabled = backgroundDiscoveryEnabledByDefault;
-    }
-
-    /**
-     * Creates a new instance of this class with the specified parameters.
-     *
-     * @param supportedThingTypes the list of Thing types which are supported (can be null)
-     * @param timeout the discovery timeout in seconds after which the discovery
-     *            service automatically stops its forced discovery process (>= 0).
-     * @param backgroundDiscoveryEnabledByDefault defines, whether the default for this discovery service is to
-     *            enable background discovery or not.
-     * @throws IllegalArgumentException if the timeout < 0
-     */
-    @Deprecated
-    public AbstractDiscoveryService(@Nullable Set<ThingTypeUID> supportedThingTypes, int timeout,
-            boolean backgroundDiscoveryEnabledByDefault) throws IllegalArgumentException {
-        this(new DiscoveryResultBuilderFactoryDelegate(), supportedThingTypes, timeout,
-                backgroundDiscoveryEnabledByDefault);
     }
 
     /**
@@ -277,7 +253,7 @@ public abstract class AbstractDiscoveryService implements DiscoveryService {
 
             String label = i18nProvider.getText(bundle, key, defaultLabel, localeProvider.getLocale());
 
-            discoveryResultNew = discoveryResultBuilderFactory.create(discoveryResult.getThingUID())
+            discoveryResultNew = DiscoveryResultBuilder.create(discoveryResult.getThingUID())
                     .withThingType(discoveryResult.getThingTypeUID()).withBridge(discoveryResult.getBridgeUID())
                     .withProperties(discoveryResult.getProperties())
                     .withRepresentationProperty(discoveryResult.getRepresentationProperty()).withLabel(label)
@@ -480,5 +456,4 @@ public abstract class AbstractDiscoveryService implements DiscoveryService {
     private String inferKey(DiscoveryResult discoveryResult, String lastSegment) {
         return "discovery." + discoveryResult.getThingUID().getAsString().replaceAll(":", ".") + "." + lastSegment;
     }
-
 }

@@ -31,8 +31,6 @@ import org.openhab.core.common.ThreadPoolManager;
 import org.openhab.core.events.EventPublisher;
 import org.openhab.core.i18n.UnitProvider;
 import org.openhab.core.items.events.ItemEventFactory;
-import org.openhab.core.service.CommandDescriptionService;
-import org.openhab.core.service.StateDescriptionService;
 import org.openhab.core.types.Command;
 import org.openhab.core.types.CommandDescription;
 import org.openhab.core.types.CommandDescriptionBuilder;
@@ -43,6 +41,8 @@ import org.openhab.core.types.State;
 import org.openhab.core.types.StateDescription;
 import org.openhab.core.types.StateDescriptionFragmentBuilderFactory;
 import org.openhab.core.types.UnDefType;
+import org.openhab.core.types.service.CommandDescriptionService;
+import org.openhab.core.types.service.StateDescriptionService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

@@ -12,16 +12,16 @@
  */
 package org.openhab.core.config.discovery.inbox.events;
 
-import static org.hamcrest.CoreMatchers.*;
-import static org.junit.Assert.assertThat;
-import static org.mockito.Mockito.when;
+import static org.hamcrest.CoreMatchers.instanceOf;
+import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.CoreMatchers.not;
+import static org.hamcrest.CoreMatchers.nullValue;
+import static org.hamcrest.MatcherAssert.assertThat;
 
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.openhab.core.config.discovery.DiscoveryResult;
 import org.openhab.core.config.discovery.DiscoveryResultBuilder;
 import org.openhab.core.config.discovery.dto.DiscoveryResultDTOMapper;
-import org.openhab.core.config.discovery.inbox.InboxPredicatesTest;
 import org.openhab.core.events.Event;
 import org.openhab.core.thing.ThingTypeUID;
 import org.openhab.core.thing.ThingUID;
@@ -39,7 +39,8 @@ public class InboxEventFactoryTest {
     private static final ThingTypeUID THING_TYPE_UID = new ThingTypeUID("binding", "type");
     private static final ThingUID THING_UID = new ThingUID(THING_TYPE_UID, "id");
 
-    private static final DiscoveryResult DISCOVERY_RESULT = InboxPredicatesTest.create(THING_UID, THING_TYPE_UID, null, null);
+    private static final DiscoveryResult DISCOVERY_RESULT = DiscoveryResultBuilder.create(THING_UID)
+            .withThingType(THING_TYPE_UID).withTTL(60).build();
 
     private static final String INBOX_ADDED_EVENT_TYPE = InboxAddedEvent.TYPE;
 
@@ -50,11 +51,6 @@ public class InboxEventFactoryTest {
             .toJson(DiscoveryResultDTOMapper.map(DISCOVERY_RESULT));
 
     private InboxEventFactory factory = new InboxEventFactory();
-
-    @Before
-    public void setUp() {
-        when(DISCOVERY_RESULT.getTimeToLive()).thenReturn(60L);
-    }
 
     @Test
     public void inboxEventFactoryCreatesEventAsInboxAddedEventCorrectly() throws Exception {

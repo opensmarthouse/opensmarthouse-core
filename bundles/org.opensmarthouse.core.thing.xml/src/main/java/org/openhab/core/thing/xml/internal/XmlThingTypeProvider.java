@@ -18,6 +18,7 @@ import java.util.Locale;
 import java.util.concurrent.Future;
 import java.util.concurrent.ScheduledExecutorService;
 
+import org.eclipse.jdt.annotation.NonNullByDefault;
 import org.eclipse.jdt.annotation.Nullable;
 import org.openhab.core.common.ThreadPoolManager;
 import org.openhab.core.config.core.ConfigDescriptionProvider;
@@ -33,10 +34,8 @@ import org.openhab.core.thing.UID;
 import org.openhab.core.thing.binding.ThingTypeProvider;
 import org.openhab.core.thing.i18n.ThingTypeI18nLocalizationService;
 import org.openhab.core.thing.type.ChannelGroupTypeProvider;
-import org.openhab.core.thing.type.ChannelTypeBuilderFactory;
 import org.openhab.core.thing.type.ChannelTypeProvider;
 import org.openhab.core.thing.type.ThingType;
-import org.openhab.core.types.CommandDescriptionBuilderFactory;
 import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleContext;
 import org.osgi.service.component.annotations.Activate;
@@ -56,6 +55,7 @@ import org.osgi.service.component.annotations.Reference;
  * @author Kai Kreuzer - fixed concurrency issues
  * @author Simon Kaufmann - factored out common aspects into {@link AbstractXmlBasedProvider}
  */
+@NonNullByDefault
 @Component(property = { "esh.scope=core.xml.thing" })
 public class XmlThingTypeProvider extends AbstractXmlBasedProvider<UID, ThingType>
         implements ThingTypeProvider, XmlDocumentProviderFactory<List<?>> {
@@ -64,32 +64,32 @@ public class XmlThingTypeProvider extends AbstractXmlBasedProvider<UID, ThingTyp
     public static final String READY_MARKER = "esh.xmlThingTypes";
 
     private final ThingTypeI18nLocalizationService thingTypeI18nLocalizationService;
-    private XmlChannelTypeProvider channelTypeProvider;
-    private XmlChannelGroupTypeProvider channelGroupTypeProvider;
-    private AbstractXmlConfigDescriptionProvider configDescriptionProvider;
+    private final XmlChannelTypeProvider channelTypeProvider;
+    private final XmlChannelGroupTypeProvider channelGroupTypeProvider;
+    private final AbstractXmlConfigDescriptionProvider configDescriptionProvider;
     private @Nullable XmlDocumentBundleTracker<List<?>> thingTypeTracker;
-    private final ChannelTypeBuilderFactory channelTypeBuilderFactory;
-    private final CommandDescriptionBuilderFactory commandDescriptionBuilderFactory;
     private final ReadyService readyService;
     private final ScheduledExecutorService scheduler = ThreadPoolManager
             .getScheduledPool(XmlDocumentBundleTracker.THREAD_POOL_NAME);
     private @Nullable Future<?> trackerJob;
 
     @Activate
-    public XmlThingTypeProvider(final @Reference ThingTypeI18nLocalizationService thingTypeI18nLocalizationService,
-            final @Reference ChannelTypeBuilderFactory channelTypeBuilderFactory,
-            final @Reference CommandDescriptionBuilderFactory commandDescriptionBuilderFactory,
-            final @Reference ReadyService readyService) {
-        this.thingTypeI18nLocalizationService = thingTypeI18nLocalizationService;
-        this.channelTypeBuilderFactory = channelTypeBuilderFactory;
-        this.commandDescriptionBuilderFactory = commandDescriptionBuilderFactory;
+    public XmlThingTypeProvider(
+            final @Reference(target = "(esh.scope=core.xml.channelGroups)") ChannelGroupTypeProvider channelGroupTypeProvider,
+            final @Reference(target = "(esh.scope=core.xml.channels)") ChannelTypeProvider channelTypeProvider,
+            final @Reference(target = "(esh.scope=core.xml.thing)") ConfigDescriptionProvider configDescriptionProvider,
+            final @Reference ReadyService readyService,
+            final @Reference ThingTypeI18nLocalizationService thingTypeI18nLocalizationService) {
+        this.channelGroupTypeProvider = (XmlChannelGroupTypeProvider) channelGroupTypeProvider;
+        this.channelTypeProvider = (XmlChannelTypeProvider) channelTypeProvider;
+        this.configDescriptionProvider = (AbstractXmlConfigDescriptionProvider) configDescriptionProvider;
         this.readyService = readyService;
+        this.thingTypeI18nLocalizationService = thingTypeI18nLocalizationService;
     }
 
     @Activate
     protected void activate(BundleContext bundleContext) {
-        XmlDocumentReader<List<?>> thingTypeReader = new ThingDescriptionReader(channelTypeBuilderFactory,
-                commandDescriptionBuilderFactory);
+        XmlDocumentReader<List<?>> thingTypeReader = new ThingDescriptionReader();
         thingTypeTracker = new XmlDocumentBundleTracker<>(bundleContext, XML_DIRECTORY, thingTypeReader, this,
                 READY_MARKER, readyService);
         trackerJob = scheduler.submit(() -> {
@@ -119,33 +119,6 @@ public class XmlThingTypeProvider extends AbstractXmlBasedProvider<UID, ThingTyp
     @Override
     public synchronized Collection<ThingType> getThingTypes(@Nullable Locale locale) {
         return getAll(locale);
-    }
-
-    @Reference(target = "(esh.scope=core.xml.thing)")
-    public void setConfigDescriptionProvider(ConfigDescriptionProvider configDescriptionProvider) {
-        this.configDescriptionProvider = (AbstractXmlConfigDescriptionProvider) configDescriptionProvider;
-    }
-
-    public void unsetConfigDescriptionProvider(ConfigDescriptionProvider configDescriptionProvider) {
-        this.configDescriptionProvider = null;
-    }
-
-    @Reference(target = "(esh.scope=core.xml.channels)")
-    public void setChannelTypeProvider(ChannelTypeProvider channelTypeProvider) {
-        this.channelTypeProvider = (XmlChannelTypeProvider) channelTypeProvider;
-    }
-
-    public void unsetChannelTypeProvider(ChannelTypeProvider channelTypeProvider) {
-        this.channelTypeProvider = null;
-    }
-
-    @Reference(target = "(esh.scope=core.xml.channelGroups)")
-    public void setChannelGroupTypeProvider(ChannelGroupTypeProvider channelGroupTypeProvider) {
-        this.channelGroupTypeProvider = (XmlChannelGroupTypeProvider) channelGroupTypeProvider;
-    }
-
-    public void unsetChannelGroupTypeProvider(ChannelGroupTypeProvider channelGroupTypeProvider) {
-        this.channelGroupTypeProvider = null;
     }
 
     @Override

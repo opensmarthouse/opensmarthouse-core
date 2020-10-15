@@ -13,7 +13,6 @@
 package org.openhab.core.items;
 
 import java.util.Collection;
-import java.util.Collections;
 
 import org.eclipse.jdt.annotation.NonNullByDefault;
 import org.eclipse.jdt.annotation.Nullable;

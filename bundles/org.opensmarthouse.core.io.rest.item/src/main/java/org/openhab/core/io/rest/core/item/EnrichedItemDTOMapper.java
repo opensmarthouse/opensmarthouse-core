@@ -12,16 +12,15 @@
  */
 package org.openhab.core.io.rest.core.item;
 
-import java.net.URI;
 import java.util.Collection;
 import java.util.LinkedHashSet;
 import java.util.Locale;
 import java.util.function.Predicate;
 
 import javax.ws.rs.core.UriBuilder;
+
 import org.eclipse.jdt.annotation.NonNullByDefault;
 import org.eclipse.jdt.annotation.Nullable;
-import org.openhab.core.io.rest.core.internal.item.ItemResource;
 import org.openhab.core.items.GroupItem;
 import org.openhab.core.items.Item;
 import org.openhab.core.items.dto.ItemDTO;
@@ -29,8 +28,8 @@ import org.openhab.core.items.dto.ItemDTOMapper;
 import org.openhab.core.transform.TransformationException;
 import org.openhab.core.transform.TransformationHelper;
 import org.openhab.core.types.StateDescription;
-import org.openhab.core.types.StateDescriptionFragmentBuilderFactory;
-import org.osgi.framework.BundleContext;
+import org.openhab.core.types.StateDescriptionFragmentBuilder;
+import org.osgi.framework.FrameworkUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -48,31 +47,30 @@ public class EnrichedItemDTOMapper {
     /**
      * Maps item into enriched item DTO object.
      *
-     *
-     * @param stateDescriptionFragmentBuilderFactory
      * @param item the item
      * @param drillDown defines whether the whole tree should be traversed or only direct members are considered
      * @param itemFilter a predicate that filters items while traversing the tree (true means that an item is
      *            considered, can be null)
-     * @param uri the uri (can be null)
+     * @param uriBuilder if present the URI builder contains one template that will be replaced by the specific item
+     *            name
      * @param locale locale (can be null)
      * @return item DTO object
      */
-    public static EnrichedItemDTO map(BundleContext bundleContext, @Nullable StateDescriptionFragmentBuilderFactory stateDescriptionFragmentBuilderFactory,
-            Item item, boolean drillDown, @Nullable Predicate<Item> itemFilter, @Nullable UriBuilder uriBuilder, @Nullable Locale locale) {
+    public static EnrichedItemDTO map(Item item, boolean drillDown, @Nullable Predicate<Item> itemFilter,
+            @Nullable UriBuilder uriBuilder, @Nullable Locale locale) {
         ItemDTO itemDTO = ItemDTOMapper.map(item);
-        return map(bundleContext, item, itemDTO, uriBuilder, stateDescriptionFragmentBuilderFactory, drillDown, itemFilter, locale);
+        return map(item, itemDTO, uriBuilder, drillDown, itemFilter, locale);
     }
 
-    private static EnrichedItemDTO map(BundleContext bundleContext, Item item, ItemDTO itemDTO, @Nullable UriBuilder uriBuilder,
-            @Nullable StateDescriptionFragmentBuilderFactory stateDescriptionFragmentBuilderFactory, boolean drillDown,
+    private static EnrichedItemDTO map(Item item, ItemDTO itemDTO, @Nullable UriBuilder uriBuilder, boolean drillDown,
             @Nullable Predicate<Item> itemFilter, @Nullable Locale locale) {
         String state = item.getState().toFullString();
-        String transformedState = considerTransformation(bundleContext, state, item, locale);
+        String transformedState = considerTransformation(state, item, locale);
         if (transformedState != null && transformedState.equals(state)) {
             transformedState = null;
         }
-        StateDescription stateDescription = considerTransformation(stateDescriptionFragmentBuilderFactory, item.getStateDescription(locale));
+        StateDescription stateDescription = considerTransformation(item.getStateDescription(locale));
+
         final String link;
         if (uriBuilder != null) {
             link = uriBuilder.build(itemDTO.name).toASCIIString();
@@ -89,7 +87,7 @@ public class EnrichedItemDTOMapper {
                 Collection<EnrichedItemDTO> members = new LinkedHashSet<>();
                 for (Item member : groupItem.getMembers()) {
                     if (itemFilter == null || itemFilter.test(member)) {
-                        members.add(map(bundleContext, stateDescriptionFragmentBuilderFactory, member, drillDown, itemFilter, uriBuilder, locale));
+                        members.add(map(member, drillDown, itemFilter, uriBuilder, locale));
                     }
                 }
                 memberDTOs = members.toArray(new EnrichedItemDTO[members.size()]);
@@ -106,14 +104,15 @@ public class EnrichedItemDTOMapper {
         return enrichedItemDTO;
     }
 
-    private static @Nullable StateDescription considerTransformation(@Nullable StateDescriptionFragmentBuilderFactory stateDescriptionFragmentBuilderFactory, @Nullable StateDescription stateDescription) {
+    private static @Nullable StateDescription considerTransformation(@Nullable StateDescription stateDescription) {
         if (stateDescription != null) {
             String pattern = stateDescription.getPattern();
             if (pattern != null) {
                 try {
-                    if (TransformationHelper.isTransform(pattern) && stateDescriptionFragmentBuilderFactory != null) {
-                        return stateDescriptionFragmentBuilderFactory.create().withPattern(pattern).build().toStateDescription();
-                    }
+                    return TransformationHelper.isTransform(pattern)
+                            ? StateDescriptionFragmentBuilder.create(stateDescription).withPattern(pattern).build()
+                                    .toStateDescription()
+                            : stateDescription;
                 } catch (NoClassDefFoundError ex) {
                     // TransformationHelper is optional dependency, so ignore if class not found
                     // return state description as it is without transformation
@@ -123,13 +122,14 @@ public class EnrichedItemDTOMapper {
         return stateDescription;
     }
 
-    private static @Nullable String considerTransformation(BundleContext bundleContext, String state, Item item, @Nullable Locale locale) {
+    private static @Nullable String considerTransformation(String state, Item item, @Nullable Locale locale) {
         StateDescription stateDescription = item.getStateDescription(locale);
         if (stateDescription != null) {
             String pattern = stateDescription.getPattern();
             if (pattern != null) {
                 try {
-                    return TransformationHelper.transform(bundleContext, pattern, state);
+                    return TransformationHelper.transform(
+                            FrameworkUtil.getBundle(EnrichedItemDTOMapper.class).getBundleContext(), pattern, state);
                 } catch (NoClassDefFoundError ex) {
                     // TransformationHelper is optional dependency, so ignore if class not found
                     // return state as it is without transformation

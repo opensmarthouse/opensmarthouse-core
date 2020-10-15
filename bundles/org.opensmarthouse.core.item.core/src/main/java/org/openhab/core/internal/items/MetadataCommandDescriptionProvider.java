@@ -22,8 +22,6 @@ import org.openhab.core.items.Metadata;
 import org.openhab.core.items.MetadataKey;
 import org.openhab.core.items.MetadataRegistry;
 import org.openhab.core.types.CommandDescription;
-import org.openhab.core.types.CommandDescriptionBuilder;
-import org.openhab.core.types.CommandDescriptionBuilderFactory;
 import org.openhab.core.types.CommandDescriptionProvider;
 import org.openhab.core.types.CommandOption;
 import org.osgi.service.component.annotations.Activate;
@@ -46,17 +44,12 @@ public class MetadataCommandDescriptionProvider implements CommandDescriptionPro
 
     public static final String COMMANDDESCRIPTION_METADATA_NAMESPACE = "commandDescription";
 
-    private final CommandDescriptionBuilderFactory commandDescriptionBuilderFactory;
     private MetadataRegistry metadataRegistry;
-    private final Map<String, Object> properties;
 
     @Activate
-    public MetadataCommandDescriptionProvider(final @Reference CommandDescriptionBuilderFactory commandDescriptionBuilderFactory,
-            final @Reference MetadataRegistry metadataRegistry,
+    public MetadataCommandDescriptionProvider(final @Reference MetadataRegistry metadataRegistry,
             Map<String, Object> properties) {
-        this.commandDescriptionBuilderFactory = commandDescriptionBuilderFactory;
         this.metadataRegistry = metadataRegistry;
-        this.properties = properties;
     }
 
     @Override
@@ -65,18 +58,18 @@ public class MetadataCommandDescriptionProvider implements CommandDescriptionPro
 
         if (metadata != null) {
             try {
-                CommandDescriptionBuilder commandDescriptionBuilder = commandDescriptionBuilderFactory.create();
+                CommandDescriptionImpl commandDescription = new CommandDescriptionImpl();
                 if (metadata.getConfiguration().containsKey("options")) {
                     Stream.of(metadata.getConfiguration().get("options").toString().split(",")).forEach(o -> {
                         if (o.contains("=")) {
-                            commandDescriptionBuilder.withCommandOption(
+                            commandDescription.addCommandOption(
                                     new CommandOption(o.split("=")[0].trim(), o.split("=")[1].trim()));
                         } else {
-                            commandDescriptionBuilder.withCommandOption(new CommandOption(o.trim(), null));
+                            commandDescription.addCommandOption(new CommandOption(o.trim(), null));
                         }
                     });
 
-                    return commandDescriptionBuilder.build();
+                    return commandDescription;
                 }
             } catch (Exception e) {
                 logger.warn("Unable to parse the commandDescription from metadata for item {}, ignoring it", itemName);

@@ -14,6 +14,7 @@ package org.openhab.core.binding.xml.internal;
 
 import java.util.List;
 
+import org.eclipse.jdt.annotation.NonNullByDefault;
 import org.openhab.core.config.core.ConfigDescription;
 import org.openhab.core.config.core.ConfigDescriptionParameter;
 import org.openhab.core.config.core.ConfigDescriptionParameterGroup;
@@ -42,6 +43,7 @@ import com.thoughtworks.xstream.XStream;
  * @author Chris Jackson - Add parameter groups
  * @author Łukasz Dywicki - Added XStream security handling.
  */
+@NonNullByDefault
 public class BindingInfoReader extends XmlDocumentReader<BindingInfoXmlResult> {
 
     /**
@@ -81,15 +83,8 @@ public class BindingInfoReader extends XmlDocumentReader<BindingInfoXmlResult> {
 
     @Override
     public void registerSecurity(XStream xstream) {
-        xstream.allowTypes(new Class[] {
-                BindingInfoXmlResult.class,
-                ConfigDescription.class,
-                ConfigDescriptionParameter.class,
-                ConfigDescriptionParameterGroup.class,
-                FilterCriteria.class,
-                NodeList.class,
-                NodeValue.class,
-                NodeAttributes.class,
-        });
+        xstream.allowTypes(new Class[] { BindingInfoXmlResult.class, ConfigDescription.class,
+                ConfigDescriptionParameter.class, ConfigDescriptionParameterGroup.class, FilterCriteria.class,
+                NodeList.class, NodeValue.class, NodeAttributes.class, });
     }
 }

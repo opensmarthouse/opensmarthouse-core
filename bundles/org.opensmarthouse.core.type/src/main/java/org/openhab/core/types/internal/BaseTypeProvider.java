@@ -31,6 +31,7 @@ import org.osgi.service.component.annotations.Component;
  * @author Chris Jackson - Initial contribution
  *
  */
+@SuppressWarnings("deprecation")
 @Component(immediate = true, service = TypeProvider.class)
 public class BaseTypeProvider implements TypeProvider {
     static private final Map<String, Method> types;

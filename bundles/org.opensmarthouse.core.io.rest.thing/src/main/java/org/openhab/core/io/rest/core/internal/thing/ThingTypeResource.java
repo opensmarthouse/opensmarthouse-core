@@ -82,8 +82,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
  * @author Dennis Nobel - Initial contribution
  * @author Kai Kreuzer - refactored for using the OSGi JAX-RS connector
  * @author Thomas Höfer - Added thing and thing type properties
- * @author Chris Jackson - Added parameter groups, advanced, multipleLimit,
- *         limitToOptions
+ * @author Chris Jackson - Added parameter groups, advanced, multipleLimit, limitToOptions
  * @author Yordan Zhelev - Added Swagger annotations
  * @author Miki Jankov - Introducing StrippedThingTypeDTO
  * @author Franck Dechavanne - Added DTOs to ApiResponses

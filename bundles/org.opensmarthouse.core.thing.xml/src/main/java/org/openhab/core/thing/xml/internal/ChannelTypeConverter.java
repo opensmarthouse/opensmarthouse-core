@@ -27,7 +27,6 @@ import org.openhab.core.thing.type.AutoUpdatePolicy;
 import org.openhab.core.thing.type.ChannelKind;
 import org.openhab.core.thing.type.ChannelType;
 import org.openhab.core.thing.type.ChannelTypeBuilder;
-import org.openhab.core.thing.type.ChannelTypeBuilderFactory;
 import org.openhab.core.thing.type.ChannelTypeUID;
 import org.openhab.core.types.CommandDescription;
 import org.openhab.core.types.EventDescription;
@@ -51,11 +50,8 @@ import com.thoughtworks.xstream.io.HierarchicalStreamReader;
  */
 public class ChannelTypeConverter extends AbstractDescriptionTypeConverter<ChannelTypeXmlResult> {
 
-    private final ChannelTypeBuilderFactory channelTypeBuilderFactory;
-
-    public ChannelTypeConverter(ChannelTypeBuilderFactory channelTypeBuilderFactory) {
+    public ChannelTypeConverter() {
         super(ChannelTypeXmlResult.class, "channel-type");
-        this.channelTypeBuilderFactory = channelTypeBuilderFactory;
 
         super.attributeMapValidator = new ConverterAttributeMapValidator(
                 new String[][] { { "id", "true" }, { "advanced", "false" }, { "system", "false" } });
@@ -159,6 +155,7 @@ public class ChannelTypeConverter extends AbstractDescriptionTypeConverter<Chann
         return null;
     }
 
+    @SuppressWarnings("deprecation")
     @Override
     protected ChannelTypeXmlResult unmarshalType(HierarchicalStreamReader reader, UnmarshallingContext context,
             Map<String, String> attributes, NodeIterator nodeIterator) throws ConversionException {
@@ -192,19 +189,21 @@ public class ChannelTypeConverter extends AbstractDescriptionTypeConverter<Chann
         URI configDescriptionURI = (URI) configDescriptionObjects[0];
         final ChannelTypeBuilder<?> builder;
         if (cKind == ChannelKind.STATE) {
-            builder = channelTypeBuilderFactory.state(channelTypeUID, label, itemType).isAdvanced(advanced)
-                    .withCategory(category).withTags(tags).withConfigDescriptionURI(configDescriptionURI)
+            builder = ChannelTypeBuilder.state(channelTypeUID, label, itemType).isAdvanced(advanced)
+                    .withCategory(category).withConfigDescriptionURI(configDescriptionURI)
                     .withStateDescription(stateDescription).withAutoUpdatePolicy(autoUpdatePolicy)
                     .withCommandDescription(commandDescription);
         } else if (cKind == ChannelKind.TRIGGER) {
-            builder = channelTypeBuilderFactory.trigger(channelTypeUID, label).isAdvanced(advanced).withCategory(category)
-                    .withTags(tags).withConfigDescriptionURI(configDescriptionURI)
-                    .withEventDescription(eventDescription);
+            builder = ChannelTypeBuilder.trigger(channelTypeUID, label).isAdvanced(advanced).withCategory(category)
+                    .withConfigDescriptionURI(configDescriptionURI).withEventDescription(eventDescription);
         } else {
             throw new IllegalArgumentException(String.format("Unknown channel kind: '%s'", cKind));
         }
         if (description != null) {
             builder.withDescription(description);
+        }
+        if (tags != null) {
+            builder.withTags(tags);
         }
         ChannelType channelType = builder.build();
 

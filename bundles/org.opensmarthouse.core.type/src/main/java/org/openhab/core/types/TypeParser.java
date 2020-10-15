@@ -38,7 +38,7 @@ import org.slf4j.LoggerFactory;
 @Component(immediate = true)
 public final class TypeParser {
 
-    private final static Logger LOGGER = LoggerFactory.getLogger(TypeParser.class);;
+    private final static Logger logger = LoggerFactory.getLogger(TypeParser.class);
     private @Nullable static TypeFactory typeRegistry;
 
     /**
@@ -117,6 +117,7 @@ public final class TypeParser {
      * some point.
      */
     private static void warning() {
-        LOGGER.warn("Detected use of legacy TypeParser API. Please port your code to use TypeFactory/TypeProvider service instead.");
+        logger.warn(
+                "Detected use of legacy TypeParser API. Please port your code to use OpenSmartHouse TypeFactory/TypeProvider service instead.");
     }
 }

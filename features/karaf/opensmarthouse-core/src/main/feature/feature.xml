@@ -84,7 +84,6 @@
         <feature>opensmarthouse-core-scheduler-core</feature>
         <feature>opensmarthouse-core-type-core</feature>
         <feature>opensmarthouse-core-item-core</feature>
-        <feature>opensmarthouse-core-thing-core</feature>
         <feature>opensmarthouse-core-voice-core</feature>
 
         <feature>opensmarthouse-core-ui-all</feature>
@@ -401,6 +400,7 @@
         <feature>opensmarthouse-core-registry</feature>
         <feature>opensmarthouse-core-config</feature>
         <feature>opensmarthouse-core-item</feature>
+        <feature>opensmarthouse-core-library-item</feature>
         <bundle>mvn:org.opensmarthouse.core.bundles/org.opensmarthouse.core.thing/${project.version}</bundle>
     </feature>
 
@@ -921,15 +921,9 @@
         <feature>opensmarthouse-core-io-transport-upnp</feature>
     </feature>
 
-    <feature name="opensmarthouse-core-thing-core" description="Thing Core" version="${project.version}">
-        <feature>opensmarthouse-core-thing</feature>
-        <feature>opensmarthouse-core-library-item</feature>
-        <bundle>mvn:org.opensmarthouse.core.bundles/org.opensmarthouse.core.thing.core/${project.version}</bundle>
-    </feature>
-
     <feature name="opensmarthouse-core-thing-xml" description="Thing Core XML" version="${project.version}">
         <feature dependency="true">opensmarthouse-tp-xstream</feature>
-        <feature>opensmarthouse-core-thing-core</feature>
+        <feature>opensmarthouse-core-thing</feature>
         <feature>opensmarthouse-core-config-xml</feature>
         <bundle start-level="75">mvn:org.opensmarthouse.core.bundles/org.opensmarthouse.core.thing.xml/${project.version}</bundle>
     </feature>

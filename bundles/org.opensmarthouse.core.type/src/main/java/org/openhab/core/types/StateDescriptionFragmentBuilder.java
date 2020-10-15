@@ -13,8 +13,12 @@
 package org.openhab.core.types;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.List;
+
 import org.eclipse.jdt.annotation.NonNullByDefault;
+import org.eclipse.jdt.annotation.Nullable;
+import org.openhab.core.internal.types.StateDescriptionFragmentImpl;
 
 /**
  * Builds a {@link StateDescriptionFragment} with the relevant parts only.
@@ -22,13 +26,82 @@ import org.eclipse.jdt.annotation.NonNullByDefault;
  * @author Henning Treu - Initial contribution
  */
 @NonNullByDefault
-public interface StateDescriptionFragmentBuilder {
+public class StateDescriptionFragmentBuilder {
+
+    private @Nullable BigDecimal minimum;
+    private @Nullable BigDecimal maximum;
+    private @Nullable BigDecimal step;
+    private @Nullable String pattern;
+    private @Nullable Boolean readOnly;
+    private @Nullable List<StateOption> options;
+
+    private StateDescriptionFragmentBuilder() {
+        //
+    }
+
+    private StateDescriptionFragmentBuilder(StateDescriptionFragment fragment) {
+        this.minimum = fragment.getMinimum();
+        this.maximum = fragment.getMaximum();
+        this.step = fragment.getStep();
+        this.pattern = fragment.getPattern();
+        this.readOnly = fragment.isReadOnly();
+        final List<StateOption> stateOptions = fragment.getOptions();
+        if (stateOptions != null && !stateOptions.isEmpty()) {
+            this.options = new ArrayList<>(stateOptions);
+        }
+    }
+
+    private StateDescriptionFragmentBuilder(StateDescription legacy) {
+        this.minimum = legacy.getMinimum();
+        this.maximum = legacy.getMaximum();
+        this.step = legacy.getStep();
+        this.pattern = legacy.getPattern();
+        this.readOnly = Boolean.valueOf(legacy.isReadOnly());
+        if (!legacy.getOptions().isEmpty()) {
+            this.options = new ArrayList<>(legacy.getOptions());
+        }
+    }
+
     /**
-     * Build a {@link StateDescriptionFragment} from the values of this builder.
+     * Creates and returns a fresh builder instance.
+     *
+     * @return a fresh {@link StateDescriptionFragmentBuilder} instance.
+     */
+    public static StateDescriptionFragmentBuilder create() {
+        return new StateDescriptionFragmentBuilder();
+    }
+
+    /**
+     * Creates a builder instance and initializes all fields from the given {@link StateDescriptionFragment}.
+     * Note: State options will only be taken into account if the list is not empty.
+     *
+     * @param fragment the {@link StateDescriptionFragment} this builder be initialized from.
+     * @return the builder.
+     */
+    public static StateDescriptionFragmentBuilder create(StateDescriptionFragment fragment) {
+        return new StateDescriptionFragmentBuilder(fragment);
+    }
+
+    /**
+     * Creates a builder instance and initializes all fields from the given {@link StateDescription}.
+     * Note: State options will only be taken into account if the list is not empty.
+     *
+     * @param legacy the {@link StateDescription} this builder be initialized from.
+     * @return the builder.
+     */
+    public static StateDescriptionFragmentBuilder create(StateDescription legacy) {
+        return new StateDescriptionFragmentBuilder(legacy);
+    }
+
+    /**
+     * Builds a {@link StateDescriptionFragment} from the values of this builder.
      *
      * @return a {@link StateDescriptionFragment} from the values of this builder.
      */
-    StateDescriptionFragment build();
+    @SuppressWarnings("deprecation")
+    public StateDescriptionFragment build() {
+        return new StateDescriptionFragmentImpl(minimum, maximum, step, pattern, readOnly, options);
+    }
 
     /**
      * Set the maximum for the resulting {@link StateDescriptionFragment}.
@@ -36,7 +109,10 @@ public interface StateDescriptionFragmentBuilder {
      * @param maximum the maximum for the resulting {@link StateDescriptionFragment}.
      * @return this builder.
      */
-    StateDescriptionFragmentBuilder withMaximum(BigDecimal maximum);
+    public StateDescriptionFragmentBuilder withMaximum(BigDecimal maximum) {
+        this.maximum = maximum;
+        return this;
+    }
 
     /**
      * Set the minimum for the resulting {@link StateDescriptionFragment}.
@@ -44,7 +120,10 @@ public interface StateDescriptionFragmentBuilder {
      * @param minimum the minimum for the resulting {@link StateDescriptionFragment}.
      * @return this builder.
      */
-    StateDescriptionFragmentBuilder withMinimum(BigDecimal minimum);
+    public StateDescriptionFragmentBuilder withMinimum(BigDecimal minimum) {
+        this.minimum = minimum;
+        return this;
+    }
 
     /**
      * Set the step for the resulting {@link StateDescriptionFragment}.
@@ -52,7 +131,10 @@ public interface StateDescriptionFragmentBuilder {
      * @param step the step for the resulting {@link StateDescriptionFragment}.
      * @return this builder.
      */
-    StateDescriptionFragmentBuilder withStep(BigDecimal step);
+    public StateDescriptionFragmentBuilder withStep(BigDecimal step) {
+        this.step = step;
+        return this;
+    }
 
     /**
      * Set the pattern for the resulting {@link StateDescriptionFragment}.
@@ -60,7 +142,10 @@ public interface StateDescriptionFragmentBuilder {
      * @param pattern the pattern for the resulting {@link StateDescriptionFragment}.
      * @return this builder.
      */
-    StateDescriptionFragmentBuilder withPattern(String pattern);
+    public StateDescriptionFragmentBuilder withPattern(String pattern) {
+        this.pattern = pattern;
+        return this;
+    }
 
     /**
      * Set readOnly for the resulting {@link StateDescriptionFragment}.
@@ -68,7 +153,10 @@ public interface StateDescriptionFragmentBuilder {
      * @param readOnly readOnly for the resulting {@link StateDescriptionFragment}.
      * @return this builder.
      */
-    StateDescriptionFragmentBuilder withReadOnly(Boolean readOnly);
+    public StateDescriptionFragmentBuilder withReadOnly(Boolean readOnly) {
+        this.readOnly = readOnly;
+        return this;
+    }
 
     /**
      * Ass a {@link StateOption} for the resulting {@link StateDescriptionFragment}.
@@ -76,7 +164,14 @@ public interface StateDescriptionFragmentBuilder {
      * @param option a {@link StateOption} for the resulting {@link StateDescriptionFragment}.
      * @return this builder.
      */
-    StateDescriptionFragmentBuilder withOption(StateOption option);
+    @SuppressWarnings("null")
+    public StateDescriptionFragmentBuilder withOption(StateOption option) {
+        if (options == null) {
+            options = new ArrayList<>();
+        }
+        options.add(option);
+        return this;
+    }
 
     /**
      * Set the {@link StateOption}s for the resulting {@link StateDescriptionFragment}.
@@ -84,5 +179,8 @@ public interface StateDescriptionFragmentBuilder {
      * @param options the {@link StateOption}s for the resulting {@link StateDescriptionFragment}.
      * @return this builder.
      */
-    StateDescriptionFragmentBuilder withOptions(List<StateOption> options);
+    public StateDescriptionFragmentBuilder withOptions(List<StateOption> options) {
+        this.options = options;
+        return this;
+    }
 }

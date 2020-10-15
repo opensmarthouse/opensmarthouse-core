@@ -23,7 +23,8 @@ import org.openhab.core.thing.Channel;
 import org.openhab.core.thing.Thing;
 import org.openhab.core.thing.ThingTypeUID;
 import org.openhab.core.thing.ThingUID;
-import org.openhab.core.thing.binding.ThingBuilderFactory;
+import org.openhab.core.thing.binding.builder.BridgeBuilder;
+import org.openhab.core.thing.binding.builder.ThingBuilder;
 import org.openhab.core.thing.util.ThingHelper;
 
 /**
@@ -65,17 +66,17 @@ public class ThingDTOMapper {
      * @param isBridge flag if the thing DTO identifies a bridge
      * @return the corresponding thing
      */
-    public static Thing map(ThingBuilderFactory thingFactory, ThingDTO thingDTO, boolean isBridge) {
+    public static Thing map(ThingDTO thingDTO, boolean isBridge) {
         ThingUID thingUID = new ThingUID(thingDTO.UID);
         ThingTypeUID thingTypeUID = thingDTO.thingTypeUID == null ? new ThingTypeUID("")
                 : new ThingTypeUID(thingDTO.thingTypeUID);
         final Thing thing;
         if (isBridge) {
-            thing = thingFactory.createBridge(thingTypeUID, thingUID).build();
+            thing = BridgeBuilder.create(thingTypeUID, thingUID).build();
         } else {
-            thing = thingFactory.createThing(thingTypeUID, thingUID).build();
+            thing = ThingBuilder.create(thingTypeUID, thingUID).build();
         }
-        return ThingHelper.merge(thingFactory, thing, thingDTO);
+        return ThingHelper.merge(thing, thingDTO);
     }
 
     private static Map<String, Object> toMap(Configuration configuration) {

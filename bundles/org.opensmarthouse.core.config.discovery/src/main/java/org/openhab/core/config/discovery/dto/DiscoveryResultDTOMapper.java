@@ -15,7 +15,6 @@ package org.openhab.core.config.discovery.dto;
 import org.eclipse.jdt.annotation.NonNullByDefault;
 import org.openhab.core.config.discovery.DiscoveryResult;
 import org.openhab.core.config.discovery.DiscoveryResultBuilder;
-import org.openhab.core.config.discovery.compat.DiscoveryResultBuilderFactoryDelegate;
 import org.openhab.core.thing.ThingTypeUID;
 import org.openhab.core.thing.ThingUID;
 
@@ -58,7 +57,7 @@ public class DiscoveryResultDTOMapper {
         final String dtoBridgeUID = discoveryResultDTO.bridgeUID;
         final ThingUID bridgeUID = dtoBridgeUID != null ? new ThingUID(dtoBridgeUID) : null;
 
-        return new DiscoveryResultBuilderFactoryDelegate().create(thingUID).withThingType(thingTypeUID).withBridge(bridgeUID)
+        return DiscoveryResultBuilder.create(thingUID).withThingType(thingTypeUID).withBridge(bridgeUID)
                 .withLabel(discoveryResultDTO.label)
                 .withRepresentationProperty(discoveryResultDTO.representationProperty)
                 .withProperties(discoveryResultDTO.properties).build();

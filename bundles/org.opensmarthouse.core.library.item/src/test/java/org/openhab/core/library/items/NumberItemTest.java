@@ -29,13 +29,13 @@ import org.openhab.core.library.types.PercentType;
 import org.openhab.core.library.types.QuantityType;
 import org.openhab.core.library.unit.ImperialUnits;
 import org.openhab.core.library.unit.SIUnits;
-import org.openhab.core.service.StateDescriptionService;
 import org.openhab.core.types.State;
 import org.openhab.core.types.StateDescription;
 import org.openhab.core.types.StateDescriptionFragment;
 import org.openhab.core.types.StateDescriptionFragmentBuilder;
 import org.openhab.core.types.StateDescriptionFragmentBuilderFactory;
 import org.openhab.core.types.UnDefType;
+import org.openhab.core.types.service.StateDescriptionService;
 import org.openhab.core.types.util.UnitUtils;
 
 /**

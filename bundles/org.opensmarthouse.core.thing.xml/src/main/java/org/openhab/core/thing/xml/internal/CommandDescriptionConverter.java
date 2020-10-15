@@ -18,7 +18,6 @@ import org.openhab.core.config.xml.util.NodeList;
 import org.openhab.core.config.xml.util.NodeValue;
 import org.openhab.core.types.CommandDescription;
 import org.openhab.core.types.CommandDescriptionBuilder;
-import org.openhab.core.types.CommandDescriptionBuilderFactory;
 import org.openhab.core.types.CommandOption;
 
 import com.thoughtworks.xstream.converters.ConversionException;
@@ -36,11 +35,8 @@ import com.thoughtworks.xstream.io.HierarchicalStreamReader;
  */
 public class CommandDescriptionConverter extends GenericUnmarshaller<CommandDescription> {
 
-    private final CommandDescriptionBuilderFactory commandDescriptionBuilderFactory;
-
-    public CommandDescriptionConverter(CommandDescriptionBuilderFactory commandDescriptionBuilderFactory) {
+    public CommandDescriptionConverter() {
         super(CommandDescription.class);
-        this.commandDescriptionBuilderFactory = commandDescriptionBuilderFactory;
     }
 
     @Override
@@ -51,7 +47,7 @@ public class CommandDescriptionConverter extends GenericUnmarshaller<CommandDesc
         NodeList commandOptionsNode = (NodeList) nodeIterator.next();
         if (commandOptionsNode != null) {
             if ("options".equals(commandOptionsNode.getNodeName())) {
-                CommandDescriptionBuilder commandDescriptionBuilder = commandDescriptionBuilderFactory.create();
+                CommandDescriptionBuilder commandDescriptionBuilder = CommandDescriptionBuilder.create();
                 for (Object coNodeObject : commandOptionsNode.getList()) {
                     NodeValue optionsNode = (NodeValue) coNodeObject;
 

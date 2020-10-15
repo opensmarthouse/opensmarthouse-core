@@ -16,7 +16,7 @@ import org.eclipse.jdt.annotation.NonNullByDefault;
 import org.openhab.core.config.core.Configuration;
 import org.openhab.core.thing.Channel;
 import org.openhab.core.thing.ChannelUID;
-import org.openhab.core.thing.compat.ChannelBuilderFactoryDelegate;
+import org.openhab.core.thing.binding.builder.ChannelBuilder;
 import org.openhab.core.thing.type.AutoUpdatePolicy;
 import org.openhab.core.thing.type.ChannelKind;
 import org.openhab.core.thing.type.ChannelTypeUID;
@@ -55,7 +55,7 @@ public class ChannelDTOMapper {
         ChannelTypeUID channelTypeUID = channelDTO.channelTypeUID != null
                 ? new ChannelTypeUID(channelDTO.channelTypeUID)
                 : null;
-        return new ChannelBuilderFactoryDelegate().create(channelUID, channelDTO.itemType)
+        return ChannelBuilder.create(channelUID, channelDTO.itemType)
                 .withConfiguration(new Configuration(channelDTO.configuration)).withLabel(channelDTO.label)
                 .withDescription(channelDTO.description).withProperties(channelDTO.properties).withType(channelTypeUID)
                 .withDefaultTags(channelDTO.defaultTags).withKind(ChannelKind.parse(channelDTO.kind))

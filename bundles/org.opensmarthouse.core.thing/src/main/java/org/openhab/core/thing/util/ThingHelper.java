@@ -30,7 +30,7 @@ import org.openhab.core.thing.Channel;
 import org.openhab.core.thing.Thing;
 import org.openhab.core.thing.ThingUID;
 import org.openhab.core.thing.UID;
-import org.openhab.core.thing.binding.ThingBuilderFactory;
+import org.openhab.core.thing.binding.builder.BridgeBuilder;
 import org.openhab.core.thing.binding.builder.ThingBuilder;
 import org.openhab.core.thing.dto.ChannelDTO;
 import org.openhab.core.thing.dto.ChannelDTOMapper;
@@ -165,13 +165,13 @@ public class ThingHelper {
      * @param updatedContents a DTO which carries the updated content
      * @return A Thing instance, which is the result of the merge
      */
-    public static Thing merge(ThingBuilderFactory thingFactory, Thing thing, ThingDTO updatedContents) {
+    public static Thing merge(Thing thing, ThingDTO updatedContents) {
         ThingBuilder builder;
 
         if (thing instanceof Bridge) {
-            builder = thingFactory.createBridge(thing.getThingTypeUID(), thing.getUID());
+            builder = BridgeBuilder.create(thing.getThingTypeUID(), thing.getUID());
         } else {
-            builder = thingFactory.createThing(thing.getThingTypeUID(), thing.getUID());
+            builder = ThingBuilder.create(thing.getThingTypeUID(), thing.getUID());
         }
 
         // Update the label

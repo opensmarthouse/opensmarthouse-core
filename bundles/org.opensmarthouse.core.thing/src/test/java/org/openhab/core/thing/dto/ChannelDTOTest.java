@@ -12,25 +12,23 @@
  */
 package org.openhab.core.thing.dto;
 
-import static org.hamcrest.CoreMatchers.*;
+import static org.hamcrest.CoreMatchers.instanceOf;
+import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.collection.IsCollectionWithSize.hasSize;
-import static org.junit.Assert.assertThat;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
 
-import java.util.Collections;
 import java.util.Map;
 import java.util.Set;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.openhab.core.config.core.Configuration;
 import org.openhab.core.library.CoreItemFactory;
 import org.openhab.core.thing.Channel;
 import org.openhab.core.thing.ChannelUID;
 import org.openhab.core.thing.ThingTypeUID;
 import org.openhab.core.thing.ThingUID;
+import org.openhab.core.thing.binding.builder.ChannelBuilder;
 import org.openhab.core.thing.type.AutoUpdatePolicy;
-import org.openhab.core.thing.type.ChannelKind;
 import org.openhab.core.thing.type.ChannelTypeUID;
 
 /**
@@ -44,12 +42,15 @@ public class ChannelDTOTest {
     private static final ThingUID THING_UID = new ThingUID(THING_TYPE_UID, "thing-id");
     private static final ChannelTypeUID CHANNEL_TYPE_UID = new ChannelTypeUID("binding-id", "channel-type-id");
     private static final ChannelUID CHANNEL_UID = new ChannelUID(THING_UID, "channel1");
-    private final Map<String, String> properties = Collections.singletonMap("key1", "value1");
-    private final Set<String> tags = Collections.singleton("tag1");
+    private final Map<String, String> properties = Map.of("key1", "value1");
+    private final Set<String> tags = Set.of("tag1");
 
     @Test
     public void testChannelDTOMappingIsBidirectional() {
-        Channel subject = createChannel(mock(Channel.class));
+        Channel subject = ChannelBuilder.create(CHANNEL_UID, CoreItemFactory.STRING).withType(CHANNEL_TYPE_UID)
+                .withLabel("Test").withDescription("My test channel")
+                .withConfiguration(new Configuration(Map.of("param1", "value1"))).withProperties(properties)
+                .withDefaultTags(tags).withAutoUpdatePolicy(AutoUpdatePolicy.VETO).build();
         Channel result = ChannelDTOMapper.map(ChannelDTOMapper.map(subject));
         assertThat(result, is(instanceOf(Channel.class)));
         assertThat(result.getChannelTypeUID(), is(CHANNEL_TYPE_UID));
@@ -64,20 +65,5 @@ public class ChannelDTOTest {
         assertThat(result.getDefaultTags(), hasSize(1));
         assertThat(result.getDefaultTags(), is(subject.getDefaultTags()));
         assertThat(result.getAutoUpdatePolicy(), is(subject.getAutoUpdatePolicy()));
-    }
-
-    private Channel createChannel(Channel channel) {
-        when(channel.getChannelTypeUID()).thenReturn(CHANNEL_TYPE_UID);
-        when(channel.getUID()).thenReturn(CHANNEL_UID);
-        when(channel.getAcceptedItemType()).thenReturn(CoreItemFactory.STRING);
-        when(channel.getKind()).thenReturn(ChannelKind.STATE);
-        when(channel.getLabel()).thenReturn("Test");
-        when(channel.getDescription()).thenReturn("My test channel");
-        when(channel.getConfiguration()).thenReturn(new Configuration(Collections.singletonMap("param1", "value1")));
-        when(channel.getProperties()).thenReturn(properties);
-        when(channel.getDefaultTags()).thenReturn(tags);
-        when(channel.getAutoUpdatePolicy()).thenReturn(AutoUpdatePolicy.VETO);
-
-        return channel;
     }
 }

@@ -73,7 +73,6 @@ public abstract class BaseThingHandler implements ThingHandler {
     protected Thing thing;
 
     private @Nullable ThingHandlerCallback callback;
-    protected @NonNullByDefault({}) ThingBuilderFactory thingBuilderFactory;
 
     /**
      * Creates a new instance of this class for the {@link Thing}.
@@ -411,7 +410,7 @@ public abstract class BaseThingHandler implements ThingHandler {
      * @return {@link ThingBuilder} which builds an exact copy of the thing (not null)
      */
     protected ThingBuilder editThing() {
-        return thingBuilderFactory.createThing(this.thing.getThingTypeUID(), this.thing.getUID())
+        return ThingBuilder.create(this.thing.getThingTypeUID(), this.thing.getUID())
                 .withBridge(this.thing.getBridgeUID()).withChannels(this.thing.getChannels())
                 .withConfiguration(this.thing.getConfiguration()).withLabel(this.thing.getLabel())
                 .withLocation(this.thing.getLocation()).withProperties(this.thing.getProperties())

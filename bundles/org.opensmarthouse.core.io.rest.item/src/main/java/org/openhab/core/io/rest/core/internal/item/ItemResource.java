@@ -78,9 +78,7 @@ import org.openhab.core.library.types.OnOffType;
 import org.openhab.core.library.types.UpDownType;
 import org.openhab.core.types.Command;
 import org.openhab.core.types.State;
-import org.openhab.core.types.StateDescriptionFragmentBuilderFactory;
 import org.openhab.core.types.TypeParser;
-import org.osgi.framework.BundleContext;
 import org.osgi.service.component.annotations.Activate;
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Reference;
@@ -124,7 +122,6 @@ import io.swagger.v3.oas.annotations.tags.Tag;
  * @author Franck Dechavanne - Added DTOs to ApiResponses
  * @author Stefan Triller - Added bulk item add method
  * @author Markus Rathgeb - Migrated to JAX-RS Whiteboard Specification
- * @author Lukasz Dywicki - Used builder factories
  * @author Wouter Born - Migrated to OpenAPI annotations
  */
 @Component
@@ -159,7 +156,6 @@ public class ItemResource implements RESTResource {
 
     private final Logger logger = LoggerFactory.getLogger(ItemResource.class);
 
-    private final BundleContext bundleContext;
     private final DTOMapper dtoMapper;
     private final EventPublisher eventPublisher;
     private final ItemBuilderFactory itemBuilderFactory;
@@ -168,11 +164,9 @@ public class ItemResource implements RESTResource {
     private final ManagedItemProvider managedItemProvider;
     private final MetadataRegistry metadataRegistry;
     private final MetadataSelectorMatcher metadataSelectorMatcher;
-    private final StateDescriptionFragmentBuilderFactory stateDescriptionFragmentBuilderFactory;
 
     @Activate
     public ItemResource(//
-            final BundleContext bundleContext, //
             final @Reference DTOMapper dtoMapper, //
             final @Reference EventPublisher eventPublisher, //
             final @Reference ItemBuilderFactory itemBuilderFactory, //
@@ -180,9 +174,7 @@ public class ItemResource implements RESTResource {
             final @Reference LocaleService localeService, //
             final @Reference ManagedItemProvider managedItemProvider,
             final @Reference MetadataRegistry metadataRegistry,
-            final @Reference MetadataSelectorMatcher metadataSelectorMatcher,
-            final @Reference StateDescriptionFragmentBuilderFactory stateDescriptionFragmentBuilderFactory) {
-        this.bundleContext = bundleContext;
+            final @Reference MetadataSelectorMatcher metadataSelectorMatcher) {
         this.dtoMapper = dtoMapper;
         this.eventPublisher = eventPublisher;
         this.itemBuilderFactory = itemBuilderFactory;
@@ -191,7 +183,6 @@ public class ItemResource implements RESTResource {
         this.managedItemProvider = managedItemProvider;
         this.metadataRegistry = metadataRegistry;
         this.metadataSelectorMatcher = metadataSelectorMatcher;
-        this.stateDescriptionFragmentBuilderFactory = stateDescriptionFragmentBuilderFactory;
     }
 
     private UriBuilder uriBuilder(final UriInfo uriInfo, final HttpHeaders httpHeaders) {
@@ -214,12 +205,12 @@ public class ItemResource implements RESTResource {
             @QueryParam("fields") @Parameter(description = "limit output to the given fields (comma separated)") @Nullable String fields) {
         final Locale locale = localeService.getLocale(language);
         final Set<String> namespaces = splitAndFilterNamespaces(namespaceSelector, locale);
+
         final UriBuilder uriBuilder = uriBuilder(uriInfo, httpHeaders);
         uriBuilder.path("{itemName}");
 
         Stream<EnrichedItemDTO> itemStream = getItems(type, tags).stream() //
-                .map(item -> EnrichedItemDTOMapper.map(bundleContext, stateDescriptionFragmentBuilderFactory, item,
-                        recursive, null, uriBuilder(uriInfo, httpHeaders), locale)) //
+                .map(item -> EnrichedItemDTOMapper.map(item, recursive, null, uriBuilder, locale)) //
                 .peek(dto -> addMetadata(dto, namespaces, null)) //
                 .peek(dto -> dto.editable = isEditable(dto.name));
         itemStream = dtoMapper.limitToFields(itemStream, fields);
@@ -245,9 +236,7 @@ public class ItemResource implements RESTResource {
 
         // if it exists
         if (item != null) {
-            logger.debug("Received HTTP GET request at '{}'.", uriInfo.getPath());
-            EnrichedItemDTO dto = EnrichedItemDTOMapper.map(bundleContext, stateDescriptionFragmentBuilderFactory, item,
-                    true, null, uriBuilder(uriInfo, httpHeaders), locale);
+            EnrichedItemDTO dto = EnrichedItemDTOMapper.map(item, true, null, uriBuilder(uriInfo, httpHeaders), locale);
             addMetadata(dto, namespaces, null);
             dto.editable = isEditable(dto.name);
             return JSONResponse.createResponse(Status.OK, dto, null);
@@ -733,10 +722,7 @@ public class ItemResource implements RESTResource {
      */
     private Response getItemResponse(final @Nullable UriBuilder uriBuilder, Status status, @Nullable Item item,
             Locale locale, @Nullable String errormessage) {
-        Object entity = null != item
-                ? EnrichedItemDTOMapper.map(bundleContext, stateDescriptionFragmentBuilderFactory, item, true, null,
-                        uriBuilder, locale)
-                : null;
+        Object entity = null != item ? EnrichedItemDTOMapper.map(item, true, null, uriBuilder, locale) : null;
         return JSONResponse.createResponse(status, entity, errormessage);
     }
 

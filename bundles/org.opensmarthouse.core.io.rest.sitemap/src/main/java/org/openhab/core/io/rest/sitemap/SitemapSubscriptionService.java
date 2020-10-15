@@ -39,9 +39,7 @@ import org.openhab.core.model.sitemap.SitemapProvider;
 import org.openhab.core.model.sitemap.sitemap.LinkableWidget;
 import org.openhab.core.model.sitemap.sitemap.Sitemap;
 import org.openhab.core.model.sitemap.sitemap.Widget;
-import org.openhab.core.types.StateDescriptionFragmentBuilderFactory;
 import org.openhab.core.ui.items.ItemUIRegistry;
-import org.osgi.framework.BundleContext;
 import org.osgi.service.component.annotations.Activate;
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Deactivate;
@@ -80,9 +78,7 @@ public class SitemapSubscriptionService implements ModelRepositoryChangeListener
         void onRelease(String subscriptionId);
     }
 
-    private final BundleContext bundleContext;
     private final ItemUIRegistry itemUIRegistry;
-    private final StateDescriptionFragmentBuilderFactory stateDescriptionFragmentBuilderFactory;
 
     private final List<SitemapProvider> sitemapProviders = new ArrayList<>();
 
@@ -102,13 +98,9 @@ public class SitemapSubscriptionService implements ModelRepositoryChangeListener
     private int maxSubscriptions = DEFAULT_MAX_SUBSCRIPTIONS;
 
     @Activate
-    public SitemapSubscriptionService(final Map<String, Object> config, final BundleContext bundleContext,
-            final @Reference ItemUIRegistry itemUIRegistry,
-            final @Reference StateDescriptionFragmentBuilderFactory stateDescriptionFragmentBuilderFactory) {
+    public SitemapSubscriptionService(Map<String, Object> config, final @Reference ItemUIRegistry itemUIRegistry) {
         applyConfig(config);
-        this.bundleContext = bundleContext;
         this.itemUIRegistry = itemUIRegistry;
-        this.stateDescriptionFragmentBuilderFactory = stateDescriptionFragmentBuilderFactory;
     }
 
     @Deactivate
@@ -257,12 +249,10 @@ public class SitemapSubscriptionService implements ModelRepositoryChangeListener
         PageChangeListener listener = pageChangeListeners.get(getValue(sitemapName, pageId));
         if (listener == null) {
             // there is no listener for this page yet, so let's try to create one
-            listener = new PageChangeListener(bundleContext, sitemapName, pageId, itemUIRegistry,
-                    stateDescriptionFragmentBuilderFactory, collectWidgets(sitemapName, pageId));
+            listener = new PageChangeListener(sitemapName, pageId, itemUIRegistry, collectWidgets(sitemapName, pageId));
             pageChangeListeners.put(getValue(sitemapName, pageId), listener);
-        } else {
-            listener.addCallback(callback);
         }
+        listener.addCallback(callback);
     }
 
     private EList<Widget> collectWidgets(String sitemapName, String pageId) {

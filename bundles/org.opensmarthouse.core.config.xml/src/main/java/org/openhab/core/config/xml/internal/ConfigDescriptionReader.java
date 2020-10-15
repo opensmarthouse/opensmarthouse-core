@@ -14,6 +14,7 @@ package org.openhab.core.config.xml.internal;
 
 import java.util.List;
 
+import org.eclipse.jdt.annotation.NonNullByDefault;
 import org.openhab.core.config.core.ConfigDescription;
 import org.openhab.core.config.core.ConfigDescriptionParameter;
 import org.openhab.core.config.core.ConfigDescriptionParameterGroup;
@@ -43,6 +44,7 @@ import com.thoughtworks.xstream.XStream;
  * @author Chris Jackson - Added configuration groups
  * @author Łukasz Dywicki - Added XStream security handling.
  */
+@NonNullByDefault
 public class ConfigDescriptionReader extends XmlDocumentReader<List<ConfigDescription>> {
 
     /**
@@ -78,14 +80,8 @@ public class ConfigDescriptionReader extends XmlDocumentReader<List<ConfigDescri
 
     @Override
     public void registerSecurity(XStream xstream) {
-        xstream.allowTypes(new Class[] {
-                ConfigDescription.class,
-                ConfigDescriptionParameter.class,
-                ConfigDescriptionParameterGroup.class,
-                FilterCriteria.class,
-                NodeList.class,
-                NodeValue.class,
-                NodeAttributes.class
-        });
+        xstream.allowTypes(new Class[] { ConfigDescription.class, ConfigDescriptionParameter.class,
+                ConfigDescriptionParameterGroup.class, FilterCriteria.class, NodeList.class, NodeValue.class,
+                NodeAttributes.class });
     }
 }

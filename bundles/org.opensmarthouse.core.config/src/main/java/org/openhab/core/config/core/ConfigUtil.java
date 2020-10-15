@@ -26,7 +26,8 @@ import java.util.stream.Collectors;
 
 import org.eclipse.jdt.annotation.Nullable;
 import org.openhab.core.config.core.ConfigDescriptionParameter.Type;
-import org.openhab.core.config.core.compat.NormalizerFactoryDelegate;
+import org.openhab.core.config.core.internal.normalization.Normalizer;
+import org.openhab.core.config.core.internal.normalization.NormalizerFactory;
 import org.openhab.core.config.core.validation.ConfigDescriptionValidator;
 import org.osgi.framework.Constants;
 import org.osgi.service.component.ComponentConstants;
@@ -43,7 +44,6 @@ import org.slf4j.LoggerFactory;
  *
  * @author Kai Kreuzer - Initial contribution
  * @author Thomas Höfer - Minor changes for type normalization based on config description
- * @author Łuaksz Dywicki - Refactor to use factory
  */
 public class ConfigUtil {
 
@@ -146,27 +146,14 @@ public class ConfigUtil {
      *
      * @param configuration the configuration that needs to be normalized
      * @return normalized configuration
-     * @deprecated Use variant with normalizer factory argument.
      */
-    @Deprecated
     public static Map<String, Object> normalizeTypes(Map<String, Object> configuration) {
-        return normalizeTypesWithFactory(new NormalizerFactoryDelegate(), configuration);
-    }
-
-    /**
-     * See {@link #normalizeTypes(Map)}.
-     *
-     * @param configuration the configuration that needs to be normalized
-     * @return normalized configuration
-     */
-    public static Map<String, Object> normalizeTypesWithFactory(NormalizerFactory normalizerFactory,
-            Map<String, Object> configuration) {
         Map<String, Object> convertedConfiguration = new HashMap<>(configuration.size());
         for (Entry<String, Object> parameter : configuration.entrySet()) {
             String name = parameter.getKey();
             Object value = parameter.getValue();
             if (!isOSGiConfigParameter(name)) {
-                convertedConfiguration.put(name, normalizeTypeWithFactory(normalizerFactory, value, null));
+                convertedConfiguration.put(name, normalizeType(value, null));
             }
         }
         return convertedConfiguration;
@@ -179,26 +166,10 @@ public class ConfigUtil {
      * @param configDescriptionParameter the parameter that needs to be normalized
      * @return corresponding value as a valid type
      * @throws IllegalArgumentException if a invalid type has been given
-     * @deprecated Use variant with normalizer factory argument.
      */
-    @Deprecated
     public static Object normalizeType(Object value, @Nullable ConfigDescriptionParameter configDescriptionParameter) {
-        return normalizeTypeWithFactory(new NormalizerFactoryDelegate(), value, configDescriptionParameter);
-    }
-
-    /**
-     * See {@link #normalizeType(Object, ConfigDescriptionParameter)}.
-     *
-     * @param normalizerFactory Factory to create normalizers of parameter values
-     * @param value the value to return as normalized type
-     * @param configDescriptionParameter the parameter that needs to be normalized
-     * @return corresponding value as a valid type
-     * @throws IllegalArgumentException if a invalid type has been given
-     */
-    public static Object normalizeTypeWithFactory(NormalizerFactory normalizerFactory, Object value,
-            @Nullable ConfigDescriptionParameter configDescriptionParameter) {
         if (configDescriptionParameter != null) {
-            Normalizer normalizer = normalizerFactory.getNormalizer(configDescriptionParameter);
+            Normalizer normalizer = NormalizerFactory.getNormalizer(configDescriptionParameter);
             return normalizer.normalize(value);
         } else if (value == null || value instanceof Boolean || value instanceof String
                 || value instanceof BigDecimal) {
@@ -206,7 +177,7 @@ public class ConfigUtil {
         } else if (value instanceof Number) {
             return new BigDecimal(value.toString());
         } else if (value instanceof Collection) {
-            return normalizeCollection(normalizerFactory, (Collection<?>) value);
+            return normalizeCollection((Collection<?>) value);
         }
         throw new IllegalArgumentException(
                 "Invalid type '{" + value.getClass().getCanonicalName() + "}' of configuration value!");
@@ -228,25 +199,9 @@ public class ConfigUtil {
      * @param configDescriptions the configuration descriptions that should be applied (must not be null or empty).
      * @return the normalized configuration or null if given configuration was null
      * @throws IllegalArgumentExcetpion if given config description is null
-     * @deprecated Use variant with normalizer factory argument.
      */
-    @Deprecated
     public static Map<String, Object> normalizeTypes(Map<String, Object> configuration,
             List<ConfigDescription> configDescriptions) {
-        return normalizeTypesWithFactory(new NormalizerFactoryDelegate(), configuration, configDescriptions);
-    }
-
-    /**
-     * See {@link #normalizeTypes(Map, List)}.
-     *
-     * @param normalizerFactory Normalization factory.
-     * @param configuration the configuration to be normalized (can be null)
-     * @param configDescriptions the configuration descriptions that should be applied (must not be null or empty).
-     * @return the normalized configuration or null if given configuration was null
-     * @throws IllegalArgumentExcetpion if given config description is null
-     */
-    public static Map<String, Object> normalizeTypesWithFactory(NormalizerFactory normalizerFactory,
-            Map<String, Object> configuration, List<ConfigDescription> configDescriptions) {
         if (configDescriptions == null || configDescriptions.isEmpty()) {
             throw new IllegalArgumentException("Config description must not be null.");
         }
@@ -266,8 +221,7 @@ public class ConfigUtil {
             Object value = parameter.getValue();
             if (!isOSGiConfigParameter(name)) {
                 ConfigDescriptionParameter configDescriptionParameter = configParams.get(name);
-                convertedConfiguration.put(name,
-                        normalizeTypeWithFactory(normalizerFactory, value, configDescriptionParameter));
+                convertedConfiguration.put(name, normalizeType(value, configDescriptionParameter));
             }
         }
         return convertedConfiguration;
@@ -277,45 +231,29 @@ public class ConfigUtil {
      * Normalizes the type of the parameter to the one allowed for configurations.
      *
      * The conversion is performed 'best-effort' (e.g. "3" will always end up being a BigDecimal, never a String).
-     * Use {@link #normalizeTypeWithFactory(NormalizerFactory, Object, ConfigDescriptionParameter)} to make sure your
-     * field type ends up as intended.
+     * Use {@link #normalizeType(Object, ConfigDescriptionParameter)} to make sure your field type ends up as intended.
      *
      * @param value the value to return as normalized type
      * @return corresponding value as a valid type
-     * @deprecated Use variant with normalizer factory argument.
      */
-    @Deprecated
     public static Object normalizeType(Object value) {
-        return normalizeTypeWithFactory(new NormalizerFactoryDelegate(), value, null);
-    }
-
-    /**
-     * See {@link #normalizeType(Object)}.
-     *
-     * @param value the value to return as normalized type
-     * @param normalizerFactory Normalizer to adjust object value if necessary
-     * @return corresponding value as a valid type
-     */
-    public static Object normalizeTypeWithFactory(Object value, NormalizerFactory normalizerFactory) {
-        return normalizeTypeWithFactory(normalizerFactory, value, null);
+        return normalizeType(value, null);
     }
 
     /**
      * Normalizes a collection.
      *
-     * @param normalizerFactory Factory for normalizers.
      * @param collection the collection that entries should be normalized
      * @return a collection that contains the normalized entries
      * @throws IllegalArgumentException if the type of the normalized values differ or an invalid type has been given
      */
-    private static Collection<Object> normalizeCollection(NormalizerFactory normalizerFactory, Collection<?> collection)
-            throws IllegalArgumentException {
+    private static Collection<Object> normalizeCollection(Collection<?> collection) throws IllegalArgumentException {
         if (collection.isEmpty()) {
             return Collections.emptyList();
         } else {
             final List<Object> lst = new ArrayList<>(collection.size());
             for (final Object it : collection) {
-                final Object normalized = normalizeTypeWithFactory(normalizerFactory, it, null);
+                final Object normalized = normalizeType(it, null);
                 lst.add(normalized);
                 if (normalized.getClass() != lst.get(0).getClass()) {
                     throw new IllegalArgumentException(

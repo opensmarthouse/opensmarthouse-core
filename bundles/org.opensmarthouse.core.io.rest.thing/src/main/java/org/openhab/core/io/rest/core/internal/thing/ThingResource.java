@@ -63,6 +63,9 @@ import org.openhab.core.io.rest.RESTResource;
 import org.openhab.core.io.rest.Stream2JSONInputStream;
 import org.openhab.core.io.rest.core.thing.EnrichedThingDTO;
 import org.openhab.core.io.rest.core.thing.EnrichedThingDTOMapper;
+import org.openhab.core.items.ItemFactory;
+import org.openhab.core.items.ItemRegistry;
+import org.openhab.core.items.ManagedItemProvider;
 import org.openhab.core.thing.Channel;
 import org.openhab.core.thing.ChannelUID;
 import org.openhab.core.thing.ManagedThingProvider;
@@ -73,7 +76,6 @@ import org.openhab.core.thing.ThingStatusInfo;
 import org.openhab.core.thing.ThingTypeMigrationService;
 import org.openhab.core.thing.ThingTypeUID;
 import org.openhab.core.thing.ThingUID;
-import org.openhab.core.thing.binding.ThingBuilderFactory;
 import org.openhab.core.thing.binding.firmware.Firmware;
 import org.openhab.core.thing.dto.ChannelDTO;
 import org.openhab.core.thing.dto.ChannelDTOMapper;
@@ -131,7 +133,6 @@ import io.swagger.v3.oas.annotations.tags.Tag;
  * @author Franck Dechavanne - Added DTOs to ApiResponses
  * @author Dimitar Ivanov - replaced Firmware UID with thing UID and firmware version
  * @author Markus Rathgeb - Migrated to JAX-RS Whiteboard Specification
- * @author Lukasz Dywicki - Used builder factories
  * @author Chris Jackson - added migrate method
  * @author Chris Jackson - removed limitation of only configuring managed things
  * @author Wouter Born - Migrated to OpenAPI annotations
@@ -155,11 +156,14 @@ public class ThingResource implements RESTResource {
     private final ConfigStatusService configStatusService;
     private final ConfigDescriptionRegistry configDescRegistry;
     private final FirmwareRegistry firmwareRegistry;
-    private final ThingBuilderFactory thingBuilderFactory;
     private final FirmwareUpdateService firmwareUpdateService;
     private final ItemChannelLinkRegistry itemChannelLinkRegistry;
+    private final ItemFactory itemFactory;
+    private final ItemRegistry itemRegistry;
     private final LocaleService localeService;
     private final ThingTypeMigrationService thingMigrationService;
+    private final ManagedItemChannelLinkProvider managedItemChannelLinkProvider;
+    private final ManagedItemProvider managedItemProvider;
     private final ManagedThingProvider managedThingProvider;
     private final ThingManager thingManager;
     private final ThingRegistry thingRegistry;
@@ -178,12 +182,14 @@ public class ThingResource implements RESTResource {
             final @Reference ItemChannelLinkRegistry itemChannelLinkRegistry, //
             final @Reference LocaleService localeService, //
             final @Reference ManagedItemChannelLinkProvider managedItemChannelLinkProvider, //
+            final @Reference ItemFactory itemFactory, //
+            final @Reference ItemRegistry itemRegistry, //
+            final @Reference ManagedItemProvider managedItemProvider,
             final @Reference ManagedThingProvider managedThingProvider, //
             final @Reference ThingManager thingManager, //
             final @Reference ThingTypeMigrationService thingMigrationService, //
-            final @Reference ThingRegistry thingRegistry, //
-            final @Reference ThingStatusInfoI18nLocalizationService thingStatusInfoI18nLocalizationService, //
-            final @Reference ThingBuilderFactory thingBuilderFactory, //
+            final @Reference ThingRegistry thingRegistry,
+            final @Reference ThingStatusInfoI18nLocalizationService thingStatusInfoI18nLocalizationService,
             final @Reference ThingTypeRegistry thingTypeRegistry) {
         this.channelTypeRegistry = channelTypeRegistry;
         this.configStatusService = configStatusService;
@@ -191,13 +197,16 @@ public class ThingResource implements RESTResource {
         this.firmwareRegistry = firmwareRegistry;
         this.firmwareUpdateService = firmwareUpdateService;
         this.itemChannelLinkRegistry = itemChannelLinkRegistry;
+        this.itemFactory = itemFactory;
+        this.itemRegistry = itemRegistry;
         this.localeService = localeService;
+        this.managedItemChannelLinkProvider = managedItemChannelLinkProvider;
+        this.managedItemProvider = managedItemProvider;
         this.managedThingProvider = managedThingProvider;
         this.thingManager = thingManager;
         this.thingRegistry = thingRegistry;
         this.thingStatusInfoI18nLocalizationService = thingStatusInfoI18nLocalizationService;
         this.thingTypeRegistry = thingTypeRegistry;
-        this.thingBuilderFactory = thingBuilderFactory;
         this.thingMigrationService = thingMigrationService;
     }
 
@@ -270,8 +279,7 @@ public class ThingResource implements RESTResource {
             // we create the Thing exactly the way we received it, i.e. we
             // cannot take its thing type into account for automatically
             // populating channels and properties.
-            thing = ThingDTOMapper.map(thingBuilderFactory, thingBean,
-                    thingTypeRegistry.getThingType(thingTypeUID) instanceof BridgeType);
+            thing = ThingDTOMapper.map(thingBean, thingTypeRegistry.getThingType(thingTypeUID) instanceof BridgeType);
         } else {
             return getThingResponse(Status.BAD_REQUEST, thing, locale,
                     "A UID must be provided, since no binding can create the thing!");
@@ -330,7 +338,7 @@ public class ThingResource implements RESTResource {
     @DELETE
     @RolesAllowed({ Role.ADMIN })
     @Path("/{thingUID}")
-    @Operation(summary = "Removes a thing from the registry. Set \'force\' to __true__ if you want the thing te be removed immediately.", security = {
+    @Operation(summary = "Removes a thing from the registry. Set \'force\' to __true__ if you want the thing to be removed immediately.", security = {
             @SecurityRequirement(name = "oauth2", scopes = { "admin" }) }, responses = {
                     @ApiResponse(responseCode = "200", description = "OK, was deleted."),
                     @ApiResponse(responseCode = "202", description = "ACCEPTED for asynchronous deletion."),
@@ -425,7 +433,7 @@ public class ThingResource implements RESTResource {
                 thing.getUID());
         normalizeChannels(thingBean, thing.getUID());
 
-        thing = ThingHelper.merge(thingBuilderFactory, thing, thingBean);
+        thing = ThingHelper.merge(thing, thingBean);
 
         // update, returns null in case Thing cannot be found
         Thing oldthing = managedThingProvider.update(thing);
@@ -816,9 +824,9 @@ public class ThingResource implements RESTResource {
         }
 
         List<ConfigDescription> configDescriptions = new ArrayList<>(2);
-        if (channelType.getConfigDescriptionURI() != null) {
-            ConfigDescription typeConfigDesc = configDescRegistry
-                    .getConfigDescription(channelType.getConfigDescriptionURI());
+        URI descURI = channelType.getConfigDescriptionURI();
+        if (descURI != null) {
+            ConfigDescription typeConfigDesc = configDescRegistry.getConfigDescription(descURI);
             if (typeConfigDesc != null) {
                 configDescriptions.add(typeConfigDesc);
             }

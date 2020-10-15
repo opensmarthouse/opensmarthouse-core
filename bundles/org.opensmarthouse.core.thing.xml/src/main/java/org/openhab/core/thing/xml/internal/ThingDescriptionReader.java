@@ -14,6 +14,7 @@ package org.openhab.core.thing.xml.internal;
 
 import java.util.List;
 
+import org.eclipse.jdt.annotation.NonNullByDefault;
 import org.openhab.core.config.core.ConfigDescription;
 import org.openhab.core.config.core.ConfigDescriptionParameter;
 import org.openhab.core.config.core.ConfigDescriptionParameterGroup;
@@ -29,9 +30,7 @@ import org.openhab.core.config.xml.util.NodeListConverter;
 import org.openhab.core.config.xml.util.NodeValue;
 import org.openhab.core.config.xml.util.NodeValueConverter;
 import org.openhab.core.config.xml.util.XmlDocumentReader;
-import org.openhab.core.thing.type.ChannelTypeBuilderFactory;
 import org.openhab.core.types.CommandDescription;
-import org.openhab.core.types.CommandDescriptionBuilderFactory;
 import org.openhab.core.types.EventDescription;
 import org.openhab.core.types.StateDescription;
 
@@ -49,13 +48,11 @@ import com.thoughtworks.xstream.XStream;
  * @author Thomas Höfer - Added thing and thing type properties
  * @author Chris Jackson - Added parameter groups and channel properties
  * @author Moritz Kammerer - Added triggers
- * @author Łukasz Dywicki - Added XStream security handling, defer initialization of converters.
+ * @author Łukasz Dywicki - Added XStream security handling
  * @author Chris Jackson - Added device-properties
  */
+@NonNullByDefault
 public class ThingDescriptionReader extends XmlDocumentReader<List<?>> {
-
-    private final ChannelTypeBuilderFactory channelTypeBuilderFactory;
-    private final CommandDescriptionBuilderFactory commandDescriptionBuilderFactory;
 
     /**
      * The default constructor of this class.
@@ -63,11 +60,8 @@ public class ThingDescriptionReader extends XmlDocumentReader<List<?>> {
      * @param channelTypeBuilderFactory
      * @param commandDescriptionBuilderFactory
      */
-    public ThingDescriptionReader(ChannelTypeBuilderFactory channelTypeBuilderFactory,
-            CommandDescriptionBuilderFactory commandDescriptionBuilderFactory) {
+    public ThingDescriptionReader() {
         super(false);
-        this.channelTypeBuilderFactory = channelTypeBuilderFactory;
-        this.commandDescriptionBuilderFactory = commandDescriptionBuilderFactory;
         super.setClassLoader(ThingDescriptionReader.class.getClassLoader());
 
         setup();
@@ -82,10 +76,10 @@ public class ThingDescriptionReader extends XmlDocumentReader<List<?>> {
         xstream.registerConverter(new ThingTypeConverter());
         xstream.registerConverter(new BridgeTypeConverter());
         xstream.registerConverter(new ChannelConverter());
-        xstream.registerConverter(new ChannelTypeConverter(channelTypeBuilderFactory));
+        xstream.registerConverter(new ChannelTypeConverter());
         xstream.registerConverter(new ChannelGroupTypeConverter());
         xstream.registerConverter(new StateDescriptionConverter());
-        xstream.registerConverter(new CommandDescriptionConverter(commandDescriptionBuilderFactory));
+        xstream.registerConverter(new CommandDescriptionConverter());
         xstream.registerConverter(new EventDescriptionConverter());
         xstream.registerConverter(new ConfigDescriptionConverter());
         xstream.registerConverter(new ConfigDescriptionParameterConverter());

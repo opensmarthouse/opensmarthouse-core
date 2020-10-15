@@ -13,6 +13,7 @@
 package org.openhab.core.config.xml;
 
 import java.util.Collection;
+import java.util.Collections;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
@@ -22,6 +23,8 @@ import java.util.Map.Entry;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.CopyOnWriteArrayList;
 
+import org.eclipse.jdt.annotation.NonNull;
+import org.eclipse.jdt.annotation.NonNullByDefault;
 import org.eclipse.jdt.annotation.Nullable;
 import org.openhab.core.common.registry.Identifiable;
 import org.openhab.core.i18n.LocalizedKey;
@@ -35,9 +38,11 @@ import org.osgi.framework.Bundle;
  * @param <T_ID> the key type, e.g. ThingTypeUID, ChannelUID, URI,...
  * @param <T_OBJECT> the object type, e.g. ThingType, ChannelType, ConfigDescription,...
  */
-public abstract class AbstractXmlBasedProvider<T_ID, T_OBJECT extends Identifiable<T_ID>> {
+@NonNullByDefault
+public abstract class AbstractXmlBasedProvider<@NonNull T_ID, @NonNull T_OBJECT extends Identifiable<@NonNull T_ID>> {
 
     private final Map<Bundle, List<T_OBJECT>> bundleObjectMap = new ConcurrentHashMap<>();
+
     private final Map<LocalizedKey, T_OBJECT> localizedObjectCache = new ConcurrentHashMap<>();
 
     /**
@@ -59,7 +64,7 @@ public abstract class AbstractXmlBasedProvider<T_ID, T_OBJECT extends Identifiab
      * @param object the object to be added
      */
     public final synchronized void add(Bundle bundle, T_OBJECT object) {
-        addAll(bundle, List.of(object));
+        addAll(bundle, Collections.singletonList(object));
     }
 
     /**
@@ -71,7 +76,7 @@ public abstract class AbstractXmlBasedProvider<T_ID, T_OBJECT extends Identifiab
      * @param objectList the objects to be added
      */
     public final synchronized void addAll(Bundle bundle, Collection<T_OBJECT> objectList) {
-        if (objectList == null || objectList.isEmpty()) {
+        if (objectList.isEmpty()) {
             return;
         }
         List<T_OBJECT> objects = acquireObjects(bundle);
@@ -85,10 +90,7 @@ public abstract class AbstractXmlBasedProvider<T_ID, T_OBJECT extends Identifiab
         }
     }
 
-    private List<T_OBJECT> acquireObjects(Bundle bundle) {
-        if (bundle == null) {
-            return null;
-        }
+    private @Nullable List<T_OBJECT> acquireObjects(Bundle bundle) {
         List<T_OBJECT> objects = bundleObjectMap.get(bundle);
         if (objects == null) {
             objects = new CopyOnWriteArrayList<>();
@@ -140,9 +142,6 @@ public abstract class AbstractXmlBasedProvider<T_ID, T_OBJECT extends Identifiab
      * @param bundle the module for which all associated Thing types to be removed
      */
     public final synchronized void removeAll(Bundle bundle) {
-        if (bundle == null) {
-            return;
-        }
         List<T_OBJECT> objects = bundleObjectMap.remove(bundle);
         if (objects != null) {
             removeCachedEntries(objects);
@@ -172,9 +171,12 @@ public abstract class AbstractXmlBasedProvider<T_ID, T_OBJECT extends Identifiab
             return cacheEntry;
         }
 
+        @Nullable
         final T_OBJECT localizedObject = localize(bundle, object, locale);
         if (localizedObject != null) {
-            localizedObjectCache.put(localizedKey, localizedObject);
+            @NonNull
+            T_OBJECT nonNullLocalizedObject =  (@NonNull T_OBJECT) localizedObject;
+            localizedObjectCache.put(localizedKey, nonNullLocalizedObject);
             return localizedObject;
         } else {
             return object;

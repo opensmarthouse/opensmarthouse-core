@@ -12,23 +12,45 @@
  */
 package org.openhab.core.types;
 
+import java.util.ArrayList;
 import java.util.List;
+
 import org.eclipse.jdt.annotation.NonNullByDefault;
+import org.openhab.core.internal.types.CommandDescriptionImpl;
 
 /**
  * Used to build instances of {@link CommandDescription}.
  *
  * @author Henning Treu - Initial contribution
- * @author Łukasz Dywicki - Refactoring to interface.
  */
 @NonNullByDefault
-public interface CommandDescriptionBuilder {
+public class CommandDescriptionBuilder {
+
+    private final List<CommandOption> commandOptions = new ArrayList<>();
+
+    private CommandDescriptionBuilder() {
+        // prevent public instantiation
+    }
+
+    /**
+     * Create and return a fresh builder instance.
+     *
+     * @return a fresh {@link CommandDescriptionBuilder} instance.
+     */
+    public static CommandDescriptionBuilder create() {
+        return new CommandDescriptionBuilder();
+    }
+
     /**
      * Build a {@link CommandDescription} from the values of this builder.
      *
      * @return a {@link CommandDescription} from the values of this builder.
      */
-    CommandDescription build();
+    public CommandDescription build() {
+        CommandDescriptionImpl commandDescription = new CommandDescriptionImpl();
+        commandOptions.forEach(co -> commandDescription.addCommandOption(co));
+        return commandDescription;
+    }
 
     /**
      * Add a {@link CommandOption} for the resulting {@link CommandDescription}.
@@ -36,7 +58,10 @@ public interface CommandDescriptionBuilder {
      * @param commandOption a {@link CommandOption} for the resulting {@link CommandDescription}.
      * @return this builder.
      */
-    CommandDescriptionBuilder withCommandOption(CommandOption commandOption);
+    public CommandDescriptionBuilder withCommandOption(CommandOption commandOption) {
+        commandOptions.add(commandOption);
+        return this;
+    }
 
     /**
      * Set the {@link CommandOption}s for the resulting {@link CommandDescription}.
@@ -44,5 +69,9 @@ public interface CommandDescriptionBuilder {
      * @param commandOptions the {@link CommandOption}s for the resulting {@link CommandDescription}.
      * @return this builder.
      */
-    CommandDescriptionBuilder withCommandOptions(List<CommandOption> commandOptions);
+    public CommandDescriptionBuilder withCommandOptions(List<CommandOption> commandOptions) {
+        this.commandOptions.clear();
+        this.commandOptions.addAll(commandOptions);
+        return this;
+    }
 }

@@ -31,8 +31,6 @@ import org.openhab.core.library.types.OnOffType;
 import org.openhab.core.library.types.PercentType;
 import org.openhab.core.library.types.RawType;
 import org.openhab.core.library.types.StringType;
-import org.openhab.core.service.CommandDescriptionService;
-import org.openhab.core.service.StateDescriptionService;
 import org.openhab.core.types.CommandDescription;
 import org.openhab.core.types.CommandDescriptionBuilder;
 import org.openhab.core.types.CommandDescriptionBuilderFactory;
@@ -43,6 +41,8 @@ import org.openhab.core.types.StateDescriptionFragment;
 import org.openhab.core.types.StateDescriptionFragmentBuilder;
 import org.openhab.core.types.StateDescriptionFragmentBuilderFactory;
 import org.openhab.core.types.StateOption;
+import org.openhab.core.types.service.CommandDescriptionService;
+import org.openhab.core.types.service.StateDescriptionService;
 
 /**
  * The GenericItemTest tests functionality of the GenericItem.

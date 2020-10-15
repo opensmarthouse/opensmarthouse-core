@@ -24,6 +24,7 @@ import java.util.concurrent.CopyOnWriteArraySet
 import org.openhab.core.config.core.ConfigDescriptionRegistry
 import org.openhab.core.config.core.ConfigUtil
 import org.openhab.core.config.core.Configuration
+import org.openhab.core.common.AbstractUID
 import org.openhab.core.common.registry.AbstractProvider
 import org.openhab.core.i18n.LocaleProvider
 import org.openhab.core.service.ReadyMarker
@@ -37,8 +38,6 @@ import org.openhab.core.thing.ThingTypeUID
 import org.openhab.core.thing.ThingUID
 import org.openhab.core.thing.binding.ThingHandlerFactory
 import org.openhab.core.thing.binding.ThingBuilderFactory
-import org.openhab.core.thing.binding.builder.ChannelBuilderFactory
-import org.openhab.core.thing.binding.builder.ThingBuilder
 import org.openhab.core.thing.type.AutoUpdatePolicy
 import org.openhab.core.thing.type.ChannelDefinition
 import org.openhab.core.thing.type.ChannelKind
@@ -59,6 +58,7 @@ import org.osgi.service.component.annotations.Component
 import org.osgi.service.component.annotations.Reference
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
+import org.openhab.core.thing.binding.builder.ChannelBuilder
 
 /**
  * {@link ThingProvider} implementation which computes *.things files.
@@ -86,7 +86,6 @@ class GenericThingProvider extends AbstractProvider<Thing> implements ThingProvi
     private ChannelTypeRegistry channelTypeRegistry
 
     private BundleResolver bundleResolver;
-    private ChannelBuilderFactory channelBuilderFactory;
 
     private Map<String, Collection<Thing>> thingsMap = new ConcurrentHashMap
 
@@ -124,15 +123,18 @@ class GenericThingProvider extends AbstractProvider<Thing> implements ThingProvi
             flattenModelThings(model.things).map [
                 // Get the ThingHandlerFactories
                 val ThingUID thingUID = constructThingUID
-                if (thingUID !== null) {
-                    val thingTypeUID = constructThingTypeUID(thingUID)
-                    return thingHandlerFactories.findFirst [
-                        supportsThingType(thingTypeUID)
-                    ]
-                } else {
+                if (thingUID === null) {
                     // ignore the Thing because its definition is broken
                     return null
                 }
+                val thingTypeUID = constructThingTypeUID(thingUID)
+                if (thingTypeUID === null) {
+                    // ignore the Thing because its definition is broken
+                    return null
+                }
+                return thingHandlerFactories.findFirst [
+                    supportsThingType(thingTypeUID)
+                ]
             ]?.filter [
                 // Drop it if there is no ThingHandlerFactory yet which can handle it 
                 it !== null
@@ -163,8 +165,12 @@ class GenericThingProvider extends AbstractProvider<Thing> implements ThingProvi
         if (modelThing.thingTypeId !== null) {
             return new ThingTypeUID(thingUID.bindingId, modelThing.thingTypeId)
         } else {
-            return new ThingTypeUID(thingUID.bindingId, thingUID.thingTypeId)
+            val String[] segments = thingUID.getAsString.split(AbstractUID.SEPARATOR)
+            if (!segments.get(1).isEmpty) {
+                return new ThingTypeUID(thingUID.bindingId, segments.get(1))
+            }
         }
+        return null
     }
 
     def private Iterable<ModelThing> flattenModelThings(Iterable<ModelThing> things) {
@@ -197,6 +203,10 @@ class GenericThingProvider extends AbstractProvider<Thing> implements ThingProvi
             return
         }
         val thingTypeUID = modelThing.constructThingTypeUID(thingUID)
+        if (thingTypeUID === null) {
+            // ignore the Thing because its definition is broken
+            return
+        }
 
         if (!isSupportedByThingHandlerFactory(thingTypeUID, thingHandlerFactory)) {
             // return silently, we were not asked to do anything
@@ -376,7 +386,7 @@ class GenericThingProvider extends AbstractProvider<Thing> implements ThingProvi
                     parsedKind = ChannelKind.parse(kind)
                 }
 
-                var channel = channelBuilderFactory.create(new ChannelUID(thingUID, id), itemType).withKind(parsedKind).
+                var channel = ChannelBuilder.create(new ChannelUID(thingUID, id), itemType).withKind(parsedKind).
                     withConfiguration(configuration).withType(channelTypeUID).withLabel(label).
                     withAutoUpdatePolicy(autoUpdatePolicy)
                 channels += channel.build()
@@ -387,7 +397,7 @@ class GenericThingProvider extends AbstractProvider<Thing> implements ThingProvi
                 val channelType = it.channelTypeUID.channelType
                 if (channelType !== null) {
                     channels +=
-                        channelBuilderFactory.create(new ChannelUID(thingUID, id), channelType.itemType).withType(
+                        ChannelBuilder.create(new ChannelUID(thingUID, id), channelType.itemType).withType(
                             it.channelTypeUID).withAutoUpdatePolicy(channelType.autoUpdatePolicy).build
                 } else {
                     logger.warn(
@@ -439,14 +449,6 @@ class GenericThingProvider extends AbstractProvider<Thing> implements ThingProvi
         this.bundleResolver = null;
     }
 
-    @Reference
-    def protected void setChannelBuilderFactory(ChannelBuilderFactory channelBuilderFactory) {
-        this.channelBuilderFactory = channelBuilderFactory;
-    }
-
-    def protected void unsetChannelBuilderFactory(ChannelBuilderFactory channelBuilderFactory) {
-        this.channelBuilderFactory = null;
-    }
 
     override void modelChanged(String modelName, org.openhab.core.model.core.EventType type) {
         if (modelName.endsWith("things")) {

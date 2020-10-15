@@ -12,6 +12,7 @@
  */
 package org.openhab.core.thing.binding.builder;
 
+import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
@@ -20,6 +21,7 @@ import org.eclipse.jdt.annotation.Nullable;
 import org.openhab.core.config.core.Configuration;
 import org.openhab.core.library.CoreItemFactory;
 import org.openhab.core.thing.Channel;
+import org.openhab.core.thing.ChannelUID;
 import org.openhab.core.thing.type.AutoUpdatePolicy;
 import org.openhab.core.thing.type.ChannelKind;
 import org.openhab.core.thing.type.ChannelType;
@@ -31,67 +33,150 @@ import org.openhab.core.thing.type.ChannelTypeUID;
  * @author Dennis Nobel - Initial contribution
  * @author Alex Tugarev - Extended about default tags
  * @author Chris Jackson - Added properties and label/description
- * @author Łukasz Dywicki - Refactoring to interface.
- * @author Chris Jackson - Added withAcceptedItemType
  */
 @NonNullByDefault
-public interface ChannelBuilder {
+public class ChannelBuilder {
+
+    private final ChannelUID channelUID;
+    private @Nullable String acceptedItemType;
+    private ChannelKind kind;
+    private @Nullable Configuration configuration;
+    private Set<String> defaultTags;
+    private @Nullable Map<String, String> properties;
+    private @Nullable String label;
+    private @Nullable String description;
+    private @Nullable ChannelTypeUID channelTypeUID;
+    private @Nullable AutoUpdatePolicy autoUpdatePolicy;
+
+    private ChannelBuilder(ChannelUID channelUID, @Nullable String acceptedItemType, Set<String> defaultTags) {
+        this.channelUID = channelUID;
+        this.acceptedItemType = acceptedItemType;
+        this.defaultTags = defaultTags;
+        this.kind = ChannelKind.STATE;
+    }
 
     /**
-     * Appends the channel type to the channel to build
+     * Creates a {@link ChannelBuilder} for the given {@link ChannelUID}.
      *
-     * @param channelTypeUID channel type UID
+     * @param channelUID the {@link ChannelUID}
      * @return channel builder
      */
-    ChannelBuilder withType(@Nullable ChannelTypeUID channelTypeUID);
+    public static ChannelBuilder create(ChannelUID channelUID) {
+        return new ChannelBuilder(channelUID, null, new HashSet<>());
+    }
 
     /**
-     * Appends a configuration to the channel to build.
+     * Creates a {@link ChannelBuilder} for the given {@link ChannelUID} and item type.
      *
-     * @param configuration configuration
+     * @param channelUID the {@link ChannelUID}
+     * @param acceptedItemType item type that is accepted by this channel
      * @return channel builder
      */
-    ChannelBuilder withConfiguration(Configuration configuration);
+    public static ChannelBuilder create(ChannelUID channelUID, @Nullable String acceptedItemType) {
+        return new ChannelBuilder(channelUID, acceptedItemType, new HashSet<>());
+    }
 
     /**
-     * Adds properties to the channel
+     * Creates a {@link ChannelBuilder} from the given {@link Channel}.
+     *
+     * @param channel the channel to be changed
+     * @return channel builder
+     */
+    public static ChannelBuilder create(Channel channel) {
+        ChannelBuilder channelBuilder = create(channel.getUID(), channel.getAcceptedItemType())
+                .withConfiguration(channel.getConfiguration()).withDefaultTags(channel.getDefaultTags())
+                .withKind(channel.getKind()).withProperties(channel.getProperties())
+                .withType(channel.getChannelTypeUID());
+        String label = channel.getLabel();
+        if (label != null) {
+            channelBuilder.withLabel(label);
+        }
+        String description = channel.getDescription();
+        if (description != null) {
+            channelBuilder.withDescription(description);
+        }
+        return channelBuilder;
+    }
+
+    /**
+     * Appends the {@link ChannelType} given by its {@link ChannelTypeUID} to the {@link Channel} to be build
+     *
+     * @param channelTypeUID the {@link ChannelTypeUID}
+     * @return channel builder
+     */
+    public ChannelBuilder withType(@Nullable ChannelTypeUID channelTypeUID) {
+        this.channelTypeUID = channelTypeUID;
+        return this;
+    }
+
+    /**
+     * Appends a {@link Configuration} to the {@link Channel} to be build.
+     *
+     * @param configuration the {@link Configuration}
+     * @return channel builder
+     */
+    public ChannelBuilder withConfiguration(Configuration configuration) {
+        this.configuration = configuration;
+        return this;
+    }
+
+    /**
+     * Adds properties to the {@link Channel}.
      *
      * @param properties properties to add
      * @return channel builder
      */
-    ChannelBuilder withProperties(Map<String, String> properties);
+    public ChannelBuilder withProperties(Map<String, String> properties) {
+        this.properties = properties;
+        return this;
+    }
 
     /**
-     * Sets the channel label. This allows overriding of the default label set in the {@link ChannelType}
+     * Sets the channel label. This allows overriding of the default label set in the {@link ChannelType}.
      *
      * @param label the channel label to override the label set in the {@link ChannelType}
      * @return channel builder
      */
-    ChannelBuilder withLabel(String label);
+    public ChannelBuilder withLabel(String label) {
+        this.label = label;
+        return this;
+    }
 
     /**
-     * Sets the channel label. This allows overriding of the default label set in the {@link ChannelType}
+     * Sets the channel description. This allows overriding of the default description set in the {@link ChannelType}.
      *
-     * @param label the channel label to override the label set in the {@link ChannelType}
+     * @param label the channel label to override the description set in the {@link ChannelType}
      * @return channel builder
      */
-    ChannelBuilder withDescription(String description);
+    public ChannelBuilder withDescription(String description) {
+        this.description = description;
+        return this;
+    }
 
     /**
-     * Appends default tags to the channel to build.
+     * Appends default tags to the {@link Channel} to be build.
      *
      * @param defaultTags default tags
      * @return channel builder
      */
-    ChannelBuilder withDefaultTags(Set<String> defaultTags);
+    public ChannelBuilder withDefaultTags(Set<String> defaultTags) {
+        this.defaultTags = defaultTags;
+        return this;
+    }
 
     /**
-     * Sets the kind of the channel.
+     * Sets the {@link ChannelKind} of the {@link Channel} to be build.
      *
-     * @param kind kind.
+     * @param kind the {@link ChannelKind}
      * @return channel builder
      */
-    ChannelBuilder withKind(ChannelKind kind);
+    public ChannelBuilder withKind(ChannelKind kind) {
+        if (kind == null) {
+            throw new IllegalArgumentException("'ChannelKind' must not be null");
+        }
+        this.kind = kind;
+        return this;
+    }
 
     /**
      * Sets the accepted item type of the {@link Channel} to be build. See
@@ -100,20 +185,30 @@ public interface ChannelBuilder {
      * @param acceptedItemType item type that is accepted by this channel
      * @return channel builder
      */
-    public ChannelBuilder withAcceptedItemType(@Nullable String acceptedItemType);
+    public ChannelBuilder withAcceptedItemType(@Nullable String acceptedItemType) {
+        this.acceptedItemType = acceptedItemType;
+        return this;
+    }
 
     /**
-     * Sets the auto update policy. See {@link AutoUpdatePolicy} for details.
+     * Sets the {@link AutoUpdatePolicy} to the {@link Channel} to be build.
      *
-     * @param policy the auto update policy to use
+     * @param policy the {@link AutoUpdatePolicy} to be used
      * @return channel builder
      */
-    ChannelBuilder withAutoUpdatePolicy(@Nullable AutoUpdatePolicy policy);
+    public ChannelBuilder withAutoUpdatePolicy(@Nullable AutoUpdatePolicy policy) {
+        this.autoUpdatePolicy = policy;
+        return this;
+    }
 
     /**
-     * Builds and returns the channel.
+     * Builds and returns the {@link Channel}.
      *
-     * @return channel
+     * @return the {@link Channel}
      */
-    Channel build();
+    @SuppressWarnings("deprecation")
+    public Channel build() {
+        return new Channel(channelUID, channelTypeUID, acceptedItemType, kind, configuration, defaultTags, properties,
+                label, description, autoUpdatePolicy);
+    }
 }

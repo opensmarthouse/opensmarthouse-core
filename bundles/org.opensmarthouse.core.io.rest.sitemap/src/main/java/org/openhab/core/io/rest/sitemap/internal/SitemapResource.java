@@ -88,9 +88,7 @@ import org.openhab.core.model.sitemap.sitemap.VisibilityRule;
 import org.openhab.core.model.sitemap.sitemap.Webview;
 import org.openhab.core.model.sitemap.sitemap.Widget;
 import org.openhab.core.types.State;
-import org.openhab.core.types.StateDescriptionFragmentBuilderFactory;
 import org.openhab.core.ui.items.ItemUIRegistry;
-import org.osgi.framework.BundleContext;
 import org.osgi.service.component.annotations.Activate;
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Deactivate;
@@ -124,7 +122,6 @@ import io.swagger.v3.oas.annotations.tags.Tag;
  * @author Chris Jackson - Initial contribution
  * @author Yordan Zhelev - Added Swagger annotations
  * @author Markus Rathgeb - Migrated to JAX-RS Whiteboard Specification
- * @author Lukasz Dywicki - Used builder factories
  * @author Wouter Born - Migrated to OpenAPI annotations
  */
 @Component(service = RESTResource.class)
@@ -177,20 +174,15 @@ public class SitemapResource
             .getScheduledPool(ThreadPoolManager.THREAD_POOL_NAME_COMMON);
 
     private @Nullable ScheduledFuture<?> cleanSubscriptionsJob;
-    private final BundleContext bundleContext;
-    private final StateDescriptionFragmentBuilderFactory stateDescriptionFragmentBuilderFactory;
 
     @Activate
     public SitemapResource( //
-            final BundleContext bundleContext, final @Reference ItemUIRegistry itemUIRegistry, //
+            final @Reference ItemUIRegistry itemUIRegistry, //
             final @Reference LocaleService localeService, //
-            final @Reference SitemapSubscriptionService subscriptions, //
-            final @Reference StateDescriptionFragmentBuilderFactory stateDescriptionFragmentBuilderFactory) {
-        this.bundleContext = bundleContext;
+            final @Reference SitemapSubscriptionService subscriptions) {
         this.itemUIRegistry = itemUIRegistry;
         this.localeService = localeService;
         this.subscriptions = subscriptions;
-        this.stateDescriptionFragmentBuilderFactory = stateDescriptionFragmentBuilderFactory;
 
         broadcaster = new SseBroadcaster<>();
 
@@ -504,8 +496,8 @@ public class SitemapResource
                         .substring(widget.eClass().getInstanceTypeName().lastIndexOf(".") + 1);
                 boolean isMapview = "mapview".equalsIgnoreCase(widgetTypeName);
                 Predicate<Item> itemFilter = (i -> CoreItemFactory.LOCATION.equals(i.getType()));
-                bean.item = EnrichedItemDTOMapper.map(bundleContext, stateDescriptionFragmentBuilderFactory, item,
-                        isMapview, itemFilter, UriBuilder.fromUri(uri).path("items/{itemName}"), locale);
+                bean.item = EnrichedItemDTOMapper.map(item, isMapview, itemFilter,
+                        UriBuilder.fromUri(uri).path("items/{itemName}"), locale);
                 bean.state = itemUIRegistry.getState(widget).toFullString();
                 // In case the widget state is identical to the item state, its value is set to null.
                 if (bean.state != null && bean.state.equals(bean.item.state)) {

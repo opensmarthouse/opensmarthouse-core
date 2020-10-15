@@ -39,8 +39,6 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.mockito.junit.jupiter.MockitoSettings;
 import org.mockito.quality.Strictness;
 import org.openhab.core.i18n.UnitProvider;
-import org.openhab.core.internal.types.CoreCommandDescriptionBuilderFactory;
-import org.openhab.core.internal.types.CoreStateDescriptionFragmentBuilderFactory;
 import org.openhab.core.items.GroupItem;
 import org.openhab.core.items.Item;
 import org.openhab.core.items.ItemNotFoundException;
@@ -81,6 +79,7 @@ import org.openhab.core.types.CommandDescriptionBuilder;
 import org.openhab.core.types.CommandOption;
 import org.openhab.core.types.State;
 import org.openhab.core.types.StateDescription;
+import org.openhab.core.types.StateDescriptionFragmentBuilder;
 import org.openhab.core.types.StateOption;
 import org.openhab.core.types.UnDefType;
 import org.openhab.core.types.util.UnitUtils;
@@ -160,8 +159,8 @@ public class ItemUIRegistryImplTest {
         when(widget.getLabel()).thenReturn(testLabel);
         when(item.getState()).thenReturn(new DecimalType(20));
         when(item.getStateAs(DecimalType.class)).thenReturn(new DecimalType(20));
-        when(item.getStateDescription()).thenReturn(new CoreStateDescriptionFragmentBuilderFactory().create()
-                .withPattern("%d").build().toStateDescription());
+        when(item.getStateDescription())
+                .thenReturn(StateDescriptionFragmentBuilder.create().withPattern("%d").build().toStateDescription());
         String label = uiRegistry.getLabel(widget);
         assertEquals("Label [20]", label);
     }
@@ -173,8 +172,8 @@ public class ItemUIRegistryImplTest {
         when(widget.getLabel()).thenReturn(testLabel);
         when(item.getState()).thenReturn(new DecimalType(20.5));
         when(item.getStateAs(DecimalType.class)).thenReturn(new DecimalType(20.5));
-        when(item.getStateDescription()).thenReturn(new CoreStateDescriptionFragmentBuilderFactory().create()
-                .withPattern("%d").build().toStateDescription());
+        when(item.getStateDescription())
+                .thenReturn(StateDescriptionFragmentBuilder.create().withPattern("%d").build().toStateDescription());
         String label = uiRegistry.getLabel(widget);
         assertEquals("Label [21]", label);
     }
@@ -820,7 +819,7 @@ public class ItemUIRegistryImplTest {
         assertThat(defaultWidget, is(instanceOf(Text.class)));
 
         // NumberItem with one to four CommandOptions should return Switch element
-        final CommandDescriptionBuilder builder = new CoreCommandDescriptionBuilderFactory().create()
+        final CommandDescriptionBuilder builder = CommandDescriptionBuilder.create()
                 .withCommandOptions(Stream
                         .of(new CommandOption("command1", "label1"), new CommandOption("command2", "label2"),
                                 new CommandOption("command3", "label3"), new CommandOption("command4", "label4"))
@@ -836,7 +835,7 @@ public class ItemUIRegistryImplTest {
         assertThat(defaultWidget, is(instanceOf(Selection.class)));
 
         // NumberItem with one or more StateOptions should return Selection element
-        when(item.getStateDescription()).thenReturn(new CoreStateDescriptionFragmentBuilderFactory().create()
+        when(item.getStateDescription()).thenReturn(StateDescriptionFragmentBuilder.create()
                 .withOption(new StateOption("value", "label")).build().toStateDescription());
         defaultWidget = uiRegistry.getDefaultWidget(NumberItem.class, ITEM_NAME);
         assertThat(defaultWidget, is(instanceOf(Selection.class)));
@@ -849,7 +848,7 @@ public class ItemUIRegistryImplTest {
         assertThat(defaultWidget, is(instanceOf(Text.class)));
 
         // StringItem with one to four CommandOptions should return Switch element
-        final CommandDescriptionBuilder builder = new CoreCommandDescriptionBuilderFactory().create()
+        final CommandDescriptionBuilder builder = CommandDescriptionBuilder.create()
                 .withCommandOptions(Stream
                         .of(new CommandOption("command1", "label1"), new CommandOption("command2", "label2"),
                                 new CommandOption("command3", "label3"), new CommandOption("command4", "label4"))
@@ -865,7 +864,7 @@ public class ItemUIRegistryImplTest {
         assertThat(defaultWidget, is(instanceOf(Selection.class)));
 
         // StringItem with one or more StateOptions should return Selection element
-        when(item.getStateDescription()).thenReturn(new CoreStateDescriptionFragmentBuilderFactory().create()
+        when(item.getStateDescription()).thenReturn(StateDescriptionFragmentBuilder.create()
                 .withOption(new StateOption("value", "label")).build().toStateDescription());
         defaultWidget = uiRegistry.getDefaultWidget(StringItem.class, ITEM_NAME);
         assertThat(defaultWidget, is(instanceOf(Selection.class)));
