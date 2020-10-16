@@ -610,7 +610,7 @@
         <bundle>mvn:org.opensmarthouse.core.bundles/org.opensmarthouse.core.config.discovery.upnp/${project.version}</bundle>
     </feature>
 
-    <feature name="opensmarthouse.inc-model-core" version="${project.version}">
+    <feature name="opensmarthouse-core-model-core" version="${project.version}">
         <feature dependency="true">opensmarthouse-tp-xtext</feature>
         <feature>opensmarthouse-core</feature>
         <bundle>mvn:org.opensmarthouse.core.bundles/org.opensmarthouse.core.model.core/${project.version}</bundle>
@@ -619,7 +619,7 @@
     <feature name="opensmarthouse-core-model-item" version="${project.version}">
         <feature>opensmarthouse-core-library-item</feature>
         <feature>opensmarthouse-core-thing</feature>
-        <feature>opensmarthouse.inc-model-core</feature>
+        <feature>opensmarthouse-core-model-core</feature>
         <bundle>mvn:org.opensmarthouse.core.bundles/org.opensmarthouse.core.model.item/${project.version}</bundle>
         <bundle>mvn:org.opensmarthouse.core.bundles/org.opensmarthouse.core.model.item.runtime/${project.version}</bundle>
     </feature>
@@ -704,7 +704,7 @@
     </feature>
 
     <feature name="opensmarthouse-core-model-sitemap" version="${project.version}">
-        <feature>opensmarthouse.inc-model-core</feature>
+        <feature>opensmarthouse-core-model-core</feature>
         <feature>opensmarthouse-core-service</feature>
         <feature>opensmarthouse-core-item</feature>
         <bundle>mvn:org.opensmarthouse.core.bundles/org.opensmarthouse.core.model.sitemap/${project.version}</bundle>

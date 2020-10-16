@@ -51,11 +51,6 @@
       <scope>test</scope>
     </dependency>    
     <dependency>
-      <groupId>org.apache.servicemix.bundles</groupId>
-      <artifactId>org.apache.servicemix.bundles.jaxb-impl</artifactId>
-      <scope>test</scope>
-    </dependency>
-    <dependency>
       <groupId>org.osgi</groupId>
       <artifactId>osgi.enroute.hamcrest.wrapper</artifactId>
       <scope>test</scope>
