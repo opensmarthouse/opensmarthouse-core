@@ -19,7 +19,6 @@
     <module>opensmarthouse-tp</module>
     <module>opensmarthouse-core</module>
     <module>framework</module>
-    <module>assembly</module>
   </modules>
 
   <dependencies>
