@@ -5,7 +5,7 @@
   <parent>
     <groupId>org.opensmarthouse.core.features.karaf</groupId>
     <artifactId>org.opensmarthouse.core.reactor.features.karaf</artifactId>
-    <version>1.0.0-SNAPSHOT</version>
+    <version>0.9.0-SNAPSHOT</version>
   </parent>
 
   <artifactId>assembly</artifactId>
