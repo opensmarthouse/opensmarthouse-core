@@ -4,7 +4,7 @@ title: OSGi
 
 # Overview
 
-openHAB is being based on [OSGi][OSGi] and understanding of OSGi modular architecture is very important.
+_OpenSmartHouse_ is being based on [OSGi][OSGi] and understanding of OSGi modular architecture is very important.
 This page is aimed to help developers, that are going to use OSGi for the first time and contains a basic overview of the OSGi technology.
 
 {::options toc_levels="2,3"/}
