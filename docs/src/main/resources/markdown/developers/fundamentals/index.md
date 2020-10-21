@@ -10,4 +10,4 @@ This section provides an overview of the fundamental concepts employed in _OpenS
 * [Items](items.md)
 * [Categories](categories.md)
 * [Profiles](profiles.md)
-* [Units of Measure](units_of_measure.md)
+* [Units of Measurement](units_of_measurement.md)
