@@ -4,7 +4,7 @@ title: OSGi Declarative Services
 
 # Overview
 
-In the [OSGi Overview article](osgi.html) we have mentioned that a bundle can register, unregister, get and unget services from a central point - the Service Registry.
+In the [OSGi Overview article](index.md) we have mentioned that a bundle can register, unregister, get and unget services from a central point - the Service Registry.
 
 In order to simplify the usage of services the [OSGi Alliance](https://www.osgi.org/about-us/) has developed a model of managing services dynamically called *Declarative Services*.
 
@@ -119,7 +119,7 @@ Let's take a look at some configuration parameters, that we can apply:
 
 If you want to react when a service got resolved, you may use annotated methods instead of fields like in the example below.
 
-The annotated `activate()` and `deactivate()` methods are called from DS, when the component configuration is activated and deactivated (more about [activation](osgids.html#activation)):
+The annotated `activate()` and `deactivate()` methods are called from DS, when the component configuration is activated and deactivated (more about [activation](osgids.md#activation)):
  
 ```java
 @Component(service = MyService.class, immediate = true)
@@ -252,7 +252,7 @@ Deactivation consists of the following actions:
 Find a few tips down below if something has gone wrong.
 
 Mind that most of the tips below are specific to Equinox as the OSGi Runtime.
-You might review again the [Equinox commands](equinox.html#iv-commands) before you continue.
+You might review again the [Equinox commands](equinox.md#iv-commands) before you continue.
 
 - Start the runtime and check the log.
   Do you see any Errors like "MESSAGE [SCR] Error while trying to bind reference"? Read the error message and proceed accordingly.
