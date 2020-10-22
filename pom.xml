@@ -5,8 +5,8 @@
   <parent>
     <groupId>org.opensmarthouse</groupId>
     <artifactId>parent</artifactId>
-    <version>1-SNAPSHOT</version>
-    <relativePath />
+    <version>0.9.1-SNAPSHOT</version>
+    <relativePath/>
   </parent>
 
   <groupId>org.opensmarthouse.core</groupId>
