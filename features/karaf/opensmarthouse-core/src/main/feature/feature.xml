@@ -98,6 +98,10 @@
         -->
     </feature>
 
+    <feature name="openhab-core-base">
+        <feature>opensmarthouse-core-base</feature>
+    </feature>
+
     <feature name="opensmarthouse-core-transform" description="Open SmartHouse Core: Transform" version="${project.version}">
         <feature>opensmarthouse-core</feature>
         <feature>opensmarthouse-core-net</feature>
@@ -834,6 +838,10 @@
 
         <feature>opensmarthouse-runtime-karaf</feature>
         <feature>opensmarthouse-core-io-rest-core</feature>
+    </feature>
+
+    <feature name="openhab-runtime-base">
+        <feature>opensmarthouse-runtime-base</feature>
     </feature>
 
     <feature name="opensmarthouse-core" version="${project.version}">
