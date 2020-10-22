@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<settings xsi:schemaLocation="http://maven.apache.org/SETTINGS/1.1.0 http://maven.apache.org/xsd/settings-1.1.0.xsd"
+  xmlns="http://maven.apache.org/SETTINGS/1.1.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+
+  <mirrors>
+    <mirror>
+      <id>${maven_server_id}-central</id>
+      <mirrorOf>${central_proxy_mirror_of}</mirrorOf>
+      <url>${central_proxy_url}</url>
+    </mirror>
+    <mirror>
+      <id>${maven_server_id}-openhab</id>
+      <mirrorOf>${openhab_proxy_mirror_of}</mirrorOf>
+      <url>${openhab_proxy_url}</url>
+    </mirror>
+  </mirrors>
+
+  <profiles>
+    <profile>
+      <id>deploy</id>
+      <activation>
+        <activeByDefault>true</activeByDefault>
+      </activation>
+
+      <repositories>
+        <repository>
+          <id>${maven_server_id}</id>
+          <url>${snapshot_repository_url}</url>
+          <name>${snapshot_repository_name}</name>
+        </repository>
+      </repositories>
+    </profile>
+  </profiles>
+
+</settings>
