@@ -5,13 +5,12 @@
   <parent>
     <groupId>org.opensmarthouse</groupId>
     <artifactId>parent</artifactId>
-    <version>0.9.1-SNAPSHOT</version>
+    <version>0.9.0-SNAPSHOT</version>
     <relativePath/>
   </parent>
 
   <groupId>org.opensmarthouse.core</groupId>
   <artifactId>org.opensmarthouse.core.reactor</artifactId>
-  <version>0.9.0-SNAPSHOT</version>
 
   <packaging>pom</packaging>
 
@@ -56,13 +55,13 @@
     <openhab-api.version>3.0.0-SNAPSHOT</openhab-api.version>
     <opensmarthouse-api.version>${project.version}</opensmarthouse-api.version>
 
-    <snapshot.repository-id>zss-snapshots</snapshot.repository-id>
-    <snapshot.repository-name>Z-SmartSystems Snapshots</snapshot.repository-name>
-    <snapshot.repository-url>http://repo.cd-jackson.com/repository/maven-snapshots/</snapshot.repository-url>
+    <snapshot.repository-id>bintray-snapshots</snapshot.repository-id>
+    <snapshot.repository-name>Bintray Snapshots</snapshot.repository-name>
+    <snapshot.repository-url>https://oss.jfrog.org/artifactory/oss-snapshot-local/</snapshot.repository-url>
 
-    <release.repository-id>zss-releases</release.repository-id>
-    <release.repository-name>Z-SmartSystems Releases</release.repository-name>
-    <release.repository-url>http://repo.cd-jackson.com/repository/maven-releases/</release.repository-url>
+    <release.repository-id>bintray-releases</release.repository-id>
+    <release.repository-name>Bintray Releases</release.repository-name>
+    <release.repository-url>https://api.bintray.com/maven/opensmarthouse/maven/opensmarthouse-core/;publish=1</release.repository-url>
 
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
@@ -157,9 +156,9 @@ Import-Package: \\
 -exportcontents: \\
   !*.internal.*,\\
   !*.impl.*, \\
-  org.openhab.*;version=${openhab-api.version}},\\
+  org.openhab.*;version=${openhab-api.version},\\
   org.openhab.core.*;version=${openhab-api.version},\\
-  org.opensmarthouse.*;version=${opensmarthouse-api.version}},\\
+  org.opensmarthouse.*;version=${opensmarthouse-api.version},\\
   org.opensmarthouse.core.*;version=${opensmarthouse-api.version}
 -sources: false
 -removeheaders: Require-Capability,Provide-Capability
@@ -368,6 +367,7 @@ Import-Package: \\
           <version>2.5.2</version>
           <configuration>
             <preparationGoals>clean install</preparationGoals>
+            <autoVersionSubmodules>true</autoVersionSubmodules>
           </configuration>
         </plugin>
 
