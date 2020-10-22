@@ -8,7 +8,7 @@ title: Equinox
 It is an [open source project][Equinox-repo], part of the [Eclipse project][Eclipse].
 It provides a set of bundles, that implement various optional OSGi services.
 
-The openHAB bundles are deployed on an Equinox runtime.
+The _OpenSmartHouse_ bundles are deployed on an Equinox runtime.
 Knowledge about how to start the runtime and execute basic commands will help you to speedup the development process.
 
 ## Start Equinox Runtime from Eclipse
@@ -33,7 +33,7 @@ Knowledge about how to start the runtime and execute basic commands will help yo
 
 The **org.eclipse.osgi** bundle is the framework implementation of the Core Framework specification in a standalone package.
 
-If you have compiled openHAB once either via command line (`mvn install`) or the Eclipse IDE, maven will have downloaded Equinox for you already.
+If you have compiled _OpenSmartHouse_ once either via command line (`mvn install`) or the Eclipse IDE, maven will have downloaded Equinox for you already.
 Find it in your maven cache directory (linux `~/.m2/repository/org/eclipse/platform/org.eclipse.osgi/3.15.0/org.eclipse.osgi-3.15.0.jar`
 and windows `C:\Users\your.name\.m2\..`).
 

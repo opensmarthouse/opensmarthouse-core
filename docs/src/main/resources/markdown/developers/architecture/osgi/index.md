@@ -4,7 +4,7 @@ title: OSGi
 
 # Overview
 
-openHAB is being based on [OSGi][OSGi] and understanding of OSGi modular architecture is very important.
+_OpenSmartHouse_ is being based on [OSGi][OSGi] and understanding of OSGi modular architecture is very important.
 This page is aimed to help developers, that are going to use OSGi for the first time and contains a basic overview of the OSGi technology.
 
 {::options toc_levels="2,3"/}
@@ -113,7 +113,7 @@ A simple diagram of the service usage and tracking is shown on Fig. 3.
 ![OSGi Services][fig3]  
 Fig.3 OSGi Services (Source: <https://www.osgi.org/wp-content/uploads/services.png>)
 
-If you are keen to know how that works in code, read on in [OSGi Declarative Services](osgids.html).
+If you are keen to know how that works in code, read on in [OSGi Declarative Services](osgids.md).
 
 Some important core services are presented below.
 
@@ -124,7 +124,7 @@ This service monitors the service registry and **provides a configuration to the
 Configuration changes are first made persistent, and then are passed to the target service.
 It is important to understand that **the target bundle receives updates from the Configuration Admin service**. Implementations should be aware that the update reception could be delayed if the Configuration Admin service is missing.
 
-- [OSGi Configuration Admin](configadmin.html)
+- [OSGi Configuration Admin](configadmin.md)
 
 ### Event Admin Service
 
@@ -134,7 +134,7 @@ OSGi events are based on the publish-subscribe messaging pattern.
 The *Event Admin Service* (`org.osgi.service.event.EventAdmin`) takes a central place in the communication between *Event Publishers* and subscribers (*Event Listeners*).
 It is responsible for keeping track of the listeners, and sending events to them.
 
-- [OSGi Event Admin](eventadmin.html)
+- [OSGi Event Admin](eventadmin.md)
 
 ## Popular OSGi Containers
 
@@ -144,7 +144,7 @@ We will list the most popular OSGi containers with a short description of their 
 
 - Open source:
   - [Equinox](https://www.eclipse.org/equinox/) - this is the reference implementation of OSGi and developed by the Eclipse Foundation.
-    As it is used in the openHAB project, we have [more detailed information](equinox.html).
+    As it is used in the openHAB project, we have [more detailed information](equinox.md).
   - [Apache Felix](http://felix.apache.org/) - developed by the Apache Software Foundation.
     [Apache Karaf](http://karaf.apache.org/) is a distribution based on Apache Felix that provides some additional features on top of it (e.g. folder based hot deployment, improved default console with remote SSH, maven plugins and others). The openHAB project is using karaf for runtime dependency installation.
   - [Concierge](https://www.eclipse.org/concierge/) - is aimed at mobile and embedded devices. With a size of around 250 kb it has the smallest footprint of the presented containers;

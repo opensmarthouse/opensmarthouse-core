@@ -12,7 +12,8 @@ _OpenSmartHouse_ is written in Java - this provides a portable system that can b
 
 We aim to support an open progressive community - both for users and developers. We want your input and support, and in return we aim to provide feedback on our plans, visibility on our decisions, and update roadmaps to allow everyone to understand where we are going. In order to achieve this, we aim to implement the following process for developments.  We have a strong emphasis here on documenting our decisions, and the way the architecture works - both in user and developer documentation, but also in Architectural Decision Records (ADRs). This ensures we know why we've done something, and new developers can also understand our thinking. This can always be challenged as things evolve, but we know why we made a decision in the past, and this is important.
 
-!()[change_request_process.png]
+![](change_request_process.png)
+
 
 To go with this, we try to work to the following principals -:
 

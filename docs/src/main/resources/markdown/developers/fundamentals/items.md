@@ -6,7 +6,7 @@ title: Commands, States and Items
 
 _OpenSmartHouse_ has a flexible type system that needs to be understood by developers before heading in to develop core or extension bundles. Here we will try to explain the system, how it is built and used, and how the developer can interact with it.
 
-The _OpenSmartHouse_ system is fundamentally similar to that derived from Eclipse SmartHome, and still used in _openHAB_. It is however implemented very differently and provides a broader range of use cases. Firstly, let's explain the terminology -:
+The _OpenSmartHouse_ system is fundamentally similar to that derived from Eclipse SmartHome, and still used in _OpenSmartHouse_. It is however implemented very differently and provides a broader range of use cases. Firstly, let's explain the terminology -:
 
 * **Type**: A _Type_ is a fundamental building block of the type system in _OpenSmartHouse_. All _Commands_ and _States_ are derived from _Type_. A _Type_ may be a simple class such as a _Number_ or _String_, or an enumeration such as _OpenClosed_ or _OnOff_. Or it may be a more complex class such as _HSB_ which inherits functionality from simpler classes such as _OnOff_ and _Percent_.
 * **Command**: A _Command_ is an interface definition that marks a _Type_ as a _Command_ which can be sent to make something happen. For example you might want to _Command_ a light On with the _OnOff_ type.
