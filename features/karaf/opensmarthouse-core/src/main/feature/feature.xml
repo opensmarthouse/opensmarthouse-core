@@ -613,6 +613,8 @@
     <feature name="opensmarthouse-core-model-core" version="${project.version}">
         <feature dependency="true">opensmarthouse-tp-xtext</feature>
         <feature>opensmarthouse-core</feature>
+        <feature>opensmarthouse-core-service-core</feature>
+
         <bundle>mvn:org.opensmarthouse.core.bundles/org.opensmarthouse.core.model.core/${project.version}</bundle>
     </feature>
 
