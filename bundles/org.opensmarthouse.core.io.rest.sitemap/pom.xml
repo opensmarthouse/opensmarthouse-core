@@ -20,7 +20,7 @@
     </dependency>
     <dependency>
       <groupId>org.opensmarthouse.core.bundles</groupId>
-      <artifactId>org.opensmarthouse.core.io.rest.core</artifactId>
+      <artifactId>org.opensmarthouse.core.io.rest</artifactId>
     </dependency>
     <dependency>
       <groupId>org.opensmarthouse.core.bundles</groupId>
@@ -30,14 +30,6 @@
       <groupId>org.opensmarthouse.core.bom</groupId>
       <artifactId>org.opensmarthouse.core.bom.compile-model</artifactId>
       <type>pom</type>
-    </dependency>
-    <dependency>
-      <groupId>io.swagger.core.v3</groupId>
-      <artifactId>swagger-annotations</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>javax.ws.rs</groupId>
-      <artifactId>javax.ws.rs-api</artifactId>
     </dependency>
 
     <dependency>
