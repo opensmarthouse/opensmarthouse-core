@@ -9,6 +9,7 @@ bin/
 *.iml
 .idea/
 **/.settings/org.eclipse.*
+.project
 
 dependency-reduced-pom.xml
 bundles/org.opensmarthouse.core.id/userdata/uuid
