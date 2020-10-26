@@ -45,6 +45,7 @@
       <url>${release.repository-url}</url>
     </repository>
     <snapshotRepository>
+      <uniqueVersion>false</uniqueVersion>
       <id>${snapshot.repository-id}</id>
       <name>${snapshot.repository-name}</name>
       <url>${snapshot.repository-url}</url>
@@ -56,9 +57,9 @@
     <openhab-api.version>3.0.0-SNAPSHOT</openhab-api.version>
     <opensmarthouse-api.version>${project.version}</opensmarthouse-api.version>
 
-    <snapshot.repository-id>bintray-snapshots</snapshot.repository-id>
-    <snapshot.repository-name>Bintray Snapshots</snapshot.repository-name>
-    <snapshot.repository-url>https://oss.jfrog.org/artifactory/oss-snapshot-local/</snapshot.repository-url>
+    <snapshot.repository-id>opensmarthouse-snapshots</snapshot.repository-id>
+    <snapshot.repository-name>OpenSmartHouse Snapshots (GitHub)</snapshot.repository-name>
+    <snapshot.repository-url>https://maven.pkg.github.com/opensmarthouse/opensmarthouse-core/</snapshot.repository-url>
 
     <release.repository-id>bintray-releases</release.repository-id>
     <release.repository-name>Bintray Releases</release.repository-name>
