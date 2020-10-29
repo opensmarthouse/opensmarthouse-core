@@ -1,45 +1,29 @@
-sudo: required
-dist: bionic
+os: linux
+dist: focal
 
 language: java
-
 jdk: openjdk11
 
 cache:
   directories:
   - $HOME/.m2
-  - $HOME/.bnd/cache/
 
-before_install:
-  - echo "MAVEN_OPTS='-Xms1g -Xmx2g'" > ~/.mavenrc
-install:
-  - |
-    function prevent_timeout() {
-        local i=0
-        while [ -e /proc/$1 ]; do
-            # print zero width char every 3 minutes while building
-            if [ "$i" -eq "180" ]; then printf %b '\u200b'; i=0; else i=$((i+1)); fi
-            sleep 1
-        done
-    }
-    function print_reactor_summary() {
-        sed -ne '/\[INFO\] Reactor Summary.*:/,$ p' "$1" | sed 's/\[INFO\] //'
-    }
-    function mvnp() {
-        set -o pipefail # exit build with error when pipes fail
-        local command=(mvn $@)
-        exec "${command[@]}" 2>&1 | # execute, redirect stderr to stdout
-            tee .build.log | # write output to log
-            stdbuf -oL grep -aE '^\[INFO\] Building .+ \[.+\]$' | # filter progress
-            sed -uE 's/^\[INFO\] Building (.*[^ ])[ ]+\[([0-9]+\/[0-9]+)\]$/\2| \1/' | # prefix project name with progress
-            sed -e :a -e 's/^.\{1,6\}|/ &/;ta' & # right align progress with padding
-        local pid=$!
-        prevent_timeout $pid &
-        wait $pid
-    }
-after_success:
-  - print_reactor_summary .build.log
-after_failure:
-  - tail -n 2000 .build.log
+notifications:
+  email:
+    secure: M2SYGSCzeUQWp4uvXw95tY27LaicqOENNuVQNFPaojw6pxoFYOgXwjsoMWgfkXHFa0URWippuqKZ2BzXndUtOWhG+k2+6v/VYKC9GBI9hs9DX/OQ6WaEXAtlN4zN+iOllFYK2aSGmD/XuT0u5o7BzQceqXHNXVMHwq2MD+Tb4PEfNHhtOcqLBjyQkJaXSl6R7BCuQA8W4viH/ubsWd+wOIDZHI/qhgwBQzuKXuvX7Yg2vMJWmd69HfnMKM+HL/CYkj+5JI+xumK2xQKovtUfNavQZeXWDKeHZWldxPu5w/F95GyTWDHyK9RLV/6Ztg1XV3HKWxFZNpqR/Ysj/ywMd90QJxbm1b8exCE3o2YOs+v+XQLkLk6aBuwHCHKx53kC0zmJmq1BrC0aiJ5e7FUFwYOwt+RWND5RMQo5XERqlJ9lM5i1+W48U4ujT14QCdh5yORFAtMGCU2XpLtsne2us4zQ2CAxFd19mMFB9cZKsSCtuHZhGmquZvBF9novvfHaN36/t/K0LTRti6XxoCl7zyeGaKB1NrHF3tK43zD3tFJ4+uwJhy3uNpldXnQpq0u3Ud7R5SKJApP24xe5xxfYHcWfWT7CbLeuvjXSJMxwZL6eSjHGM4FrQS35eFJVIiznla1hyK087yJ4/iRcnvsM6tDYywYJDjHbAzNUSkOH1S4=
+
 script:
-  - mvnp clean verify -B -DskipChecks
+  - mvn clean verify -B -e -q -DskipChecks
+
+before_deploy:
+  - cp .travis.settings.xml $HOME/.m2/settings.xml
+  - git checkout master
+
+deploy:
+  skip_cleanup: true
+  provider: script
+  script: mvn -B -e -q deploy
+
+branches:
+  only:
+    - master
