@@ -63,11 +63,12 @@ import org.slf4j.LoggerFactory;
 /**
  *
  * @author Kai Kreuzer - Initial contribution
+ * @author Chris Jackson - Fixed NPE if keystore path not set
  */
 public class CertificateGenerator implements BundleActivator {
 
     private static final String JETTY_KEYSTORE_PATH_PROPERTY = "jetty.keystore.path";
-    private static final String KEYSTORE_PASSWORD = "openhab";
+    private static final String KEYSTORE_PASSWORD = "opensmarthouse";
     private static final String KEYSTORE_ENTRY_ALIAS = "mykey";
     private static final String KEYSTORE_JKS_TYPE = "JKS";
     private static final String CURVE_NAME = "prime256v1";
@@ -75,7 +76,7 @@ public class CertificateGenerator implements BundleActivator {
     private static final String KEY_FACTORY_TYPE = "EC";
     private static final String CONTENT_SIGNER_ALGORITHM = "SHA256withECDSA";
     private static final String CERTIFICATE_X509_TYPE = "X.509";
-    private static final String X500_NAME = "CN=openhab.org, OU=None, O=None, L=None, C=None";
+    private static final String X500_NAME = "CN=opensmarthouse.org, OU=None, O=None, L=None, C=None";
 
     private Logger logger;
 
@@ -110,6 +111,9 @@ public class CertificateGenerator implements BundleActivator {
      */
     private KeyStore ensureKeystore() throws KeyStoreException {
         String keystorePath = System.getProperty(JETTY_KEYSTORE_PATH_PROPERTY);
+        if (keystorePath == null) {
+            throw new KeyStoreException("Failed to create the keystore. Keystore path is not set.");
+        }
         keystoreFile = new File(keystorePath);
         KeyStore keyStore = KeyStore.getInstance(KEYSTORE_JKS_TYPE);
         if (!keystoreFile.exists()) {
