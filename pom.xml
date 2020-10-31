@@ -5,13 +5,13 @@
   <parent>
     <groupId>org.opensmarthouse</groupId>
     <artifactId>parent</artifactId>
-    <version>0.9.1-SNAPSHOT</version>
+    <version>0.9.1</version>
     <relativePath />
   </parent>
 
   <groupId>org.opensmarthouse.core</groupId>
   <artifactId>org.opensmarthouse.core.reactor</artifactId>
-  <version>0.9.1-SNAPSHOT</version>
+  <version>0.9.1</version>
 
   <packaging>pom</packaging>
 
@@ -29,7 +29,7 @@
   <scm>
     <connection>scm:git:https://github.com/opensmarthouse/opensmarthouse-core.git</connection>
     <developerConnection>scm:git:https://github.com/opensmarthouse/opensmarthouse-core.git</developerConnection>
-    <tag>HEAD</tag>
+    <tag>org.opensmarthouse.core.reactor-0.9.1</tag>
     <url>https://github.com/opensmarthouse/opensmarthouse-core</url>
   </scm>
 
