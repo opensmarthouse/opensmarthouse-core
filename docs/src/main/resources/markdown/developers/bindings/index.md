@@ -652,7 +652,7 @@ TODO
 
 # Implementing a Discovery Service
 
-Bindings can implement the `DiscoveryService` interface and register it as an OSGi service to inform the framework about devices and services, that can be added as things to the system (see also [Inbox & Discovery Concept](../../concepts/discovery.md)).
+Bindings can implement the `DiscoveryService` interface and register it as an OSGi service to inform the framework about devices and services, that can be added as things to the system (see also [Inbox & Discovery Concept]../discovery/index.md)).
 
 A discovery service provides discovery results.
 The following table gives an overview about the main parts of a `DiscoveryResult`:
@@ -792,7 +792,7 @@ If this behavior is not appropriate for the implemented discovery service, one c
 ## Internationalization
 
 The framework will take care of internationalizing labels of discovery results if you extend the `AbstractDiscoveryService`.
-See [i18n](../utils/i18n.html#discovery) for more information.
+See [i18n](../utils/i18n.md#discovery) for more information.
 
 ::: tip Hint!
 To make it work you have to inject references to the `LocaleProvider` and the `TranslationProvider` services into your implementation.
@@ -886,4 +886,4 @@ TODO
 
 # Frequently asked questions / FAQ
 
-Various binding related questions are answered in our [Binding development FAQ](faq.html).
+Various binding related questions are answered in our [Binding development FAQ](faq.md).
