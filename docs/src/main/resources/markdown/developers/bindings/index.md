@@ -17,7 +17,7 @@ During development you might come back with specific questions.
 # Structure of a Binding
 
 Every binding needs to define a `binding.xml` file.
-Find more information in the respective [binding XML reference](binding-xml.html).
+Find more information in the respective [binding XML reference](binding-xml.md).
 
 # Describing Things
 
@@ -29,7 +29,7 @@ Each functionality of the *Thing* should be modelled as a `Channel`.
 *Thing* and *Channel* structures need to be explained to the OpenSmartHouse runtime.
 This is done in a declarative way via XML files, so called *ThingTypes* and *ChannelTypes*.
 
-Find more information in the respective [Thing & Channel XML reference](thing-xml.html).
+Find more information in the respective [Thing & Channel XML reference](thing-xml.md).
 
 # The ThingHandlerFactory
 
