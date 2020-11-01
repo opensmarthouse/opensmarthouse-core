@@ -20,34 +20,34 @@ The list of all predefined categories can be found in our categories overview:
 
 | Category         | Description                                                                                          | Icon Example    |
 |------------------|------------------------------------------------------------------------------------------------------|-----------------|
-| Battery          | Batteries, Energy Storages                                                                           | ![](/iconsets/classic/battery.png)     |
-| Blinds           | Roller shutters, window blinds, etc.                                                                 | ![](/iconsets/classic/blinds.png)      |
-| Camera           | All kinds of cameras                                                                                 | ![](/iconsets/classic/camera.png)      |
-| Car              | Smart Cars                                                                                           |                 |
+| Battery          | Batteries, Energy Storages                                                                           | ![](iconsets/classic/battery.png)     |
+| Blinds           | Roller shutters, window blinds, etc.                                                                 | ![](iconsets/classic/blinds.png)      |
+| Camera           | All kinds of cameras                                                                                 | ![](iconsets/classic/camera.png)      |
+| Car              | Smart Cars                                                                                           | ![](iconsets/classic/garage_detached_selected.png)  |
 | CleaningRobot    | Vacuum robots, mopping robots, etc.                                                                  |                 |
-| Door             | Door                                                                                                 | ![](/iconsets/classic/door.png)        |
-| FrontDoor        | Front Door                                                                                           | ![](/iconsets/classic/frontdoor.png)   |
-| GarageDoor       | Garage Door                                                                                          | ![](/iconsets/classic/garagedoor.png)  |
-| HVAC             | Air condition devices, Fans                                                                          |                 |
-| Inverter         | Power inverter, such as solar inverters etc.                                                         |                 |
-| LawnMower        | Lawn mowing robots, etc.                                                                             | ![](/iconsets/classic/lawnmower.png)   |
-| Lightbulb        | Devices that illuminate something, such as bulbs, etc.                                               | ![](/iconsets/classic/lightbulb.png)   |
-| Lock             | Devices whose primary pupose is locking something                                                    | ![](/iconsets/classic/lock.png)        |
+| Door             | Door                                                                                                 | ![](iconsets/classic/door.png)        |
+| FrontDoor        | Front Door                                                                                           | ![](iconsets/classic/frontdoor.png)   |
+| GarageDoor       | Garage Door                                                                                          | ![](iconsets/classic/garagedoor.png)  |
+| HVAC             | Air condition devices, Fans                                                                          | ![](iconsets/classic/fan_ceiling.png) |
+| Inverter         | Power inverter, such as solar inverters etc.                                                         | ![](iconsets/classic/solarplant.png)  |
+| LawnMower        | Lawn mowing robots, etc.                                                                             | ![](iconsets/classic/lawnmower.png)   |
+| Lightbulb        | Devices that illuminate something, such as bulbs, etc.                                               | ![](iconsets/classic/lightbulb.png)   |
+| Lock             | Devices whose primary pupose is locking something                                                    | ![](iconsets/classic/lock.png)        |
 | MotionDetector   | Motion sensors/detectors                                                                             |                 |
-| NetworkAppliance | Bridges/Gateway need to access other devices like used by Philips Hue for example, Routers, Switches |                 |
-| PowerOutlet      | Small devices to be plugged into a power socket in a wall which stick there                          | ![](/iconsets/classic/poweroutlet.png) |
-| Projector        | Devices that project a picture somewhere                                                             | ![](/iconsets/classic/projector.png)   |
-| RadiatorControl  | Controls on radiators used to heat up rooms                                                          |                 |
-| Receiver         | Audio/Video receivers, i.e. radio receivers, satelite or cable receivers, recorders, etc.            | ![](/iconsets/classic/receiver.png)    |
-| Screen           | Devices that are able to show a picture                                                              | ![](/iconsets/classic/screen.png)      |
+| NetworkAppliance | Bridges/Gateway need to access other devices like used by Philips Hue for example, Routers, Switches | ![](iconsets/classic/network.png)     |
+  PowerOutlet      | Small devices to be plugged into a power socket in a wall which stick there                          | ![](iconsets/classic/poweroutlet.png) |
+| Projector        | Devices that project a picture somewhere                                                             | ![](iconsets/classic/projector.png)   |
+| RadiatorControl  | Controls on radiators used to heat up rooms                                                          | ![](iconsets/classic/radiator.png)    |
+| Receiver         | Audio/Video receivers, i.e. radio receivers, satelite or cable receivers, recorders, etc.            | ![](iconsets/classic/receiver.png)    |
+| Screen           | Devices that are able to show a picture                                                              | ![](iconsets/classic/screen.png)     |
 | Sensor           | Device used to measure something                                                                     |                 |
-| Siren            | Siren used by Alarm systems                                                                          | ![](/iconsets/classic/siren.png)       |
+| Siren            | Siren used by Alarm systems                                                                          | ![](iconsets/classic/siren.png)       |
 | SmokeDetector    | Smoke detectors                                                                                      |                 |
 | Speaker          | Devices that are able to play sounds                                                                 |                 |
-| WallSwitch       | Any device attached to the wall that controls a binary status of something, for ex. a light switch   | ![](/iconsets/classic/wallswitch.png)  |
+| WallSwitch       | Any device attached to the wall that controls a binary status of something, for ex. a light switch   | ![](iconsets/classic/wallswitch.png)  |
 | WebService       | Account with credentials for a website                                                               |                 |
-| Window           | Window                                                                                               | ![](/iconsets/classic/window.png)      |
-| WhiteGood        | Devices that look like Waschingmachines, Dishwashers, Dryers, Fridges, Ovens, etc.                   | ![](/iconsets/classic/whitegood.png)   |
+| Window           | Window                                                                                               | ![](iconsets/classic/window.png)      |
+| WhiteGood        | Devices that look like Waschingmachines, Dishwashers, Dryers, Fridges, Ovens, etc.                   | ![](iconsets/classic/whitegood.png)   |
 
 ### Channel Group Categories
 
@@ -63,68 +63,68 @@ There are different types of categories for Channels, which are listed below.
 
 | Category      | Icon Example                             |
 |---------------|------------------------------------------|
-| Colorpicker   | ![](/iconsets/classic/colorpicker.png)   |
-| Number        | ![](/iconsets/classic/number.png)        |
-| Rollershutter | ![](/iconsets/classic/rollershutter.png) |
-| Slider        | ![](/iconsets/classic/slider.png)        |
-| Switch        | ![](/iconsets/classic/switch.png)        |
-| Text          | ![](/iconsets/classic/text.png)          |
-| Group         | ![](/iconsets/classic/group.png)         |
+| Colorpicker   | ![](iconsets/classic/colorpicker.png)   |
+| Number        | ![](iconsets/classic/number.png)        |
+| Rollershutter | ![](iconsets/classic/rollershutter.png) |
+| Slider        | ![](iconsets/classic/slider.png)        |
+| Switch        | ![](iconsets/classic/switch.png)        |
+| Text          | ![](iconsets/classic/text.png)          |
+| Group         | ![](iconsets/classic/group.png)         |
 
 #### Weather
 
 | Category    | Icon Example                           |
 |-------------|----------------------------------------|
-| Sun         | ![](/iconsets/classic/sun.png)         |
-| Moon        | ![](/iconsets/classic/moon.png)        |
-| Clouds      | ![](/iconsets/classic/clouds.png)      |
-| Sun_Clouds  | ![](/iconsets/classic/sun_clouds.png)  |
-| Rain        | ![](/iconsets/classic/rain.png)        |
-| Snow        | ![](/iconsets/classic/snow.png)        |
-| Wind        | ![](/iconsets/classic/wind.png)        |
-| Humidity    | ![](/iconsets/classic/humidity.png)    |
-| Temperature | ![](/iconsets/classic/temperature.png) |
+| Sun         | ![](iconsets/classic/sun.png)         |
+| Moon        | ![](iconsets/classic/moon.png)        |
+| Clouds      | ![](iconsets/classic/clouds.png)      |
+| Sun_Clouds  | ![](iconsets/classic/sun_clouds.png)  |
+| Rain        | ![](iconsets/classic/rain.png)        |
+| Snow        | ![](iconsets/classic/snow.png)        |
+| Wind        | ![](iconsets/classic/wind.png)        |
+| Humidity    | ![](iconsets/classic/humidity.png)    |
+| Temperature | ![](iconsets/classic/temperature.png) |
 
 #### Properties
 
 | Category         | Icon Example                                |
 |------------------|---------------------------------------------|
-| BatteryLevel     | ![](/iconsets/classic/batterylevel.png)     |
-| LowBattery       | ![](/iconsets/classic/lowbattery.png)       |
-| CarbonDioxide    | ![](/iconsets/classic/carbondioxide.png)    |
-| Energy           | ![](/iconsets/classic/energy.png)           |
-| Gas              | ![](/iconsets/classic/gas.png)              |
-| Oil              | ![](/iconsets/classic/oil.png)              |
-| Water            | ![](/iconsets/classic/water.png)            |
-| Light            | ![](/iconsets/classic/light.png)            |
-| ColorLight       | ![](/iconsets/classic/colorlight.png)       |
-| Temperature      | ![](/iconsets/classic/temperature.png)      |
-| Smoke            | ![](/iconsets/classic/smoke.png)            |
-| SoundVolume      | ![](/iconsets/classic/soundvolume.png)      |
-| Pressure         | ![](/iconsets/classic/pressure.png)         |
-| Fire             | ![](/iconsets/classic/fire.png)             |
-| Motion           | ![](/iconsets/classic/motion.png)           |
-| QualityOfService | ![](/iconsets/classic/qualityofservice.png) |
-| Moisture         | ![](/iconsets/classic/moisture.png)         |
-| Noise            | ![](/iconsets/classic/noise.png)            |
-| Flow             | ![](/iconsets/classic/flow.png)             |
-| Price            | ![](/iconsets/classic/price.png)            |
-| Time             | ![](/iconsets/classic/time.png)             |
+| BatteryLevel     | ![](iconsets/classic/batterylevel.png)     |
+| LowBattery       | ![](iconsets/classic/lowbattery.png)       |
+| CarbonDioxide    | ![](iconsets/classic/carbondioxide.png)    |
+| Energy           | ![](iconsets/classic/energy.png)           |
+| Gas              | ![](iconsets/classic/gas.png)              |
+| Oil              | ![](iconsets/classic/oil.png)              |
+| Water            | ![](iconsets/classic/water.png)            |
+| Light            | ![](iconsets/classic/light.png)            |
+| ColorLight       | ![](iconsets/classic/colorlight.png)       |
+| Temperature      | ![](iconsets/classic/temperature.png)      |
+| Smoke            | ![](iconsets/classic/smoke.png)            |
+| SoundVolume      | ![](iconsets/classic/soundvolume.png)      |
+| Pressure         | ![](iconsets/classic/pressure.png)         |
+| Fire             | ![](iconsets/classic/fire.png)             |
+| Motion           | ![](iconsets/classic/motion.png)           |
+| QualityOfService | ![](iconsets/classic/qualityofservice.png) |
+| Moisture         | ![](iconsets/classic/moisture.png)         |
+| Noise            | ![](iconsets/classic/noise.png)            |
+| Flow             | ![](iconsets/classic/flow.png)             |
+| Price            | ![](iconsets/classic/price.png)            |
+| Time             | ![](iconsets/classic/time.png)             |
 
 #### Control
 
 | Category     | Icon Example                            |
 |--------------|-----------------------------------------|
-| Heating      | ![](/iconsets/classic/heating.png)      |
-| MediaControl | ![](/iconsets/classic/mediacontrol.png) |
-| MoveControl  | ![](/iconsets/classic/movecontrol.png)  |
-| Zoom         | ![](/iconsets/classic/zoom.png)         |
+| Heating      | ![](iconsets/classic/heating.png)      |
+| MediaControl | ![](iconsets/classic/mediacontrol.png) |
+| MoveControl  | ![](iconsets/classic/movecontrol.png)  |
+| Zoom         | ![](iconsets/classic/zoom.png)         |
 
 #### Purpose
 
 | Category | Icon Example                        |
 |----------|-------------------------------------|
-| Alarm    | ![](/iconsets/classic/alarm.png)    |
-| Presence | ![](/iconsets/classic/presence.png) |
-| Vacation | ![](/iconsets/classic/vacation.png) |
-| Party    | ![](/iconsets/classic/party.png)    |
+| Alarm    | ![](iconsets/classic/alarm.png)    |
+| Presence | ![](iconsets/classic/presence.png) |
+| Vacation | ![](iconsets/classic/vacation.png) |
+| Party    | ![](iconsets/classic/party.png)    |
