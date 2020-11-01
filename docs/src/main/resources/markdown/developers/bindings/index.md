@@ -124,10 +124,10 @@ The `ThingManager` creates for each Thing a `ThingHandler` instance using a `Thi
 Therefore, it tracks all `ThingHandlerFactory`s from the binding.
 
 The `ThingManager` determines if the `Thing` is initializable or not.
-A `Thing` is considered as *initializable* if all *required* configuration parameters (cf. property *parameter.required* in [Configuration Description](config-xml.html)) are available.
+A `Thing` is considered as *initializable* if all *required* configuration parameters (cf. property *parameter.required* in [Configuration Description](config-xml.md)) are available.
 If so, the method `ThingHandler.initialize()` is called.
 
-Only Things with status (cf. [Thing Status](../../concepts/things.html#thing-status)) *UNKNOWN*, *ONLINE* or *OFFLINE* are considered as *initialized* by the framework and therefore it is the handler's duty to assign one of these states sooner or later.
+Only Things with status (cf. [Thing Status](../../concepts/things.md#thing-status)) *UNKNOWN*, *ONLINE* or *OFFLINE* are considered as *initialized* by the framework and therefore it is the handler's duty to assign one of these states sooner or later.
 To achieve that, the status must be reported to the framework via the callback or `BaseThingHandler.updateStatus(...)` for convenience.
 Furthermore, the framework expects `initialize()` to be non-blocking and to return quickly.
 For longer running initializations, the implementation has to take care of scheduling a separate job which must guarantee to set the status eventually.
@@ -195,7 +195,7 @@ Bindings implementing device configuration should consider providing `ConfigStat
 
 *Things* can have properties.
 If you would like to add meta data to your thing, e.g. the vendor of the thing, then you can define your own thing properties by simply adding them to the thing type definition.
-The properties section [here](thing-definition.html#Properties) explains how to specify such properties.
+The properties section [here](thing-definition.md#Properties) explains how to specify such properties.
 
 To retrieve the properties one can call the operation `getProperties` of the corresponding `org.eclipse.smarthome.core.thing.type.ThingType` instance.
 If a thing will be created for this thing type then its properties will be automatically copied into the new thing instance.
@@ -331,7 +331,7 @@ It is binding specific when the channel should be triggered.
 
 ## Updating the Thing Status
 
-The *ThingHandler* must also manage the thing status (see also: [Thing Status Concept](../../concepts/things.html#thing-status)).
+The *ThingHandler* must also manage the thing status (see also: [Thing Status Concept](../../concepts/things.md#thing-status)).
 If the device or service is not working correctly, the binding should change the status to *OFFLINE* and back to *ONLINE*, if it is working again.
 The status can be updated via an inherited method from the BaseThingHandler class by calling:
 
@@ -340,7 +340,7 @@ updateStatus(ThingStatus.OFFLINE, ThingStatusDetail.OFFLINE.COMMUNICATION_ERROR)
 ```
 
 The second argument of the method takes a `ThingStatusDetail` enumeration value, which further specifies the current status situation.
-A complete list of all thing statuses and thing status details is listed in the [Thing Status](../../concepts/things.html#thing-status) chapter.
+A complete list of all thing statuses and thing status details is listed in the [Thing Status](../../concepts/things.md#thing-status) chapter.
 
 The binding should also provide additional status description, if available.
 This description might contain technical information (e.g. an HTTP status code, or any other protocol specific information, which helps to identify the current problem):
@@ -468,7 +468,7 @@ The Hue gateway is an IP device with an HTTP API, which communicates over the Zi
 In the openHAB model the Hue gateway is represented as a *Bridge* with connected *Things*, that represent the Hue bulbs.
 *Bridge* inherits from *Thing*, so that it also has *Channels* and all other features of a thing, with the addition that it also holds a list of things.
 
-We have a FAQ, dicussing [Thing, Bridge and Channel modelling](faq.html#structuring-things-and-thing-types).
+We have a FAQ, dicussing [Thing, Bridge and Channel modelling](faq.md#structuring-things-and-thing-types).
 
 When implementing a binding with *Bridges*, the logic to communicate with the external system is often shared between the different `ThingHandler` implementations.
 In that case it makes sense to implement a handler for the *Bridge* and delegate the actual command execution from the *ThingHandler* to the *BridgeHandler*.
@@ -549,7 +549,7 @@ Sub-classes of these handlers must only override the operation `getConfigStatus`
 
 The framework will take care of internationalizing messages.
 
-For this purpose there must be an [i18n](../utils/i18n.html) properties file inside the bundle of the configuration status provider that has a message declared for the message key of the `ConfigStatusMessage`.
+For this purpose there must be an [i18n](../utils/i18n.md) properties file inside the bundle of the configuration status provider that has a message declared for the message key of the `ConfigStatusMessage`.
 The actual message key is built by the operation `withMessageKeySuffix(String)` of the message´s builder in the manner that the given message key suffix is appended to *config-status."config-status-message-type."*.
 
 As a result depending on the type of the message the final constructed message keys are:
@@ -652,7 +652,7 @@ TODO
 
 # Implementing a Discovery Service
 
-Bindings can implement the `DiscoveryService` interface and register it as an OSGi service to inform the framework about devices and services, that can be added as things to the system (see also [Inbox & Discovery Concept](../../concepts/discovery.html)).
+Bindings can implement the `DiscoveryService` interface and register it as an OSGi service to inform the framework about devices and services, that can be added as things to the system (see also [Inbox & Discovery Concept](../../concepts/discovery.md)).
 
 A discovery service provides discovery results.
 The following table gives an overview about the main parts of a `DiscoveryResult`:
