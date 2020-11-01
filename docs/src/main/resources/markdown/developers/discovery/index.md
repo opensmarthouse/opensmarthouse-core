@@ -64,7 +64,7 @@ If an entry is ignored, it will be hidden in the inbox without creating a Thing 
 
 OpenSmartHouse offers a service to automatically ignore discovery results in the inbox, whenever a Thing is created manually, that represents the same Thing, as the respective discovery result would create. 
 This Thing would either have the same Thing UID or the value of its representation property is equal to the representation property's value in the discovery result.
-This service is enabled by default but can be disabled by setting `org.eclipse.smarthome.inbox:autoIgnore=false`. 
+This service is enabled by default but can be disabled by setting `org.openhab.inbox:autoIgnore=false`. 
 
 ## Auto Approve
 
