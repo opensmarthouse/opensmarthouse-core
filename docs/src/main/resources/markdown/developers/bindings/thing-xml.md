@@ -59,7 +59,7 @@ Bindings may optionally set the version of a thing type. This may be used within
 
 ### Thing Categories
 
-A description about thing categories as well as an overview about which categories exist can be found in our [categories overview](../../concepts/categories.md).
+A description about thing categories as well as an overview about which categories exist can be found in our [categories overview](../fundamentals/categories.md).
 
 ## Channels
 
