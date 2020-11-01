@@ -71,4 +71,4 @@ This service is enabled by default but can be disabled by setting `org.eclipse.s
 If the manual acceptance of discovery results by the user is not desired, it is possible to turn on the auto-approval feature of the inbox.
 In this case, every new entry gets automatically approved immediately (unless it has been marked as ignored as a duplicate).
 
-The auto approval can be enabled by the setting `org.eclipse.smarthome.inbox:autoApprove=true`; the default is false.
+The auto approval can be enabled by the setting `org.openhab.inbox:autoApprove=true`; the default is false.
