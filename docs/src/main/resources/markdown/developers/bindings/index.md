@@ -4,7 +4,7 @@ title: Bindings
 
 # Overview
 
-A binding is an extension to openHAB that integrates an external system like a software service or a hardware device.
+A binding is an extension to OpenSmartHouse that integrates an external system like a software service or a hardware device.
 The external system is represented as a set of *Things* and sometimes *Bridges* with *Channels*.
 
 This chapter covers everything to know about binding development.
@@ -21,12 +21,12 @@ Find more information in the respective [binding XML reference](binding-xml.html
 
 # Describing Things
 
-External systems are represented as *Things* in openHAB.
+External systems are represented as *Things* in OpenSmartHouse.
 When starting the implementation of a binding, you should think about the abstraction of your external system.
 Different services or devices should be represented as individual *Things*.
 Each functionality of the *Thing* should be modelled as a `Channel`.
 
-*Thing* and *Channel* structures need to be explained to the openHAB runtime.
+*Thing* and *Channel* structures need to be explained to the OpenSmartHouse runtime.
 This is done in a declarative way via XML files, so called *ThingTypes* and *ChannelTypes*.
 
 Find more information in the respective [Thing & Channel XML reference](thing-xml.html).
@@ -39,7 +39,7 @@ The `ThingHandlerFactory` is responsible for creating `ThingHandler` instances.
 
 Every binding must implement a `ThingHandlerFactory` and register it as OSGi service so that the runtime knows which class needs to be called for creating and handling things.
 
-When a new *Thing* is added, the openHAB runtime queries every `ThingHandlerFactory` for support of the *ThingType* by calling the `supportsThingType` method.
+When a new *Thing* is added, the OpenSmartHouse runtime queries every `ThingHandlerFactory` for support of the *ThingType* by calling the `supportsThingType` method.
 When the method returns `true`, the runtime calls `createHandler`, which should then return a proper `ThingHandler` implementation.
 
 A weather bindings `WeatherHandlerFactory` for example supports only one *ThingType* and instantiates a new `WeatherHandler` for a given thing:
