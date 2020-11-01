@@ -92,7 +92,7 @@ Some or all of these bundles must be included in your runtime configuration, if 
 
  Name | Bundle Symbolic Name | Description
  -------- | -------- | --------
-Declarative Services | org.eclipse.equinox.ds | An implementation of the OSGi [Declarative Services](osgids.html) specification
+Declarative Services | org.eclipse.equinox.ds | An implementation of the OSGi [Declarative Services](osgids.md) specification
 Event Admin Service | org.eclipse.equinox.event | OSGi Compendium Release 7 [Event Admin](https://osgi.org/javadoc/osgi.cmpn/7.0.0/org/osgi/service/event/EventAdmin.html) Service provides an inter-bundle communication mechanism based on an event publish and subscribe model
 Equinox Utilities | org.eclipse.equinox.util | A library of utility classes that are frequently used from the Equinox OSGi Service implementation bundles
 OSGi Services API | org.eclipse.osgi.service | This bundle contains the set of OSGi specified service APIs

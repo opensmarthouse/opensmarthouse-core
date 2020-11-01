@@ -127,7 +127,7 @@ The `ThingManager` determines if the `Thing` is initializable or not.
 A `Thing` is considered as *initializable* if all *required* configuration parameters (cf. property *parameter.required* in [Configuration Description](config-xml.md)) are available.
 If so, the method `ThingHandler.initialize()` is called.
 
-Only Things with status (cf. [Thing Status](../../concepts/things.md#thing-status)) *UNKNOWN*, *ONLINE* or *OFFLINE* are considered as *initialized* by the framework and therefore it is the handler's duty to assign one of these states sooner or later.
+Only Things with status (cf. [Thing Status](../fundamentals/things.md#thing-status)) *UNKNOWN*, *ONLINE* or *OFFLINE* are considered as *initialized* by the framework and therefore it is the handler's duty to assign one of these states sooner or later.
 To achieve that, the status must be reported to the framework via the callback or `BaseThingHandler.updateStatus(...)` for convenience.
 Furthermore, the framework expects `initialize()` to be non-blocking and to return quickly.
 For longer running initializations, the implementation has to take care of scheduling a separate job which must guarantee to set the status eventually.
@@ -331,7 +331,7 @@ It is binding specific when the channel should be triggered.
 
 ## Updating the Thing Status
 
-The *ThingHandler* must also manage the thing status (see also: [Thing Status Concept](../../concepts/things.md#thing-status)).
+The *ThingHandler* must also manage the thing status (see also: [Thing Status Concept](../fundamentals/things.md#thing-status)).
 If the device or service is not working correctly, the binding should change the status to *OFFLINE* and back to *ONLINE*, if it is working again.
 The status can be updated via an inherited method from the BaseThingHandler class by calling:
 
@@ -340,7 +340,7 @@ updateStatus(ThingStatus.OFFLINE, ThingStatusDetail.OFFLINE.COMMUNICATION_ERROR)
 ```
 
 The second argument of the method takes a `ThingStatusDetail` enumeration value, which further specifies the current status situation.
-A complete list of all thing statuses and thing status details is listed in the [Thing Status](../../concepts/things.md#thing-status) chapter.
+A complete list of all thing statuses and thing status details is listed in the [Thing Status](../fundamentals/things.md#thing-status) chapter.
 
 The binding should also provide additional status description, if available.
 This description might contain technical information (e.g. an HTTP status code, or any other protocol specific information, which helps to identify the current problem):
@@ -652,7 +652,7 @@ TODO
 
 # Implementing a Discovery Service
 
-Bindings can implement the `DiscoveryService` interface and register it as an OSGi service to inform the framework about devices and services, that can be added as things to the system (see also [Inbox & Discovery Concept]../discovery/index.md)).
+Bindings can implement the `DiscoveryService` interface and register it as an OSGi service to inform the framework about devices and services, that can be added as things to the system (see also [Inbox & Discovery Concept](../fundamentals/discovery.md)).
 
 A discovery service provides discovery results.
 The following table gives an overview about the main parts of a `DiscoveryResult`:
