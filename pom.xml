@@ -353,7 +353,7 @@ Import-Package: \\
             <additionalparam>--frames</additionalparam>
             <!-- Prevents the "undefined" module in path name, which causes a file not found when searching -->
             <additionalJOption>--no-module-directories</additionalJOption>
-            <excludePackageNames>*.internal.*,nl.*</excludePackageNames>
+            <excludePackageNames>nl.*</excludePackageNames>
           </configuration>
         </plugin>
 

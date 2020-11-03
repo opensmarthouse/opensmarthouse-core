@@ -362,7 +362,6 @@
         <feature>opensmarthouse-core-config</feature>
         <feature>opensmarthouse-core-thing</feature>
         <bundle>mvn:org.opensmarthouse.core.bundles/org.opensmarthouse.core.config.discovery/${project.version}</bundle>
-        <bundle>mvn:org.opensmarthouse.core.bundles/org.opensmarthouse.core.config.discovery.core/${project.version}</bundle>
     </feature>
 
     <feature name="opensmarthouse-core-config-dispatch" version="${project.version}">
