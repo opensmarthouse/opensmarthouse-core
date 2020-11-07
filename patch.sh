@@ -52,6 +52,8 @@ refactor $1 "bundles/org.openhab.core/src/main/java/org/openhab/core/internal/se
 
 refactor $1 "bundles/org.openhab.core/src/main/java/org/openhab/core/types/util/UnitUtils.java"                                                "bundles/org.opensmarthouse.core.library.unit/src/main/java/org/openhab/core/types/util/UnitUtils.java"
 
+refactor $1 "bundles/org.openhab.core/src/main/java/org/openhab/core/items/ManagedItemProvider.java"                                           "bundles/org.opensmarthouse.core.item.core/src/main/java/org/openhab/core/internal/items/StorageItemProvider.java" 
+
 refactor $1 "bundles/org.openhab.core/src/main/java/org/openhab/core/library/CoreItemFactory.java"                                             "bundles/org.opensmarthouse.core.item.core/src/main/java/org/openhab/core/internal/items/CoreItemFactory.java" 
 refactor $1 "bundles/org.openhab.core/src/test/java/org/openhab/core/library/CoreItemFactoryTest.java"                                         "bundles/org.opensmarthouse.core.item.core/src/test/java/org/openhab/core/internal/items/CoreItemFactoryTest.java"
 
