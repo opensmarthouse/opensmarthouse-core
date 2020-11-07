@@ -153,6 +153,19 @@ public class RulesRefresher implements ReadyTracker {
         }
     }
 
+    @Reference(cardinality = ReferenceCardinality.MULTIPLE, policy = ReferencePolicy.DYNAMIC)
+    protected void addThingActions(ThingActions thingActions) {
+        if (started) {
+            scheduleRuleRefresh();
+        }
+    }
+
+    protected void removeThingActions(ThingActions thingActions) {
+        if (started) {
+            scheduleRuleRefresh();
+        }
+    }
+
     protected synchronized void scheduleRuleRefresh() {
         ScheduledFuture<?> localJob = job;
         if (localJob != null && !localJob.isDone()) {
