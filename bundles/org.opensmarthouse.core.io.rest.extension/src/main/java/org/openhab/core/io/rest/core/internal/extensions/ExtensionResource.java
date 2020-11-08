@@ -216,7 +216,7 @@ public class ExtensionResource implements RESTResource {
         return Response.ok(null, MediaType.TEXT_PLAIN).build();
     }
 
-    private void postFailureEvent(String addonId, String msg) {
+    private void postFailureEvent(String addonId, @Nullable String msg) {
         Event event = ExtensionEventFactory.createExtensionFailureEvent(addonId, msg);
         eventPublisher.post(event);
     }

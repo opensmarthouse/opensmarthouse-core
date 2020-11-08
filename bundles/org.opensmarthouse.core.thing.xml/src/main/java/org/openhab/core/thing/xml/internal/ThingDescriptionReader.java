@@ -62,7 +62,10 @@ public class ThingDescriptionReader extends XmlDocumentReader<List<?>> {
      */
     public ThingDescriptionReader() {
         super(false);
-        super.setClassLoader(ThingDescriptionReader.class.getClassLoader());
+        ClassLoader classLoader = ThingDescriptionReader.class.getClassLoader();
+        if (classLoader != null) {
+            super.setClassLoader(classLoader);
+        }
 
         setup();
     }

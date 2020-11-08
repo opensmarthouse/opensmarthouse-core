@@ -226,7 +226,7 @@ public abstract class AbstractRegistry<@NonNull E extends Identifiable<K>, @NonN
 
     @Override
     public void removed(Provider<E> provider, E element) {
-        final E existingElement;
+        final @Nullable E existingElement;
         elementWriteLock.lock();
         try {
             // The given "element" might not be the live instance but loaded from storage.
@@ -247,7 +247,10 @@ public abstract class AbstractRegistry<@NonNull E extends Identifiable<K>, @NonN
             }
             identifierToElement.remove(uid);
             elementToProvider.remove(existingElement);
-            providerToElements.get(provider).remove(existingElement);
+            Collection<E> providerElements = providerToElements.get(provider);
+            if (providerElements != null) {
+                providerElements.remove(existingElement);
+            }
             elements.remove(existingElement);
         } finally {
             elementWriteLock.unlock();
@@ -270,7 +273,7 @@ public abstract class AbstractRegistry<@NonNull E extends Identifiable<K>, @NonN
             return;
         }
 
-        final E existingElement;
+        final @Nullable E existingElement;
         elementWriteLock.lock();
         try {
             // The given "element" might not be the live instance but loaded from storage.
@@ -293,8 +296,10 @@ public abstract class AbstractRegistry<@NonNull E extends Identifiable<K>, @NonN
             elementToProvider.remove(existingElement);
             elementToProvider.put(element, provider);
             final Collection<E> providerElements = providerToElements.get(provider);
-            providerElements.remove(existingElement);
-            providerElements.add(element);
+            if (providerElements != null) {
+                providerElements.remove(existingElement);
+                providerElements.add(element);
+            }
             elements.remove(existingElement);
             elements.add(element);
         } finally {
@@ -322,8 +327,9 @@ public abstract class AbstractRegistry<@NonNull E extends Identifiable<K>, @NonN
     protected @Nullable Entry<Provider<E>, E> getValueAndProvider(K key) {
         elementReadLock.lock();
         try {
-            final E element = identifierToElement.get(key);
-            return element == null ? null : Map.entry(elementToProvider.get(element), element);
+            final @Nullable E element = identifierToElement.get(key);
+            final Provider<E> provider = elementToProvider.get(element);
+            return element == null || provider == null ? null : Map.entry(provider, element);
         } finally {
             elementReadLock.unlock();
         }
@@ -430,11 +436,8 @@ public abstract class AbstractRegistry<@NonNull E extends Identifiable<K>, @NonN
     protected @Nullable Provider<E> getProvider(K key) {
         elementReadLock.lock();
         try {
-            final E element = identifierToElement.get(key);
-            if (element == null) {
-                return null;
-            }
-            return elementToProvider.get(element);
+            final @Nullable E element = identifierToElement.get(key);
+            return element == null ? null : elementToProvider.get(element);
         } finally {
             elementReadLock.unlock();
         }

@@ -302,8 +302,12 @@ Import-Package: \\
           <version>${maven-compiler-plugin.version}</version>
           <configuration>
             <compilerId>eclipse</compilerId>
+            <compilerArguments>
+              <annotationpath>CLASSPATH</annotationpath>
+              <classpath>${project.build.directory}/dependency</classpath>
+            </compilerArguments>
             <compilerArgs>
-              <arg>-err:+nullAnnot(org.eclipse.jdt.annotation.Nullable|org.eclipse.jdt.annotation.NonNull|org.eclipse.jdt.annotation.NonNullByDefault),+inheritNullAnnot,-nullUncheckedConversion</arg>
+              <arg>-err:+nullAnnot(org.eclipse.jdt.annotation.Nullable|org.eclipse.jdt.annotation.NonNull|org.eclipse.jdt.annotation.NonNullByDefault),+inheritNullAnnot,+nullAnnotConflict,-nullUncheckedConversion</arg>
               <arg>-warn:+null,+inheritNullAnnot,+nullAnnotConflict,-nullUncheckedConversion,+nullAnnotRedundant,+nullDereference</arg>
             </compilerArgs>
             <showWarnings>true</showWarnings>

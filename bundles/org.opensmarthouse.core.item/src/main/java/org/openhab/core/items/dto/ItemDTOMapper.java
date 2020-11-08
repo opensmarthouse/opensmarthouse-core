@@ -30,6 +30,7 @@ import org.openhab.core.types.State;
  * @author Kai Kreuzer - Initial contribution
  * @author Stefan Bußweiler - Moved to core and renamed class to DTO mapper
  * @author Dennis Nobel - Removed dynamic data
+ * @author Łukasz Dywicki - Split API and implementation
  */
 @NonNullByDefault
 public class ItemDTOMapper {
