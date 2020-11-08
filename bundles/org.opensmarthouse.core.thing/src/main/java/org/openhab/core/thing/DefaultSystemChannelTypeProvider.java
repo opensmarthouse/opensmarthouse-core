@@ -15,6 +15,7 @@ package org.openhab.core.thing;
 import java.util.Collection;
 import java.util.Objects;
 import java.util.concurrent.atomic.AtomicReference;
+
 import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.NonNullByDefault;
 import org.eclipse.jdt.annotation.Nullable;
@@ -34,9 +35,9 @@ import org.osgi.framework.ServiceReference;
  * it was separated and split. Constants now live in {@link SystemChannelTypeConstants} while
  * implementation is now moved to internal package and can not be called directly.
  *
- * @@deprecated This class is kept to provide compatibility for OH 2.x APIs and will not receive any
- * other updates. Please migrate your code to use of @{@link SystemChannelTypeConstants} to refer
- * common channel types.
+ * @deprecated This class is kept to provide compatibility for OH 2.x APIs and will not receive any
+ *             other updates. Please migrate your code to use of {@link SystemChannelTypeConstants} to refer
+ *             common channel types.
  *
  * @author Łukasz Dywicki - Extraction from past code base.
  */
@@ -175,17 +176,20 @@ public class DefaultSystemChannelTypeProvider {
         Bundle bundle = FrameworkUtil.getBundle(DefaultSystemChannelTypeProvider.class);
 
         if (bundle == null) {
-            throw new ExceptionInInitializerError("DefaultSystemChannelTypeProvider is legacy API working only under OSGi to bridge OH 2.x bindings.");
+            throw new ExceptionInInitializerError(
+                    "DefaultSystemChannelTypeProvider is legacy API working only under OSGi to bridge OH 2.x bindings.");
         }
 
-        @Nullable ServiceReference<ChannelTypeProvider> lookup = null;
+        @Nullable
+        ServiceReference<ChannelTypeProvider> lookup = null;
         int waitTime = 0;
         while (waitTime < 10000) {
             // lets wait up to 10 seconds to get default channel type provider in place
             // it might not be very fortunate way unless we get bindings using specific
             try {
                 Collection<ServiceReference<ChannelTypeProvider>> reference = bundle.getBundleContext()
-                    .getServiceReferences(ChannelTypeProvider.class, "(component.name=org.openhab.core.thing.internal.DefaultSystemChannelTypeProvider)");
+                        .getServiceReferences(ChannelTypeProvider.class,
+                                "(component.name=org.openhab.core.thing.internal.DefaultSystemChannelTypeProvider)");
                 if (reference != null && reference.size() > 0) {
                     lookup = reference.iterator().next();
                     break;
@@ -197,9 +201,11 @@ public class DefaultSystemChannelTypeProvider {
             }
         }
 
-        @NonNull ChannelTypeProvider provider = bundle.getBundleContext().getService(lookup);
+        @NonNull
+        ChannelTypeProvider provider = bundle.getBundleContext().getService(lookup);
 
-        SYSTEM_CHANNEL_SIGNAL_STRENGTH = getChannel(provider, SystemChannelTypeConstants.SYSTEM_CHANNEL_SIGNAL_STRENGTH);
+        SYSTEM_CHANNEL_SIGNAL_STRENGTH = getChannel(provider,
+                SystemChannelTypeConstants.SYSTEM_CHANNEL_SIGNAL_STRENGTH);
         SYSTEM_CHANNEL_LOW_BATTERY = getChannel(provider, SystemChannelTypeConstants.SYSTEM_CHANNEL_LOW_BATTERY);
         SYSTEM_CHANNEL_BATTERY_LEVEL = getChannel(provider, SystemChannelTypeConstants.SYSTEM_CHANNEL_BATTERY_LEVEL);
         SYSTEM_TRIGGER = getChannel(provider, SystemChannelTypeConstants.SYSTEM_TRIGGER);

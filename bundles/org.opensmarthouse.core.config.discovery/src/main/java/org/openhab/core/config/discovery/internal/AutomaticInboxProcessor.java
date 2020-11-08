@@ -120,7 +120,7 @@ public class AutomaticInboxProcessor extends AbstractTypedEventSubscriber<ThingS
     }
 
     @Activate
-    protected void activate(@Nullable Map<String, @Nullable Object> properties) {
+    protected void activate(@Nullable Map<String, Object> properties) {
         thingRegistry.addRegistryChangeListener(this);
         inbox.addInboxListener(this);
 
@@ -128,7 +128,7 @@ public class AutomaticInboxProcessor extends AbstractTypedEventSubscriber<ThingS
     }
 
     @Modified
-    protected void modified(@Nullable Map<String, @Nullable Object> properties) {
+    protected void modified(@Nullable Map<String, Object> properties) {
         if (properties != null) {
             Object value = properties.get(AUTO_IGNORE_CONFIG_PROPERTY);
             autoIgnore = value == null || !"false".equals(value.toString());
