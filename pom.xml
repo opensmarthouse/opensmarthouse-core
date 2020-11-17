@@ -71,6 +71,7 @@
     <swagger.version>2.1.0</swagger.version>
     <netty.version>4.1.42.Final</netty.version>
 
+    <eea.version>2.2.1</eea.version>
     <sat.version>0.10.0</sat.version>
 
     <!-- xtext / emf / core -->

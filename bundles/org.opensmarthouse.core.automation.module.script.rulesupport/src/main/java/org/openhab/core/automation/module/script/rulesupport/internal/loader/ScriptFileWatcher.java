@@ -32,6 +32,7 @@ import java.util.Arrays;
 import java.util.Comparator;
 import java.util.HashSet;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Set;
 import java.util.SortedSet;
 import java.util.TreeSet;
@@ -282,7 +283,7 @@ public class ScriptFileWatcher extends AbstractWatchService {
             }
 
             for (String key : newlySupported) {
-                reimportUrls.addAll(urlsByScriptExtension.remove(key));
+                reimportUrls.addAll(Objects.requireNonNullElse(urlsByScriptExtension.remove(key), Set.of()));
             }
         }
 
