@@ -35,6 +35,7 @@ import org.openhab.core.items.ItemBuilderFactory;
 import org.openhab.core.items.ItemFactory;
 import org.openhab.core.items.ItemProvider;
 import org.openhab.core.items.ItemRegistry;
+import org.openhab.core.items.ItemUtil;
 import org.openhab.core.items.ManagedItemProvider;
 import org.openhab.core.items.dto.GroupFunctionDTO;
 import org.openhab.core.items.dto.ItemDTOMapper;
@@ -95,6 +96,16 @@ public class StorageItemProvider extends AbstractManagedProvider<Item, String, S
         this.itemBuilderFactory = itemBuilderFactory;
     }
 
+    @Override
+    public @Nullable Item remove(String key) {
+        Item item = get(key);
+        if (item instanceof GroupItem) {
+            removeGroupNameFromMembers((GroupItem) item);
+        }
+
+        return super.remove(key);
+    }
+
     /**
      * Removes an item and its member if recursive flag is set to true.
      *
@@ -138,6 +149,16 @@ public class StorageItemProvider extends AbstractManagedProvider<Item, String, S
         return memberNames;
     }
 
+    private Set<Item> getMembers(GroupItem groupItem, Collection<Item> allItems) {
+        Set<Item> members = new HashSet<>();
+        for (Item item : allItems) {
+            if (item.getGroupNames().contains(groupItem.getName())) {
+                members.add(item);
+            }
+        }
+        return members;
+    }
+
     private @Nullable Item createItem(String itemType, String itemName) {
         try {
             Item item = itemBuilderFactory.newItemBuilder(itemType, itemName).build();
@@ -145,6 +166,16 @@ public class StorageItemProvider extends AbstractManagedProvider<Item, String, S
         } catch (IllegalStateException e) {
             logger.debug("Couldn't create item '{}' of type '{}'", itemName, itemType);
             return null;
+        }
+    }
+
+    private void removeGroupNameFromMembers(GroupItem groupItem) {
+        Set<Item> members = getMembers(groupItem, getAll());
+        for (Item member : members) {
+            if (member instanceof GenericItem) {
+                ((GenericItem) member).removeGroupName(groupItem.getUID());
+                update(member);
+            }
         }
     }
 
