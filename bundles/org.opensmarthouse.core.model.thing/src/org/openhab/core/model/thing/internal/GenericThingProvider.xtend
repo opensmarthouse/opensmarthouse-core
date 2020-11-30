@@ -73,7 +73,7 @@ import org.openhab.core.thing.binding.builder.ChannelBuilder
  * @author Markus Rathgeb - Add locale provider support
  */
 @Component(immediate=true, service=ThingProvider)
-class GenericThingProvider extends AbstractProvider<Thing> implements ThingProvider, ModelRepositoryChangeListener, ReadyService.ReadyTracker {
+class GenericThingProvider extends AbstractProviderLazyNullness<Thing> implements ThingProvider, ModelRepositoryChangeListener, ReadyService.ReadyTracker {
 
     private static final String XML_THING_TYPE = "esh.xmlThingTypes";
 
