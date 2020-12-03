@@ -32,6 +32,7 @@ import org.mockito.Mock;
 import org.openhab.core.events.Event;
 import org.openhab.core.events.EventPublisher;
 import org.openhab.core.items.GenericItem;
+import org.openhab.core.items.GroupItem;
 import org.openhab.core.items.MetadataRegistry;
 import org.openhab.core.items.events.ItemCommandEvent;
 import org.openhab.core.items.events.ItemEventFactory;
@@ -69,6 +70,8 @@ public class AutoUpdateManagerTest {
     private static final ChannelUID CHANNEL_UID_HANDLER_MISSING = new ChannelUID(THING_UID_HANDLER_MISSING, "channel1");
     private ItemCommandEvent event;
     private GenericItem item;
+    private ItemCommandEvent groupEvent;
+    private GroupItem groupItem;
 
     private @Mock ChannelTypeRegistry channelTypeRegistryMock;
     private @Mock EventPublisher eventPublisherMock;
@@ -90,6 +93,9 @@ public class AutoUpdateManagerTest {
         event = ItemEventFactory.createCommandEvent(ITEM_NAME, new StringType("AFTER"));
         item = new StringItem(ITEM_NAME);
         item.setState(new StringType("BEFORE"));
+        groupEvent = ItemEventFactory.createCommandEvent("groupTest", new StringType("AFTER"));
+        groupItem = new GroupItem("groupTest", new StringItem("test"));
+        groupItem.setState(new StringType("BEFORE"));
 
         when(iclRegistryMock.getLinks(eq(ITEM_NAME))).then(answer -> links);
 
@@ -346,5 +352,14 @@ public class AutoUpdateManagerTest {
 
         assertPredictionEvent("AFTER", null);
         assertStateEvent("AFTER", AutoUpdateManager.EVENT_SOURCE_OPTIMISTIC); // no?
+    }
+
+    @Test
+    public void testAutoUpdateDisabledForGroupItems() {
+        groupItem.addMember(item);
+        aum.receiveCommand(groupEvent, groupItem);
+        groupItem.removeMember(item);
+
+        assertNothingHappened();
     }
 }
