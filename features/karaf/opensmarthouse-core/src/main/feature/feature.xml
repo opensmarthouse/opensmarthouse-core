@@ -334,6 +334,10 @@
         <bundle>mvn:org.opensmarthouse.core.bundles/org.opensmarthouse.core.automation.rest/${project.version}</bundle>
     </feature>
 
+    <feature name="opensmarthouse-core-cache" version="${project.version}">
+        <bundle>mvn:org.opensmarthouse.core.bundles/org.opensmarthouse.core.cache/${project.version}</bundle>
+    </feature>
+
     <feature name="opensmarthouse-core-config" version="${project.version}">
         <feature>opensmarthouse-tp-gson</feature>
         <feature>opensmarthouse-core-common</feature>
@@ -406,6 +410,7 @@
 
     <feature name="opensmarthouse-core-thing" description="Thing API" version="${project.version}">
         <feature>opensmarthouse-core-common</feature>
+        <feature>opensmarthouse-core-cache</feature>
         <feature>opensmarthouse-core-registry</feature>
         <feature>opensmarthouse-core-config</feature>
         <feature>opensmarthouse-core-item</feature>
