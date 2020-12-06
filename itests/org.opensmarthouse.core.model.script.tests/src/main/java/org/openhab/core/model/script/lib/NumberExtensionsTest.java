@@ -46,8 +46,8 @@ public class NumberExtensionsTest {
     private static final QuantityType<Length> Q_LENGTH_1_M = new QuantityType<>("1 m");
     private static final QuantityType<Length> Q_LENGTH_2_CM = new QuantityType<>("2 cm");
 
-    private static final QuantityType<Dimensionless> Q_ONE_1 = new QuantityType<>(1, SmartHomeUnits.ONE);
-    private static final QuantityType<Dimensionless> Q_ONE_2 = new QuantityType<>(2, SmartHomeUnits.ONE);
+    private static final QuantityType<Dimensionless> Q_ONE_1 = new QuantityType<>(1, Units.ONE);
+    private static final QuantityType<Dimensionless> Q_ONE_2 = new QuantityType<>(2, Units.ONE);
 
     @Test
     public void operatorPlusNumberNumber() {

@@ -33,14 +33,13 @@ import org.openhab.core.library.dimension.Density;
 import org.openhab.core.library.dimension.Intensity;
 
 import tec.uom.se.quantity.Quantities;
-import tec.uom.se.unit.Units;
 
 /**
- * Test for the framework defined {@link SmartHomeUnits}.
+ * Test for the framework defined {@link Units}.
  *
  * @author Henning Treu - Initial contribution
  */
-public class SmartHomeUnitsTest {
+public class UnitsTest {
 
     private static final double DEFAULT_ERROR = 0.0000000000000001d;
 
@@ -69,7 +68,7 @@ public class SmartHomeUnitsTest {
 
     @Test
     public void testmmHg2PascalConversion() {
-        Quantity<Pressure> mmHg = Quantities.getQuantity(BigDecimal.ONE, SmartHomeUnits.MILLIMETRE_OF_MERCURY);
+        Quantity<Pressure> mmHg = Quantities.getQuantity(BigDecimal.ONE, Units.MILLIMETRE_OF_MERCURY);
 
         assertThat(mmHg.to(SIUnits.PASCAL), is(Quantities.getQuantity(new BigDecimal("133.322368"), SIUnits.PASCAL)));
         assertThat(mmHg.to(MetricPrefix.HECTO(SIUnits.PASCAL)),
@@ -78,16 +77,16 @@ public class SmartHomeUnitsTest {
 
     @Test
     public void testMmHgUnitSymbol() {
-        assertThat(SmartHomeUnits.MILLIMETRE_OF_MERCURY.getSymbol(), is("mmHg"));
-        assertThat(SmartHomeUnits.MILLIMETRE_OF_MERCURY.toString(), is("mmHg"));
+        assertThat(Units.MILLIMETRE_OF_MERCURY.getSymbol(), is("mmHg"));
+        assertThat(Units.MILLIMETRE_OF_MERCURY.toString(), is("mmHg"));
     }
 
     @Test
     public void testPascal2mmHgConversion() {
         Quantity<Pressure> pascal = Quantities.getQuantity(new BigDecimal("133.322368"), SIUnits.PASCAL);
 
-        assertThat(pascal.to(SmartHomeUnits.MILLIMETRE_OF_MERCURY),
-                is(Quantities.getQuantity(BigDecimal.ONE, SmartHomeUnits.MILLIMETRE_OF_MERCURY)));
+        assertThat(pascal.to(Units.MILLIMETRE_OF_MERCURY),
+                is(Quantities.getQuantity(BigDecimal.ONE, Units.MILLIMETRE_OF_MERCURY)));
     }
 
     @Test
@@ -105,7 +104,7 @@ public class SmartHomeUnitsTest {
 
     @Test
     public void testKelvin2Fahrenheit() {
-        Quantity<Temperature> kelvin = Quantities.getQuantity(BigDecimal.ZERO, SmartHomeUnits.KELVIN);
+        Quantity<Temperature> kelvin = Quantities.getQuantity(BigDecimal.ZERO, Units.KELVIN);
 
         assertThat(kelvin.to(ImperialUnits.FAHRENHEIT),
                 is(Quantities.getQuantity(new BigDecimal("-459.67"), ImperialUnits.FAHRENHEIT)));
@@ -113,7 +112,7 @@ public class SmartHomeUnitsTest {
 
     @Test
     public void testKelvin2Fahrenheit2() {
-        Quantity<Temperature> kelvin = Quantities.getQuantity(new BigDecimal("300"), SmartHomeUnits.KELVIN);
+        Quantity<Temperature> kelvin = Quantities.getQuantity(new BigDecimal("300"), Units.KELVIN);
 
         assertThat(kelvin.to(ImperialUnits.FAHRENHEIT),
                 is(Quantities.getQuantity(new BigDecimal("80.33"), ImperialUnits.FAHRENHEIT)));
@@ -123,8 +122,8 @@ public class SmartHomeUnitsTest {
     public void testFahrenheit2Kelvin() {
         Quantity<Temperature> fahrenheit = Quantities.getQuantity(new BigDecimal("100"), ImperialUnits.FAHRENHEIT);
 
-        Quantity<Temperature> kelvin = fahrenheit.to(SmartHomeUnits.KELVIN);
-        assertThat(kelvin.getUnit(), is(SmartHomeUnits.KELVIN));
+        Quantity<Temperature> kelvin = fahrenheit.to(Units.KELVIN);
+        assertThat(kelvin.getUnit(), is(Units.KELVIN));
         assertThat(kelvin.getValue().doubleValue(), is(closeTo(310.92777777777777778d, DEFAULT_ERROR)));
     }
 
@@ -150,14 +149,14 @@ public class SmartHomeUnitsTest {
     public void testKmh2Knot() {
         Quantity<Speed> kmh = Quantities.getQuantity(new BigDecimal("1.852"), SIUnits.KILOMETRE_PER_HOUR);
 
-        Quantity<Speed> knot = kmh.to(SmartHomeUnits.KNOT);
-        assertThat(knot.getUnit(), is(SmartHomeUnits.KNOT));
+        Quantity<Speed> knot = kmh.to(Units.KNOT);
+        assertThat(knot.getUnit(), is(Units.KNOT));
         assertThat(knot.getValue().doubleValue(), is(closeTo(1.000, DEFAULT_ERROR)));
     }
 
     @Test
     public void testKnot2Kmh() {
-        Quantity<Speed> knot = Quantities.getQuantity(BigDecimal.TEN, SmartHomeUnits.KNOT);
+        Quantity<Speed> knot = Quantities.getQuantity(BigDecimal.TEN, Units.KNOT);
 
         Quantity<Speed> kmh = knot.to(SIUnits.KILOMETRE_PER_HOUR);
         assertThat(kmh.getUnit(), is(SIUnits.KILOMETRE_PER_HOUR));
@@ -166,26 +165,26 @@ public class SmartHomeUnitsTest {
 
     @Test
     public void testKnotUnitSymbol() {
-        assertThat(SmartHomeUnits.KNOT.getSymbol(), is("kn"));
-        assertThat(SmartHomeUnits.KNOT.toString(), is("kn"));
+        assertThat(Units.KNOT.getSymbol(), is("kn"));
+        assertThat(Units.KNOT.toString(), is("kn"));
     }
 
     @Test
     public void testVarUnitSymbol() {
-        assertThat(SmartHomeUnits.VAR.getSymbol(), is("var"));
-        assertThat(SmartHomeUnits.VAR.toString(), is("var"));
-        assertThat(SmartHomeUnits.VAR_HOUR.toString(), is("varh"));
+        assertThat(Units.VAR.getSymbol(), is("var"));
+        assertThat(Units.VAR.toString(), is("var"));
+        assertThat(Units.VAR_HOUR.toString(), is("varh"));
     }
 
     @Test
     public void testKVarUnitSymbol() {
-        assertThat(SmartHomeUnits.KILOVAR.toString(), is("kvar"));
-        assertThat(SmartHomeUnits.KILOVAR_HOUR.toString(), is("kvarh"));
+        assertThat(Units.KILOVAR.toString(), is("kvar"));
+        assertThat(Units.KILOVAR_HOUR.toString(), is("kvarh"));
 
-        Quantity<Power> kvar = Quantities.getQuantity(BigDecimal.TEN, MetricPrefix.KILO(SmartHomeUnits.VAR));
+        Quantity<Power> kvar = Quantities.getQuantity(BigDecimal.TEN, MetricPrefix.KILO(Units.VAR));
         assertThat(kvar.getUnit().toString(), is("kvar"));
 
-        Quantity<Energy> kvarh = Quantities.getQuantity(BigDecimal.TEN, MetricPrefix.KILO(SmartHomeUnits.VAR_HOUR));
+        Quantity<Energy> kvarh = Quantities.getQuantity(BigDecimal.TEN, MetricPrefix.KILO(Units.VAR_HOUR));
         assertThat(kvarh.getUnit().toString(), is("kvarh"));
     }
 
@@ -196,15 +195,14 @@ public class SmartHomeUnitsTest {
 
     @Test
     public void testVoltAmpereUnitSymbol() {
-        assertThat(SmartHomeUnits.VOLT_AMPERE.toString(), is("VA"));
-        assertThat(SmartHomeUnits.VOLT_AMPERE.getSymbol(), is("VA"));
-        assertThat(SmartHomeUnits.VOLT_AMPERE_HOUR.toString(), is("VAh"));
+        assertThat(Units.VOLT_AMPERE.toString(), is("VA"));
+        assertThat(Units.VOLT_AMPERE.getSymbol(), is("VA"));
+        assertThat(Units.VOLT_AMPERE_HOUR.toString(), is("VAh"));
 
-        Quantity<Power> kVA = Quantities.getQuantity(BigDecimal.TEN, MetricPrefix.KILO(SmartHomeUnits.VOLT_AMPERE));
+        Quantity<Power> kVA = Quantities.getQuantity(BigDecimal.TEN, MetricPrefix.KILO(Units.VOLT_AMPERE));
         assertThat(kVA.getUnit().toString(), is("kVA"));
 
-        Quantity<Energy> kVAh = Quantities.getQuantity(BigDecimal.TEN,
-                MetricPrefix.KILO(SmartHomeUnits.VOLT_AMPERE_HOUR));
+        Quantity<Energy> kVAh = Quantities.getQuantity(BigDecimal.TEN, MetricPrefix.KILO(Units.VOLT_AMPERE_HOUR));
         assertThat(kVAh.getUnit().toString(), is("kVAh"));
     }
 
@@ -269,10 +267,10 @@ public class SmartHomeUnitsTest {
 
     @Test
     public void testOneUnitSymbol() {
-        assertThat(SmartHomeUnits.ONE.getSymbol(), is(""));
+        assertThat(Units.ONE.getSymbol(), is(""));
 
-        Quantity<Dimensionless> one1 = Quantities.getQuantity(BigDecimal.ONE, SmartHomeUnits.ONE);
-        Quantity<Dimensionless> one2 = Quantities.getQuantity(BigDecimal.ONE, SmartHomeUnits.ONE);
+        Quantity<Dimensionless> one1 = Quantities.getQuantity(BigDecimal.ONE, Units.ONE);
+        Quantity<Dimensionless> one2 = Quantities.getQuantity(BigDecimal.ONE, Units.ONE);
 
         assertThat(one1.add(one2).toString(), is("2 one"));
     }
@@ -293,27 +291,27 @@ public class SmartHomeUnitsTest {
     public void testDobsonUnits() {
         // https://en.wikipedia.org/wiki/Dobson_unit
         QType<ArealDensity> oneDU = new QType<>("1 DU");
-        QType<ArealDensity> mmolpsq = (QType<ArealDensity>) oneDU.toUnit(MetricPrefix.MILLI(Units.MOLE).multiply(Units.METRE.pow(-2)));
+        QType<?> mmolpsq = oneDU.toUnit(MetricPrefix.MILLI(Units.MOLE).multiply(tec.uom.se.unit.Units.METRE.pow(-2)));
         assertThat(mmolpsq.doubleValue(), is(closeTo(0.4462d, DEFAULT_ERROR)));
-        assertThat(mmolpsq.toUnit(SmartHomeUnits.DOBSON_UNIT).doubleValue(), is(closeTo(1, DEFAULT_ERROR)));
+        assertThat(mmolpsq.toUnit(Units.DOBSON_UNIT).doubleValue(), is(closeTo(1, DEFAULT_ERROR)));
     }
 
     @Test
     public void testBar2Pascal() {
-        Quantity<Pressure> bar = Quantities.getQuantity(BigDecimal.valueOf(1), SmartHomeUnits.BAR);
+        Quantity<Pressure> bar = Quantities.getQuantity(BigDecimal.valueOf(1), Units.BAR);
         assertThat(bar.to(SIUnits.PASCAL), is(Quantities.getQuantity(100000, SIUnits.PASCAL)));
     }
 
     @Test
     public void testMicrogramPerCubicMeter2KilogramPerCubicMeter() {
-        Quantity<Density> oneKgM3 = Quantities.getQuantity(BigDecimal.ONE, SmartHomeUnits.KILOGRAM_PER_CUBICMETRE);
-        Quantity<Density> converted = oneKgM3.to(SmartHomeUnits.MICROGRAM_PER_CUBICMETRE);
+        Quantity<Density> oneKgM3 = Quantities.getQuantity(BigDecimal.ONE, Units.KILOGRAM_PER_CUBICMETRE);
+        Quantity<Density> converted = oneKgM3.to(Units.MICROGRAM_PER_CUBICMETRE);
         assertThat(converted.getValue().doubleValue(), is(closeTo(1000000000, DEFAULT_ERROR)));
     }
 
     @Test
     public void testMicrogramPerCubicMeterUnitSymbol() {
-        assertThat(SmartHomeUnits.MICROGRAM_PER_CUBICMETRE.toString(), is("µg/m³"));
+        assertThat(Units.MICROGRAM_PER_CUBICMETRE.toString(), is("µg/m³"));
     }
 
     @Test
@@ -323,14 +321,14 @@ public class SmartHomeUnitsTest {
 
     @Test
     public void testMicrowattPerSquareCentimetre2KilogramPerSquareCentiMetre() {
-        Quantity<Intensity> oneMwCm2 = Quantities.getQuantity(BigDecimal.ONE, SmartHomeUnits.IRRADIANCE);
-        Quantity<Intensity> converted = oneMwCm2.to(SmartHomeUnits.MICROWATT_PER_SQUARE_CENTIMETRE);
+        Quantity<Intensity> oneMwCm2 = Quantities.getQuantity(BigDecimal.ONE, Units.IRRADIANCE);
+        Quantity<Intensity> converted = oneMwCm2.to(Units.MICROWATT_PER_SQUARE_CENTIMETRE);
         assertThat(converted.getValue().doubleValue(), is(100d));
     }
 
     @Test
     public void testMicrowattPerSquareCentimetreUnitSymbol() {
-        assertThat(SmartHomeUnits.MICROWATT_PER_SQUARE_CENTIMETRE.toString(), is("µW/cm²"));
+        assertThat(Units.MICROWATT_PER_SQUARE_CENTIMETRE.toString(), is("µW/cm²"));
     }
 
     @Test
@@ -341,8 +339,8 @@ public class SmartHomeUnitsTest {
     @Test
     public void testElectricCharge() {
         QType<?> oneAh = QType.valueOf("3600 C");
-        QType<?> converted = oneAh.toUnit(SmartHomeUnits.AMPERE_HOUR);
-        QType<?> converted2 = oneAh.toUnit(SmartHomeUnits.MILLIAMPERE_HOUR);
+        QType<?> converted = oneAh.toUnit(Units.AMPERE_HOUR);
+        QType<?> converted2 = oneAh.toUnit(Units.MILLIAMPERE_HOUR);
         assertThat(converted.doubleValue(), is(closeTo(1.00, DEFAULT_ERROR)));
         assertEquals("1000 mAh", converted2.toString());
     }
