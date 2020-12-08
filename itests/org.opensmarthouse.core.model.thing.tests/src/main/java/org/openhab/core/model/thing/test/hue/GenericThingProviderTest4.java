@@ -150,7 +150,7 @@ public class GenericThingProviderTest4 extends JavaOSGiTest {
     private void removeReadyMarker() {
         waitForAssert(() -> {
             // wait for the XML processing to be finished, then remove the ready marker again
-            ReadyMarker marker = new ReadyMarker("esh.xmlThingTypes", bundle.getSymbolicName());
+            ReadyMarker marker = new ReadyMarker("openhab.xmlThingTypes", bundle.getSymbolicName());
             assertThat(readyService.isReady(marker), is(true));
             readyService.unmarkReady(marker);
         });
@@ -196,7 +196,7 @@ public class GenericThingProviderTest4 extends JavaOSGiTest {
     private void finishLoading() {
         finished = true;
         assertThat(bridgeInitializeCounter, is(0));
-        readyService.markReady(new ReadyMarker("esh.xmlThingTypes", bundle.getSymbolicName()));
+        readyService.markReady(new ReadyMarker("openhab.xmlThingTypes", bundle.getSymbolicName()));
     }
 
     private void unload() {

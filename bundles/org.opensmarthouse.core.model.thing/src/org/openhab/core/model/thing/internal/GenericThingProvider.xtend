@@ -75,7 +75,7 @@ import org.openhab.core.thing.binding.builder.ChannelBuilder
 @Component(immediate=true, service=ThingProvider)
 class GenericThingProvider extends AbstractProviderLazyNullness<Thing> implements ThingProvider, ModelRepositoryChangeListener, ReadyService.ReadyTracker {
 
-    private static final String XML_THING_TYPE = "esh.xmlThingTypes";
+    private static final String XML_THING_TYPE = "openhab.xmlThingTypes";
 
     private LocaleProvider localeProvider
 

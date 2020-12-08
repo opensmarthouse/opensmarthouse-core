@@ -166,7 +166,7 @@ public class ThingManagerOSGiJavaTest extends JavaOSGiTest {
             try {
                 assertThat(
                         bundleContext.getServiceReferences(ReadyMarker.class,
-                                "(esh.xmlThingTypes=" + bundleContext.getBundle().getSymbolicName() + ")"),
+                                "(openhab.xmlThingTypes=" + bundleContext.getBundle().getSymbolicName() + ")"),
                         is(notNullValue()));
             } catch (InvalidSyntaxException e) {
                 throw new RuntimeException(e);
