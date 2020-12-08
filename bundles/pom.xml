@@ -90,6 +90,7 @@
     <module>org.opensmarthouse.core.io.rest.ui</module>
     <module>org.opensmarthouse.core.io.rest.voice</module>
     <module>org.opensmarthouse.core.io.transport.mdns</module>
+    <module>org.opensmarthouse.core.io.transport.modbus</module>
     <module>org.opensmarthouse.core.io.transport.mqtt</module>
     <module>org.opensmarthouse.core.io.transport.serial</module>
     <module>org.opensmarthouse.core.io.transport.serial.console</module>
