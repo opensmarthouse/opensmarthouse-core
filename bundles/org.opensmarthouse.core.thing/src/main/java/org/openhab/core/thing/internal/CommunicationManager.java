@@ -75,6 +75,7 @@ import org.openhab.core.types.registry.TypeFactory;
 import org.openhab.core.types.util.UnitUtils;
 import org.osgi.service.component.annotations.Activate;
 import org.osgi.service.component.annotations.Component;
+import org.osgi.service.component.annotations.Deactivate;
 import org.osgi.service.component.annotations.Reference;
 import org.osgi.service.component.annotations.ReferenceCardinality;
 import org.osgi.service.component.annotations.ReferencePolicy;
@@ -136,6 +137,13 @@ public class CommunicationManager implements EventSubscriber, RegistryChangeList
         this.safeCaller = safeCaller;
         this.thingRegistry = thingRegistry;
         this.typeFactory = typeFactory;
+
+        itemChannelLinkRegistry.addRegistryChangeListener(this);
+    }
+
+    @Deactivate
+    public void deactivate(){
+        itemChannelLinkRegistry.removeRegistryChangeListener(this);
     }
 
     private final Set<ItemFactory> itemFactories = new CopyOnWriteArraySet<>();
@@ -180,6 +188,7 @@ public class CommunicationManager implements EventSubscriber, RegistryChangeList
         synchronized (profiles) {
             Profile profile = profiles.get(link.getUID());
             if (profile != null) {
+                logger.trace("using profile '{}' from cache", profile.getProfileTypeUID());
                 return profile;
             }
             ProfileTypeUID profileTypeUID = determineProfileTypeUID(link, item, thing);
@@ -562,11 +571,12 @@ public class CommunicationManager implements EventSubscriber, RegistryChangeList
 
     @Reference(cardinality = ReferenceCardinality.MULTIPLE, policy = ReferencePolicy.DYNAMIC)
     protected void addProfileFactory(ProfileFactory profileFactory) {
-        this.profileFactories.put(profileFactory, ConcurrentHashMap.newKeySet());
+        profileFactories.put(profileFactory, ConcurrentHashMap.newKeySet());
     }
 
+    @SuppressWarnings("null")
     protected void removeProfileFactory(ProfileFactory profileFactory) {
-        Set<String> links = this.profileFactories.remove(profileFactory);
+        Set<String> links = profileFactories.remove(profileFactory);
         synchronized (profiles) {
             links.forEach(link -> {
                 profiles.remove(link);
