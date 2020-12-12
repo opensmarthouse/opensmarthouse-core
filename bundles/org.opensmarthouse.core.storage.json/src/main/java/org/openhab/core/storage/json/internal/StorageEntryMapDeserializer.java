@@ -69,7 +69,7 @@ public class StorageEntryMapDeserializer implements JsonDeserializer<Map<String,
             throws JsonParseException {
         JsonObject obj = json.getAsJsonObject();
         if (!isOuterMap(obj)) {
-            throw new IllegalArgumentException("Object {} is not an outer map: " + obj);
+            throw new IllegalArgumentException("Object is not an outer map: " + obj);
         }
         return readOuterMap(obj, context);
     }
