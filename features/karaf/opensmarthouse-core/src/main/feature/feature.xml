@@ -457,6 +457,7 @@
     <feature name="opensmarthouse-core-io-http-auth" version="${project.version}">
         <feature dependency="true">opensmarthouse-tp-jax-rs</feature>
         <feature>opensmarthouse-core-io-http</feature>
+        <feature>opensmarthouse-core-i18n</feature>
         <feature>opensmarthouse-core-auth-jaas</feature>
         <bundle>mvn:org.opensmarthouse.core.bundles/org.opensmarthouse.core.io.http.auth/${project.version}</bundle>
     </feature>
