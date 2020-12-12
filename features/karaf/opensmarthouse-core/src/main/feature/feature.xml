@@ -218,6 +218,7 @@
     <feature name="opensmarthouse-core-service" description="Open SmartHouse Core: Service" version="${project.version}">
         <feature>opensmarthouse-core-common</feature>
         <feature>opensmarthouse-core-type</feature>
+        <feature>opensmarthouse-core-event</feature>
         <bundle>mvn:org.opensmarthouse.core.bundles/org.opensmarthouse.core.service/${project.version}</bundle>
     </feature>
 
@@ -245,6 +246,7 @@
     <feature name="opensmarthouse-core-registry" description="Open SmartHouse Core: Registry API and base types" version="${project.version}">
         <feature>opensmarthouse-core-event</feature>
         <feature>opensmarthouse-core-storage</feature>
+        <feature>opensmarthouse-core-service</feature>
         <bundle>mvn:org.opensmarthouse.core.bundles/org.opensmarthouse.core.registry/${project.version}</bundle>
     </feature>
 
@@ -436,7 +438,7 @@
     </feature>
 
     <feature name="opensmarthouse-core-io-monitor" version="${project.version}">
-        <feature>opensmarthouse-core-event</feature>
+        <feature>opensmarthouse-core-service</feature>
         <bundle>mvn:org.opensmarthouse.core.bundles/org.opensmarthouse.core.io.monitor/${project.version}</bundle>
     </feature>
 

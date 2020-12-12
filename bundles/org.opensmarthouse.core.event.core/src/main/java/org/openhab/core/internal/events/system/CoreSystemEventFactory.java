@@ -10,7 +10,7 @@
  *
  * SPDX-License-Identifier: EPL-2.0
  */
-package org.openhab.core.events.system;
+package org.openhab.core.internal.events.system;
 
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -20,20 +20,22 @@ import org.eclipse.jdt.annotation.Nullable;
 import org.openhab.core.events.AbstractEventFactory;
 import org.openhab.core.events.Event;
 import org.openhab.core.events.EventFactory;
+import org.openhab.core.events.system.StartLevelEventFactory;
+import org.openhab.core.events.system.StartlevelEvent;
 import org.osgi.service.component.annotations.Component;
 
 /**
  * Factory that creates system events.
  *
  * @author Kai Kreuzer - Initial contribution
+ * @author Łukasz Dywicki - Separated interface and implementation.
  */
-@Component(immediate = true, service = EventFactory.class)
-@NonNullByDefault
-public class SystemEventFactory extends AbstractEventFactory {
+@Component(immediate = true, service = {StartLevelEventFactory.class, EventFactory.class})
+public class CoreSystemEventFactory extends AbstractEventFactory implements StartLevelEventFactory {
 
     static final String SYSTEM_STARTLEVEL_TOPIC = "openhab/system/startlevel";
 
-    public SystemEventFactory() {
+    public CoreSystemEventFactory() {
         super(Stream.of(StartlevelEvent.TYPE).collect(Collectors.toSet()));
     }
 
@@ -43,49 +45,21 @@ public class SystemEventFactory extends AbstractEventFactory {
      * @param startlevel Startlevel of system
      * @return Created start level event.
      */
-    public static StartlevelEvent createStartlevelEvent(Integer startlevel) {
+    public StartlevelEvent createStartlevelEvent(Integer startlevel) {
         SystemEventPayloadBean bean = new SystemEventPayloadBean(startlevel);
-        String payload = serializePayload(bean);
-        return new StartlevelEvent(SYSTEM_STARTLEVEL_TOPIC, payload, null, startlevel);
+        String payload = AbstractEventFactory.serializePayload(bean);
+        return new StartlevelEvent(CoreSystemEventFactory.SYSTEM_STARTLEVEL_TOPIC, payload, null, startlevel);
     }
 
     @Override
-    protected Event createEventByType(String eventType, String topic, String payload, @Nullable String source)
-            throws Exception {
+    protected Event createEventByType(String eventType, String topic, String payload, String source) throws Exception {
         return createStartlevelEvent(topic, payload, source);
     }
 
-    /**
-     * Creates a startlevel event from a payload.
-     *
-     * @param topic Event topic
-     * @param source Event source
-     * @param payload Payload
-     * @return created startlevel event
-     */
-    public StartlevelEvent createStartlevelEvent(String topic, String payload, @Nullable String source) {
+    @Override
+    public StartlevelEvent createStartlevelEvent(String topic, String payload, String source) {
         SystemEventPayloadBean bean = deserializePayload(payload, SystemEventPayloadBean.class);
         return new StartlevelEvent(topic, payload, source, bean.getStartlevel());
     }
 
-    /**
-     * This is a java bean that is used to serialize/deserialize system event payload.
-     */
-    public static class SystemEventPayloadBean {
-        private @NonNullByDefault({}) Integer startlevel;
-
-        /**
-         * Default constructor for deserialization e.g. by Gson.
-         */
-        protected SystemEventPayloadBean() {
-        }
-
-        public SystemEventPayloadBean(Integer startlevel) {
-            this.startlevel = startlevel;
-        }
-
-        public Integer getStartlevel() {
-            return startlevel;
-        }
-    }
 }

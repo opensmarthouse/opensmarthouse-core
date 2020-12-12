@@ -37,7 +37,7 @@ public class StartlevelEvent extends AbstractEvent {
      * @param source the source
      * @param startlevel the system startlevel
      */
-    protected StartlevelEvent(String topic, String payload, @Nullable String source, Integer startlevel) {
+    public StartlevelEvent(String topic, String payload, @Nullable String source, Integer startlevel) {
         super(topic, payload, source);
         this.startlevel = startlevel;
     }

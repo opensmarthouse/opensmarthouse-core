@@ -20,7 +20,6 @@ import java.math.BigDecimal;
 import java.nio.charset.StandardCharsets;
 import java.util.Collection;
 import java.util.Iterator;
-import java.util.Set;
 
 import org.eclipse.jdt.annotation.NonNullByDefault;
 import org.eclipse.xtext.naming.QualifiedName;
