@@ -70,6 +70,7 @@ import org.openhab.core.thing.type.DynamicStateDescriptionProvider;
 import org.openhab.core.thing.type.ThingTypeBuilder;
 import org.openhab.core.types.Command;
 import org.openhab.core.types.StateDescription;
+import org.openhab.core.types.StateDescriptionFragment;
 import org.openhab.core.types.StateDescriptionFragmentBuilder;
 import org.openhab.core.types.StateOption;
 import org.openhab.core.common.osgi.BundleResolver;
@@ -115,16 +116,19 @@ public class ChannelStateDescriptionProviderOSGiTest extends JavaOSGiTest {
         thingHandlerFactory.activate(componentContext);
         registerService(thingHandlerFactory, ThingHandlerFactory.class.getName());
 
-        final StateDescription state = new StateDescription(BigDecimal.ZERO, BigDecimal.valueOf(100), BigDecimal.TEN,
-                "%d Peek", true, Collections.singletonList(new StateOption("SOUND", "My great sound.")));
+        final StateDescriptionFragment state = StateDescriptionFragmentBuilder.create().withMinimum(BigDecimal.ZERO)
+                .withMaximum(BigDecimal.valueOf(100)).withStep(BigDecimal.TEN).withPattern("%d Peek").withReadOnly(true)
+                .withOption(new StateOption("SOUND", "My great sound.")).build();
 
-        final StateDescription state2 = new StateDescription(BigDecimal.ZERO, BigDecimal.valueOf(256),
-                BigDecimal.valueOf(8), null, false, null);
+        final StateDescriptionFragment state2 = StateDescriptionFragmentBuilder.create().withMinimum(BigDecimal.ZERO)
+                .withMaximum(BigDecimal.valueOf(256)).withStep(BigDecimal.valueOf(8)).build();
 
-        final ChannelType channelType = new ChannelType(new ChannelTypeUID("hue:alarm"), false, CoreItemFactory.NUMBER,
-                " ", "", null, null, state, null);
-        final ChannelType channelType2 = new ChannelType(new ChannelTypeUID("hue:num"), false, CoreItemFactory.NUMBER,
-                " ", "", null, null, state2, null);
+        final ChannelType channelType = ChannelTypeBuilder
+                .state(new ChannelTypeUID("hue:alarm"), " ", CoreItemFactory.NUMBER).withStateDescriptionFragment(state)
+                .build();
+        final ChannelType channelType2 = ChannelTypeBuilder
+                .state(new ChannelTypeUID("hue:num"), " ", CoreItemFactory.NUMBER).withStateDescriptionFragment(state2)
+                .build();
         final ChannelType channelType3 = new ChannelType(new ChannelTypeUID("hue:info"), true, CoreItemFactory.STRING,
                 " ", "", null, null, (StateDescription) null, null);
         final ChannelType channelType4 = new ChannelType(new ChannelTypeUID("hue:color"), false, CoreItemFactory.COLOR,
@@ -133,8 +137,8 @@ public class ChannelStateDescriptionProviderOSGiTest extends JavaOSGiTest {
                 CoreItemFactory.DIMMER, "Brightness", "", "Light", null, (StateDescription) null, null);
         final ChannelType channelType6 = new ChannelType(new ChannelTypeUID("hue:switch"), false,
                 CoreItemFactory.SWITCH, "Switch", "", "Light", null, (StateDescription) null, null);
-        final ChannelType channelType7 = new ChannelType(CHANNEL_TYPE_7_UID, false, CoreItemFactory.NUMBER, " ", "",
-                "Light", null, state, null);
+        final ChannelType channelType7 = ChannelTypeBuilder.state(CHANNEL_TYPE_7_UID, " ", CoreItemFactory.NUMBER)
+                .withCategory("Light").withStateDescriptionFragment(state).build();
 
         List<ChannelType> channelTypes = new ArrayList<>();
         channelTypes.add(channelType);
