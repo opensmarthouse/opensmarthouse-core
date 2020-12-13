@@ -75,7 +75,7 @@ public class OpenSmartHouse {
      */
     public static String buildString() {
         Properties prop = new Properties();
-        Path versionFilePath = Paths.get(getUserDataFolder(), "etc", "version.properties");
+        Path versionFilePath = Paths.get("etc", "version.properties");
         try (FileInputStream fis = new FileInputStream(versionFilePath.toFile())) {
             prop.load(fis);
             String buildNo = prop.getProperty("build-no");
