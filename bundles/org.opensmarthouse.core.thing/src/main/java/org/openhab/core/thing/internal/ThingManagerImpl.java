@@ -431,7 +431,7 @@ public class ThingManagerImpl
             public void onReadyMarkerAdded(ReadyMarker readyMarker) {
                 startLevelSetterJob = scheduler.scheduleWithFixedDelay(() -> {
                     for (Thing t : things) {
-                        if (!ThingHandlerHelper.isHandlerInitialized(t)) {
+                        if (!ThingHandlerHelper.isHandlerInitialized(t) && t.isEnabled()) {
                             return;
                         }
                     }
