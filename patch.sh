@@ -23,6 +23,14 @@ commit=$(sed '1q;d' $1)
 commit=${commit:5}
 commit=${commit:0:40}
 
+# author
+author=$(sed '2q;d' $1)
+author=${author:5}
+
+# date
+commitDate=$(sed '3q;d' $1)
+commitDate=${commitDate:5}
+
 # Create a new branch
 if [ $check == 0 ]
 then
@@ -285,5 +293,18 @@ rm $1.original.diff
 mv $1.tmp $1
 
 echo --- Patch Information ---
-echo $title
-echo $commit
+read -p "Automatically add files and create commit? [y/n]" prompt
+if [[ $prompt == "y" || $prompt == "Y" || $prompt == "yes" || $prompt == "Yes" ]]; then
+  git status|grep -i "modified:\|added:\|deleted:"|grep -v .gitignore|grep -v patch.sh|tr -s '\t' ' '|cut -d ' ' -f 3|xargs git add
+  echo "Executing command: git commit --author \"$author\" --date \"$commitDate\" -s"
+  head -n 10 $1 >> .git/commit-msg.txt
+  echo "X-Backport-Id: $commit" >> .git/commit-msg.txt
+  git commit --author "$author" --date "$commitDate" -eF .git/commit-msg.txt -s && rm .git/commit-msg.txt
+  read -p "Remove $1? [y/n]" cleanup
+  if [[ $cleanup == "y" || $cleanup == "Y" || $cleanup == "yes" || $cleanup == "Yes" ]]; then
+    rm $1;
+  fi;
+else
+  echo $title
+  echo $commit
+fi;
