@@ -335,6 +335,7 @@
     </feature>
 
     <feature name="opensmarthouse-core-cache" version="${project.version}">
+        <feature>opensmarthouse-core</feature>
         <bundle>mvn:org.opensmarthouse.core.bundles/org.opensmarthouse.core.cache/${project.version}</bundle>
     </feature>
 
