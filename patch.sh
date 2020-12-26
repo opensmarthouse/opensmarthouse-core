@@ -297,7 +297,9 @@ read -p "Automatically add files and create commit? [y/n]" prompt
 if [[ $prompt == "y" || $prompt == "Y" || $prompt == "yes" || $prompt == "Yes" ]]; then
   git status|grep -i "modified:\|added:\|deleted:"|grep -v .gitignore|grep -v patch.sh|tr -s '\t' ' '|cut -d ' ' -f 3|xargs git add
   echo "Executing command: git commit --author \"$author\" --date \"$commitDate\" -s"
-  head -n 10 $1 >> .git/commit-msg.txt
+  # get header from Subject to beginning of diff section, then remove '---' separator line and append OH commit id
+  sed -n "/^Subject: /,/---/p" $1 >> .git/commit-msg.txt
+  sed -i '$ d' .git/commit-msg.txt
   echo "X-Backport-Id: $commit" >> .git/commit-msg.txt
   git commit --author "$author" --date "$commitDate" -eF .git/commit-msg.txt -s && rm .git/commit-msg.txt
   read -p "Remove $1? [y/n]" cleanup
