@@ -240,6 +240,7 @@ public class PersistenceExtensionsTest {
         assertEquals(OnOffType.ON, historicItem.getState());
     }
 
+    @Test
     public void testVarianceSince() {
         numberItem.setState(new DecimalType(3025));
 
@@ -266,6 +267,7 @@ public class PersistenceExtensionsTest {
         assertNull(variance);
     }
 
+    @Test
     public void testDeviationSince() {
         numberItem.setState(new DecimalType(3025));
 
