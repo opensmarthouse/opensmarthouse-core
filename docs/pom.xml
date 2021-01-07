@@ -12,7 +12,7 @@
          <plugin>
             <groupId>com.ruleoftech</groupId>
             <artifactId>markdown-page-generator-plugin</artifactId>
-            <version>2.2.2-SNAPSHOT</version>
+            <version>2.3.0</version>
             <executions>
                <execution>
                   <id>compile</id>
