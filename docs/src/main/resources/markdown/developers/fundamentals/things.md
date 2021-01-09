@@ -1,8 +1,8 @@
 ---
-title: Things
+# Things
 ---
 
-# Overview
+## Overview
 
 Things are the entities that can physically be added to a system and which can potentially provide many functionalities in one.
 It is important to note that Things do not have to be devices, but they can also represent a web service or any other manageable source of information and functionality.
@@ -38,6 +38,7 @@ As many Things can be automatically discovered, there are special mechanisms ava
 Each Thing has a status object, which helps to identify possible problems with the device or service.
 The following table provides an overview of the different statuses:
 
+
 | Status        | Description |
 |---------------|-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
 | UNINITIALIZED | This is the initial status of a Thing when it is added or the framework is being started. This status is also assigned if the initializing process failed or the binding is not available. Commands sent to Channels will not be processed.                                                                                                                                                                                                                                  |
@@ -51,6 +52,7 @@ The following table provides an overview of the different statuses:
 The statuses UNINITIALIZED, INITIALIZING and REMOVING are set by the framework, whereas the statuses UNKNOWN, ONLINE and OFFLINE are assigned from a binding.
 
 Additionally, the REMOVED status is set by the binding to indicate that the removal process has been completed, i.e. the Thing must have been in REMOVING status before.
+
 
 ### Status Transitions
 
