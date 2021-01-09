@@ -1,8 +1,6 @@
----
-title: Commands, States and Items
----
+# Commands, States and Items
 
-# Type System Overview
+## Type System Overview
 
 _OpenSmartHouse_ has a flexible type system that needs to be understood by developers before heading in to develop core or extension bundles. Here we will try to explain the system, how it is built and used, and how the developer can interact with it.
 
@@ -25,9 +23,9 @@ _OpenSmartHouse_ uses a type system that is externally similar to that defined b
 
 _Eclipse SmartHome_ defined a system which makes extensive use of interfaces - each type implementing multiple interfaces with a circular hierarchy, and potentially deriving from a different base class (eg Number) or `enum`. This makes it impossible to build a type system which derives from an abstract class from which base functionality is provided.
 
-_OpenSmartHouse_ addresses this with a simplified type system where the multiple implementations of interfaces is reduced to a more manageable level, and an `AbstractBaseType` is introduced to support core functionality within the framework such as improved security and auxillary command or state information.  The following diagram provides a comparisson of the two approaches -:
+_OpenSmartHouse_ addresses this with a simplified type system where the multiple implementations of interfaces is reduced to a more manageable level, and an `AbstractBaseType` is introduced to support core functionality within the framework such as improved security and auxillary command or state information.  The following diagram provides a comparison of the two approaches -:
 
-![](type_system_comparisson.png)
+![](type_system_comparison.png)
 
 In most instances, there is no change required, however there are two key changes that could introduce incompatabilities.
 

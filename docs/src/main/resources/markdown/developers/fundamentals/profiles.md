@@ -1,8 +1,6 @@
----
-title: Profiles
----
+# Profiles
 
-# Overview
+## Overview
 
 The communication between the framework and the Thing handlers is managed by the "Communication Manager", which in turn uses "Profiles"  to determined what exactly needs to be done. 
 This provides some flexibility to influence these communication paths.

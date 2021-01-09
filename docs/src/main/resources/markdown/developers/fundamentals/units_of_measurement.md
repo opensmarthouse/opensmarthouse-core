@@ -1,8 +1,6 @@
----
-title: Units Of Measurement
----
+# Units Of Measurement
 
-# Overview
+## Overview
 
 To express measured values in a scientific correct unit the framework supports units of measurement.
 By using quantified decimal values in state updates and commands, the framework is able to automatically convert values to a desired unit which may be defined by the system locale or on a per-use-basis. 
@@ -77,122 +75,132 @@ The `org.eclipse.smarthome.core.library.dimension` and `javax.measure.quantity` 
 All units which are currently supported by default are listed in the tables below.
 
 
-Imperial:
+#### Imperial:
 
-| Type        | Unit            | Symbol |
-|-------------|-----------------|--------|
-| Pressure    | Inch of Mercury | inHg   |
-| Temperature | Fahrenheit      | °F     |
-| Speed       | Miles per Hour  | mph    |
-| Length      | Inch            | in     |
-| Length      | Foot            | ft     |
-| Length      | Yard            | yd     |
-| Length      | Chain           | ch     |
-| Length      | Furlong         | fur    |
-| Length      | Mile            | mi     |
-| Length      | League          | lea    |
+<table>
+	<thead>
+		<tr><th>Type</th><th>Unit</th><th>Symbol</th></tr>
+	</thead>
+	<tbody>
+		<tr valign="top"><td>Pressure</td><td>Inch of Mercury</td><td>inHg</td></tr>
+		<tr valign="top"><td>Temperature</td><td>Degree Fahrenheit</td><td>°F</td></tr>
+		<tr valign="top"><td>Speed</td><td>Miles per Hour</td><td>mph</td></tr>
+		<tr valign="top"><td rowspan="7">Length</td><td>Inch</td><td>in</td>
+		<tr valign="top"><td>Foot</td><td>ft</td>
+		<tr valign="top"><td>Yard</td><td>yd</td>
+		<tr valign="top"><td>Chain</td><td>ch</td>
+		<tr valign="top"><td>Furlong</td><td>fur</td>
+		<tr valign="top"><td>Mile</td><td>mi</td>
+		<tr valign="top"><td>League</td><td>lea</td></tr>
+	</tbody>
+</table>
 
-SI:
+#### SI:
 
-| Type                   | Unit                             | Symbol |
-|------------------------|----------------------------------|--------|
-| Acceleration           | Metre per Second squared         | m/s²   |
-| Acceleration           | Standard Gravity                 | ɡₙ     |
-| AmountOfSubstance      | Mole                             | mol    |
-| AmountOfSubstance      | Deutscher Härtegrad              | °dH    |
-| Angle                  | Radian                           | rad    |
-| Angle                  | Degree                           | °      |
-| Angle                  | Minute Angle                     | '      |
-| Angle                  | Second Angle                     | ''     |
-| Area                   | Square Metre                     | m²     |
-| ArealDensity           | Dobson Unit                      | DU     |
-| CatalyticActivity      | Katal                            | kat    |
-| DataAmount             | Bit                              | bit    |
-| DataAmount             | Megabit                          | Mbit   |
-| DataAmount             | Kilobit                          | kbit   |
-| DataAmount             | Gigabit                          | Gbit   |
-| DataAmount             | Terabit                          | Tbit   |
-| DataAmount             | Byte                             | B      |
-| DataAmount             | Octet                            | o      |
-| DataAmount             | Kibioctet                        | Kio    |
-| DataAmount             | Mebioctet                        | Mio    |
-| DataAmount             | Gibioctet                        | Gio    |
-| DataTransferRate       | Bit per Second                   | bit/s  |
-| DataTransferRate       | Kilobit per Second               | kbit/s |
-| DataTransferRate       | Megabit per Second               | Mbit/s | 
-| DataTransferRate       | Gigabit per Second               | Gbit/s | 
-| DataTransferRate       | Terabit per Second               | Tbit/s | 
-| Density                | Microgram per cubic Metre        | µg/m³  |
-| Density                | Kilogram per cubic Metre         | kg/m³  |
-| Dimensionless          | Percent                          | %      |
-| Dimensionless          | Parts per Million                | ppm    |
-| Dimensionless          | Decibel                          | dB     |
-| ElectricPotential      | Volt                             | V      |
-| ElectricCapacitance    | Farad                            | F      |
-| ElectricCharge         | Coulomb                          | C      |
-| ElectricCharge         | Ampere Hour                      | Ah     |
-| ElectricCharge         | Milliampere Hour                 | mAh    |
-| ElectricConductance    | Siemens                          | S      |
-| ElectricConductivity   | Siemens per Metre                | S/m    |
-| ElectricCurrent        | Ampere                           | A      |
-| ElectricInductance     | Henry                            | H      |
-| ElectricResistance     | Ohm                              | Ω      |
-| Energy                 | Joule                            | J      |
-| Energy                 | Watt Second                      | Ws     |
-| Energy                 | Watt Hour                        | Wh     |
-| Energy                 | Kilowatt Hour                    | kWh    |
-| Energy                 | Megawatt Hour                    | MWh    |
-| Energy                 | Volt-Ampere Hour                 | VAh    |
-| Energy                 | Volt-Ampere Reactive Hour        | varh   |
-| Energy                 | Kilovar Hour                     | kvarh  |
-| Force                  | Newton                           | N      |
-| Frequency              | Hertz                            | Hz     |
-| Illuminance            | Lux                              | lx     |
-| Intensity              | Irradiance                       | W/m²   |
-| Intensity              | Microwatt per square Centimeter  | µW/cm² |
-| Length                 | Metre                            | m      |
-| Length                 | Kilometre                        | km     |
-| LuminousFlux           | Lumen                            | lm     |
-| LuminousIntensity      | Candela                          | cd     |
-| MagneticFlux           | Weber                            | Wb     |
-| MagneticFluxDensity    | Tesla                            | T      |
-| Mass                   | Kilogram                         | kg     |
-| Mass                   | Gram                             | g      |
-| Power                  | Watt                             | W      |
-| Power                  | Volt-Ampere                      | VA     |
-| Power                  | Volt-Ampere Reactive             | var    |
-| Power                  | Kilovar                          | kvar   |
-| Power                  | Decibel-Milliwatts               | dBm    |
-| Pressure               | Pascal                           | Pa     |
-| Pressure               | Hectopascal                      | hPa    |
-| Pressure               | Millimetre of Mercury            | mmHg   |
-| Pressure               | Bar                              | bar    |
-| Pressure               | Millibar                         | mbar   |
-| Radioactivity          | Becquerel                        | Bq     |
-| RadiationDoseAbsorbed  | Gray                             | Gy     |
-| RadiationDoseEffective | Sievert                          | Sv     |
-| SolidAngle             | Steradian                        | sr     |
-| Speed                  | Metre per Second                 | m/s    |
-| Speed                  | Millimetre per Hour              | mm/h   |
-| Speed                  | Kilometre per Hour               | km/h   |
-| Speed                  | Knot                             | kn     |
-| Temperature            | Kelvin                           | K      |
-| Temperature            | Celsius                          | °C     |
-| Time                   | Second                           | s      |
-| Time                   | Minute                           | min    |
-| Time                   | Hour                             | h      |
-| Time                   | Day                              | d      |
-| Time                   | Week                             | week   |
-| Time                   | Year                             | y      |
-| Volume                 | Litre                            | l      |
-| Volume                 | Cubic Metre                      | m³     |
-| VolumetricFlowRate     | Litre per Minute                 | l/min  |
-| VolumetricFlowRate     | Cubic Metre per Second           | m³/s   |
-| VolumetricFlowRate     | Cubic Metre per Minute           | m³/min |
-| VolumetricFlowRate     | Cubic Metre per Hour             | m³/h   |
-| VolumetricFlowRate     | Cubic Metre per Day              | m³/d   |
+<table>
+	<thead>
+		<tr><th>Type</th><th>Unit</th><th>Symbol</th></tr>
+	</thead>
+	<tbody>
+		<tr valign="top"><td rowspan="2">Acceleration</td><td>Metre per Second squared</td><td>m/s²</td></tr>
+		<tr valign="top"><td>Standard Gravity</td><td>ɡₙ</td></tr>
+		<tr valign="top"><td rowspan="2">AmountOfSubstance</td><td> Mole</td><td>mol</td></tr>
+		<tr valign="top"><td>Deutscher Härtegrad</td><td>°dH</td></tr>
+		<tr valign="top"><td rowspan="4">Angle</td><td>Radian</td><td>rad</td>
+		<tr valign="top"><td>Degree</td><td>°</td>
+		<tr valign="top"><td>Minute Angle</td><td>'</td>
+		<tr valign="top"><td>Second Angle</td><td>''</td>
+		<tr valign="top"><td>Area</td><td>Square Metre</td><td>m²</td></tr>
+		<tr valign="top"><td>ArealDensity</td><td>Dobson Unit</td><td>DU</td></tr>
+		<tr valign="top"><td>CatalyticActivity</td><td>Katal</td><td>kat</td></tr>
+		<tr valign="top"><td rowspan="10">DataAmount</td><td>Bit</td><td>bit</td></tr>
+		<tr valign="top"><td>Megabit</td><td>Mbit</td>
+		<tr valign="top"><td>Kilobit</td><td>kbit</td>
+		<tr valign="top"><td>Gigabit</td><td>Gbit</td></tr>
+		<tr valign="top"><td>Terabit</td><td>Tbit</td></tr>
+		<tr valign="top"><td>Byte</td><td>B</td>
+		<tr valign="top"><td>Octet</td><td>o</td>
+		<tr valign="top"><td>Kibioctet</td><td>Kio</td></tr>
+		<tr valign="top"><td>Mebioctet</td><td>Mio</td></tr>
+		<tr valign="top"><td>Gibioctet</td><td>Gio</td></tr>
+		<tr valign="top"><td rowspan="5">DataTransferRate</td><td>Bit per Second</td><td>bit/s</td></tr>
+		<tr valign="top"><td>Kilobit per Second</td><td>kbit/s</td></tr>
+		<tr valign="top"><td>Megabit per Second</td><td>Mbit/s</td></tr>
+		<tr valign="top"><td>Gigabit per Second</td><td>Gbit/s</td></tr>
+		<tr valign="top"><td>Terabit per Second </td><td>Tbit/s</td></tr>
+		<tr valign="top"><td rowspan="2">Density</td><td>Microgram per cubic Metre</td><td>µg/m³</td></tr>
+		<tr valign="top"><td>Kilogram per cubic Metre</td><td>kg/m³</td></tr>
+		<tr valign="top"><td rowspan="3">Dimensionless</td><td>Percent</td><td>%</td></tr>
+		<tr valign="top"><td>Parts per Million</td><td>ppm</td></tr>
+		<tr valign="top"><td>Decibel</td><td>dB</td></tr>
+		<tr valign="top"><td>ElectricPotential</td><td>Volt</td><td>V</td></tr>
+		<tr valign="top"><td>ElectricCapacitance</td><td>Farad</td><td>F</td></tr>
+		<tr valign="top"><td rowspan="3">ElectricCharge</td><td>Coulomb</td><td>C</td></tr>
+		<tr valign="top"><td>Ampere Hour</td><td>Ah</td></tr>
+		<tr valign="top"><td>Milliampere Hour</td><td>mAh</td></tr>
+		<tr valign="top"><td>ElectricConductance</td><td>Siemens</td><td>S</td></tr>
+		<tr valign="top"><td>ElectricConductivity</td><td>Siemens per Metre</td><td>S/m</td></tr>
+		<tr valign="top"><td>ElectricCurrent</td><td>Ampere</td><td>A</td></tr>
+		<tr valign="top"><td>ElectricInductance</td><td>Henry</td><td>H</td></tr>
+		<tr valign="top"><td>ElectricResistance</td><td>Ohm</td><td>Ω</td></tr>
+		<tr valign="top"><td rowspan="8">Energy</td><td>Joule</td><td>J</td></tr>
+		<tr valign="top"><td>Watt Second</td><td>Ws</td></tr>
+		<tr valign="top"><td>Watt Hour</td><td>Wh</td></tr>
+		<tr valign="top"><td>Kilowatt Hour</td><td>kWh</td></tr>
+		<tr valign="top"><td>Megawatt Hour</td><td>MWh</td></tr>
+		<tr valign="top"><td>Volt-Ampere Hour</td><td>VAh</td></tr>
+		<tr valign="top"><td>Volt-Ampere Reactive Hour</td><td>varh</td></tr>
+		<tr valign="top"><td>Kilovar Hour</td><td>kvarh</td></tr>
+		<tr valign="top"><td>Force</td><td>Newton</td><td>N</td></tr>
+		<tr valign="top"><td>Frequency</td><td>Hertz</td><td>Hz</td></tr>
+		<tr valign="top"><td>Illuminance</td><td>Lux</td><td>lx</td></tr>
+		<tr valign="top"><td rowspan="2">Intensity</td><td>Irradiance</td><td>W/m²</td></tr>
+		<tr valign="top"><td>Microwatt per square Centimeter</td><td>µW/cm²</td></tr>
+		<tr valign="top"><td rowspan="2">Length</td><td>Metre</td><td>m</td></tr>
+		<tr valign="top"><td>Kilometre</td><td>km</td></tr>
+		<tr valign="top"><td>LuminousFlux</td><td>Lumen</td><td>lm</td></tr>
+		<tr valign="top"><td>LuminousIntensity</td><td>Candela</td><td>cd</td></tr>
+		<tr valign="top"><td>MagneticFlux</td><td>Weber</td><td>Wb</td></tr>
+		<tr valign="top"><td>MagneticFluxDensity</td><td>Tesla</td><td>T</td></tr>
+		<tr valign="top"><td rowspan="2">Mass</td><td>Kilogram</td><td>kg</td></tr>
+		<tr valign="top"><td>Gram</td><td>g</td></tr>
+		<tr valign="top"><td rowspan="5">Power</td><td>Watt</td><td>W</td></tr>
+		<tr valign="top"><td>Volt-Ampere</td><td>VA</td></tr>
+		<tr valign="top"><td>Volt-Ampere Reactive</td><td>var</td></tr>
+		<tr valign="top"><td>Kilovar</td><td>kvar</td></tr>
+		<tr valign="top"><td>Decibel-Milliwatts</td><td>dBm</td></tr>
+		<tr valign="top"><td rowspan="5">Pressure</td><td>Pascal</td><td>Pa</td></tr>
+		<tr valign="top"><td>Hectopascal</td><td>hPa</td></tr>
+		<tr valign="top"><td>Millimetre of Mercury</td><td>mmHg</td></tr>
+		<tr valign="top"><td>Bar</td><td>bar</td></tr>
+		<tr valign="top"><td>Millibar</td><td>mbar</td></tr>
+		<tr valign="top"><td>Radioactivity</td><td>Becquerel</td><td>Bq</td></tr>
+		<tr valign="top"><td>RadiationDoseAbsorbed</td><td>Gray</td><td>Gy</td></tr>
+		<tr valign="top"><td>RadiationDoseEffective</td><td>Sievert</td><td>Sv</td></tr>
+		<tr valign="top"><td>SolidAngle</td><td>Steradian</td><td>sr</td></tr>
+		<tr valign="top"><td rowspan="4">Speed</td><td>Metre per Second</td><td>m/s</td></tr>
+		<tr valign="top"><td>Millimetre per Hour</td><td>mm/h</td></tr>
+		<tr valign="top"><td>Kilometre per Hour</td><td>km/h</td></tr>
+		<tr valign="top"><td>Knot</td><td>kn</td></tr>
+		<tr valign="top"><td rowspan="2">Temperature</td><td>Kelvin</td><td>K</td></tr>
+		<tr valign="top"><td>Celsius</td><td>°C</td></tr>
+		<tr valign="top"><td rowspan="6">Time</td><td>Second</td><td>s</td></tr>
+		<tr valign="top"><td>Minute</td><td>min</td></tr>
+		<tr valign="top"><td>Hour</td><td>h</td></tr>
+		<tr valign="top"><td>Day</td><td>d</td></tr>
+		<tr valign="top"><td>Week</td><td>week</td></tr>
+		<tr valign="top"><td>Year</td><td>y</td></tr>
+		<tr valign="top"><td rowspan="2">Volume</td><td>Litre</td><td>l</td></tr>
+		<tr valign="top"><td>Cubic Metre</td><td>m³</td></tr>
+		<tr valign="top"><td rowspan="5">VolumetricFlowRate</td><td>Litre per Minute</td><td>l/min</td></tr>
+		<tr valign="top"><td>Cubic Metre per Second</td><td>m³/s</td></tr>
+		<tr valign="top"><td>Cubic Metre per Minute</td><td>m³/min</td></tr>
+		<tr valign="top"><td>Cubic Metre per Hour</td><td>m³/h</td></tr>
+		<tr valign="top"><td>Cubic Metre per Day</td><td>m³/d</td></tr>
+	</tbody>
+</table>
 
-Metric Prefixes:
+#### Metric Prefixes:
 
 | Name  | Symbol | Factor |
 |-------|--------|--------|
@@ -217,7 +225,7 @@ Metric Prefixes:
 | Zepto | z      | 10⁻²¹  |
 | Yocto | y      | 10⁻²⁴  |
 
-Binary Prefixes:
+#### Binary Prefixes:
 
 | Name | Symbol | Factor |
 | ---- | ------ | ------ |

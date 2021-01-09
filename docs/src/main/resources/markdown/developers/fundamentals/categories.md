@@ -1,8 +1,6 @@
----
-title: Categories
----
-
 # Categories
+
+## Categories
 
 Categories in _OpenSmartHouse_ are used to provide meta information about Things, Channels, etc. UIs can use this information to render specific icons or provide a search functionality to for example filter all Things for a certain category.
 
@@ -63,27 +61,27 @@ There are different types of categories for Channels, which are listed below.
 
 | Category      | Icon Example                             |
 |---------------|------------------------------------------|
-| Colorpicker   | ![](iconsets/classic/colorpicker.png)   |
-| Number        | ![](iconsets/classic/number.png)        |
-| Rollershutter | ![](iconsets/classic/rollershutter.png) |
-| Slider        | ![](iconsets/classic/slider.png)        |
-| Switch        | ![](iconsets/classic/switch.png)        |
-| Text          | ![](iconsets/classic/text.png)          |
-| Group         | ![](iconsets/classic/group.png)         |
+| Colorpicker   | ![](iconsets/classic/colorpicker.png)    |
+| Number        |                                          |
+| Rollershutter | ![](iconsets/classic/rollershutter.png)  |
+| Slider        | ![](iconsets/classic/slider.png)         |
+| Switch        | ![](iconsets/classic/switch.png)         |
+| Text          | ![](iconsets/classic/text.png)           |
+| Group         | ![](iconsets/classic/group.png)          |
 
 #### Weather
 
 | Category    | Icon Example                           |
 |-------------|----------------------------------------|
-| Sun         | ![](iconsets/classic/sun.png)         |
-| Moon        | ![](iconsets/classic/moon.png)        |
-| Clouds      | ![](iconsets/classic/clouds.png)      |
-| Sun_Clouds  | ![](iconsets/classic/sun_clouds.png)  |
-| Rain        | ![](iconsets/classic/rain.png)        |
-| Snow        | ![](iconsets/classic/snow.png)        |
-| Wind        | ![](iconsets/classic/wind.png)        |
-| Humidity    | ![](iconsets/classic/humidity.png)    |
-| Temperature | ![](iconsets/classic/temperature.png) |
+| Sun         | ![](iconsets/classic/sun.png)          |
+| Moon        | ![](iconsets/classic/moon.png)         |
+| Clouds      |                                        |
+| Sun_Clouds  | ![](iconsets/classic/sun_clouds.png)   |
+| Rain        | ![](iconsets/classic/rain.png)         |
+| Snow        | ![](iconsets/classic/snow.png)         |
+| Wind        | ![](iconsets/classic/wind.png)         |
+| Humidity    | ![](iconsets/classic/humidity.png)     |
+| Temperature | ![](iconsets/classic/temperature.png)  |
 
 #### Properties
 
@@ -105,8 +103,8 @@ There are different types of categories for Channels, which are listed below.
 | Fire             | ![](iconsets/classic/fire.png)             |
 | Motion           | ![](iconsets/classic/motion.png)           |
 | QualityOfService | ![](iconsets/classic/qualityofservice.png) |
-| Moisture         | ![](iconsets/classic/moisture.png)         |
-| Noise            | ![](iconsets/classic/noise.png)            |
+| Moisture         |                                            |
+| Noise            |                                            |
 | Flow             | ![](iconsets/classic/flow.png)             |
 | Price            | ![](iconsets/classic/price.png)            |
 | Time             | ![](iconsets/classic/time.png)             |
