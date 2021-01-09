@@ -17,6 +17,7 @@
 	<!-- Bootstrap CSS -->
 	<!-- Custom CSS styles-->
 	<link rel="stylesheet" href="/css/style.css">
+	<link rel="stylesheet" href="/css/dev-docs.css">
 </head>
 
 <body is="dmx-app" id="opensmarthouse">

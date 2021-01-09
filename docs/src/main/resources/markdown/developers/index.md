@@ -1,6 +1,4 @@
----
 # Developers Guide
----
 
 ## Overview
 
