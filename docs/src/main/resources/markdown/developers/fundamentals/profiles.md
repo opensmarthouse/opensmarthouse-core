@@ -1,5 +1,13 @@
 # Profiles
 
+<nav aria-label="breadcrumb">
+  <ol class="breadcrumb">
+    <li class="breadcrumb-item"><a href="../index.php">Developers Guide</a></li>
+    <li class="breadcrumb-item"><a href="index.php">Fundamental Concepts</a></li>
+    <li class="breadcrumb-item active" aria-current="page">Profiles</li>
+  </ol>
+</nav>
+
 ## Overview
 
 The communication between the framework and the Thing handlers is managed by the "Communication Manager", which in turn uses "Profiles"  to determined what exactly needs to be done. 

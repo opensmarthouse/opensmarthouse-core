@@ -1,5 +1,13 @@
 # Commands, States and Items
 
+<nav aria-label="breadcrumb">
+  <ol class="breadcrumb">
+    <li class="breadcrumb-item"><a href="../index.php">Developers Guide</a></li>
+    <li class="breadcrumb-item"><a href="index.php">Fundamental Concepts</a></li>
+    <li class="breadcrumb-item active" aria-current="page">Items</li>
+  </ol>
+</nav>
+
 ## Type System Overview
 
 _OpenSmartHouse_ has a flexible type system that needs to be understood by developers before heading in to develop core or extension bundles. Here we will try to explain the system, how it is built and used, and how the developer can interact with it.

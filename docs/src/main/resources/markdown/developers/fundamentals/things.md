@@ -1,5 +1,13 @@
 # Things
 
+<nav aria-label="breadcrumb">
+  <ol class="breadcrumb">
+    <li class="breadcrumb-item"><a href="../index.php">Developers Guide</a></li>
+    <li class="breadcrumb-item"><a href="index.php">Fundamental Concepts</a></li>
+    <li class="breadcrumb-item active" aria-current="page">Things</li>
+  </ol>
+</nav>
+
 ## Overview
 
 Things are the entities that can physically be added to a system and which can potentially provide many functionalities in one.
