@@ -35,6 +35,7 @@ import org.openhab.core.library.types.RewindFastforwardType;
 import org.openhab.core.library.types.StopMoveType;
 import org.openhab.core.library.types.StringListType;
 import org.openhab.core.library.types.StringType;
+import org.openhab.core.library.types.UnDefType;
 import org.openhab.core.library.types.UpDownType;
 import org.openhab.core.types.Type;
 import org.openhab.core.types.registry.TypeProvider;

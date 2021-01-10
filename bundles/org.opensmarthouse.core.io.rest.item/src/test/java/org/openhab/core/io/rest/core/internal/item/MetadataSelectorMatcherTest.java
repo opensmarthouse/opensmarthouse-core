@@ -20,18 +20,16 @@ import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.when;
 import static org.mockito.MockitoAnnotations.initMocks;
 
-import java.net.URI;
-import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
-import org.openhab.core.config.core.ConfigDescription;
-import org.openhab.core.config.core.ConfigDescriptionBuilder;
 import org.openhab.core.config.core.ConfigDescriptionRegistry;
+import org.openhab.core.items.Metadata;
+import org.openhab.core.items.MetadataKey;
 import org.openhab.core.items.MetadataRegistry;
 
 /**
@@ -53,21 +51,14 @@ public class MetadataSelectorMatcherTest {
     public void setup() throws Exception {
         initMocks(this);
 
-        when(configDescriptionRegistry.getConfigDescriptions(null)).thenReturn(mockConfigDescriptions());
+        when(metadataRegistry.getAll())
+                .thenReturn(List.of(new Metadata(new MetadataKey("magic", "test_item"), "test", Map.of()),
+                        new Metadata(new MetadataKey("magic2", "test_item"), "test", Map.of()),
+                        new Metadata(new MetadataKey("homekit", "test_item"), "test", Map.of()),
+                        new Metadata(new MetadataKey("alexa", "test_item"), "test", Map.of())));
         when(metadataRegistry.isInternalNamespace(anyString())).thenReturn(false);
 
-        matcher = new MetadataSelectorMatcher(metadataRegistry, configDescriptionRegistry);
-    }
-
-    private Collection<ConfigDescription> mockConfigDescriptions() throws Exception {
-        List<ConfigDescription> configDescriptions = new ArrayList<>();
-
-        configDescriptions.add(ConfigDescriptionBuilder.create(new URI("metadata:magic")).build());
-        configDescriptions.add(ConfigDescriptionBuilder.create(new URI("metadata:magic2")).build());
-        configDescriptions.add(ConfigDescriptionBuilder.create(new URI("metadata:homekit")).build());
-        configDescriptions.add(ConfigDescriptionBuilder.create(new URI("metadata:alexa")).build());
-
-        return configDescriptions;
+        matcher = new MetadataSelectorMatcher(metadataRegistry);
     }
 
     @Test

@@ -194,7 +194,7 @@ public class ItemResource implements RESTResource {
     @GET
     @RolesAllowed({ Role.USER, Role.ADMIN })
     @Produces(MediaType.APPLICATION_JSON)
-    @Operation(summary = "Get all available items.", responses = {
+    @Operation(operationId = "getItems", summary = "Get all available items.", responses = {
             @ApiResponse(responseCode = "200", description = "OK", content = @Content(array = @ArraySchema(schema = @Schema(implementation = EnrichedItemDTO.class)))) })
     public Response getItems(final @Context UriInfo uriInfo, final @Context HttpHeaders httpHeaders,
             @HeaderParam(HttpHeaders.ACCEPT_LANGUAGE) @Parameter(description = "language") @Nullable String language,
@@ -221,7 +221,7 @@ public class ItemResource implements RESTResource {
     @RolesAllowed({ Role.USER, Role.ADMIN })
     @Path("/{itemname: [a-zA-Z_0-9]+}")
     @Produces({ MediaType.APPLICATION_JSON })
-    @Operation(summary = "Gets a single item.", responses = {
+    @Operation(operationId = "getItemByName", summary = "Gets a single item.", responses = {
             @ApiResponse(responseCode = "200", description = "OK", content = @Content(schema = @Schema(implementation = EnrichedItemDTO.class))),
             @ApiResponse(responseCode = "404", description = "Item not found") })
     public Response getItemData(final @Context UriInfo uriInfo, final @Context HttpHeaders httpHeaders,
@@ -258,7 +258,7 @@ public class ItemResource implements RESTResource {
     @RolesAllowed({ Role.USER, Role.ADMIN })
     @Path("/{itemname: [a-zA-Z_0-9]+}/state")
     @Produces(MediaType.TEXT_PLAIN)
-    @Operation(summary = "Gets the state of an item.", responses = {
+    @Operation(operationId = "getItemState", summary = "Gets the state of an item.", responses = {
             @ApiResponse(responseCode = "200", description = "OK", content = @Content(schema = @Schema(implementation = String.class))),
             @ApiResponse(responseCode = "404", description = "Item not found") })
     public Response getPlainItemState(@PathParam("itemname") @Parameter(description = "item name") String itemname) {
@@ -279,7 +279,7 @@ public class ItemResource implements RESTResource {
     @RolesAllowed({ Role.USER, Role.ADMIN })
     @Path("/{itemname: [a-zA-Z_0-9]+}/state")
     @Consumes(MediaType.TEXT_PLAIN)
-    @Operation(summary = "Updates the state of an item.", responses = {
+    @Operation(operationId = "updateItemState", summary = "Updates the state of an item.", responses = {
             @ApiResponse(responseCode = "202", description = "Accepted"),
             @ApiResponse(responseCode = "404", description = "Item not found"),
             @ApiResponse(responseCode = "400", description = "Item state null") })
@@ -315,7 +315,7 @@ public class ItemResource implements RESTResource {
     @RolesAllowed({ Role.USER, Role.ADMIN })
     @Path("/{itemname: [a-zA-Z_0-9]+}")
     @Consumes(MediaType.TEXT_PLAIN)
-    @Operation(summary = "Sends a command to an item.", responses = {
+    @Operation(operationId = "sendItemCommand", summary = "Sends a command to an item.", responses = {
             @ApiResponse(responseCode = "200", description = "OK"),
             @ApiResponse(responseCode = "404", description = "Item not found"),
             @ApiResponse(responseCode = "400", description = "Item command null") })
@@ -356,7 +356,7 @@ public class ItemResource implements RESTResource {
     @PUT
     @RolesAllowed({ Role.ADMIN })
     @Path("/{itemName: [a-zA-Z_0-9]+}/members/{memberItemName: [a-zA-Z_0-9]+}")
-    @Operation(summary = "Adds a new member to a group item.", security = {
+    @Operation(operationId = "addMemberToGroupItem", summary = "Adds a new member to a group item.", security = {
             @SecurityRequirement(name = "oauth2", scopes = { "admin" }) }, responses = {
                     @ApiResponse(responseCode = "200", description = "OK"),
                     @ApiResponse(responseCode = "404", description = "Item or member item not found or item is not of type group item."),
@@ -395,7 +395,7 @@ public class ItemResource implements RESTResource {
     @DELETE
     @RolesAllowed({ Role.ADMIN })
     @Path("/{itemName: [a-zA-Z_0-9]+}/members/{memberItemName: [a-zA-Z_0-9]+}")
-    @Operation(summary = "Removes an existing member from a group item.", security = {
+    @Operation(operationId = "removeMemberFromGroupItem", summary = "Removes an existing member from a group item.", security = {
             @SecurityRequirement(name = "oauth2", scopes = { "admin" }) }, responses = {
                     @ApiResponse(responseCode = "200", description = "OK"),
                     @ApiResponse(responseCode = "404", description = "Item or member item not found or item is not of type group item."),
@@ -434,7 +434,7 @@ public class ItemResource implements RESTResource {
     @DELETE
     @RolesAllowed({ Role.ADMIN })
     @Path("/{itemname: [a-zA-Z_0-9]+}")
-    @Operation(summary = "Removes an item from the registry.", security = {
+    @Operation(operationId = "removeItemFromRegistry", summary = "Removes an item from the registry.", security = {
             @SecurityRequirement(name = "oauth2", scopes = { "admin" }) }, responses = {
                     @ApiResponse(responseCode = "200", description = "OK"),
                     @ApiResponse(responseCode = "404", description = "Item not found or item is not editable.") })
@@ -448,7 +448,7 @@ public class ItemResource implements RESTResource {
     @PUT
     @RolesAllowed({ Role.ADMIN })
     @Path("/{itemname: [a-zA-Z_0-9]+}/tags/{tag}")
-    @Operation(summary = "Adds a tag to an item.", security = {
+    @Operation(operationId = "addTagToItem", summary = "Adds a tag to an item.", security = {
             @SecurityRequirement(name = "oauth2", scopes = { "admin" }) }, responses = {
                     @ApiResponse(responseCode = "200", description = "OK"),
                     @ApiResponse(responseCode = "404", description = "Item not found."),
@@ -474,7 +474,7 @@ public class ItemResource implements RESTResource {
     @DELETE
     @RolesAllowed({ Role.ADMIN })
     @Path("/{itemname: [a-zA-Z_0-9]+}/tags/{tag}")
-    @Operation(summary = "Removes a tag from an item.", security = {
+    @Operation(operationId = "removeTagFromItem", summary = "Removes a tag from an item.", security = {
             @SecurityRequirement(name = "oauth2", scopes = { "admin" }) }, responses = {
                     @ApiResponse(responseCode = "200", description = "OK"),
                     @ApiResponse(responseCode = "404", description = "Item not found."),
@@ -501,7 +501,7 @@ public class ItemResource implements RESTResource {
     @RolesAllowed({ Role.ADMIN })
     @Path("/{itemname: [a-zA-Z_0-9]+}/metadata/{namespace}")
     @Consumes(MediaType.APPLICATION_JSON)
-    @Operation(summary = "Adds metadata to an item.", security = {
+    @Operation(operationId = "addMetadataToItem", summary = "Adds metadata to an item.", security = {
             @SecurityRequirement(name = "oauth2", scopes = { "admin" }) }, responses = { //
                     @ApiResponse(responseCode = "200", description = "OK"), //
                     @ApiResponse(responseCode = "201", description = "Created"), //
@@ -536,7 +536,7 @@ public class ItemResource implements RESTResource {
     @DELETE
     @RolesAllowed({ Role.ADMIN })
     @Path("/{itemname: [a-zA-Z_0-9]+}/metadata/{namespace}")
-    @Operation(summary = "Removes metadata from an item.", security = {
+    @Operation(operationId = "removeMetadataFromItem", summary = "Removes metadata from an item.", security = {
             @SecurityRequirement(name = "oauth2", scopes = { "admin" }) }, responses = {
                     @ApiResponse(responseCode = "200", description = "OK"),
                     @ApiResponse(responseCode = "404", description = "Item not found."),
@@ -572,12 +572,12 @@ public class ItemResource implements RESTResource {
     @RolesAllowed({ Role.ADMIN })
     @Path("/{itemname: [a-zA-Z_0-9]+}")
     @Consumes(MediaType.APPLICATION_JSON)
-    @Operation(summary = "Adds a new item to the registry or updates the existing item.", security = {
+    @Operation(operationId = "addOrUpdateItemInRegistry", summary = "Adds a new item to the registry or updates the existing item.", security = {
             @SecurityRequirement(name = "oauth2", scopes = { "admin" }) }, responses = {
                     @ApiResponse(responseCode = "200", description = "OK", content = @Content(schema = @Schema(implementation = String.class))),
                     @ApiResponse(responseCode = "201", description = "Item created."),
-                    @ApiResponse(responseCode = "400", description = "Item null."),
-                    @ApiResponse(responseCode = "404", description = "Item not found."),
+                    @ApiResponse(responseCode = "400", description = "Payload invalid."),
+                    @ApiResponse(responseCode = "404", description = "Item not found or name in path invalid."),
                     @ApiResponse(responseCode = "405", description = "Item not editable.") })
     public Response createOrUpdateItem(final @Context UriInfo uriInfo, final @Context HttpHeaders httpHeaders,
             @HeaderParam(HttpHeaders.ACCEPT_LANGUAGE) @Parameter(description = "language") @Nullable String language,
@@ -588,31 +588,42 @@ public class ItemResource implements RESTResource {
         // If we didn't get an item bean, then return!
         if (item == null) {
             return Response.status(Status.BAD_REQUEST).build();
-        }
-
-        Item newItem = ItemDTOMapper.map(item, itemBuilderFactory);
-        if (newItem == null) {
-            logger.warn("Received HTTP PUT request at '{}' with an invalid item type '{}'.", uriInfo.getPath(),
-                    item.type);
+        } else if (!itemname.equalsIgnoreCase((item.name))) {
+            logger.warn(
+                    "Received HTTP PUT request at '{}' with an item name '{}' that does not match the one in the url.",
+                    uriInfo.getPath(), item.name);
             return Response.status(Status.BAD_REQUEST).build();
         }
 
-        // Save the item
-        if (getItem(itemname) == null) {
-            // item does not yet exist, create it
-            managedItemProvider.add(newItem);
-            return getItemResponse(uriBuilder(uriInfo, httpHeaders), Status.CREATED, itemRegistry.get(itemname), locale,
-                    null);
-        } else if (managedItemProvider.get(itemname) != null) {
-            // item already exists as a managed item, update it
-            managedItemProvider.update(newItem);
-            return getItemResponse(uriBuilder(uriInfo, httpHeaders), Status.OK, itemRegistry.get(itemname), locale,
-                    null);
-        } else {
-            // Item exists but cannot be updated
-            logger.warn("Cannot update existing item '{}', because is not managed.", itemname);
-            return JSONResponse.createErrorResponse(Status.METHOD_NOT_ALLOWED,
-                    "Cannot update non-managed Item " + itemname);
+        try {
+            Item newItem = ItemDTOMapper.map(item, itemBuilderFactory);
+            if (newItem == null) {
+                logger.warn("Received HTTP PUT request at '{}' with an invalid item type '{}'.", uriInfo.getPath(),
+                        item.type);
+                return Response.status(Status.BAD_REQUEST).build();
+            }
+
+            // Save the item
+            if (getItem(itemname) == null) {
+                // item does not yet exist, create it
+                managedItemProvider.add(newItem);
+                return getItemResponse(uriBuilder(uriInfo, httpHeaders), Status.CREATED, itemRegistry.get(itemname),
+                        locale, null);
+            } else if (managedItemProvider.get(itemname) != null) {
+                // item already exists as a managed item, update it
+                managedItemProvider.update(newItem);
+                return getItemResponse(uriBuilder(uriInfo, httpHeaders), Status.OK, itemRegistry.get(itemname), locale,
+                        null);
+            } else {
+                // Item exists but cannot be updated
+                logger.warn("Cannot update existing item '{}', because is not managed.", itemname);
+                return JSONResponse.createErrorResponse(Status.METHOD_NOT_ALLOWED,
+                        "Cannot update non-managed Item " + itemname);
+            }
+        } catch (IllegalArgumentException e) {
+            logger.warn("Received HTTP PUT request at '{}' with an invalid item name '{}'.", uriInfo.getPath(),
+                    item.name);
+            return Response.status(Status.BAD_REQUEST).build();
         }
     }
 
@@ -625,10 +636,10 @@ public class ItemResource implements RESTResource {
     @PUT
     @RolesAllowed({ Role.ADMIN })
     @Consumes(MediaType.APPLICATION_JSON)
-    @Operation(summary = "Adds a list of items to the registry or updates the existing items.", security = {
+    @Operation(operationId = "addOrUpdateItemsInRegistry", summary = "Adds a list of items to the registry or updates the existing items.", security = {
             @SecurityRequirement(name = "oauth2", scopes = { "admin" }) }, responses = {
                     @ApiResponse(responseCode = "200", description = "OK", content = @Content(schema = @Schema(implementation = String.class))),
-                    @ApiResponse(responseCode = "400", description = "Item list is null.") })
+                    @ApiResponse(responseCode = "400", description = "Payload is invalid.") })
     public Response createOrUpdateItems(
             @Parameter(description = "array of item data", required = true) GroupItemDTO @Nullable [] items) {
         // If we didn't get an item list bean, then return!
@@ -641,12 +652,17 @@ public class ItemResource implements RESTResource {
         Map<String, Collection<String>> tagMap = new HashMap<>();
 
         for (GroupItemDTO item : items) {
-            Item newItem = ItemDTOMapper.map(item, itemBuilderFactory);
-            if (newItem == null) {
-                wrongTypes.add(item);
-                tagMap.put(item.name, item.tags);
-            } else {
-                activeItems.add(newItem);
+            try {
+                Item newItem = ItemDTOMapper.map(item, itemBuilderFactory);
+                if (newItem == null) {
+                    wrongTypes.add(item);
+                    tagMap.put(item.name, item.tags);
+                } else {
+                    activeItems.add(newItem);
+                }
+            } catch (IllegalArgumentException e) {
+                logger.warn("Received HTTP PUT request with an invalid item name '{}'.", item.name);
+                return Response.status(Status.BAD_REQUEST).build();
             }
         }
 

@@ -82,7 +82,11 @@ public class TypeRegistryImpl implements TypeFactory {
             return null;
         }
 
-        return provider.createType(typeName, input);
+        try {
+            return provider.createType(typeName, input);
+        } catch (IllegalArgumentException e) {
+            return null;
+        }
     }
 
     @Override

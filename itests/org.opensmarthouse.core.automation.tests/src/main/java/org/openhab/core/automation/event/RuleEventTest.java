@@ -41,6 +41,7 @@ import org.openhab.core.automation.events.RuleAddedEvent;
 import org.openhab.core.automation.events.RuleRemovedEvent;
 import org.openhab.core.automation.events.RuleStatusInfoEvent;
 import org.openhab.core.automation.events.RuleUpdatedEvent;
+import org.openhab.core.automation.internal.RuleEngineImpl;
 import org.openhab.core.automation.util.ModuleBuilder;
 import org.openhab.core.automation.util.RuleBuilder;
 import org.openhab.core.common.registry.ProviderChangeListener;
@@ -57,6 +58,7 @@ import org.openhab.core.items.events.ItemCommandEvent;
 import org.openhab.core.items.events.ItemEventFactory;
 import org.openhab.core.library.items.SwitchItem;
 import org.openhab.core.library.types.OnOffType;
+import org.openhab.core.service.ReadyMarker;
 import org.openhab.core.test.java.JavaOSGiTest;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -99,6 +101,9 @@ public class RuleEventTest extends JavaOSGiTest {
         };
         registerService(itemProvider);
         registerVolatileStorageService();
+
+        // start rule engine
+        ((RuleEngineImpl) getService(RuleManager.class)).onReadyMarkerAdded(new ReadyMarker("", ""));
     }
 
     @Test

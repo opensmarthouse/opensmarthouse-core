@@ -40,6 +40,7 @@ import org.openhab.core.items.MetadataRegistry;
 import org.openhab.core.items.RegistryHook;
 import org.openhab.core.items.events.ItemEventFactory;
 import org.openhab.core.types.service.CommandDescriptionService;
+import org.openhab.core.service.ReadyService;
 import org.openhab.core.types.service.StateDescriptionService;
 import org.osgi.service.component.ComponentContext;
 import org.osgi.service.component.annotations.Activate;
@@ -282,6 +283,17 @@ public class ItemRegistryImpl extends AbstractRegistry<Item, String, ItemProvide
         for (Item item : getItems()) {
             ((GenericItem) item).setEventPublisher(null);
         }
+    }
+
+    @Override
+    @Reference
+    protected void setReadyService(ReadyService readyService) {
+        super.setReadyService(readyService);
+    }
+
+    @Override
+    protected void unsetReadyService(ReadyService readyService) {
+        super.unsetReadyService(readyService);
     }
 
     @Reference(cardinality = ReferenceCardinality.OPTIONAL, policy = ReferencePolicy.DYNAMIC)

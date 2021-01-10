@@ -27,8 +27,6 @@ import java.text.DecimalFormatSymbols;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.TimeZone;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 import org.eclipse.emf.common.util.BasicEList;
 import org.junit.jupiter.api.BeforeEach;
@@ -819,11 +817,9 @@ public class ItemUIRegistryImplTest {
         assertThat(defaultWidget, is(instanceOf(Text.class)));
 
         // NumberItem with one to four CommandOptions should return Switch element
-        final CommandDescriptionBuilder builder = CommandDescriptionBuilder.create()
-                .withCommandOptions(Stream
-                        .of(new CommandOption("command1", "label1"), new CommandOption("command2", "label2"),
-                                new CommandOption("command3", "label3"), new CommandOption("command4", "label4"))
-                        .collect(Collectors.toList()));
+        final CommandDescriptionBuilder builder = CommandDescriptionBuilder.create().withCommandOptions(
+                List.of(new CommandOption("command1", "label1"), new CommandOption("command2", "label2"),
+                        new CommandOption("command3", "label3"), new CommandOption("command4", "label4")));
         when(item.getCommandDescription()).thenReturn(builder.build());
         defaultWidget = uiRegistry.getDefaultWidget(NumberItem.class, ITEM_NAME);
         assertThat(defaultWidget, is(instanceOf(Switch.class)));
@@ -836,9 +832,17 @@ public class ItemUIRegistryImplTest {
 
         // NumberItem with one or more StateOptions should return Selection element
         when(item.getStateDescription()).thenReturn(StateDescriptionFragmentBuilder.create()
-                .withOption(new StateOption("value", "label")).build().toStateDescription());
+                .withOptions(List.of(new StateOption("value1", "label1"), new StateOption("value2", "label2"))).build()
+                .toStateDescription());
         defaultWidget = uiRegistry.getDefaultWidget(NumberItem.class, ITEM_NAME);
         assertThat(defaultWidget, is(instanceOf(Selection.class)));
+
+        // Read-only NumberItem with one or more StateOptions should return Text element
+        when(item.getStateDescription()).thenReturn(StateDescriptionFragmentBuilder.create().withReadOnly(Boolean.TRUE)
+                .withOptions(List.of(new StateOption("value1", "label1"), new StateOption("value2", "label2"))).build()
+                .toStateDescription());
+        defaultWidget = uiRegistry.getDefaultWidget(NumberItem.class, ITEM_NAME);
+        assertThat(defaultWidget, is(instanceOf(Text.class)));
     }
 
     @Test
@@ -848,11 +852,9 @@ public class ItemUIRegistryImplTest {
         assertThat(defaultWidget, is(instanceOf(Text.class)));
 
         // StringItem with one to four CommandOptions should return Switch element
-        final CommandDescriptionBuilder builder = CommandDescriptionBuilder.create()
-                .withCommandOptions(Stream
-                        .of(new CommandOption("command1", "label1"), new CommandOption("command2", "label2"),
-                                new CommandOption("command3", "label3"), new CommandOption("command4", "label4"))
-                        .collect(Collectors.toList()));
+        final CommandDescriptionBuilder builder = CommandDescriptionBuilder.create().withCommandOptions(
+                List.of(new CommandOption("command1", "label1"), new CommandOption("command2", "label2"),
+                        new CommandOption("command3", "label3"), new CommandOption("command4", "label4")));
         when(item.getCommandDescription()).thenReturn(builder.build());
         defaultWidget = uiRegistry.getDefaultWidget(StringItem.class, ITEM_NAME);
         assertThat(defaultWidget, is(instanceOf(Switch.class)));
@@ -865,8 +867,16 @@ public class ItemUIRegistryImplTest {
 
         // StringItem with one or more StateOptions should return Selection element
         when(item.getStateDescription()).thenReturn(StateDescriptionFragmentBuilder.create()
-                .withOption(new StateOption("value", "label")).build().toStateDescription());
+                .withOptions(List.of(new StateOption("value1", "label1"), new StateOption("value2", "label2"))).build()
+                .toStateDescription());
         defaultWidget = uiRegistry.getDefaultWidget(StringItem.class, ITEM_NAME);
         assertThat(defaultWidget, is(instanceOf(Selection.class)));
+
+        // Read-only StringItem with one or more StateOptions should return Text element
+        when(item.getStateDescription()).thenReturn(StateDescriptionFragmentBuilder.create().withReadOnly(Boolean.TRUE)
+                .withOptions(List.of(new StateOption("value1", "label1"), new StateOption("value2", "label2"))).build()
+                .toStateDescription());
+        defaultWidget = uiRegistry.getDefaultWidget(StringItem.class, ITEM_NAME);
+        assertThat(defaultWidget, is(instanceOf(Text.class)));
     }
 }

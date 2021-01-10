@@ -53,6 +53,7 @@ import org.mockito.junit.MockitoRule;
 public class CorsFilterTest {
 
     private static final String CONTENT_TYPE_HEADER = HttpHeaders.CONTENT_TYPE;
+    private static final String AUTHORIZATION_HEADER = HttpHeaders.AUTHORIZATION;
 
     private static final String ACCESS_CONTROL_REQUEST_HEADERS = "Access-Control-Request-Headers";
 
@@ -112,6 +113,7 @@ public class CorsFilterTest {
         assertResponseHasHeader(ACCESS_CONTROL_ALLOW_METHODS_HEADER, ACCEPTED_HTTP_METHODS);
         assertResponseHasHeader(ACCESS_CONTROL_ALLOW_ORIGIN_HEADER, ECLIPSE_ORIGIN);
         assertResponseHasHeader(ACCESS_CONTROL_ALLOW_HEADERS, CONTENT_TYPE_HEADER);
+        assertResponseHasHeader(ACCESS_CONTROL_ALLOW_HEADERS, AUTHORIZATION_HEADER);
         assertResponseHasHeader(VARY_HEADER, VARY_HEADER_VALUE + "," + ORIGIN_HEADER);
     }
 
@@ -165,7 +167,7 @@ public class CorsFilterTest {
 
     private void assertResponseHasHeader(String header, String value) {
         assertTrue(responseHeaders.containsKey(header));
-        assertTrue(responseHeaders.getFirst(header).equals(value));
+        assertTrue(responseHeaders.get(header).contains(value));
     }
 
     private void setupRequestContext(String methodValue, String originValue, final String requestMethodValue,

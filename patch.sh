@@ -23,6 +23,14 @@ commit=$(sed '1q;d' $1)
 commit=${commit:5}
 commit=${commit:0:40}
 
+# author
+author=$(sed '2q;d' $1)
+author=${author:5}
+
+# date
+commitDate=$(sed '3q;d' $1)
+commitDate=${commitDate:5}
+
 # Create a new branch
 if [ $check == 0 ]
 then
@@ -51,6 +59,8 @@ cp $1 $1.tmp
 refactor $1 "bundles/org.openhab.core/src/main/java/org/openhab/core/internal/service/BundleResolverImpl.java"                                 "bundles/org.opensmarthouse.core.common/src/main/java/org/openhab/core/internal/common/osgi/BundleResolverImpl.java"
 
 refactor $1 "bundles/org.openhab.core/src/main/java/org/openhab/core/types/util/UnitUtils.java"                                                "bundles/org.opensmarthouse.core.library.unit/src/main/java/org/openhab/core/types/util/UnitUtils.java"
+
+refactor $1 "bundles/org.openhab.core/src/main/java/org/openhab/core/items/ManagedItemProvider.java"                                           "bundles/org.opensmarthouse.core.item.core/src/main/java/org/openhab/core/internal/items/StorageItemProvider.java" 
 
 refactor $1 "bundles/org.openhab.core/src/main/java/org/openhab/core/library/CoreItemFactory.java"                                             "bundles/org.opensmarthouse.core.item.core/src/main/java/org/openhab/core/internal/items/CoreItemFactory.java" 
 refactor $1 "bundles/org.openhab.core/src/test/java/org/openhab/core/library/CoreItemFactoryTest.java"                                         "bundles/org.opensmarthouse.core.item.core/src/test/java/org/openhab/core/internal/items/CoreItemFactoryTest.java"
@@ -283,5 +293,20 @@ rm $1.original.diff
 mv $1.tmp $1
 
 echo --- Patch Information ---
-echo $title
-echo $commit
+read -p "Automatically add files and create commit? [y/n]" prompt
+if [[ $prompt == "y" || $prompt == "Y" || $prompt == "yes" || $prompt == "Yes" ]]; then
+  git status|grep -i "modified:\|added:\|deleted:"|grep -v .gitignore|grep -v patch.sh|tr -s '\t' ' '|cut -d ' ' -f 3|xargs git add
+  echo "Executing command: git commit --author \"$author\" --date \"$commitDate\" -s"
+  # get header from Subject to beginning of diff section, then remove '---' separator line and append OH commit id
+  sed -n "/^Subject: /,/---/p" $1 >> .git/commit-msg.txt
+  sed -i '$ d' .git/commit-msg.txt
+  echo "X-Backport-Id: $commit" >> .git/commit-msg.txt
+  git commit --author "$author" --date "$commitDate" -eF .git/commit-msg.txt -s && rm .git/commit-msg.txt
+  read -p "Remove $1? [y/n]" cleanup
+  if [[ $cleanup == "y" || $cleanup == "Y" || $cleanup == "yes" || $cleanup == "Yes" ]]; then
+    rm $1;
+  fi;
+else
+  echo $title
+  echo $commit
+fi;

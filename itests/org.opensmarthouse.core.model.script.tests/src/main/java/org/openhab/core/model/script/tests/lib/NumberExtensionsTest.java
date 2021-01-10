@@ -20,8 +20,7 @@ import java.math.RoundingMode;
 import org.junit.Assert;
 import org.junit.Test;
 import org.openhab.core.library.types.DecimalType;
-import org.openhab.core.model.script.lib.NumberExtensions;
-import org.openhab.core.types.Type;
+import org.openhab.core.model.script.lib.NumberExtensions; org.openhab.core.types.Type;
 
 /**
  * Test case for {@link NumberExtensions} library class
@@ -651,3 +650,4 @@ public class NumberExtensionsTest {
         Assert.assertTrue(result);
     }
 }
+QuantityType

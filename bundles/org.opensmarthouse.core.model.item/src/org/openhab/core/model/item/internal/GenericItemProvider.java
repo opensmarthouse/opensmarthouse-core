@@ -37,6 +37,7 @@ import org.openhab.core.items.GroupItem;
 import org.openhab.core.items.Item;
 import org.openhab.core.items.ItemFactory;
 import org.openhab.core.items.ItemProvider;
+import org.openhab.core.items.ItemUtil;
 import org.openhab.core.items.dto.GroupFunctionDTO;
 import org.openhab.core.items.dto.ItemDTOMapper;
 import org.openhab.core.types.StateDescriptionFragment;
@@ -305,7 +306,8 @@ public class GenericItemProvider extends AbstractProvider<Item>
             if (model != null) {
                 for (ModelItem modelItem : model.getItems()) {
                     for (String itemType : itemTypes) {
-                        if (itemType.equals(modelItem.getType())) {
+                        String type = modelItem.getType();
+                        if (type != null && itemType.equals(ItemUtil.getMainItemType(type))) {
                             Item item = createItemFromModelItem(modelItem);
                             if (item != null) {
                                 internalDispatchBindings(reader, modelName, item, modelItem.getBindings());
@@ -399,8 +401,8 @@ public class GenericItemProvider extends AbstractProvider<Item>
                     Map<String, Item> newItems = toItemMap(getItemsFromModel(modelName));
                     itemsMap.put(modelName, newItems.values());
                     for (Item newItem : newItems.values()) {
-                        if (oldItems.containsKey(newItem.getName())) {
-                            Item oldItem = oldItems.get(newItem.getName());
+                        Item oldItem = oldItems.get(newItem.getName());
+                        if (oldItem != null) {
                             if (hasItemChanged(oldItem, newItem)) {
                                 notifyListenersAboutUpdatedElement(oldItem, newItem);
                             }
@@ -479,7 +481,7 @@ public class GenericItemProvider extends AbstractProvider<Item>
         return !(sameBaseItemClass && sameFunction);
     }
 
-    private Map<String, Item> toItemMap(Collection<Item> items) {
+    private Map<String, Item> toItemMap(@Nullable Collection<Item> items) {
         if (items == null || items.isEmpty()) {
             return Collections.emptyMap();
         }

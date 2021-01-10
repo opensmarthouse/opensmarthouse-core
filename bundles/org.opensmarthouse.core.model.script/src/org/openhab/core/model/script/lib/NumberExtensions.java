@@ -20,7 +20,7 @@ import javax.measure.quantity.Dimensionless;
 import org.openhab.core.library.types.DecimalType;
 import org.openhab.core.library.types.NumberType;
 import org.openhab.core.library.types.QuantityType;
-import org.openhab.core.library.unit.SmartHomeUnits;
+import org.openhab.core.library.unit.Units;
 import org.openhab.core.types.Type;
 
 /**
@@ -97,7 +97,7 @@ public class NumberExtensions {
 
     public static boolean operator_equals(NumberType left, NumberType right) {
         // in case one of the Number instances is of type QuantityType they are never equal (except for
-        // SmartHomeUnit.ONE).
+        // Units.ONE).
         // for both instances being QuantityTypes the specific method
         // operator_equals(QuantityType<?> left, QuantityType<?> right) is called by the script engine.
         if (oneIsQuantity(left, right)) {
@@ -174,7 +174,7 @@ public class NumberExtensions {
         }
     }
 
-    // Comparison operators between ESH types and numbers
+    // Comparison operators between types and numbers
 
     public static boolean operator_equals(Type type, NumberType x) {
         if (type instanceof QuantityType && x instanceof QuantityType) {
@@ -284,7 +284,7 @@ public class NumberExtensions {
     }
 
     public static QuantityType<?> operator_divide(Number x, QuantityType<?> y) {
-        QuantityType<Dimensionless> xQuantity = new QuantityType<>(x, SmartHomeUnits.ONE);
+        QuantityType<Dimensionless> xQuantity = new QuantityType<>(x, Units.ONE);
         return operator_divide(xQuantity, y);
     }
 
@@ -296,7 +296,7 @@ public class NumberExtensions {
         return left.equals(right);
     }
 
-    // support SmartHomeUnit.ONE as Number representation
+    // support Units.ONE as Number representation
     public static boolean operator_equals(QuantityType<?> left, NumberType right) {
         return operator_equals((NumberType) left, right);
     }
@@ -305,7 +305,7 @@ public class NumberExtensions {
         return !operator_equals(left, right);
     }
 
-    // support SmartHomeUnit.ONE as Number representation
+    // support Units.ONE as Number representation
     public static boolean operator_notEquals(QuantityType<?> left, NumberType right) {
         return operator_notEquals((NumberType) left, right);
     }
@@ -319,7 +319,7 @@ public class NumberExtensions {
         }
     }
 
-    // support SmartHomeUnit.ONE as Number representation
+    // support Units.ONE as Number representation
     public static boolean operator_lessThan(QuantityType<?> x, NumberType y) {
         return operator_lessThan((NumberType) x, y);
     }
@@ -333,7 +333,7 @@ public class NumberExtensions {
         }
     }
 
-    // support SmartHomeUnit.ONE as Number representation
+    // support Units.ONE as Number representation
     public static boolean operator_lessEqualsThan(QuantityType<?> x, NumberType y) {
         return operator_lessEqualsThan((NumberType) x, y);
     }
@@ -347,7 +347,7 @@ public class NumberExtensions {
         }
     }
 
-    // support SmartHomeUnit.ONE as Number representation
+    // support Units.ONE as Number representation
     public static boolean operator_greaterThan(QuantityType<?> x, NumberType y) {
         return operator_greaterThan((NumberType) x, y);
     }
@@ -361,7 +361,7 @@ public class NumberExtensions {
         }
     }
 
-    // support SmartHomeUnit.ONE as Number representation
+    // support Units.ONE as Number representation
     public static boolean operator_greaterEqualsThan(QuantityType<?> x, NumberType y) {
         return operator_greaterEqualsThan((NumberType) x, y);
     }
@@ -395,7 +395,7 @@ public class NumberExtensions {
     }
 
     private static boolean isAbstractUnitOne(QuantityType<?> left) {
-        return SmartHomeUnits.ONE.equals(left.getUnit());
+        return Units.ONE.equals(left.getUnit());
     }
 
 }

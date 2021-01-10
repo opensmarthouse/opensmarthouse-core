@@ -28,7 +28,7 @@ import tec.uom.se.ComparableQuantity;
 import tec.uom.se.quantity.Quantities;
 
 /**
- * Test for volumentric flow rate constants defined in {@link SmartHomeUnits}.
+ * Test for volumentric flow rate constants defined in {@link Units}.
  *
  * @author Łukasz Dywicki - Initial contribution
  */
@@ -38,7 +38,7 @@ public class VolumetricFlowRateTest {
     /**
      * While its not SI base unit it produces nice and fairly rounded numbers (si base is m3/s).
      */
-    private static final Unit<VolumetricFlowRate> BASE_UNIT = SmartHomeUnits.CUBICMETRE_PER_HOUR;
+    private static final Unit<VolumetricFlowRate> BASE_UNIT = Units.CUBICMETRE_PER_HOUR;
 
     private final Unit<VolumetricFlowRate> unit;
     private final String symbol;
@@ -80,10 +80,10 @@ public class VolumetricFlowRateTest {
 
     @Parameters
     public static Object[] params() {
-        return new Object[] { new Object[] { SmartHomeUnits.LITRE_PER_MINUTE, "l/min", 100.0, 6.0 },
-                new Object[] { SmartHomeUnits.CUBICMETRE_PER_SECOND, "m³/s", 100.0, 360000.0 },
-                new Object[] { SmartHomeUnits.CUBICMETRE_PER_MINUTE, "m³/min", 100.0, 6000.0 },
-                new Object[] { SmartHomeUnits.CUBICMETRE_PER_HOUR, "m³/h", 100.0, 100.0 },
-                new Object[] { SmartHomeUnits.CUBICMETRE_PER_DAY, "m³/d", 100.0, 4.166666666666667 } };
+        return new Object[] { new Object[] { Units.LITRE_PER_MINUTE, "l/min", 100.0, 6.0 },
+                new Object[] { Units.CUBICMETRE_PER_SECOND, "m³/s", 100.0, 360000.0 },
+                new Object[] { Units.CUBICMETRE_PER_MINUTE, "m³/min", 100.0, 6000.0 },
+                new Object[] { Units.CUBICMETRE_PER_HOUR, "m³/h", 100.0, 100.0 },
+                new Object[] { Units.CUBICMETRE_PER_DAY, "m³/d", 100.0, 4.166666666666667 } };
     }
 }
