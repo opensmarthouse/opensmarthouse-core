@@ -105,6 +105,104 @@ All units which are currently supported by default are listed in the tables belo
 
 #### SI:
 
+| Type                   | Unit                             | Symbol |
+|------------------------|----------------------------------|--------|
+| Acceleration           | Metre per Second squared         | m/s²   |
+|           | Standard Gravity                 | ɡₙ     |
+| AmountOfSubstance      | Mole                             | mol    |
+|       | Deutscher Härtegrad              | °dH    |
+| Angle                  | Radian                           | rad    |
+|                   | Degree                           | °      |
+|                   | Minute Angle                     | '      |
+|                   | Second Angle                     | ''     |
+| Area                   | Square Metre                     | m²     |
+| ArealDensity           | Dobson Unit                      | DU     |
+| CatalyticActivity      | Katal                            | kat    |
+| DataAmount             | Bit                              | bit    |
+|              | Megabit                          | Mbit   |
+|              | Kilobit                          | kbit   |
+|              | Gigabit                          | Gbit   |
+|              | Terabit                          | Tbit   |
+|              | Byte                             | B      |
+|              | Octet                            | o      |
+|              | Kibioctet                        | Kio    |
+|              | Mebioctet                        | Mio    |
+|              | Gibioctet                        | Gio    |
+| DataTransferRate       | Bit per Second                   | bit/s  |
+|        | Kilobit per Second               | kbit/s |
+|        | Megabit per Second               | Mbit/s | 
+|        | Gigabit per Second               | Gbit/s | 
+|        | Terabit per Second               | Tbit/s | 
+| Density                | Microgram per cubic Metre        | µg/m³  |
+|                 | Kilogram per cubic Metre         | kg/m³  |
+| Dimensionless          | Percent                          | %      |
+|           | Parts per Million                | ppm    |
+|           | Decibel                          | dB     |
+| ElectricPotential      | Volt                             | V      |
+| ElectricCapacitance    | Farad                            | F      |
+| ElectricCharge         | Coulomb                          | C      |
+|          | Ampere Hour                      | Ah     |
+|          | Milliampere Hour                 | mAh    |
+| ElectricConductance    | Siemens                          | S      |
+| ElectricConductivity   | Siemens per Metre                | S/m    |
+| ElectricCurrent        | Ampere                           | A      |
+| ElectricInductance     | Henry                            | H      |
+| ElectricResistance     | Ohm                              | Ω      |
+| Energy                 | Joule                            | J      |
+|                  | Watt Second                      | Ws     |
+|                  | Watt Hour                        | Wh     |
+|                  | Kilowatt Hour                    | kWh    |
+|                  | Megawatt Hour                    | MWh    |
+|                  | Volt-Ampere Hour                 | VAh    |
+|                  | Volt-Ampere Reactive Hour        | varh   |
+|                  | Kilovar Hour                     | kvarh  |
+| Force                  | Newton                           | N      |
+| Frequency              | Hertz                            | Hz     |
+| Illuminance            | Lux                              | lx     |
+| Intensity              | Irradiance                       | W/m²   |
+|               | Microwatt per square Centimeter  | µW/cm² |
+| Length                 | Metre                            | m      |
+|                  | Kilometre                        | km     |
+| LuminousFlux           | Lumen                            | lm     |
+| LuminousIntensity      | Candela                          | cd     |
+| MagneticFlux           | Weber                            | Wb     |
+| MagneticFluxDensity    | Tesla                            | T      |
+| Mass                   | Kilogram                         | kg     |
+|                    | Gram                             | g      |
+| Power                  | Watt                             | W      |
+|                   | Volt-Ampere                      | VA     |
+|                   | Volt-Ampere Reactive             | var    |
+|                   | Kilovar                          | kvar   |
+|                   | Decibel-Milliwatts               | dBm    |
+| Pressure               | Pascal                           | Pa     |
+|                | Hectopascal                      | hPa    |
+|                | Millimetre of Mercury            | mmHg   |
+|                | Bar                              | bar    |
+|                | Millibar                         | mbar   |
+| Radioactivity          | Becquerel                        | Bq     |
+| RadiationDoseAbsorbed  | Gray                             | Gy     |
+| RadiationDoseEffective | Sievert                          | Sv     |
+| SolidAngle             | Steradian                        | sr     |
+| Speed                  | Metre per Second                 | m/s    |
+|                   | Millimetre per Hour              | mm/h   |
+|                   | Kilometre per Hour               | km/h   |
+|                   | Knot                             | kn     |
+| Temperature            | Kelvin                           | K      |
+|             | Celsius                          | °C     |
+| Time                   | Second                           | s      |
+|                    | Minute                           | min    |
+|                    | Hour                             | h      |
+|                    | Day                              | d      |
+|                    | Week                             | week   |
+|                    | Year                             | y      |
+| Volume                 | Litre                            | l      |
+|                  | Cubic Metre                      | m³     |
+| VolumetricFlowRate     | Litre per Minute                 | l/min  |
+|      | Cubic Metre per Second           | m³/s   |
+|      | Cubic Metre per Minute           | m³/min |
+|      | Cubic Metre per Hour             | m³/h   |
+|      | Cubic Metre per Day              | m³/d   |
+
 <table>
 	<thead>
 		<tr><th>Type</th><th>Unit</th><th>Symbol</th></tr>
