@@ -218,6 +218,7 @@
     <feature name="opensmarthouse-core-service" description="Open SmartHouse Core: Service" version="${project.version}">
         <feature>opensmarthouse-core-common</feature>
         <feature>opensmarthouse-core-type</feature>
+        <feature>opensmarthouse-core-event</feature>
         <bundle>mvn:org.opensmarthouse.core.bundles/org.opensmarthouse.core.service/${project.version}</bundle>
     </feature>
 
@@ -245,6 +246,7 @@
     <feature name="opensmarthouse-core-registry" description="Open SmartHouse Core: Registry API and base types" version="${project.version}">
         <feature>opensmarthouse-core-event</feature>
         <feature>opensmarthouse-core-storage</feature>
+        <feature>opensmarthouse-core-service</feature>
         <bundle>mvn:org.opensmarthouse.core.bundles/org.opensmarthouse.core.registry/${project.version}</bundle>
     </feature>
 
@@ -334,6 +336,11 @@
         <bundle>mvn:org.opensmarthouse.core.bundles/org.opensmarthouse.core.automation.rest/${project.version}</bundle>
     </feature>
 
+    <feature name="opensmarthouse-core-cache" version="${project.version}">
+        <feature>opensmarthouse-core</feature>
+        <bundle>mvn:org.opensmarthouse.core.bundles/org.opensmarthouse.core.cache/${project.version}</bundle>
+    </feature>
+
     <feature name="opensmarthouse-core-config" version="${project.version}">
         <feature>opensmarthouse-tp-gson</feature>
         <feature>opensmarthouse-core-common</feature>
@@ -406,6 +413,7 @@
 
     <feature name="opensmarthouse-core-thing" description="Thing API" version="${project.version}">
         <feature>opensmarthouse-core-common</feature>
+        <feature>opensmarthouse-core-cache</feature>
         <feature>opensmarthouse-core-registry</feature>
         <feature>opensmarthouse-core-config</feature>
         <feature>opensmarthouse-core-item</feature>
@@ -430,7 +438,7 @@
     </feature>
 
     <feature name="opensmarthouse-core-io-monitor" version="${project.version}">
-        <feature>opensmarthouse-core-event</feature>
+        <feature>opensmarthouse-core-service</feature>
         <bundle>mvn:org.opensmarthouse.core.bundles/org.opensmarthouse.core.io.monitor/${project.version}</bundle>
     </feature>
 
@@ -449,6 +457,7 @@
     <feature name="opensmarthouse-core-io-http-auth" version="${project.version}">
         <feature dependency="true">opensmarthouse-tp-jax-rs</feature>
         <feature>opensmarthouse-core-io-http</feature>
+        <feature>opensmarthouse-core-i18n</feature>
         <feature>opensmarthouse-core-auth-jaas</feature>
         <bundle>mvn:org.opensmarthouse.core.bundles/org.opensmarthouse.core.io.http.auth/${project.version}</bundle>
     </feature>
@@ -556,6 +565,16 @@
 
         <bundle>mvn:org.opensmarthouse.core.bundles/org.opensmarthouse.core.io.transport.mdns/${project.version}</bundle>
         <bundle>mvn:org.opensmarthouse.core.bundles/org.opensmarthouse.core.config.discovery.mdns/${project.version}</bundle>
+    </feature>
+
+    <feature name="opensmarthouse-core-io-transport-modbus" version="${project.version}">
+        <feature>opensmarthouse-core-util</feature>
+        <feature>opensmarthouse-transport-serial</feature>
+
+        <bundle dependency="true">mvn:commons-io/commons-io/2.6</bundle>
+        <bundle dependency="true">mvn:commons-lang/commons-lang/2.6</bundle>
+        <bundle dependency="true">mvn:org.apache.commons/commons-pool2/2.8.1</bundle>
+        <bundle>mvn:org.opensmarthouse.core.bundles/org.opensmarthouse.core.io.transport.modbus/${project.version}</bundle>
     </feature>
 
     <feature name="opensmarthouse-core-io-transport-mqtt" version="${project.version}">
@@ -904,6 +923,10 @@
 
     <feature name="opensmarthouse-transport-mdns" description="mDNS Transport" version="${project.version}">
         <feature>opensmarthouse-core-io-transport-mdns</feature>
+    </feature>
+
+    <feature name="opensmarthouse-transport-modbus" description="Modbus Transport" version="${project.version}">
+        <feature>opensmarthouse-core-io-transport-modbus</feature>
     </feature>
 
     <feature name="opensmarthouse-transport-mqtt" description="MQTT Transport" version="${project.version}">

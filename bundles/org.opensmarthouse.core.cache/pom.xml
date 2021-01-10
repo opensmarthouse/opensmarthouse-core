@@ -15,6 +15,10 @@
 
   <dependencies>
     <dependency>
+      <groupId>org.opensmarthouse.core.bundles</groupId>
+      <artifactId>org.opensmarthouse.core</artifactId>
+    </dependency>
+    <dependency>
       <groupId>org.slf4j</groupId>
       <artifactId>slf4j-api</artifactId>
     </dependency>
@@ -24,8 +28,24 @@
     </dependency>
 
     <dependency>
+      <groupId>org.osgi</groupId>
+      <artifactId>osgi.enroute.hamcrest.wrapper</artifactId>
+    </dependency>
+    <dependency>
       <groupId>junit</groupId>
       <artifactId>junit</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.junit.jupiter</groupId>
+      <artifactId>junit-jupiter-api</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.junit.jupiter</groupId>
+      <artifactId>junit-jupiter-params</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.mockito</groupId>
+      <artifactId>mockito-junit-jupiter</artifactId>
     </dependency>
   </dependencies>
 

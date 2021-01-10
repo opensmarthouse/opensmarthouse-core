@@ -46,7 +46,7 @@ public class ConfigDescriptionI18nTest extends JavaOSGiTest {
     @Before
     public void setUp() {
         configDescriptionProvider = getService(ConfigDescriptionProvider.class,
-                serviceReference -> "core.xml.config".equals(serviceReference.getProperty("esh.scope")));
+                serviceReference -> "core.xml.config".equals(serviceReference.getProperty("openhab.scope")));
         assertThat(configDescriptionProvider, is(notNullValue()));
     }
 

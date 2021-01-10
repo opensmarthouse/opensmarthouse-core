@@ -71,6 +71,7 @@
     <swagger.version>2.1.0</swagger.version>
     <netty.version>4.1.42.Final</netty.version>
 
+    <eea.version>2.2.1</eea.version>
     <sat.version>0.10.0</sat.version>
 
     <!-- xtext / emf / core -->
@@ -302,8 +303,12 @@ Import-Package: \\
           <version>${maven-compiler-plugin.version}</version>
           <configuration>
             <compilerId>eclipse</compilerId>
+            <compilerArguments>
+              <annotationpath>CLASSPATH</annotationpath>
+              <classpath>${project.build.directory}/dependency</classpath>
+            </compilerArguments>
             <compilerArgs>
-              <arg>-err:+nullAnnot(org.eclipse.jdt.annotation.Nullable|org.eclipse.jdt.annotation.NonNull|org.eclipse.jdt.annotation.NonNullByDefault),+inheritNullAnnot,-nullUncheckedConversion</arg>
+              <arg>-err:+nullAnnot(org.eclipse.jdt.annotation.Nullable|org.eclipse.jdt.annotation.NonNull|org.eclipse.jdt.annotation.NonNullByDefault),+inheritNullAnnot,+nullAnnotConflict,-nullUncheckedConversion</arg>
               <arg>-warn:+null,+inheritNullAnnot,+nullAnnotConflict,-nullUncheckedConversion,+nullAnnotRedundant,+nullDereference</arg>
             </compilerArgs>
             <showWarnings>true</showWarnings>

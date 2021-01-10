@@ -46,11 +46,12 @@ public class ItemBuilderTest {
     private @Mock ItemFactory mockFactory;
     private @Mock ActiveItem mockItem;
     private @Mock Item originalItem;
+    private @Mock ItemFactory itemFactory;
 
     @Before
     public void setup() {
         initMocks(this);
-        itemBuilderFactory = new ItemBuilderFactoryImpl();
+        itemBuilderFactory = new ItemBuilderFactoryImpl(itemFactory);
         itemBuilderFactory.addItemFactory(mockFactory);
     }
 

@@ -20,6 +20,7 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Optional;
 import java.util.Set;
+import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.CopyOnWriteArraySet;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
 import java.util.function.BiConsumer;
@@ -31,6 +32,8 @@ import org.eclipse.jdt.annotation.NonNullByDefault;
 import org.eclipse.jdt.annotation.Nullable;
 import org.openhab.core.events.Event;
 import org.openhab.core.events.EventPublisher;
+import org.openhab.core.service.ReadyMarker;
+import org.openhab.core.service.ReadyService;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.ServiceReference;
 import org.osgi.util.tracker.ServiceTracker;
@@ -63,7 +66,7 @@ public abstract class AbstractRegistry<@NonNull E extends Identifiable<K>, @NonN
     private final Logger logger = LoggerFactory.getLogger(AbstractRegistry.class);
 
     private final @Nullable Class<P> providerClazz;
-    private @Nullable ServiceTracker<P, P> providerTracker;
+    private @Nullable CompletableFuture<ServiceTracker<P, P>> providerTrackerFuture;
 
     private final ReentrantReadWriteLock elementLock = new ReentrantReadWriteLock();
     private final ReentrantReadWriteLock.ReadLock elementReadLock = elementLock.readLock();
@@ -78,6 +81,7 @@ public abstract class AbstractRegistry<@NonNull E extends Identifiable<K>, @NonN
     private Optional<ManagedProvider<E, K>> managedProvider = Optional.empty();
 
     private @Nullable EventPublisher eventPublisher;
+    private @Nullable ReadyService readyService;
 
     /**
      * Constructor.
@@ -95,18 +99,29 @@ public abstract class AbstractRegistry<@NonNull E extends Identifiable<K>, @NonN
          * multiple) rely on an active component.
          * To grant that the add and remove functions are called only for an active component, we use a provider
          * tracker.
+         * Do not open the tracker in the activation method itself as this could lead to circular dependency errors.
          */
         if (providerClazz != null) {
             Class<P> providerClazz = this.providerClazz;
-            providerTracker = new ProviderTracker(context, providerClazz);
-            providerTracker.open();
+            providerTrackerFuture = CompletableFuture.supplyAsync(() -> {
+                ServiceTracker<P, P> providerTracker = new ProviderTracker(context, providerClazz);
+                providerTracker.open();
+                return providerTracker;
+            });
         }
     }
 
     protected void deactivate() {
-        if (providerTracker != null) {
-            providerTracker.close();
-            providerTracker = null;
+        CompletableFuture<ServiceTracker<P, P>> future = providerTrackerFuture;
+        if (future != null) {
+            future.join().close();
+        }
+    }
+
+    public void waitForCompletedAsyncActivationTasks() {
+        CompletableFuture<ServiceTracker<P, P>> future = providerTrackerFuture;
+        if (future != null) {
+            future.join();
         }
     }
 
@@ -214,7 +229,7 @@ public abstract class AbstractRegistry<@NonNull E extends Identifiable<K>, @NonN
 
     @Override
     public void removed(Provider<E> provider, E element) {
-        final E existingElement;
+        final @Nullable E existingElement;
         elementWriteLock.lock();
         try {
             // The given "element" might not be the live instance but loaded from storage.
@@ -235,7 +250,10 @@ public abstract class AbstractRegistry<@NonNull E extends Identifiable<K>, @NonN
             }
             identifierToElement.remove(uid);
             elementToProvider.remove(existingElement);
-            providerToElements.get(provider).remove(existingElement);
+            Collection<E> providerElements = providerToElements.get(provider);
+            if (providerElements != null) {
+                providerElements.remove(existingElement);
+            }
             elements.remove(existingElement);
         } finally {
             elementWriteLock.unlock();
@@ -258,7 +276,7 @@ public abstract class AbstractRegistry<@NonNull E extends Identifiable<K>, @NonN
             return;
         }
 
-        final E existingElement;
+        final @Nullable E existingElement;
         elementWriteLock.lock();
         try {
             // The given "element" might not be the live instance but loaded from storage.
@@ -281,8 +299,10 @@ public abstract class AbstractRegistry<@NonNull E extends Identifiable<K>, @NonN
             elementToProvider.remove(existingElement);
             elementToProvider.put(element, provider);
             final Collection<E> providerElements = providerToElements.get(provider);
-            providerElements.remove(existingElement);
-            providerElements.add(element);
+            if (providerElements != null) {
+                providerElements.remove(existingElement);
+                providerElements.add(element);
+            }
             elements.remove(existingElement);
             elements.add(element);
         } finally {
@@ -310,8 +330,9 @@ public abstract class AbstractRegistry<@NonNull E extends Identifiable<K>, @NonN
     protected @Nullable Entry<Provider<E>, E> getValueAndProvider(K key) {
         elementReadLock.lock();
         try {
-            final E element = identifierToElement.get(key);
-            return element == null ? null : Map.entry(elementToProvider.get(element), element);
+            final @Nullable E element = identifierToElement.get(key);
+            final Provider<E> provider = elementToProvider.get(element);
+            return element == null || provider == null ? null : Map.entry(provider, element);
         } finally {
             elementReadLock.unlock();
         }
@@ -406,6 +427,11 @@ public abstract class AbstractRegistry<@NonNull E extends Identifiable<K>, @NonN
             elementWriteLock.unlock();
         }
         elementsAdded.forEach(this::notifyListenersAboutAddedElement);
+
+        if (provider instanceof ManagedProvider && readyService != null) {
+            readyService.markReady(
+                    new ReadyMarker("managed", providerClazz.getSimpleName().replace("Provider", "").toLowerCase()));
+        }
         logger.debug("Provider \"{}\" has been added.", provider.getClass().getName());
     }
 
@@ -418,11 +444,8 @@ public abstract class AbstractRegistry<@NonNull E extends Identifiable<K>, @NonN
     protected @Nullable Provider<E> getProvider(K key) {
         elementReadLock.lock();
         try {
-            final E element = identifierToElement.get(key);
-            if (element == null) {
-                return null;
-            }
-            return elementToProvider.get(element);
+            final @Nullable E element = identifierToElement.get(key);
+            return element == null ? null : elementToProvider.get(element);
         } finally {
             elementReadLock.unlock();
         }
@@ -632,6 +655,14 @@ public abstract class AbstractRegistry<@NonNull E extends Identifiable<K>, @NonN
 
     protected void unsetEventPublisher(EventPublisher eventPublisher) {
         this.eventPublisher = null;
+    }
+
+    protected void setReadyService(ReadyService readyService) {
+        this.readyService = readyService;
+    }
+
+    protected void unsetReadyService(ReadyService readyService) {
+        this.readyService = null;
     }
 
     /**

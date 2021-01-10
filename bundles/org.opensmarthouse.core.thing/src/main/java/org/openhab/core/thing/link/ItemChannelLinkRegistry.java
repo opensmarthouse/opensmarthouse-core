@@ -13,8 +13,8 @@
 package org.openhab.core.thing.link;
 
 import java.util.Set;
+
 import org.eclipse.jdt.annotation.NonNullByDefault;
-import org.openhab.core.common.registry.Registry;
 import org.openhab.core.items.Item;
 import org.openhab.core.thing.ChannelUID;
 import org.openhab.core.thing.Thing;
@@ -40,8 +40,15 @@ public interface ItemChannelLinkRegistry extends LinkRegistry<ItemChannelLink> {
      */
     Set<ChannelUID> getBoundChannels(String itemName);
 
+    @Override
     Set<String> getLinkedItemNames(UID uid);
 
+    /**
+     * Returns a set of bound items for the given channel UID.
+     *
+     * @param uid channel UID
+     * @return an unmodifiable set of bound items for the given channel UID
+     */
     Set<Item> getLinkedItems(UID uid);
 
     /**
