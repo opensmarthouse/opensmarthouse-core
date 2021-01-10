@@ -39,7 +39,7 @@ import org.eclipse.xtext.xbase.typesystem.IBatchTypeResolver
 import org.openhab.core.library.types.NumberType
 
 /**
- * The script interpreter handles ESH specific script components, which are not known
+ * The script interpreter handles specific script components, which are not known
  * to the standard Xbase interpreter.
  * 
  * @author Kai Kreuzer - Initial contribution and API

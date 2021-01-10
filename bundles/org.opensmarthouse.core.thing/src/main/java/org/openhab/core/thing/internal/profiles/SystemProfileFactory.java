@@ -73,6 +73,10 @@ public class SystemProfileFactory implements ProfileFactory, ProfileAdvisor, Pro
 
     Function<ProfileTypeBuilderFactory, StateProfileType> FOLLOW_TYPE = profileTypeBuilderFactory -> profileTypeBuilderFactory.newState(FOLLOW, "Follow").build();
 
+    Function<ProfileTypeBuilderFactory, StateProfileType> HYSTERESIS_TYPE = profileTypeBuilderFactory -> profileTypeBuilderFactory.newState(HYSTERESIS, "Hysteresis")
+        .withSupportedItemTypes(CoreItemFactory.SWITCH).withSupportedItemTypesOfChannel(CoreItemFactory.DIMMER, CoreItemFactory.NUMBER)
+        .build();
+
     Function<ProfileTypeBuilderFactory, StateProfileType> OFFSET_TYPE = profileTypeBuilderFactory -> profileTypeBuilderFactory.newState(OFFSET, "Offset")
             .withSupportedItemTypes(CoreItemFactory.NUMBER).withSupportedItemTypesOfChannel(CoreItemFactory.NUMBER)
             .build();
@@ -142,7 +146,7 @@ public class SystemProfileFactory implements ProfileFactory, ProfileAdvisor, Pro
     private final Set<ProfileType> SUPPORTED_PROFILE_TYPES;
 
     private static final Set<ProfileTypeUID> SUPPORTED_PROFILE_TYPE_UIDS = Collections
-            .unmodifiableSet(Stream.of(DEFAULT, FOLLOW, OFFSET, RAWBUTTON_ON_OFF_SWITCH, RAWBUTTON_TOGGLE_PLAYER,
+            .unmodifiableSet(Stream.of(DEFAULT, FOLLOW, OFFSET, HYSTERESIS, RAWBUTTON_ON_OFF_SWITCH, RAWBUTTON_TOGGLE_PLAYER,
                     RAWBUTTON_TOGGLE_PLAYER, RAWBUTTON_TOGGLE_SWITCH, RAWROCKER_DIMMER, RAWROCKER_NEXT_PREVIOUS,
                     RAWROCKER_ON_OFF, RAWROCKER_PLAY_PAUSE, RAWROCKER_REWIND_FASTFORWARD, RAWROCKER_STOP_MOVE,
                     RAWROCKER_UP_DOWN, TIMESTAMP_CHANGE, TIMESTAMP_UPDATE).collect(Collectors.toSet()));
@@ -161,7 +165,7 @@ public class SystemProfileFactory implements ProfileFactory, ProfileAdvisor, Pro
         this.profileTypeI18nLocalizationService = profileTypeI18nLocalizationService;
         this.bundle = bundleResolver.resolveBundle(SystemProfileFactory.class);
 
-        SUPPORTED_PROFILE_TYPES = Stream.of(DEFAULT_TYPE, FOLLOW_TYPE, OFFSET_TYPE, RAWBUTTON_ON_OFF_SWITCH_TYPE,
+        SUPPORTED_PROFILE_TYPES = Stream.of(DEFAULT_TYPE, FOLLOW_TYPE, OFFSET_TYPE, HYSTERESIS_TYPE, RAWBUTTON_ON_OFF_SWITCH_TYPE,
                 RAWBUTTON_TOGGLE_PLAYER_TYPE, RAWBUTTON_TOGGLE_PLAYER_TYPE, RAWBUTTON_TOGGLE_SWITCH_TYPE,
                 RAWROCKER_DIMMER_TYPE, RAWROCKER_NEXT_PREVIOUS_TYPE, RAWROCKER_ON_OFF_TYPE,
                 RAWROCKER_PLAY_PAUSE_TYPE, RAWROCKER_REWIND_FASTFORWARD_TYPE, RAWROCKER_STOP_MOVE_TYPE,
@@ -177,6 +181,8 @@ public class SystemProfileFactory implements ProfileFactory, ProfileAdvisor, Pro
             return new SystemDefaultProfile(callback);
         } else if (FOLLOW.equals(profileTypeUID)) {
             return new SystemFollowProfile(callback);
+        } else if (HYSTERESIS.equals(profileTypeUID)) {
+            return new SystemHysteresisStateProfile(callback, context);
         } else if (OFFSET.equals(profileTypeUID)) {
             return new SystemOffsetProfile(callback, context);
         } else if (RAWBUTTON_ON_OFF_SWITCH.equals(profileTypeUID)) {

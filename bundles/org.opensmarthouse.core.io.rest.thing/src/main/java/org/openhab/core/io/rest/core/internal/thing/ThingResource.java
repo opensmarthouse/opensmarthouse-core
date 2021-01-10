@@ -56,6 +56,7 @@ import org.openhab.core.config.core.Configuration;
 import org.openhab.core.config.core.status.ConfigStatusInfo;
 import org.openhab.core.config.core.status.ConfigStatusService;
 import org.openhab.core.config.core.validation.ConfigValidationException;
+import org.openhab.core.io.rest.DTOMapper;
 import org.openhab.core.io.rest.JSONResponse;
 import org.openhab.core.io.rest.LocaleService;
 import org.openhab.core.io.rest.RESTConstants;
@@ -152,6 +153,7 @@ public class ThingResource implements RESTResource {
     /** The URI path to this resource */
     public static final String PATH_THINGS = "things";
 
+    private final DTOMapper dtoMapper;
     private final ChannelTypeRegistry channelTypeRegistry;
     private final ConfigStatusService configStatusService;
     private final ConfigDescriptionRegistry configDescRegistry;
@@ -174,7 +176,7 @@ public class ThingResource implements RESTResource {
 
     @Activate
     public ThingResource( //
-            final @Reference ChannelTypeRegistry channelTypeRegistry,
+            final @Reference DTOMapper dtoMapper, final @Reference ChannelTypeRegistry channelTypeRegistry,
             final @Reference ConfigStatusService configStatusService,
             final @Reference ConfigDescriptionRegistry configDescRegistry,
             final @Reference FirmwareRegistry firmwareRegistry,
@@ -191,6 +193,7 @@ public class ThingResource implements RESTResource {
             final @Reference ThingRegistry thingRegistry,
             final @Reference ThingStatusInfoI18nLocalizationService thingStatusInfoI18nLocalizationService,
             final @Reference ThingTypeRegistry thingTypeRegistry) {
+        this.dtoMapper = dtoMapper;
         this.channelTypeRegistry = channelTypeRegistry;
         this.configStatusService = configStatusService;
         this.configDescRegistry = configDescRegistry;
@@ -219,9 +222,10 @@ public class ThingResource implements RESTResource {
     @POST
     @RolesAllowed({ Role.ADMIN })
     @Consumes(MediaType.APPLICATION_JSON)
-    @Operation(summary = "Creates a new thing and adds it to the registry.", security = {
+    @Operation(operationId = "createThingInRegistry", summary = "Creates a new thing and adds it to the registry.", security = {
             @SecurityRequirement(name = "oauth2", scopes = { "admin" }) }, responses = {
                     @ApiResponse(responseCode = "201", description = "Created", content = @Content(schema = @Schema(implementation = String.class))),
+                    @ApiResponse(responseCode = "400", description = "Thing uid does not match bridge uid."),
                     @ApiResponse(responseCode = "400", description = "A uid must be provided, if no binding can create a thing of this type."),
                     @ApiResponse(responseCode = "409", description = "A thing with the same uid already exists.") })
     public Response create(
@@ -246,6 +250,11 @@ public class ThingResource implements RESTResource {
 
         if (thingBean.bridgeUID != null) {
             bridgeUID = new ThingUID(thingBean.bridgeUID);
+            if (thingUID != null && (!thingUID.getBindingId().equals(bridgeUID.getBindingId())
+                    || !thingUID.getBridgeIds().contains(bridgeUID.getId()))) {
+                return Response.status(Status.BAD_REQUEST)
+                        .entity("Thing UID '" + thingUID + "' does not match bridge UID '" + bridgeUID + "'").build();
+            }
         }
 
         // turn the ThingDTO's configuration into a Configuration
@@ -290,16 +299,21 @@ public class ThingResource implements RESTResource {
     }
 
     @GET
-    @RolesAllowed({ Role.USER, Role.ADMIN })
+    @RolesAllowed({ Role.ADMIN })
     @Produces(MediaType.APPLICATION_JSON)
-    @Operation(summary = "Get all available things.", responses = {
+    @Operation(operationId = "getThings", summary = "Get all available things.", responses = {
             @ApiResponse(responseCode = "200", description = "OK", content = @Content(array = @ArraySchema(schema = @Schema(implementation = EnrichedThingDTO.class), uniqueItems = true))) })
     public Response getAll(
-            @HeaderParam(HttpHeaders.ACCEPT_LANGUAGE) @Parameter(description = "language") @Nullable String language) {
+            @HeaderParam(HttpHeaders.ACCEPT_LANGUAGE) @Parameter(description = "language") @Nullable String language,
+            @QueryParam("summary") @Parameter(description = "summary fields only") @Nullable Boolean summary) {
         final Locale locale = localeService.getLocale(language);
 
         Stream<EnrichedThingDTO> thingStream = thingRegistry.stream().map(t -> convertToEnrichedThingDTO(t, locale))
                 .distinct();
+        if (summary != null && summary == true) {
+            thingStream = dtoMapper.limitToFields(thingStream,
+                    "UID,label,bridgeUID,thingTypeUID,statusInfo,firmwareStatus,location,editable");
+        }
         return Response.ok(new Stream2JSONInputStream(thingStream)).build();
     }
 
@@ -307,7 +321,7 @@ public class ThingResource implements RESTResource {
     @RolesAllowed({ Role.ADMIN })
     @Path("/{thingUID}")
     @Produces(MediaType.APPLICATION_JSON)
-    @Operation(summary = "Gets thing by UID.", security = {
+    @Operation(operationId = "getThingById", summary = "Gets thing by UID.", security = {
             @SecurityRequirement(name = "oauth2", scopes = { "admin" }) }, responses = {
                     @ApiResponse(responseCode = "200", description = "OK", content = @Content(schema = @Schema(implementation = ThingDTO.class))),
                     @ApiResponse(responseCode = "404", description = "Thing not found.") })
@@ -338,7 +352,7 @@ public class ThingResource implements RESTResource {
     @DELETE
     @RolesAllowed({ Role.ADMIN })
     @Path("/{thingUID}")
-    @Operation(summary = "Removes a thing from the registry. Set \'force\' to __true__ if you want the thing to be removed immediately.", security = {
+    @Operation(operationId = "removeThingById", summary = "Removes a thing from the registry. Set \'force\' to __true__ if you want the thing to be removed immediately.", security = {
             @SecurityRequirement(name = "oauth2", scopes = { "admin" }) }, responses = {
                     @ApiResponse(responseCode = "200", description = "OK, was deleted."),
                     @ApiResponse(responseCode = "202", description = "ACCEPTED for asynchronous deletion."),
@@ -397,7 +411,7 @@ public class ThingResource implements RESTResource {
     @RolesAllowed({ Role.ADMIN })
     @Path("/{thingUID}")
     @Consumes(MediaType.APPLICATION_JSON)
-    @Operation(summary = "Updates a thing.", security = {
+    @Operation(operationId = "updateThing", summary = "Updates a thing.", security = {
             @SecurityRequirement(name = "oauth2", scopes = { "admin" }) }, responses = {
                     @ApiResponse(responseCode = "200", description = "OK", content = @Content(schema = @Schema(implementation = ThingDTO.class))),
                     @ApiResponse(responseCode = "404", description = "Thing not found."),
@@ -457,7 +471,7 @@ public class ThingResource implements RESTResource {
     @RolesAllowed({ Role.ADMIN })
     @Path("/{thingUID}/config")
     @Consumes(MediaType.APPLICATION_JSON)
-    @Operation(summary = "Updates thing's configuration.", security = {
+    @Operation(operationId = "updateThingConfig", summary = "Updates thing's configuration.", security = {
             @SecurityRequirement(name = "oauth2", scopes = { "admin" }) }, responses = {
                     @ApiResponse(responseCode = "200", description = "OK", content = @Content(schema = @Schema(implementation = ThingDTO.class))),
                     @ApiResponse(responseCode = "400", description = "Configuration of the thing is not valid."),
@@ -508,10 +522,10 @@ public class ThingResource implements RESTResource {
     }
 
     @GET
-    @RolesAllowed({ Role.USER, Role.ADMIN })
+    @RolesAllowed({ Role.ADMIN })
     @Path("/{thingUID}/status")
     @Produces(MediaType.APPLICATION_JSON)
-    @Operation(summary = "Gets thing status.", security = {
+    @Operation(operationId = "getThingStatus", summary = "Gets thing status.", security = {
             @SecurityRequirement(name = "oauth2", scopes = { "admin" }) }, responses = {
                     @ApiResponse(responseCode = "200", description = "OK", content = @Content(schema = @Schema(implementation = String.class))),
                     @ApiResponse(responseCode = "404", description = "Thing not found.") })
@@ -536,7 +550,7 @@ public class ThingResource implements RESTResource {
     @PUT
     @RolesAllowed({ Role.ADMIN })
     @Path("/{thingUID}/enable")
-    @Operation(summary = "Sets the thing enabled status.", security = {
+    @Operation(operationId = "enableThing", summary = "Sets the thing enabled status.", security = {
             @SecurityRequirement(name = "oauth2", scopes = { "admin" }) }, responses = {
                     @ApiResponse(responseCode = "200", description = "OK", content = @Content(schema = @Schema(implementation = String.class))),
                     @ApiResponse(responseCode = "404", description = "Thing not found.") })
@@ -594,7 +608,7 @@ public class ThingResource implements RESTResource {
     @RolesAllowed({ Role.ADMIN })
     @Path("/{thingUID}/config/status")
     @Produces(MediaType.APPLICATION_JSON)
-    @Operation(summary = "Gets thing config status.", security = {
+    @Operation(operationId = "getThingConfigStatus", summary = "Gets thing config status.", security = {
             @SecurityRequirement(name = "oauth2", scopes = { "admin" }) }, responses = {
                     @ApiResponse(responseCode = "200", description = "OK", content = @Content(schema = @Schema(implementation = String.class))),
                     @ApiResponse(responseCode = "404", description = "Thing not found.") })
@@ -622,7 +636,7 @@ public class ThingResource implements RESTResource {
     @RolesAllowed({ Role.ADMIN })
     @Path("/{thingUID}/firmware/{firmwareVersion}")
     @Consumes(MediaType.APPLICATION_JSON)
-    @Operation(summary = "Update thing firmware.", security = {
+    @Operation(operationId = "updateThingFirmware", summary = "Update thing firmware.", security = {
             @SecurityRequirement(name = "oauth2", scopes = { "admin" }) }, responses = {
                     @ApiResponse(responseCode = "200", description = "OK"),
                     @ApiResponse(responseCode = "400", description = "Firmware update preconditions not satisfied."),
@@ -659,7 +673,7 @@ public class ThingResource implements RESTResource {
     @GET
     @RolesAllowed({ Role.ADMIN })
     @Path("/{thingUID}/firmware/status")
-    @Operation(summary = "Gets thing's firmware status.", security = {
+    @Operation(operationId = "getThingFirmwareStatus", summary = "Gets thing's firmware status.", security = {
             @SecurityRequirement(name = "oauth2", scopes = { "admin" }) }, responses = {
                     @ApiResponse(responseCode = "200", description = "OK"),
                     @ApiResponse(responseCode = "204", description = "No firmware status provided by this Thing.") })
@@ -679,7 +693,7 @@ public class ThingResource implements RESTResource {
     @RolesAllowed({ Role.ADMIN })
     @Path("/{thingUID}/firmwares")
     @Produces(MediaType.APPLICATION_JSON)
-    @Operation(summary = "Get all available firmwares for provided thing UID", security = {
+    @Operation(operationId = "getAvailableFirmwaresForThing", summary = "Get all available firmwares for provided thing UID", security = {
             @SecurityRequirement(name = "oauth2", scopes = { "admin" }) }, responses = {
                     @ApiResponse(responseCode = "200", description = "OK", content = @Content(array = @ArraySchema(schema = @Schema(implementation = FirmwareDTO.class), uniqueItems = true))),
                     @ApiResponse(responseCode = "204", description = "No firmwares found.") })

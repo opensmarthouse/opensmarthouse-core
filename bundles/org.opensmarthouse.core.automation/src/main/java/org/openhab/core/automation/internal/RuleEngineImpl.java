@@ -51,6 +51,7 @@ import org.openhab.core.automation.handler.TriggerHandler;
 import org.openhab.core.automation.handler.TriggerHandlerCallback;
 import org.openhab.core.automation.internal.TriggerHandlerCallbackImpl.TriggerData;
 import org.openhab.core.automation.internal.composite.CompositeModuleHandlerFactory;
+import org.openhab.core.automation.internal.module.handler.SystemTriggerHandler;
 import org.openhab.core.automation.internal.ruleengine.WrappedAction;
 import org.openhab.core.automation.internal.ruleengine.WrappedCondition;
 import org.openhab.core.automation.internal.ruleengine.WrappedModule;
@@ -67,14 +68,19 @@ import org.openhab.core.automation.type.ModuleTypeRegistry;
 import org.openhab.core.automation.type.Output;
 import org.openhab.core.automation.type.TriggerType;
 import org.openhab.core.automation.util.ReferenceResolver;
+import org.openhab.core.common.NamedThreadFactory;
 import org.openhab.core.common.registry.RegistryChangeListener;
 import org.openhab.core.events.Event;
 import org.openhab.core.events.EventPublisher;
+import org.openhab.core.service.ReadyMarker;
+import org.openhab.core.service.ReadyMarkerFilter;
+import org.openhab.core.service.ReadyService;
+import org.openhab.core.service.ReadyService.ReadyTracker;
+import org.openhab.core.service.StartLevelService;
 import org.openhab.core.storage.Storage;
 import org.openhab.core.storage.StorageService;
 import org.osgi.service.component.annotations.Activate;
 import org.osgi.service.component.annotations.Component;
-import org.osgi.service.component.annotations.ComponentPropertyType;
 import org.osgi.service.component.annotations.Deactivate;
 import org.osgi.service.component.annotations.Reference;
 import org.osgi.service.component.annotations.ReferenceCardinality;
@@ -100,17 +106,9 @@ import org.slf4j.LoggerFactory;
  * @author Markus Rathgeb - use a managed rule
  * @author Ana Dimova - new reference syntax: list[index], map["key"], bean.field
  */
-@Component(immediate = true)
+@Component(immediate = true, service = { RuleManager.class })
 @NonNullByDefault
-public class RuleEngineImpl implements RuleManager, RegistryChangeListener<ModuleType> {
-
-    @ComponentPropertyType
-    public @interface Config {
-        /**
-         * Delay between rule's re-initialization tries.
-         */
-        long rule_reinitialization_delay() default 500;
-    }
+public class RuleEngineImpl implements RuleManager, RegistryChangeListener<ModuleType>, ReadyTracker {
 
     /**
      * Constant defining separator between module id and output name.
@@ -119,31 +117,30 @@ public class RuleEngineImpl implements RuleManager, RegistryChangeListener<Modul
 
     private static final String DISABLED_RULE_STORAGE = "automation_rules_disabled";
 
-    /**
-     * Delay between rule's re-initialization tries.
-     */
-    private final long scheduleReinitializationDelay;
+    private static final int RULE_INIT_DELAY = 500;
 
-    private final Map<String, @Nullable WrappedRule> managedRules = new ConcurrentHashMap<>();
+    private static final ReadyMarker MARKER = new ReadyMarker("ruleengine", "start");
+
+    private final Map<String, WrappedRule> managedRules = new ConcurrentHashMap<>();
 
     /**
      * {@link Map} holding all created {@link TriggerHandlerCallback} instances, corresponding to each {@link Rule}.
      * There is only one {@link TriggerHandlerCallback} instance per {@link Rule}. The relation is
      * {@link Rule}'s UID to {@link TriggerHandlerCallback} instance.
      */
-    private final Map<String, @Nullable TriggerHandlerCallbackImpl> thCallbacks = new HashMap<>();
+    private final Map<String, TriggerHandlerCallbackImpl> thCallbacks = new HashMap<>();
 
     /**
      * {@link Map} holding all {@link ModuleType} UIDs that are available in some rule's module definition. The relation
      * is {@link ModuleType}'s UID to {@link Set} of {@link Rule} UIDs.
      */
-    private final Map<String, @Nullable Set<String>> mapModuleTypeToRules = new HashMap<>();
+    private final Map<String, Set<String>> mapModuleTypeToRules = new HashMap<>();
 
     /**
      * {@link Map} holding all available {@link ModuleHandlerFactory}s linked with {@link ModuleType}s that they
      * supporting. The relation is {@link ModuleType}'s UID to {@link ModuleHandlerFactory} instance.
      */
-    private final Map<String, @Nullable ModuleHandlerFactory> moduleHandlerFactories;
+    private final Map<String, ModuleHandlerFactory> moduleHandlerFactories;
 
     /**
      * {@link Set} holding all available {@link ModuleHandlerFactory}s.
@@ -160,12 +157,15 @@ public class RuleEngineImpl implements RuleManager, RegistryChangeListener<Modul
      */
     private boolean isDisposed = false;
 
+    /**
+     * flag to check whether we have reached a start level where we want to start rule execution
+     */
+    private boolean started = false;
+
     protected final Logger logger = LoggerFactory.getLogger(RuleEngineImpl.class);
 
-    /**
-     * A callback that is notified when the status of a {@link Rule} changes.
-     */
     private final RuleRegistry ruleRegistry;
+    private final ReadyService readyService;
 
     /**
      * {@link Map} holding all Rule context maps. Rule context maps contain dynamic parameters used by the
@@ -173,7 +173,7 @@ public class RuleEngineImpl implements RuleManager, RegistryChangeListener<Modul
      * The context map of a {@link Rule} is cleaned when the execution is completed. The relation is
      * {@link Rule}'s UID to Rule context map.
      */
-    private final Map<String, @Nullable Map<String, @Nullable Object>> contextMap;
+    private final Map<String, Map<String, Object>> contextMap;
 
     /**
      * This field holds reference to {@link ModuleTypeRegistry}. The {@link RuleEngineImpl} needs it to auto-map
@@ -188,10 +188,9 @@ public class RuleEngineImpl implements RuleManager, RegistryChangeListener<Modul
 
     /**
      * {@link Map} holding all scheduled {@link Rule} re-initialization tasks. The relation is {@link Rule}'s
-     * UID to
-     * re-initialization task as a {@link Future} instance.
+     * UID to re-initialization task as a {@link Future} instance.
      */
-    private final Map<String, @Nullable Future<?>> scheduleTasks = new HashMap<>(31);
+    private final Map<String, Future<?>> scheduleTasks = new HashMap<>(31);
 
     /**
      * Performs the {@link Rule} re-initialization tasks.
@@ -249,8 +248,9 @@ public class RuleEngineImpl implements RuleManager, RegistryChangeListener<Modul
      * Constructor of {@link RuleEngineImpl}.
      */
     @Activate
-    public RuleEngineImpl(final Config config, final @Reference ModuleTypeRegistry moduleTypeRegistry,
-            final @Reference RuleRegistry ruleRegistry, final @Reference StorageService storageService) {
+    public RuleEngineImpl(final @Reference ModuleTypeRegistry moduleTypeRegistry,
+            final @Reference RuleRegistry ruleRegistry, final @Reference StorageService storageService,
+            final @Reference ReadyService readyService) {
         this.contextMap = new HashMap<>();
         this.moduleHandlerFactories = new HashMap<>(20);
 
@@ -263,8 +263,7 @@ public class RuleEngineImpl implements RuleManager, RegistryChangeListener<Modul
         compositeFactory = new CompositeModuleHandlerFactory(mtRegistry, this);
 
         this.ruleRegistry = ruleRegistry;
-
-        this.scheduleReinitializationDelay = config.rule_reinitialization_delay();
+        this.readyService = readyService;
 
         listener = new RegistryChangeListener<Rule>() {
             @Override
@@ -287,6 +286,9 @@ public class RuleEngineImpl implements RuleManager, RegistryChangeListener<Modul
         for (Rule rule : ruleRegistry.getAll()) {
             addRule(rule);
         }
+
+        readyService.registerTracker(this, new ReadyMarkerFilter().withType(StartLevelService.STARTLEVEL_MARKER_TYPE)
+                .withIdentifier(Integer.toString(StartLevelService.STARTLEVEL_RULES)));
     }
 
     /**
@@ -505,12 +507,6 @@ public class RuleEngineImpl implements RuleManager, RegistryChangeListener<Modul
             if (f != null) {
                 if (!f.isDone()) {
                     f.cancel(true);
-                }
-            }
-            if (scheduleTasks.isEmpty()) {
-                if (executor != null) {
-                    executor.shutdown();
-                    executor = null;
                 }
             }
         }
@@ -757,11 +753,11 @@ public class RuleEngineImpl implements RuleManager, RegistryChangeListener<Modul
         if (r != null) {
             unregister(r);
             synchronized (this) {
-                for (Iterator<Map.Entry<String, @Nullable Set<String>>> it = mapModuleTypeToRules.entrySet()
-                        .iterator(); it.hasNext();) {
-                    Map.Entry<String, @Nullable Set<String>> e = it.next();
+                for (Iterator<Map.Entry<String, Set<String>>> it = mapModuleTypeToRules.entrySet().iterator(); it
+                        .hasNext();) {
+                    Map.Entry<String, Set<String>> e = it.next();
                     Set<String> rules = e.getValue();
-                    if (rules != null && rules.contains(rUID)) {
+                    if (rules.contains(rUID)) {
                         rules.remove(rUID);
                         if (rules.size() < 1) {
                             it.remove();
@@ -906,12 +902,12 @@ public class RuleEngineImpl implements RuleManager, RegistryChangeListener<Modul
                     return;
                 }
                 setRule(managedRule);
-            }, scheduleReinitializationDelay, TimeUnit.MILLISECONDS));
+            }, RULE_INIT_DELAY, TimeUnit.MILLISECONDS));
         }
     }
 
     private void removeMissingModuleTypes(Collection<String> moduleTypes) {
-        Map<String, @Nullable List<String>> mapMissingHandlers = null;
+        Map<String, List<String>> mapMissingHandlers = null;
         for (String moduleTypeName : moduleTypes) {
             Set<String> rules = null;
             synchronized (this) {
@@ -941,7 +937,7 @@ public class RuleEngineImpl implements RuleManager, RegistryChangeListener<Modul
             }
         } // for
         if (mapMissingHandlers != null) {
-            for (Entry<String, @Nullable List<String>> e : mapMissingHandlers.entrySet()) {
+            for (Entry<String, List<String>> e : mapMissingHandlers.entrySet()) {
                 String rUID = e.getKey();
                 List<String> missingTypes = e.getValue();
                 StringBuffer sb = new StringBuffer();
@@ -965,6 +961,10 @@ public class RuleEngineImpl implements RuleManager, RegistryChangeListener<Modul
     protected void runRule(String ruleUID, TriggerHandlerCallbackImpl.TriggerData td) {
         if (thCallbacks.get(ruleUID) == null) {
             // the rule was unregistered
+            return;
+        }
+        if (!started) {
+            logger.debug("Rule engine not yet started - not executing rule '{}',", ruleUID);
             return;
         }
         synchronized (this) {
@@ -1053,7 +1053,7 @@ public class RuleEngineImpl implements RuleManager, RegistryChangeListener<Modul
      * @param ruleUID the UID of the rule whose context must be cleared.
      */
     protected void clearContext(String ruleUID) {
-        Map<String, @Nullable Object> context = contextMap.get(ruleUID);
+        Map<String, Object> context = contextMap.get(ruleUID);
         if (context != null) {
             context.clear();
         }
@@ -1077,7 +1077,7 @@ public class RuleEngineImpl implements RuleManager, RegistryChangeListener<Modul
      * @param outputs new output values.
      */
     private void updateContext(String ruleUID, String moduleUID, @Nullable Map<String, ?> outputs) {
-        Map<String, @Nullable Object> context = getContext(ruleUID, null);
+        Map<String, Object> context = getContext(ruleUID, null);
         if (outputs != null) {
             for (Map.Entry<String, ?> entry : outputs.entrySet()) {
                 String key = moduleUID + OUTPUT_SEPARATOR + entry.getKey();
@@ -1089,8 +1089,8 @@ public class RuleEngineImpl implements RuleManager, RegistryChangeListener<Modul
     /**
      * @return copy of current context in rule engine
      */
-    private Map<String, @Nullable Object> getContext(String ruleUID, @Nullable Set<Connection> connections) {
-        Map<String, @Nullable Object> context = contextMap.get(ruleUID);
+    private Map<String, Object> getContext(String ruleUID, @Nullable Set<Connection> connections) {
+        Map<String, Object> context = contextMap.get(ruleUID);
         if (context == null) {
             context = new HashMap<>();
             contextMap.put(ruleUID, context);
@@ -1145,7 +1145,7 @@ public class RuleEngineImpl implements RuleManager, RegistryChangeListener<Modul
             }
             final Condition condition = wrappedCondition.unwrap();
             ConditionHandler tHandler = wrappedCondition.getModuleHandler();
-            Map<String, @Nullable Object> context = getContext(ruleUID, wrappedCondition.getConnections());
+            Map<String, Object> context = getContext(ruleUID, wrappedCondition.getConnections());
             if (tHandler != null && !tHandler.isSatisfied(Collections.unmodifiableMap(context))) {
                 logger.debug("The condition '{}' of rule '{}' is unsatisfied.", condition.getId(), ruleUID);
                 return false;
@@ -1174,7 +1174,7 @@ public class RuleEngineImpl implements RuleManager, RegistryChangeListener<Modul
             final Action action = wrappedAction.unwrap();
             ActionHandler aHandler = wrappedAction.getModuleHandler();
             if (aHandler != null) {
-                Map<String, @Nullable Object> context = getContext(ruleUID, wrappedAction.getConnections());
+                Map<String, Object> context = getContext(ruleUID, wrappedAction.getConnections());
                 try {
                     Map<String, ?> outputs = aHandler.execute(Collections.unmodifiableMap(context));
                     if (outputs != null) {
@@ -1213,7 +1213,8 @@ public class RuleEngineImpl implements RuleManager, RegistryChangeListener<Modul
         if (currentExecutor != null && !currentExecutor.isShutdown()) {
             return currentExecutor;
         }
-        final ScheduledExecutorService newExecutor = Executors.newSingleThreadScheduledExecutor();
+        final ScheduledExecutorService newExecutor = Executors
+                .newSingleThreadScheduledExecutor(new NamedThreadFactory("ruleengine"));
         executor = newExecutor;
         return newExecutor;
     }
@@ -1358,7 +1359,7 @@ public class RuleEngineImpl implements RuleManager, RegistryChangeListener<Modul
         return result;
     }
 
-    private void initTagsMap(String moduleId, List<Output> outputs, Map<Set<String>, @Nullable OutputRef> tagMap) {
+    private void initTagsMap(String moduleId, List<Output> outputs, Map<Set<String>, OutputRef> tagMap) {
         for (Output output : outputs) {
             Set<String> tags = output.getTags();
             if (!tags.isEmpty()) {
@@ -1421,5 +1422,53 @@ public class RuleEngineImpl implements RuleManager, RegistryChangeListener<Modul
         public String getOutputName() {
             return outputName;
         }
+    }
+
+    @Override
+    public void onReadyMarkerAdded(ReadyMarker readyMarker) {
+        executeRulesWithStartLevel();
+    }
+
+    @Override
+    public void onReadyMarkerRemoved(ReadyMarker readyMarker) {
+        started = false;
+    }
+
+    private void executeRulesWithStartLevel() {
+        getScheduledExecutor().submit(() -> {
+            ruleRegistry.getAll().stream() //
+                    .filter(r -> mustTrigger(r)) //
+                    .forEach(r -> runNow(r.getUID(), true,
+                            Map.of(SystemTriggerHandler.OUT_STARTLEVEL, StartLevelService.STARTLEVEL_RULES)));
+            started = true;
+            readyService.markReady(MARKER);
+            logger.info("Rule engine started.");
+        });
+    }
+
+    private boolean mustTrigger(Rule r) {
+        for (Trigger t : r.getTriggers()) {
+            if (t.getTypeUID() == SystemTriggerHandler.STARTLEVEL_MODULE_TYPE_ID) {
+                Object slObj = t.getConfiguration().get(SystemTriggerHandler.CFG_STARTLEVEL);
+                try {
+                    Integer sl = Integer.valueOf(slObj.toString());
+                    if (sl <= StartLevelService.STARTLEVEL_RULEENGINE) {
+                        return true;
+                    }
+                } catch (NumberFormatException e) {
+                    logger.warn("Configuration '{}' is not a valid start level!", slObj);
+                }
+            }
+        }
+        return false;
+    }
+
+    /**
+     * Returns whether the rule engine has been started
+     *
+     * @return true, if the rule engine has been started
+     */
+    public boolean isStarted() {
+        return started;
     }
 }

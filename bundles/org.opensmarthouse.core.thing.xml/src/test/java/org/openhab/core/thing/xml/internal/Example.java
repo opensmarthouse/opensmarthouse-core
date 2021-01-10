@@ -12,8 +12,11 @@
  */
 package org.openhab.core.thing.xml.internal;
 
+import static org.eclipse.jdt.annotation.Checks.requireNonNull;
+
 import java.net.URL;
 
+import org.eclipse.jdt.annotation.NonNullByDefault;
 import org.junit.jupiter.api.Test;
 
 /**

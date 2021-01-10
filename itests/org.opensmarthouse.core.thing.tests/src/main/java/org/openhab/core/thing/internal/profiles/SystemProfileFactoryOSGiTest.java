@@ -45,12 +45,8 @@ import org.openhab.core.thing.type.ChannelType;
  */
 public class SystemProfileFactoryOSGiTest extends JavaOSGiTest {
 
-    private final Map<String, Object> properties = new HashMap<String, Object>() {
-        private static final long serialVersionUID = 1L;
-        {
-            put("offset", BigDecimal.ZERO);
-        }
-    };
+    private final Map<String, Object> properties = Map.of(SystemOffsetProfile.OFFSET_PARAM, BigDecimal.ZERO,
+            SystemHysteresisStateProfile.LOWER_PARAM, BigDecimal.TEN);
 
     private SystemProfileFactory profileFactory;
 
@@ -74,7 +70,7 @@ public class SystemProfileFactoryOSGiTest extends JavaOSGiTest {
     @Test
     public void systemProfileTypesAndUidsShouldBeAvailable() {
         Collection<ProfileTypeUID> systemProfileTypeUIDs = profileFactory.getSupportedProfileTypeUIDs();
-        assertEquals(15, systemProfileTypeUIDs.size());
+        assertEquals(16, systemProfileTypeUIDs.size());
 
         Collection<ProfileType> systemProfileTypes = profileFactory.getProfileTypes(null);
         assertEquals(systemProfileTypeUIDs.size(), systemProfileTypes.size());
@@ -83,20 +79,19 @@ public class SystemProfileFactoryOSGiTest extends JavaOSGiTest {
     @Test
     public void testFactoryCreatesAvailableProfiles() {
         for (ProfileTypeUID profileTypeUID : profileFactory.getSupportedProfileTypeUIDs()) {
-            assertThat(profileFactory.createProfile(profileTypeUID, mockCallback, mockContext), is(notNullValue()));
+            assertNotNull(profileFactory.createProfile(profileTypeUID, mockCallback, mockContext));
         }
     }
 
     @Test
     public void testGetSuggestedProfileTypeUIDNullChannelType1() {
-        assertThat(profileFactory.getSuggestedProfileTypeUID((ChannelType) null, CoreItemFactory.SWITCH),
-                is(nullValue()));
+        assertNull(profileFactory.getSuggestedProfileTypeUID((ChannelType) null, CoreItemFactory.SWITCH));
     }
 
     @Test
     public void testGetSuggestedProfileTypeUIDNullChannelType2() {
         Channel channel = ChannelBuilder.create(new ChannelUID("test:test:test:test"), CoreItemFactory.SWITCH).build();
-        assertThat(profileFactory.getSuggestedProfileTypeUID(channel, CoreItemFactory.SWITCH),
-                is(SystemProfiles.DEFAULT));
+        assertEquals(SystemProfiles.DEFAULT,
+                profileFactory.getSuggestedProfileTypeUID(channel, CoreItemFactory.SWITCH));
     }
 }

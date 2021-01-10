@@ -23,6 +23,7 @@ import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
+import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.HttpHeaders;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
@@ -65,12 +66,15 @@ import io.swagger.v3.oas.annotations.tags.Tag;
  * Jersey servlet.
  *
  * @author Dennis Nobel - Initial contribution
- * @author Kai Kreuzer - refactored for using the OSGi JAX-RS connector and removed ThingSetupManager
+ * @author Kai Kreuzer - refactored for using the OSGi JAX-RS connector and
+ *         removed ThingSetupManager
  * @author Yordan Zhelev - Added Swagger annotations
- * @author Chris Jackson - Updated to use JSONResponse. Fixed null response from approve. Improved error reporting.
+ * @author Chris Jackson - Updated to use JSONResponse. Fixed null response from
+ *         approve. Improved error reporting.
  * @author Franck Dechavanne - Added DTOs to ApiResponses
  * @author Markus Rathgeb - Migrated to JAX-RS Whiteboard Specification
  * @author Wouter Born - Migrated to OpenAPI annotations
+ * @author Laurent Garnier - Added optional parameter newThingId to approve API
  */
 @Component(service = { RESTResource.class, InboxResource.class })
 @JaxrsResource
@@ -98,19 +102,21 @@ public class InboxResource implements RESTResource {
     @POST
     @Path("/{thingUID}/approve")
     @Consumes(MediaType.TEXT_PLAIN)
-    @Operation(summary = "Approves the discovery result by adding the thing to the registry.", responses = {
+    @Operation(operationId = "approveInboxItemById", summary = "Approves the discovery result by adding the thing to the registry.", responses = {
             @ApiResponse(responseCode = "200", description = "OK"),
             @ApiResponse(responseCode = "404", description = "Thing unable to be approved."),
             @ApiResponse(responseCode = "409", description = "No binding found that supports this thing.") })
     public Response approve(
             @HeaderParam(HttpHeaders.ACCEPT_LANGUAGE) @Parameter(description = "language") @Nullable String language,
             @PathParam("thingUID") @Parameter(description = "thingUID") String thingUID,
-            @Parameter(description = "thing label") @Nullable String label) {
+            @Parameter(description = "thing label") @Nullable String label,
+            @QueryParam("newThingId") @Parameter(description = "new thing ID") @Nullable String newThingId) {
         ThingUID thingUIDObject = new ThingUID(thingUID);
         String notEmptyLabel = label != null && !label.isEmpty() ? label : null;
+        String notEmptyNewThingId = newThingId != null && !newThingId.isEmpty() ? newThingId : null;
         Thing thing = null;
         try {
-            thing = inbox.approve(thingUIDObject, notEmptyLabel);
+            thing = inbox.approve(thingUIDObject, notEmptyLabel, notEmptyNewThingId);
         } catch (IllegalArgumentException e) {
             logger.error("Thing {} unable to be approved: {}", thingUID, e.getLocalizedMessage());
             return JSONResponse.createErrorResponse(Status.NOT_FOUND, "Thing unable to be approved.");
@@ -126,7 +132,7 @@ public class InboxResource implements RESTResource {
 
     @DELETE
     @Path("/{thingUID}")
-    @Operation(summary = "Removes the discovery result from the inbox.", responses = {
+    @Operation(operationId = "removeItemFromInbox", summary = "Removes the discovery result from the inbox.", responses = {
             @ApiResponse(responseCode = "200", description = "OK"),
             @ApiResponse(responseCode = "404", description = "Discovery result not found in the inbox.") })
     public Response delete(@PathParam("thingUID") @Parameter(description = "thingUID") String thingUID) {
@@ -139,7 +145,7 @@ public class InboxResource implements RESTResource {
 
     @GET
     @Produces({ MediaType.APPLICATION_JSON })
-    @Operation(summary = "Get all discovered things.", responses = {
+    @Operation(operationId = "getDiscoveredInboxItems", summary = "Get all discovered things.", responses = {
             @ApiResponse(responseCode = "200", description = "OK", content = @Content(schema = @Schema(implementation = DiscoveryResultDTO.class))) })
     public Response getAll() {
         Stream<DiscoveryResultDTO> discoveryStream = inbox.getAll().stream().map(DiscoveryResultDTOMapper::map);
@@ -148,7 +154,7 @@ public class InboxResource implements RESTResource {
 
     @POST
     @Path("/{thingUID}/ignore")
-    @Operation(summary = "Flags a discovery result as ignored for further processing.", responses = {
+    @Operation(operationId = "flagInboxItemAsIgnored", summary = "Flags a discovery result as ignored for further processing.", responses = {
             @ApiResponse(responseCode = "200", description = "OK") })
     public Response ignore(@PathParam("thingUID") @Parameter(description = "thingUID") String thingUID) {
         inbox.setFlag(new ThingUID(thingUID), DiscoveryResultFlag.IGNORED);
@@ -157,7 +163,7 @@ public class InboxResource implements RESTResource {
 
     @POST
     @Path("/{thingUID}/unignore")
-    @Operation(summary = "Removes ignore flag from a discovery result.", responses = {
+    @Operation(operationId = "removeIgnoreFlagOnInboxItem", summary = "Removes ignore flag from a discovery result.", responses = {
             @ApiResponse(responseCode = "200", description = "OK") })
     public Response unignore(@PathParam("thingUID") @Parameter(description = "thingUID") String thingUID) {
         inbox.setFlag(new ThingUID(thingUID), DiscoveryResultFlag.NEW);

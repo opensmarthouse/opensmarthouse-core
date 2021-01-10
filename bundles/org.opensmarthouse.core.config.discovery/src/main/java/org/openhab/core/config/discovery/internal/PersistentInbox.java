@@ -23,6 +23,7 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Objects;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
@@ -87,6 +88,7 @@ import org.slf4j.LoggerFactory;
  * @author Dennis Nobel - Added persistence support
  * @author Andre Fuechsel - Added removeOlderResults
  * @author Christoph Knauf - Added removeThingsForBridge and getPropsAndConfigParams
+ * @author Laurent Garnier - Added parameter newThingId to method approve
  */
 @Component(immediate = true, service = Inbox.class)
 @NonNullByDefault
@@ -173,7 +175,7 @@ public final class PersistentInbox implements Inbox, DiscoveryListener, ThingReg
     }
 
     @Override
-    public @Nullable Thing approve(ThingUID thingUID, @Nullable String label) {
+    public @Nullable Thing approve(ThingUID thingUID, @Nullable String label, @Nullable String newThingId) {
         if (thingUID == null) {
             throw new IllegalArgumentException("Thing UID must not be null");
         }
@@ -187,7 +189,16 @@ public final class PersistentInbox implements Inbox, DiscoveryListener, ThingReg
         getPropsAndConfigParams(result, properties, configParams);
         final Configuration config = new Configuration(configParams);
         ThingTypeUID thingTypeUID = result.getThingTypeUID();
-        Thing newThing = ThingFactory.createThing(thingUID, config, properties, result.getBridgeUID(), thingTypeUID,
+        ThingUID newThingUID = thingUID;
+        if (newThingId != null) {
+            try {
+                newThingUID = new ThingUID(thingTypeUID, newThingId);
+            } catch (IllegalArgumentException e) {
+                logger.warn("Cannot create thing: {}", e.getMessage());
+                return null;
+            }
+        }
+        Thing newThing = ThingFactory.createThing(newThingUID, config, properties, result.getBridgeUID(), thingTypeUID,
                 thingHandlerFactories);
         if (newThing == null) {
             logger.warn("Cannot create thing. No binding found that supports creating a thing of type {}.",
@@ -534,13 +545,15 @@ public final class PersistentInbox implements Inbox, DiscoveryListener, ThingReg
         final List<ConfigDescriptionParameter> configDescParams = getConfigDescParams(discoveryResult);
         final Set<String> paramNames = getConfigDescParamNames(configDescParams);
         final Map<String, Object> resultProps = discoveryResult.getProperties();
-        for (String resultKey : resultProps.keySet()) {
+        for (Entry<String, Object> resultEntry : resultProps.entrySet()) {
+            String resultKey = resultEntry.getKey();
+            Object resultValue = resultEntry.getValue();
             if (paramNames.contains(resultKey)) {
                 ConfigDescriptionParameter param = getConfigDescriptionParam(configDescParams, resultKey);
-                Object normalizedValue = ConfigUtil.normalizeType(resultProps.get(resultKey), param);
+                Object normalizedValue = ConfigUtil.normalizeType(resultValue, param);
                 configParams.put(resultKey, normalizedValue);
             } else {
-                props.put(resultKey, String.valueOf(resultProps.get(resultKey)));
+                props.put(resultKey, String.valueOf(resultValue));
             }
         }
     }

@@ -127,9 +127,9 @@ public class ThingTypeResource implements RESTResource {
     }
 
     @GET
-    @RolesAllowed({ Role.USER })
+    @RolesAllowed({ Role.USER, Role.ADMIN })
     @Produces(MediaType.APPLICATION_JSON)
-    @Operation(summary = "Gets all available thing types without config description, channels and properties.", responses = {
+    @Operation(operationId = "getThingTypes", summary = "Gets all available thing types without config description, channels and properties.", responses = {
             @ApiResponse(responseCode = "200", description = "OK", content = @Content(array = @ArraySchema(schema = @Schema(implementation = StrippedThingTypeDTO.class), uniqueItems = true))) })
     public Response getAll(
             @HeaderParam(HttpHeaders.ACCEPT_LANGUAGE) @Parameter(description = "language") @Nullable String language,
@@ -146,10 +146,10 @@ public class ThingTypeResource implements RESTResource {
     }
 
     @GET
-    @RolesAllowed({ Role.USER })
+    @RolesAllowed({ Role.USER, Role.ADMIN })
     @Path("/{thingTypeUID}")
     @Produces(MediaType.APPLICATION_JSON)
-    @Operation(summary = "Gets thing type by UID.", responses = {
+    @Operation(operationId = "getThingTypeById", summary = "Gets thing type by UID.", responses = {
             @ApiResponse(responseCode = "200", description = "Thing type with provided thingTypeUID does not exist.", content = @Content(schema = @Schema(implementation = ThingTypeDTO.class))),
             @ApiResponse(responseCode = "404", description = "No content") })
     public Response getByUID(@PathParam("thingTypeUID") @Parameter(description = "thingTypeUID") String thingTypeUID,
