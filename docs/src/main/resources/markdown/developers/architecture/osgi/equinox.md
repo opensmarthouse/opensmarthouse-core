@@ -1,8 +1,7 @@
----
-title: Equinox
----
 
-# Overview
+# Equinox
+
+## Overview
 
 [Equinox][Equinox] is considered to be a reference implementation of the [OSGi Core Release 7][OSGi-core].
 It is an [open source project][Equinox-repo], part of the [Eclipse project][Eclipse].

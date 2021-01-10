@@ -29,7 +29,7 @@ This guide is written with the developer in mind, but understanding some of the 
 
 * [Fundamental Concepts](fundamentals/index.md)
 * [System Architecture](architecture/index.md)
-  * [OSGi Fundamentals](architecture/osgi/index.md)
+    * [OSGi Fundamentals](architecture/osgi/index.md)
 * [Build System](buildsystem/index.md)
 * [Discovery Services](discovery/index.md)
 * [Bindings](bindings/index.md)

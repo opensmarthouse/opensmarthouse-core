@@ -1,8 +1,16 @@
----
-title: OSGi Declarative Services
----
 
-# Overview
+# OSGi Declarative Services
+
+<nav aria-label="breadcrumb">
+  <ol class="breadcrumb">
+    <li class="breadcrumb-item"><a href="../../index.php">Developers Guide</a></li>
+    <li class="breadcrumb-item"><a href="../index.php">System Architecture</a></li>
+    <li class="breadcrumb-item"><a href="index.php">OSGi Fundamentals</a></li>
+    <li class="breadcrumb-item active" aria-current="page">OSGi Declarative Services</li>
+  </ol>
+</nav>
+
+## Overview
 
 In the [OSGi Overview article](index.md) we have mentioned that a bundle can register, unregister, get and unget services from a central point - the Service Registry.
 

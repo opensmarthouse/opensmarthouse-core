@@ -1,8 +1,15 @@
----
-title: OSGi
----
 
-# Overview
+# OSGi
+
+<nav aria-label="breadcrumb">
+  <ol class="breadcrumb">
+    <li class="breadcrumb-item"><a href="../../index.php">Developers Guide</a></li>
+    <li class="breadcrumb-item"><a href="../index.php">System Architecture</a></li>
+    <li class="breadcrumb-item active" aria-current="page">OSGi Fundamentals</li>
+  </ol>
+</nav>
+
+## Overview
 
 _OpenSmartHouse_ is being based on [OSGi][OSGi] and understanding of OSGi modular architecture is very important.
 This page is aimed to help developers, that are going to use OSGi for the first time and contains a basic overview of the OSGi technology.
@@ -34,7 +41,7 @@ The OSGi framework consist of several layers build on top of each other (See Fig
   - **Security Layer** - optional layer, based on the Java 2 security architecture, that manages permissions for different modules.
 
 ![OSGi Layers][fig1]  
-Fig.1 OSGi Layering (Source:<https://www.osgi.org/wp-content/uploads/layering-osgi.png>)
+Fig.1 OSGi Layering (Source: <https://www.osgi.org/wp-content/uploads/layering-osgi.png>)
 
 More details about the OSGi architecture can be found at <https://www.osgi.org/developer/architecture/>
 
@@ -101,7 +108,7 @@ Fig.2 Bundle State diagram
 
 Another main concept, that allows the bundles to communicate between each other, is the *service* model.
 
-**In OSGi, a bundle can register a *service* in a central [service registry](#important-definitions) under one ore more *service interface***.
+**In OSGi, a bundle can register a *service* in a central [service registry](#important-definitions) under one or more *service interface***.
 It is an important feature of OSGi, because it provides a central place to register and get services.
 A bundle is permitted to register service objects at any time during the STARTING, ACTIVE or STOPPING states.
 Other bundles can go the registry and list all objects, that are registered under a specific interface or class.
@@ -143,14 +150,13 @@ We have talked so far about the OSGi specification. Here is the place to emphasi
 We will list the most popular OSGi containers with a short description of their goals. We can divide them into:
 
 - Open source:
-  - [Equinox](https://www.eclipse.org/equinox/) - this is the reference implementation of OSGi and developed by the Eclipse Foundation.
+    - [Equinox](https://www.eclipse.org/equinox/) - this is the reference implementation of OSGi and developed by the Eclipse Foundation.
     As it is used in the openHAB project, we have [more detailed information](equinox.md).
-  - [Apache Felix](http://felix.apache.org/) - developed by the Apache Software Foundation.
+    - [Apache Felix](http://felix.apache.org/) - developed by the Apache Software Foundation.
     [Apache Karaf](http://karaf.apache.org/) is a distribution based on Apache Felix that provides some additional features on top of it (e.g. folder based hot deployment, improved default console with remote SSH, maven plugins and others). The openHAB project is using karaf for runtime dependency installation.
-  - [Concierge](https://www.eclipse.org/concierge/) - is aimed at mobile and embedded devices. With a size of around 250 kb it has the smallest footprint of the presented containers;
-
+    - [Concierge](https://www.eclipse.org/concierge/) - is aimed at mobile and embedded devices. With a size of around 250 kb it has the smallest footprint of the presented containers;
 - Commercial:
-  - [Bosch IoT Gateway Software](https://www.bosch-si.com/iot-platform/iot-platform/gateway/software.html) - implements OSGi R6 Core and Compendium Specification. This implementation is low-footprint, optimized for embedded products, provides custom remote management agent and many more additional components.
+    - [Bosch IoT Gateway Software](https://www.bosch-si.com/iot-platform/iot-platform/gateway/software.html) - implements OSGi R6 Core and Compendium Specification. This implementation is low-footprint, optimized for embedded products, provides custom remote management agent and many more additional components.
 
 ## Important Definitions
 
