@@ -13,7 +13,7 @@
     SPDX-License-Identifier: EPL-2.0
 
 -->
-<features name="${project.artifactId}-${project.version}" xmlns="http://karaf.apache.org/xmlns/features/v1.3.0">
+<features name="${project.artifactId}-${project.version}" xmlns="http://karaf.apache.org/xmlns/features/v1.4.0">
 
     <repository>mvn:org.opensmarthouse.core.features.karaf/org.opensmarthouse.core.features.karaf.opensmarthouse-tp/${project.version}/xml/features</repository>
 
@@ -96,10 +96,6 @@
         <bundle>mvn:org.opensmarthouse.core.bundles/org.opensmarthouse.core.io.rest.core/${project.version}</bundle>
         <bundle>mvn:org.opensmarthouse.core.bundles/org.opensmarthouse.core.io.rest.sse/${project.version}</bundle>
         -->
-    </feature>
-
-    <feature name="openhab-core-base">
-        <feature>opensmarthouse-core-base</feature>
     </feature>
 
     <feature name="opensmarthouse-core-transform" description="Open SmartHouse Core: Transform" version="${project.version}">
@@ -860,10 +856,6 @@
 
         <feature>opensmarthouse-runtime-karaf</feature>
         <feature>opensmarthouse-core-io-rest-core</feature>
-    </feature>
-
-    <feature name="openhab-runtime-base">
-        <feature>opensmarthouse-runtime-base</feature>
     </feature>
 
     <feature name="opensmarthouse-core" version="${project.version}">
