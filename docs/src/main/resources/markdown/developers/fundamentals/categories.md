@@ -1,13 +1,5 @@
 # Categories
 
-<nav aria-label="breadcrumb">
-  <ol class="breadcrumb">
-    <li class="breadcrumb-item"><a href="../index.php">Developers Guide</a></li>
-    <li class="breadcrumb-item"><a href="index.php">Fundamental Concepts</a></li>
-    <li class="breadcrumb-item active" aria-current="page">Categories</li>
-  </ol>
-</nav>
-
 ## Categories
 
 Categories in _OpenSmartHouse_ are used to provide meta information about Things, Channels, etc. UIs can use this information to render specific icons or provide a search functionality to for example filter all Things for a certain category.

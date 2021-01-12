@@ -1,14 +1,4 @@
-
-# title: Event Admin
-
-<nav aria-label="breadcrumb">
-  <ol class="breadcrumb">
-    <li class="breadcrumb-item"><a href="../../index.php">Developers Guide</a></li>
-    <li class="breadcrumb-item"><a href="../index.php">System Architecture</a></li>
-    <li class="breadcrumb-item"><a href="index.php">OSGi Fundamentals</a></li>
-    <li class="breadcrumb-item active" aria-current="page">OSGi Event Admin</li>
-  </ol>
-</nav>
+# Event Admin
 
 ## Overview
 

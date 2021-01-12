@@ -1,15 +1,6 @@
 
 # Configuration Admin
 
-<nav aria-label="breadcrumb">
-  <ol class="breadcrumb">
-    <li class="breadcrumb-item"><a href="../../index.php">Developers Guide</a></li>
-    <li class="breadcrumb-item"><a href="../index.php">System Architecture</a></li>
-    <li class="breadcrumb-item"><a href="index.php">OSGi Fundamentals</a></li>
-    <li class="breadcrumb-item active" aria-current="page">OSGi Configuration Admin</li>
-  </ol>
-</nav>
-
 ## Overview
 
 As defined in the [OSGi Compendium Release 7][OSGi-cmpn] *configuration is the process of defining the configuration data of bundles and assuring that those bundles receive that data when they are active in the OSGi Service Platform.*

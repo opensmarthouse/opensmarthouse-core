@@ -1,12 +1,6 @@
 
 # Developers Guide
 
-<nav aria-label="breadcrumb">
-  <ol class="breadcrumb">
-    <li class="breadcrumb-item active" aria-current="page">Developers Guide</li>
-  </ol>
-</nav>
-
 ## Overview
 
 _OpenSmartHouse_ is a Smart Building automation framework. The documentation found here aims to support developers wishing to understand the framework to add functionality to the core, or extend the functionality through bindings that interface to hardware, or those that wish to integrate the framework within a wider system.

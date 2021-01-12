@@ -1,4 +1,3 @@
-
 # Equinox
 
 ## Overview
