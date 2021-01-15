@@ -122,15 +122,6 @@
             -->
           </blacklistedBundles>
         </configuration>
-        <executions>
-          <execution>
-            <id>karaf-feature-verification</id>
-            <goals>
-              <goal>verify</goal>
-            </goals>
-            <phase>none</phase>
-          </execution>
-        </executions>
       </plugin>
     </plugins>
   </build>
