@@ -59,19 +59,20 @@ public class ItemUpdater extends AbstractItemEventSubscriber {
             } else {
                 // Look for class hierarchy
                 for (Class<? extends State> state : item.getAcceptedDataTypes()) {
-                    try {
-                        if (!state.isEnum() && state.newInstance().getClass().isAssignableFrom(newState.getClass())) {
+                    //try {
+                        if (state.isInstance(newState)) {
                             isAccepted = true;
                             break;
                         }
-                    } catch (InstantiationException e) {
-                        logger.warn("InstantiationException on {}", e.getMessage()); // Should never happen
-                    } catch (IllegalAccessException e) {
-                        logger.warn("IllegalAccessException on {}", e.getMessage()); // Should never happen
-                    }
+//                    } catch (InstantiationException e) {
+//                        logger.warn("InstantiationException on {}", e.getMessage(), e); // Should never happen
+//                    } catch (IllegalAccessException e) {
+//                        logger.warn("IllegalAccessException on {}", e.getMessage(), e); // Should never happen
+//                    }
                 }
             }
             if (isAccepted) {
+                logger.debug("Updating state of item ({}) state to {}", itemName, newState);
                 item.setState(newState);
             } else {
                 logger.debug("Received update of a not accepted type ({}) for item {}",
