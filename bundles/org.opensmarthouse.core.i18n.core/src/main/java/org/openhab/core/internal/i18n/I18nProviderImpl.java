@@ -27,10 +27,13 @@ import javax.measure.Quantity;
 import javax.measure.Unit;
 import javax.measure.quantity.Angle;
 import javax.measure.quantity.Dimensionless;
+import javax.measure.quantity.Energy;
 import javax.measure.quantity.Length;
+import javax.measure.quantity.Power;
 import javax.measure.quantity.Pressure;
 import javax.measure.quantity.Speed;
 import javax.measure.quantity.Temperature;
+import javax.measure.quantity.Volume;
 import javax.measure.spi.SystemOfUnits;
 
 import org.eclipse.jdt.annotation.NonNullByDefault;
@@ -41,8 +44,10 @@ import org.openhab.core.i18n.TimeZoneProvider;
 import org.openhab.core.i18n.TranslationProvider;
 import org.openhab.core.i18n.UnitProvider;
 import org.openhab.core.library.dimension.Intensity;
+import org.openhab.core.library.dimension.VolumetricFlowRate;
 import org.openhab.core.library.types.PointType;
 import org.openhab.core.library.unit.ImperialUnits;
+import org.openhab.core.library.unit.MetricPrefix;
 import org.openhab.core.library.unit.SIUnits;
 import org.openhab.core.library.unit.Units;
 import org.osgi.framework.Bundle;
@@ -377,5 +382,21 @@ public class I18nProviderImpl
         angleMap.put(SIUnits.getInstance(), Units.DEGREE_ANGLE);
         angleMap.put(ImperialUnits.getInstance(), Units.DEGREE_ANGLE);
         dimensionMap.put(Angle.class, angleMap);
+
+        Map<SystemOfUnits, Unit<? extends Quantity<?>>> volumeMap = new HashMap<>();
+        volumeMap.put(SIUnits.getInstance(), tec.uom.se.unit.Units.CUBIC_METRE);
+        dimensionMap.put(Volume.class, volumeMap);
+
+        Map<SystemOfUnits, Unit<? extends Quantity<?>>> volumeFlowMap = new HashMap<>();
+        volumeFlowMap.put(SIUnits.getInstance(), Units.CUBICMETRE_PER_HOUR);
+        dimensionMap.put(VolumetricFlowRate.class, volumeFlowMap);
+
+        Map<SystemOfUnits, Unit<? extends Quantity<?>>> energyMap = new HashMap<>();
+        energyMap.put(SIUnits.getInstance(), Units.KILOWATT_HOUR);
+        dimensionMap.put(Energy.class, energyMap);
+
+        Map<SystemOfUnits, Unit<? extends Quantity<?>>> powerMap = new HashMap<>();
+        powerMap.put(SIUnits.getInstance(), MetricPrefix.KILO(Units.WATT));
+        dimensionMap.put(Power.class, powerMap);
     }
 }
