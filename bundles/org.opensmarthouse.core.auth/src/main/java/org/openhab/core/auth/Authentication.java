@@ -12,8 +12,6 @@
  */
 package org.openhab.core.auth;
 
-import java.util.Arrays;
-import java.util.HashSet;
 import java.util.Set;
 
 /**
@@ -22,7 +20,7 @@ import java.util.Set;
  * Each authentication must at least point to some identity (username), roles, and may also be valid for a specific
  * scope only.
  *
- * @author Łukasz Dywicki - Initial contribution
+ * @author Łukasz Dywicki - Initial contribution, item level security
  * @author Kai Kreuzer - Added JavaDoc and switched from array to Set
  * @author Yannick Schaus - Add scope
  */
@@ -31,6 +29,7 @@ public class Authentication {
     private String username;
     private Set<String> roles;
     private String scope;
+    private Set<String> items;
 
     /**
      * no-args constructor required by gson
@@ -39,6 +38,7 @@ public class Authentication {
         this.username = null;
         this.roles = null;
         this.scope = null;
+        this.items = null;
     }
 
     /**
@@ -48,8 +48,7 @@ public class Authentication {
      * @param roles a variable list of roles that the user possesses.
      */
     public Authentication(String username, String... roles) {
-        this.username = username;
-        this.roles = new HashSet<>(Arrays.asList(roles));
+        this(username, roles, "");
     }
 
     /**
@@ -60,8 +59,21 @@ public class Authentication {
      * @param scope a scope this authentication is valid for
      */
     public Authentication(String username, String[] roles, String scope) {
-        this(username, roles);
+        this(username, roles, scope, new String[] {"*"});
+    }
+
+    /**
+     * Creates a new instance with a specific scope
+     *
+     * @param username name of the user associated to this authentication instance
+     * @param roles a variable list of roles that the user possesses.
+     * @param scope a scope this authentication is valid for
+     */
+    public Authentication(String username, String[] roles, String scope, String[] items) {
+        this.username = username;
+        this.roles = Set.of(roles);
         this.scope = scope;
+        this.items = Set.of(items);
     }
 
     /**
@@ -89,5 +101,14 @@ public class Authentication {
      */
     public String getScope() {
         return scope;
+    }
+
+    /**
+     * Retrieves the items this authentication is valid for.
+     *
+     * @return an set of items (might be empty)
+     */
+    public Set<String> getItems() {
+        return items;
     }
 }

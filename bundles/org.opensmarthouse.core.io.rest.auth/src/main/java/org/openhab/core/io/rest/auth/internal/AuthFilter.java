@@ -13,34 +13,35 @@
 package org.openhab.core.io.rest.auth.internal;
 
 import java.io.IOException;
-import java.util.Base64;
+import java.util.List;
 import java.util.Map;
-
+import java.util.Optional;
+import java.util.concurrent.CopyOnWriteArrayList;
 import javax.annotation.Priority;
 import javax.ws.rs.Priorities;
 import javax.ws.rs.container.ContainerRequestContext;
 import javax.ws.rs.container.ContainerRequestFilter;
 import javax.ws.rs.container.PreMatching;
-import javax.ws.rs.core.HttpHeaders;
+import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
 import javax.ws.rs.core.SecurityContext;
 import javax.ws.rs.ext.Provider;
-
 import org.eclipse.jdt.annotation.Nullable;
-import org.openhab.core.auth.Authentication;
 import org.openhab.core.auth.AuthenticationException;
-import org.openhab.core.auth.User;
-import org.openhab.core.auth.UserApiTokenCredentials;
-import org.openhab.core.auth.UserRegistry;
-import org.openhab.core.auth.UsernamePasswordCredentials;
+import org.openhab.core.auth.AuthenticationManager;
+import org.openhab.core.auth.AuthenticationResult;
+import org.openhab.core.auth.Credentials;
 import org.openhab.core.config.core.ConfigurableService;
-import org.openhab.core.io.rest.JSONResponse;
+import org.openhab.core.io.auth.CredentialsExtractor;
+import org.openhab.core.io.http.facade.HttpRequestDelegate;
 import org.openhab.core.io.rest.RESTConstants;
 import org.osgi.framework.Constants;
 import org.osgi.service.component.annotations.Activate;
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Modified;
 import org.osgi.service.component.annotations.Reference;
+import org.osgi.service.component.annotations.ReferenceCardinality;
+import org.osgi.service.component.annotations.ReferencePolicy;
 import org.osgi.service.jaxrs.whiteboard.JaxrsWhiteboardConstants;
 import org.osgi.service.jaxrs.whiteboard.propertytypes.JaxrsApplicationSelect;
 import org.osgi.service.jaxrs.whiteboard.propertytypes.JaxrsExtension;
@@ -65,21 +66,15 @@ import org.slf4j.LoggerFactory;
 public class AuthFilter implements ContainerRequestFilter {
     private final Logger logger = LoggerFactory.getLogger(AuthFilter.class);
 
-    private static final String ALT_AUTH_HEADER = "X-OPENHAB-TOKEN";
-    private static final String API_TOKEN_PREFIX = "oh.";
-
     protected static final String CONFIG_URI = "system:restauth";
-    private static final String CONFIG_ALLOW_BASIC_AUTH = "allowBasicAuth";
-    private static final String CONFIG_IMPLICIT_USER_ROLE = "implicitUserRole";
 
-    private boolean allowBasicAuth = false;
-    private boolean implicitUserRole = true;
+    private boolean enabled = true;
 
     @Reference
-    private JwtHelper jwtHelper;
+    private AuthenticationManager authenticationManager;
 
-    @Reference
-    private UserRegistry userRegistry;
+    private List<CredentialsExtractor<HttpRequestDelegate>> extractors = new CopyOnWriteArrayList<>();
+
 
     @Activate
     protected void activate(Map<String, Object> config) {
@@ -88,91 +83,56 @@ public class AuthFilter implements ContainerRequestFilter {
 
     @Modified
     protected void modified(@Nullable Map<String, Object> properties) {
-        if (properties != null) {
-            Object value = properties.get(CONFIG_ALLOW_BASIC_AUTH);
-            allowBasicAuth = value != null && "true".equals(value.toString());
-            value = properties.get(CONFIG_IMPLICIT_USER_ROLE);
-            implicitUserRole = value == null || !"false".equals(value.toString());
-        }
-    }
 
-    private SecurityContext authenticateBearerToken(String token) throws AuthenticationException {
-        if (token.startsWith(API_TOKEN_PREFIX)) {
-            UserApiTokenCredentials credentials = new UserApiTokenCredentials(token);
-            Authentication auth = userRegistry.authenticate(credentials);
-            User user = userRegistry.get(auth.getUsername());
-            if (user == null) {
-                throw new AuthenticationException("User not found in registry");
-            }
-            return new UserSecurityContext(user, auth, "ApiToken");
-        } else {
-            Authentication auth = jwtHelper.verifyAndParseJwtAccessToken(token);
-            return new JwtSecurityContext(auth);
-        }
-    }
-
-    private SecurityContext authenticateUsernamePassword(String username, String password)
-            throws AuthenticationException {
-        UsernamePasswordCredentials credentials = new UsernamePasswordCredentials(username, password);
-        Authentication auth = userRegistry.authenticate(credentials);
-        User user = userRegistry.get(auth.getUsername());
-        if (user == null) {
-            throw new AuthenticationException("User not found in registry");
-        }
-        return new UserSecurityContext(user, auth, "Basic");
     }
 
     @Override
     public void filter(ContainerRequestContext requestContext) throws IOException {
-        try {
-            String altTokenHeader = requestContext.getHeaderString(ALT_AUTH_HEADER);
-            if (altTokenHeader != null) {
-                requestContext.setSecurityContext(authenticateBearerToken(altTokenHeader));
+        if (this.enabled) {
+            if (authenticationManager == null) {
+                Response response = Response.status(Status.UNAUTHORIZED).entity("Failed to authenticate request.").build();
+                requestContext.abortWith(response);
                 return;
             }
 
-            String authHeader = requestContext.getHeaderString(HttpHeaders.AUTHORIZATION);
-            if (authHeader != null) {
-                String[] authParts = authHeader.split(" ");
-                if (authParts.length == 2) {
-                    if ("Bearer".equalsIgnoreCase(authParts[0])) {
-                        requestContext.setSecurityContext(authenticateBearerToken(authParts[1]));
+            int found = 0, failed = 0;
+            for (CredentialsExtractor<HttpRequestDelegate> extractor : extractors) {
+                Optional<Credentials> extracted = extractor.retrieveCredentials(new JaxRsRequestDelegate(requestContext));
+                if (extracted.isPresent()) {
+                    found++;
+                    Credentials credentials = extracted.get();
+                    try {
+                        AuthenticationResult authentication = authenticationManager.authenticate(credentials);
+                        requestContext.setSecurityContext(new ApplicationSecurityContext(authentication.getAuthentication(), false, authentication.getScheme()));
                         return;
-                    } else if ("Basic".equalsIgnoreCase(authParts[0])) {
-                        try {
-                            String[] decodedCredentials = new String(Base64.getDecoder().decode(authParts[1]), "UTF-8")
-                                    .split(":");
-                            if (decodedCredentials.length > 2) {
-                                throw new AuthenticationException("Invalid Basic authentication credential format");
-                            }
-                            switch (decodedCredentials.length) {
-                                case 1:
-                                    requestContext.setSecurityContext(authenticateBearerToken(decodedCredentials[0]));
-                                    break;
-                                case 2:
-                                    if (!allowBasicAuth) {
-                                        throw new AuthenticationException(
-                                                "Basic authentication with username/password is not allowed");
-                                    }
-                                    requestContext.setSecurityContext(
-                                            authenticateUsernamePassword(decodedCredentials[0], decodedCredentials[1]));
-                            }
-
-                            return;
-                        } catch (AuthenticationException e) {
-                            throw new AuthenticationException("Invalid Basic authentication credentials", e);
+                    } catch (AuthenticationException e) {
+                        failed++;
+                        if (logger.isDebugEnabled()) {
+                            logger.debug("Failed to authenticate using credentials {}", credentials, e);
+                        } else {
+                            logger.info("Failed to authenticate using credentials {}", credentials);
                         }
                     }
                 }
             }
 
-            if (implicitUserRole) {
+            if (true) {
                 requestContext.setSecurityContext(new AnonymousUserSecurityContext());
+                return;
             }
 
-        } catch (AuthenticationException e) {
-            logger.warn("Unauthorized API request: {}", e.getMessage());
-            requestContext.abortWith(JSONResponse.createErrorResponse(Status.UNAUTHORIZED, "Invalid credentials"));
+            Response response = Response.status(Status.UNAUTHORIZED).entity("Could not authenticate request. Found " + found
+                + " credentials in request out of which " + failed + " were invalid").build();
+            requestContext.abortWith(response);
         }
+    }
+
+    @Reference(cardinality = ReferenceCardinality.MULTIPLE, policy = ReferencePolicy.DYNAMIC, target = "(context=org.openhab.core.io.http.facade.HttpRequestDelegate)")
+    public void addCredentialsExtractor(CredentialsExtractor<HttpRequestDelegate> extractor) {
+        this.extractors.add(extractor);
+    }
+
+    public void removeCredentialsExtractor(CredentialsExtractor<HttpRequestDelegate> extractor) {
+        this.extractors.remove(extractor);
     }
 }

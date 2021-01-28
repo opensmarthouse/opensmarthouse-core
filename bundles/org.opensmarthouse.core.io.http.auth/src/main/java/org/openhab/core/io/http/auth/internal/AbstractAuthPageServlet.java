@@ -26,15 +26,17 @@ import java.util.ResourceBundle.Control;
 import java.util.UUID;
 
 import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.eclipse.jdt.annotation.NonNullByDefault;
 import org.eclipse.jdt.annotation.Nullable;
-import org.openhab.core.auth.Authentication;
 import org.openhab.core.auth.AuthenticationException;
+import org.openhab.core.auth.AuthenticationManager;
 import org.openhab.core.auth.AuthenticationProvider;
-import org.openhab.core.auth.User;
-import org.openhab.core.auth.UserRegistry;
+import org.openhab.core.auth.AuthenticationResult;
+import org.openhab.core.auth.local.User;
+import org.openhab.core.auth.local.UserRegistry;
 import org.openhab.core.auth.UsernamePasswordCredentials;
 import org.openhab.core.i18n.LocaleProvider;
 import org.osgi.framework.BundleContext;
@@ -60,7 +62,7 @@ public abstract class AbstractAuthPageServlet extends HttpServlet {
 
     protected HttpService httpService;
     protected UserRegistry userRegistry;
-    protected AuthenticationProvider authProvider;
+    protected AuthenticationManager authManager;
     protected LocaleProvider localeProvider;
     protected @Nullable Instant lastAuthenticationFailure;
     protected int authenticationFailureCount = 0;
@@ -70,11 +72,11 @@ public abstract class AbstractAuthPageServlet extends HttpServlet {
     protected String pageTemplate;
 
     public AbstractAuthPageServlet(BundleContext bundleContext, @Reference HttpService httpService,
-            @Reference UserRegistry userRegistry, @Reference AuthenticationProvider authProvider,
+            @Reference UserRegistry userRegistry, @Reference AuthenticationManager authManager,
             @Reference LocaleProvider localeProvider) {
         this.httpService = httpService;
         this.userRegistry = userRegistry;
-        this.authProvider = authProvider;
+        this.authManager = authManager;
         this.localeProvider = localeProvider;
 
         pageTemplate = "";
@@ -130,12 +132,12 @@ public abstract class AbstractAuthPageServlet extends HttpServlet {
         }
 
         // Authenticate the user with the supplied credentials
-        UsernamePasswordCredentials credentials = new UsernamePasswordCredentials(username, password);
-        Authentication auth = authProvider.authenticate(credentials);
-        logger.debug("Login successful: {}", auth.getUsername());
+        UsernamePasswordCredentials credentials = new UsernamePasswordCredentials(username, password, HttpServletRequest.FORM_AUTH);
+        AuthenticationResult auth = authManager.authenticate(credentials);
+        logger.debug("Login successful: {}", auth.getPrincipal());
         lastAuthenticationFailure = null;
         authenticationFailureCount = 0;
-        User user = userRegistry.get(auth.getUsername());
+        User user = userRegistry.get(auth.getAuthentication().getUsername());
         if (user == null) {
             throw new AuthenticationException("User not found");
         }

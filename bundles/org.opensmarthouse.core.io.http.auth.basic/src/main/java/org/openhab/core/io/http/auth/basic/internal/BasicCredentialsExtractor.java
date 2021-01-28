@@ -19,25 +19,26 @@ import javax.servlet.http.HttpServletRequest;
 
 import org.openhab.core.auth.Credentials;
 import org.openhab.core.auth.UsernamePasswordCredentials;
-import org.openhab.core.io.http.auth.CredentialsExtractor;
+import org.openhab.core.io.auth.CredentialsExtractor;
+import org.openhab.core.io.http.facade.HttpRequestDelegate;
 import org.osgi.service.component.annotations.Component;
 
 /**
  * Extract user name and password from incoming request.
  *
- * @author Łukasz Dywicki - Initial contribution.
+ * @author Łukasz Dywicki - Initial contribution, migration to Http request facade.
  */
-@Component(property = { "context=javax.servlet.http.HttpServletRequest" })
-public class BasicCredentialsExtractor implements CredentialsExtractor<HttpServletRequest> {
+@Component(property = { "context=org.openhab.core.io.http.facade.HttpRequestDelegate" })
+public class BasicCredentialsExtractor implements CredentialsExtractor<HttpRequestDelegate> {
 
     @Override
-    public Optional<Credentials> retrieveCredentials(HttpServletRequest request) {
-        String authenticationHeader = request.getHeader("Authorization");
+    public Optional<Credentials> retrieveCredentials(HttpRequestDelegate request) {
+        return request.getAuthorizationHeader()
+            .filter(header -> header.contains(" "))
+            .flatMap(this::process);
+    }
 
-        if (authenticationHeader == null) {
-            return Optional.empty();
-        }
-
+    private Optional<UsernamePasswordCredentials> process(String authenticationHeader) {
         String[] tokens = authenticationHeader.split(" ");
         if (tokens.length == 2) {
             String authType = tokens[0];

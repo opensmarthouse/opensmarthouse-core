@@ -22,6 +22,7 @@ public class UsernamePasswordCredentials implements Credentials {
 
     private final String username;
     private final String password;
+    private final String scheme;
 
     /**
      * Creates a new instance
@@ -30,8 +31,20 @@ public class UsernamePasswordCredentials implements Credentials {
      * @param password password of the user
      */
     public UsernamePasswordCredentials(String username, String password) {
+        this(username, password, "basic");
+    }
+
+    /**
+     * Creates a new instance with given scheme.
+     *
+     * @param username name of the user
+     * @param password password of the user
+     * @param scheme login scheme
+     */
+    public UsernamePasswordCredentials(String username, String password, String scheme) {
         this.username = username;
         this.password = password;
+        this.scheme = scheme;
     }
 
     /**
@@ -53,7 +66,12 @@ public class UsernamePasswordCredentials implements Credentials {
     }
 
     @Override
+    public String getScheme() {
+        return scheme;
+    }
+
+    @Override
     public String toString() {
-        return username + ":" + password.replaceAll(".", "*");
+        return scheme + "(" + username + ":[protected])";
     }
 }

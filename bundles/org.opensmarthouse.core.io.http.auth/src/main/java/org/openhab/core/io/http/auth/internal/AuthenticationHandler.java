@@ -25,11 +25,13 @@ import javax.servlet.http.HttpServletResponse;
 import org.openhab.core.auth.Authentication;
 import org.openhab.core.auth.AuthenticationException;
 import org.openhab.core.auth.AuthenticationManager;
+import org.openhab.core.auth.AuthenticationResult;
 import org.openhab.core.auth.Credentials;
 import org.openhab.core.io.http.Handler;
 import org.openhab.core.io.http.HandlerContext;
 import org.openhab.core.io.http.HandlerPriorities;
-import org.openhab.core.io.http.auth.CredentialsExtractor;
+import org.openhab.core.io.http.facade.HttpRequestDelegate;
+import org.openhab.core.io.auth.CredentialsExtractor;
 import org.osgi.service.component.annotations.Activate;
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Modified;
@@ -54,7 +56,7 @@ public class AuthenticationHandler implements Handler {
 
     private final Logger logger = LoggerFactory.getLogger(AuthenticationHandler.class);
 
-    private final List<CredentialsExtractor<HttpServletRequest>> extractors = new CopyOnWriteArrayList<>();
+    private final List<CredentialsExtractor<HttpRequestDelegate>> extractors = new CopyOnWriteArrayList<>();
 
     private AuthenticationManager authenticationManager;
 
@@ -77,14 +79,14 @@ public class AuthenticationHandler implements Handler {
             }
 
             int found = 0, failed = 0;
-            for (CredentialsExtractor<HttpServletRequest> extractor : extractors) {
-                Optional<Credentials> extracted = extractor.retrieveCredentials(request);
+            for (CredentialsExtractor<HttpRequestDelegate> extractor : extractors) {
+                Optional<Credentials> extracted = extractor.retrieveCredentials(new ServletRequestDelegate(request));
                 if (extracted.isPresent()) {
                     found++;
                     Credentials credentials = extracted.get();
                     try {
-                        Authentication authentication = authenticationManager.authenticate(credentials);
-                        request.setAttribute(Authentication.class.getName(), authentication);
+                        AuthenticationResult authentication = authenticationManager.authenticate(credentials);
+                        request.setAttribute(Authentication.class.getName(), authentication.getAuthentication());
                         context.execute(request, response);
                         return;
                     } catch (AuthenticationException e) {
@@ -167,12 +169,12 @@ public class AuthenticationHandler implements Handler {
         this.authenticationManager = null;
     }
 
-    @Reference(cardinality = ReferenceCardinality.MULTIPLE, policy = ReferencePolicy.DYNAMIC, target = "(context=javax.servlet.http.HttpServletRequest)")
-    public void addCredentialsExtractor(CredentialsExtractor<HttpServletRequest> extractor) {
+    @Reference(cardinality = ReferenceCardinality.MULTIPLE, policy = ReferencePolicy.DYNAMIC, target = "(context=org.openhab.core.io.http.facade.HttpRequestDelegate)")
+    public void addCredentialsExtractor(CredentialsExtractor<HttpRequestDelegate> extractor) {
         this.extractors.add(extractor);
     }
 
-    public void removeCredentialsExtractor(CredentialsExtractor<HttpServletRequest> extractor) {
+    public void removeCredentialsExtractor(CredentialsExtractor<HttpRequestDelegate> extractor) {
         this.extractors.remove(extractor);
     }
 }

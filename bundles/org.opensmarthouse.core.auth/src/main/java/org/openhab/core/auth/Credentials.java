@@ -19,4 +19,6 @@ package org.openhab.core.auth;
  */
 public interface Credentials {
 
+  String getScheme();
+
 }

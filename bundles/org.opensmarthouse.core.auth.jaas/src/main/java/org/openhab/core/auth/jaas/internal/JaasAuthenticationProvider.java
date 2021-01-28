@@ -32,11 +32,15 @@ import org.eclipse.jdt.annotation.Nullable;
 import org.openhab.core.auth.Authentication;
 import org.openhab.core.auth.AuthenticationException;
 import org.openhab.core.auth.AuthenticationProvider;
+import org.openhab.core.auth.AuthenticationResult;
 import org.openhab.core.auth.Credentials;
-import org.openhab.core.auth.GenericUser;
+import org.openhab.core.auth.local.GenericUser;
 import org.openhab.core.auth.UsernamePasswordCredentials;
+import org.openhab.core.config.core.ConfigurableService;
+import org.osgi.framework.Constants;
 import org.osgi.service.component.annotations.Activate;
 import org.osgi.service.component.annotations.Component;
+import org.osgi.service.component.annotations.ConfigurationPolicy;
 import org.osgi.service.component.annotations.Deactivate;
 import org.osgi.service.component.annotations.Modified;
 
@@ -50,14 +54,17 @@ import org.osgi.service.component.annotations.Modified;
  * @author Yannick Schaus - provides a configuration with the ManagedUserLoginModule as a sufficient login module
  */
 @NonNullByDefault
-@Component(configurationPid = "org.openhab.jaas")
+@Component(configurationPid = "org.openhab.jaas", property = Constants.SERVICE_PID + "=org.openhab.jaas", configurationPolicy = ConfigurationPolicy.REQUIRE)
+@ConfigurableService(category = "auth", label = "JAAS Authentication", description_uri = JaasAuthenticationProvider.CONFIG_URI)
 public class JaasAuthenticationProvider implements AuthenticationProvider {
+
     private static final String DEFAULT_REALM = "openhab";
+    static final String CONFIG_URI = "auth:jaas";
 
     private @Nullable String realmName;
 
     @Override
-    public Authentication authenticate(final Credentials credentials) throws AuthenticationException {
+    public AuthenticationResult authenticate(final Credentials credentials) throws AuthenticationException {
         if (realmName == null) { // configuration is not yet ready or set
             realmName = DEFAULT_REALM;
         }
@@ -93,7 +100,7 @@ public class JaasAuthenticationProvider implements AuthenticationProvider {
             }, new ManagedUserLoginConfiguration());
             loginContext.login();
 
-            return getAuthentication(name, loginContext.getSubject());
+            return getAuthentication(name, userCredentials.getScheme(), loginContext.getSubject());
         } catch (LoginException e) {
             throw new AuthenticationException(e.getMessage());
         } finally {
@@ -101,8 +108,10 @@ public class JaasAuthenticationProvider implements AuthenticationProvider {
         }
     }
 
-    private Authentication getAuthentication(String name, Subject subject) {
-        return new Authentication(name, getRoles(subject.getPrincipals()));
+    private AuthenticationResult getAuthentication(String name, String scheme, Subject subject) {
+        return new AuthenticationResult(subject.getPrincipals().iterator().next(), scheme,
+            new Authentication(name, getRoles(subject.getPrincipals()))
+        );
     }
 
     private String[] getRoles(Set<Principal> principals) {

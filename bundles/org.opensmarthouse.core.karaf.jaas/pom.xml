@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+
+  <modelVersion>4.0.0</modelVersion>
+
+  <parent>
+    <groupId>org.opensmarthouse.core.bundles</groupId>
+    <artifactId>org.opensmarthouse.core.reactor.bundles</artifactId>
+    <version>0.9.2-SNAPSHOT</version>
+  </parent>
+
+  <artifactId>org.opensmarthouse.core.karaf.jaas</artifactId>
+
+  <name>OpenSmartHouse Core | Bundles | Karaf JAAS Integration</name>
+
+  <dependencies>
+    <dependency>
+      <groupId>org.opensmarthouse.core.bundles</groupId>
+      <artifactId>org.opensmarthouse.core.auth.local</artifactId>
+    </dependency>
+
+    <dependency>
+      <groupId>org.apache.karaf.jaas</groupId>
+      <artifactId>org.apache.karaf.jaas.modules</artifactId>
+      <version>${karaf.compile.version}</version>
+      <scope>provided</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.karaf.jaas</groupId>
+      <artifactId>org.apache.karaf.jaas.boot</artifactId>
+      <version>${karaf.compile.version}</version>
+      <scope>provided</scope>
+    </dependency>
+  </dependencies>
+
+</project>
