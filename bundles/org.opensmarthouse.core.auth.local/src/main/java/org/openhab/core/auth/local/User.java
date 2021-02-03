@@ -33,5 +33,12 @@ public interface User extends Principal, Identifiable<String> {
      * @see Role
      * @return role attributed to the user
      */
-    public Set<String> getRoles();
+    Set<String> getRoles();
+
+    /**
+     * Returns items which given user have access to.
+     *
+     * @return Item identifiers user has access to.
+     */
+    Set<String> getPermissions();
 }

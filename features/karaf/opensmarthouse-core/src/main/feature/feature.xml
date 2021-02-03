@@ -314,6 +314,12 @@
         <bundle>mvn:org.opensmarthouse.core.bundles/org.opensmarthouse.core.auth.password/${project.version}</bundle>
     </feature>
 
+    <feature name="opensmarthouse-core-authz-item" version="${project.version}">
+        <feature>opensmarthouse-core-auth</feature>
+        <feature>opensmarthouse-core-item</feature>
+        <bundle>mvn:org.opensmarthouse.core.bundles/org.opensmarthouse.core.item.auth/${project.version}</bundle>
+    </feature>
+
     <feature name="opensmarthouse-core-automation" version="${project.version}">
         <feature dependency="true">opensmarthouse-tp-gson</feature>
         <feature>opensmarthouse-core</feature>
@@ -572,6 +578,7 @@
     <feature name="opensmarthouse-core-io-rest-item" version="${project.version}">
         <feature>opensmarthouse-core-library-item</feature>
         <feature>opensmarthouse-core-io-rest</feature>
+        <feature>opensmarthouse-core-auth</feature>
         <feature>opensmarthouse-core-registry</feature>
         <feature>opensmarthouse-core-config</feature>
         <feature>opensmarthouse-core-thing</feature>
@@ -582,6 +589,7 @@
     <feature name="opensmarthouse-core-io-rest-sse" version="${project.version}">
         <feature dependency="true">opensmarthouse-tp-javax-inject</feature>
         <feature>opensmarthouse-core-io-rest</feature>
+        <feature>opensmarthouse-core-auth</feature>
         <feature>opensmarthouse-core-item</feature>
         <feature>opensmarthouse-core-transform</feature>
         <bundle>mvn:org.opensmarthouse.core.bundles/org.opensmarthouse.core.io.rest.sse/${project.version}</bundle>
@@ -1082,6 +1090,7 @@
 
     <feature name="opensmarthouse-core-io-rest-persistence" version="${project.version}">
         <feature>opensmarthouse-core-io-rest</feature>
+        <feature>opensmarthouse-core-auth</feature>
         <feature>opensmarthouse-core-persistence</feature>
         <bundle>mvn:org.opensmarthouse.core.bundles/org.opensmarthouse.core.io.rest.persistence/${project.version}</bundle>
     </feature>

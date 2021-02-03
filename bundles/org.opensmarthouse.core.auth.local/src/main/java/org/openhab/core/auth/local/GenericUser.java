@@ -12,6 +12,7 @@
  */
 package org.openhab.core.auth.local;
 
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -28,16 +29,23 @@ public class GenericUser implements User {
 
     private String name;
     private Set<String> roles;
+    private Set<String> permissions;
 
     /**
      * Constructs a user attributed with a set of roles.
      *
      * @param name the username (account name)
      * @param roles the roles attributed to this user
+     * @param permissions the items user has access to
      */
-    public GenericUser(String name, Set<String> roles) {
+    public GenericUser(String name, Set<String> roles, Set<String> permissions) {
         this.name = name;
         this.roles = roles;
+        this.permissions = permissions;
+    }
+
+    public GenericUser(String name, Set<String> roles) {
+        this(name, roles, Collections.emptySet());
     }
 
     /**
@@ -64,7 +72,12 @@ public class GenericUser implements User {
         return roles;
     }
 
+    @Override
+    public Set<String> getPermissions() {
+        return permissions;
+    }
+
     public String toString() {
-        return name + " (" + roles + ")";
+        return name + " (" + roles + " " + permissions + ")";
     }
 }

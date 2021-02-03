@@ -1,34 +1,25 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-
   <modelVersion>4.0.0</modelVersion>
 
   <parent>
     <groupId>org.opensmarthouse.core.bundles</groupId>
     <artifactId>org.opensmarthouse.core.reactor.bundles</artifactId>
-    <version>0.9.3-SNAPSHOT</version>
+    <version>0.9.2-SNAPSHOT</version>
   </parent>
 
-  <artifactId>org.opensmarthouse.core.io.rest.persistence</artifactId>
+  <artifactId>org.opensmarthouse.core.item.auth</artifactId>
 
-  <name>OpenSmartHouse Core | Bundles | REST | Persistence</name>
+  <name>OpenSmartHouse Core | Bundles | Item | Auth</name>
 
   <dependencies>
     <dependency>
       <groupId>org.opensmarthouse.core.bundles</groupId>
-      <artifactId>org.opensmarthouse.core.persistence</artifactId>
+      <artifactId>org.opensmarthouse.core.item</artifactId>
     </dependency>
     <dependency>
       <groupId>org.opensmarthouse.core.bundles</groupId>
-      <artifactId>org.opensmarthouse.core.io.rest</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>javax.annotation</groupId>
-      <artifactId>javax.annotation-api</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>org.opensmarthouse.core.bundles</groupId>
-      <artifactId>org.opensmarthouse.core.io.rest.auth</artifactId>
+      <artifactId>org.opensmarthouse.core.auth</artifactId>
     </dependency>
   </dependencies>
 

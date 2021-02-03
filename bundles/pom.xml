@@ -111,6 +111,7 @@
     <module>org.opensmarthouse.core.io.transport.serial.rxtx.rfc2217</module>
     <module>org.opensmarthouse.core.io.transport.upnp</module>
     <module>org.opensmarthouse.core.item</module>
+    <module>org.opensmarthouse.core.item.auth</module>
     <module>org.opensmarthouse.core.item.core</module>
     <module>org.opensmarthouse.core.karaf</module>
     <module>org.opensmarthouse.core.karaf.jaas</module>

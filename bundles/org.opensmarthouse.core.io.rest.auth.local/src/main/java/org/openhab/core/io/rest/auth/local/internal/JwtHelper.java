@@ -117,7 +117,9 @@ public class JwtHelper {
             jwtClaims.setClaim("client_id", clientId);
             jwtClaims.setClaim("scope", scope);
             jwtClaims.setStringListClaim("role",
-                    new ArrayList<>(user.getRoles() != null ? user.getRoles() : Collections.emptySet()));
+                new ArrayList<>(user.getRoles() != null ? user.getRoles() : Collections.emptySet()));
+            jwtClaims.setStringListClaim("permissions",
+                new ArrayList<>(user.getPermissions() != null ? user.getPermissions() : Collections.emptySet()));
 
             JsonWebSignature jws = new JsonWebSignature();
             jws.setPayload(jwtClaims.toJson());
@@ -149,10 +151,16 @@ public class JwtHelper {
             JwtClaims jwtClaims = jwtConsumer.processToClaims(jwt);
             String username = jwtClaims.getSubject();
             List<String> roles = jwtClaims.getStringListClaimValue("role");
+            List<String> permissions = jwtClaims.getStringListClaimValue("permissions");
             String scope = jwtClaims.getStringClaimValue("scope");
-            return new Authentication(username, roles.toArray(new String[roles.size()]), scope);
+            return new Authentication(username, toArray(roles), scope, toArray(permissions));
         } catch (InvalidJwtException | MalformedClaimException e) {
             throw new AuthenticationException("Error while processing JWT token", e);
         }
     }
+
+    protected String[] toArray(List<String> entries) {
+        return entries.toArray(new String[entries.size()]);
+    }
+
 }

@@ -12,16 +12,20 @@
  */
 package org.openhab.core.io.rest.sse;
 
+import static org.openhab.core.io.rest.sse.internal.SseSinkItemInfo.canAccessItem;
 import static org.openhab.core.io.rest.sse.internal.SseSinkItemInfo.hasConnectionId;
 import static org.openhab.core.io.rest.sse.internal.SseSinkItemInfo.tracksItem;
+import static org.openhab.core.io.rest.sse.internal.SseSinkTopicInfo.hasItemAccess;
 import static org.openhab.core.io.rest.sse.internal.SseSinkTopicInfo.matchesTopic;
 
 import java.io.IOException;
+import java.util.LinkedHashSet;
 import java.util.Optional;
 import java.util.Set;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
+import java.util.function.Predicate;
 import javax.annotation.security.RolesAllowed;
 import javax.inject.Singleton;
 import javax.servlet.http.HttpServletResponse;
@@ -41,6 +45,10 @@ import javax.ws.rs.sse.Sse;
 import javax.ws.rs.sse.SseEventSink;
 
 import org.eclipse.jdt.annotation.NonNullByDefault;
+import org.openhab.core.auth.AuthenticationContextHolder;
+import org.openhab.core.auth.AuthorizationManager;
+import org.openhab.core.auth.Permission;
+import org.openhab.core.auth.Permissions;
 import org.openhab.core.auth.Role;
 import org.openhab.core.events.Event;
 import org.openhab.core.io.rest.RESTConstants;
@@ -52,6 +60,8 @@ import org.openhab.core.io.rest.sse.internal.SseSinkItemInfo;
 import org.openhab.core.io.rest.sse.internal.SseSinkTopicInfo;
 import org.openhab.core.io.rest.sse.internal.dto.EventDTO;
 import org.openhab.core.io.rest.sse.internal.util.SseUtil;
+import org.openhab.core.items.Item;
+import org.openhab.core.items.events.ItemEvent;
 import org.openhab.core.items.events.ItemStateChangedEvent;
 import org.osgi.service.component.annotations.Activate;
 import org.osgi.service.component.annotations.Component;
@@ -104,11 +114,16 @@ public class SseResource implements RESTResource, SsePublisher {
     private final SseBroadcaster<SseSinkItemInfo> itemStatesBroadcaster = new SseBroadcaster<>();
     private final SseItemStatesEventBuilder itemStatesEventBuilder;
     private final SseBroadcaster<SseSinkTopicInfo> topicBroadcaster = new SseBroadcaster<>();
+    private final AuthorizationManager authorizationManager;
+    private final AuthenticationContextHolder authenticationContextHolder;
 
     private ExecutorService executorService;
 
     @Activate
-    public SseResource(@Reference SseItemStatesEventBuilder itemStatesEventBuilder) {
+    public SseResource(@Reference SseItemStatesEventBuilder itemStatesEventBuilder, @Reference
+        AuthorizationManager authorizationManager, @Reference AuthenticationContextHolder authenticationContextHolder) {
+        this.authorizationManager = authorizationManager;
+        this.authenticationContextHolder = authenticationContextHolder;
         this.executorService = Executors.newSingleThreadExecutor();
         this.itemStatesEventBuilder = itemStatesEventBuilder;
     }
@@ -163,7 +178,7 @@ public class SseResource implements RESTResource, SsePublisher {
             return;
         }
 
-        topicBroadcaster.add(sseEventSink, new SseSinkTopicInfo(eventFilter));
+        topicBroadcaster.add(sseEventSink, new SseSinkTopicInfo(eventFilter, authenticationContextHolder.getAuthentication()));
 
         addCommonResponseHeaders(response);
     }
@@ -172,7 +187,13 @@ public class SseResource implements RESTResource, SsePublisher {
         final EventDTO eventDTO = SseUtil.buildDTO(event);
         final OutboundSseEvent sseEvent = SseUtil.buildEvent(sse.newEventBuilder(), eventDTO);
 
-        topicBroadcaster.sendIf(sseEvent, matchesTopic(eventDTO.topic));
+        Predicate<SseSinkTopicInfo> predicate = (sink) -> true;
+        if (event instanceof ItemEvent) {
+            String item = ((ItemEvent) event).getItemName();
+            predicate = hasItemAccess(authorizationManager, item);
+        }
+
+        topicBroadcaster.sendIf(sseEvent, matchesTopic(eventDTO.topic).and(predicate));
     }
 
     /**
@@ -187,7 +208,7 @@ public class SseResource implements RESTResource, SsePublisher {
     @Operation(operationId = "initNewStateTacker", summary = "Initiates a new item state tracker connection", responses = {
             @ApiResponse(responseCode = "200", description = "OK") })
     public void getStateEvents(@Context final SseEventSink sseEventSink, @Context final HttpServletResponse response) {
-        final SseSinkItemInfo sinkItemInfo = new SseSinkItemInfo();
+        final SseSinkItemInfo sinkItemInfo = new SseSinkItemInfo(authenticationContextHolder.getAuthentication());
         itemStatesBroadcaster.add(sseEventSink, sinkItemInfo);
 
         addCommonResponseHeaders(response);
@@ -216,6 +237,13 @@ public class SseResource implements RESTResource, SsePublisher {
             return Response.status(Status.NOT_FOUND).build();
         }
 
+        Set<String> subsribedItemNames = new LinkedHashSet<>();
+        for (String item : itemNames) {
+            if (authorizationManager.hasPermission(Permissions.READ, item, Item.class, authenticationContextHolder.getAuthentication())) {
+                subsribedItemNames.add(item);
+            }
+        }
+
         itemStateInfo.get().updateTrackedItems(itemNames);
 
         OutboundSseEvent itemStateEvent = itemStatesEventBuilder.buildEvent(sse.newEventBuilder(), itemNames);
@@ -233,7 +261,8 @@ public class SseResource implements RESTResource, SsePublisher {
      */
     public void handleEventBroadcastItemState(final ItemStateChangedEvent stateChangeEvent) {
         String itemName = stateChangeEvent.getItemName();
-        boolean isTracked = itemStatesBroadcaster.getInfoIf(info -> true).anyMatch(tracksItem(itemName));
+        boolean isTracked = itemStatesBroadcaster.getInfoIf(info -> true).anyMatch(tracksItem(itemName)
+            .and(canAccessItem(authorizationManager, itemName)));
         if (isTracked) {
             OutboundSseEvent event = itemStatesEventBuilder.buildEvent(sse.newEventBuilder(), Set.of(itemName));
             if (event != null) {

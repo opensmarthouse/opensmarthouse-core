@@ -19,7 +19,6 @@ import java.util.Set;
 
 import org.eclipse.jdt.annotation.NonNullByDefault;
 import org.eclipse.jdt.annotation.Nullable;
-import org.openhab.core.auth.local.User;
 
 /**
  * A {@link User} sourced from a managed {@link UserProvider}.
@@ -33,6 +32,7 @@ public class ManagedUser implements User {
     private String passwordHash;
     private String passwordSalt;
     private Set<String> roles = new HashSet<>();
+    private Set<String> permissions = new HashSet<>();
     private @Nullable PendingToken pendingToken = null;
     private List<UserSession> sessions = new ArrayList<>();
     private List<UserApiToken> apiTokens = new ArrayList<>();
@@ -118,6 +118,14 @@ public class ManagedUser implements User {
      */
     public void setRoles(Set<String> roles) {
         this.roles = roles;
+    }
+
+    public void setPermissions(Set<String> permissions) {
+        this.permissions = permissions;
+    }
+
+    public Set<String> getPermissions() {
+        return permissions;
     }
 
     /**

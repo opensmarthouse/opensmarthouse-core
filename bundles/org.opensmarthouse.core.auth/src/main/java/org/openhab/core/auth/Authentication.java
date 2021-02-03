@@ -29,7 +29,7 @@ public class Authentication {
     private String username;
     private Set<String> roles;
     private String scope;
-    private Set<String> items;
+    private Set<String> permissions;
 
     /**
      * no-args constructor required by gson
@@ -38,7 +38,7 @@ public class Authentication {
         this.username = null;
         this.roles = null;
         this.scope = null;
-        this.items = null;
+        this.permissions = null;
     }
 
     /**
@@ -59,7 +59,7 @@ public class Authentication {
      * @param scope a scope this authentication is valid for
      */
     public Authentication(String username, String[] roles, String scope) {
-        this(username, roles, scope, new String[] {"*"});
+        this(username, roles, scope, new String[] {"*:*:*"});
     }
 
     /**
@@ -68,12 +68,13 @@ public class Authentication {
      * @param username name of the user associated to this authentication instance
      * @param roles a variable list of roles that the user possesses.
      * @param scope a scope this authentication is valid for
+     * @param permissions permissions associated with authentication
      */
-    public Authentication(String username, String[] roles, String scope, String[] items) {
+    public Authentication(String username, String[] roles, String scope, String[] permissions) {
         this.username = username;
         this.roles = Set.of(roles);
         this.scope = scope;
-        this.items = Set.of(items);
+        this.permissions = Set.of(permissions);
     }
 
     /**
@@ -104,11 +105,11 @@ public class Authentication {
     }
 
     /**
-     * Retrieves the items this authentication is valid for.
+     * Retrieves the permissions this authentication has.
      *
-     * @return an set of items (might be empty)
+     * @return an set of permissions (might be empty)
      */
-    public Set<String> getItems() {
-        return items;
+    public Set<String> getPermissions() {
+        return permissions;
     }
 }

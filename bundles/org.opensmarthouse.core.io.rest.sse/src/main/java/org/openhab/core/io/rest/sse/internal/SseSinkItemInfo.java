@@ -18,6 +18,11 @@ import java.util.concurrent.CopyOnWriteArraySet;
 import java.util.function.Predicate;
 
 import org.eclipse.jdt.annotation.NonNullByDefault;
+import org.eclipse.jdt.annotation.Nullable;
+import org.openhab.core.auth.Authentication;
+import org.openhab.core.auth.AuthorizationManager;
+import org.openhab.core.auth.Permissions;
+import org.openhab.core.items.Item;
 
 /**
  * The specific information we need to hold for a SSE sink which tracks item state updates.
@@ -29,6 +34,11 @@ public class SseSinkItemInfo {
 
     private final String connectionId = UUID.randomUUID().toString();
     private final Set<String> trackedItems = new CopyOnWriteArraySet<>();
+    private final @Nullable Authentication authentication;
+
+    public SseSinkItemInfo(@Nullable Authentication authentication) {
+        this.authentication = authentication;
+    }
 
     /**
      * Gets the connection identifier of this {@link SseSinkItemInfo}
@@ -55,5 +65,14 @@ public class SseSinkItemInfo {
 
     public static Predicate<SseSinkItemInfo> tracksItem(String itemName) {
         return info -> info.trackedItems.contains(itemName);
+    }
+
+    public static Predicate<SseSinkItemInfo> canAccessItem(AuthorizationManager manager, String itemName) {
+        return info -> {
+            if (info.authentication == null) {
+                return false;
+            }
+            return manager.hasPermission(Permissions.READ, itemName, Item.class, info.authentication);
+        };
     }
 }
