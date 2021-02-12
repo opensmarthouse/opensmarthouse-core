@@ -23,6 +23,7 @@
     <module>org.opensmarthouse.core.auth.core</module>
     <module>org.opensmarthouse.core.auth.apitoken</module>
     <module>org.opensmarthouse.core.auth.apitoken.provider</module>
+    <module>org.opensmarthouse.core.auth.cookie</module>
     <module>org.opensmarthouse.core.auth.jaas</module>
     <module>org.opensmarthouse.core.auth.jwt</module>
     <module>org.opensmarthouse.core.auth.jwt.provider</module>
@@ -73,6 +74,7 @@
     <module>org.opensmarthouse.core.io.http.auth</module>
     <module>org.opensmarthouse.core.io.http.auth.apitoken</module>
     <module>org.opensmarthouse.core.io.http.auth.basic</module>
+    <module>org.opensmarthouse.core.io.http.auth.cookie</module>
     <module>org.opensmarthouse.core.io.http.auth.jwt</module>
     <module>org.opensmarthouse.core.io.http.facade</module>
     <module>org.opensmarthouse.core.io.jetty.certificate</module>

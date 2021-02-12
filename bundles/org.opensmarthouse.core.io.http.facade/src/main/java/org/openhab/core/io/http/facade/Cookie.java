@@ -12,20 +12,27 @@
  */
 package org.openhab.core.io.http.facade;
 
-import java.util.Optional;
-
 /**
- * A thin abstraction layer over HTTP request to bridge servlet and JAX-RS api.
+ * An unified (facade) version of http cookie.
  *
- * @author Łukasz Dywicki - Initial contribution
+ * @author Łukasz Dywicki - Initial contribution.
  */
-public interface HttpRequestDelegate {
+public class Cookie {
 
-  Optional<String> getHeader(String headerName);
+  private final String name;
+  private final String value;
 
-  default Optional<String> getAuthorizationHeader() {
-    return getHeader("Authorization");
+  public Cookie(String name, String value) {
+    this.name = name;
+    this.value = value;
   }
 
-  Optional<Cookie> getCookie(String cookieName);
+  public String getName() {
+    return name;
+  }
+
+  public String getValue() {
+    return value;
+  }
+
 }

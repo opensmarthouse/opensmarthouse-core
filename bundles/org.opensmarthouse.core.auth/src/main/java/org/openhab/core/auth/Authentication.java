@@ -71,10 +71,22 @@ public class Authentication {
      * @param permissions permissions associated with authentication
      */
     public Authentication(String username, String[] roles, String scope, String[] permissions) {
+        this(username, Set.of(roles), scope, Set.of(permissions));
+    }
+
+    /**
+     * Creates a new instance with a specific scope
+     *
+     * @param username name of the user associated to this authentication instance
+     * @param roles a variable list of roles that the user possesses.
+     * @param scope a scope this authentication is valid for
+     * @param permissions permissions associated with authentication
+     */
+    public Authentication(String username, Set<String> roles, String scope, Set<String> permissions) {
         this.username = username;
-        this.roles = Set.of(roles);
+        this.roles = roles;
         this.scope = scope;
-        this.permissions = Set.of(permissions);
+        this.permissions = permissions;
     }
 
     /**

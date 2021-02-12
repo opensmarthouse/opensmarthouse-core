@@ -28,7 +28,7 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.openhab.core.auth.local.ManagedUser;
 import org.openhab.core.auth.local.User;
-import org.openhab.core.auth.UsernamePasswordCredentials;
+import org.openhab.core.auth.password.UsernamePasswordCredentials;
 import org.openhab.core.auth.local.UserSession;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.ServiceEvent;

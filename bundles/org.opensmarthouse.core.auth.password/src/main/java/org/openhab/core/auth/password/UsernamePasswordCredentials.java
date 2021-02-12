@@ -10,7 +10,9 @@
  *
  * SPDX-License-Identifier: EPL-2.0
  */
-package org.openhab.core.auth;
+package org.openhab.core.auth.password;
+
+import org.openhab.core.auth.Credentials;
 
 /**
  * Credentials which represent user name and password.

@@ -35,7 +35,7 @@ import org.openhab.core.auth.AuthenticationProvider;
 import org.openhab.core.auth.AuthenticationResult;
 import org.openhab.core.auth.Credentials;
 import org.openhab.core.auth.local.GenericUser;
-import org.openhab.core.auth.UsernamePasswordCredentials;
+import org.openhab.core.auth.password.UsernamePasswordCredentials;
 import org.openhab.core.config.core.ConfigurableService;
 import org.osgi.framework.Constants;
 import org.osgi.service.component.annotations.Activate;

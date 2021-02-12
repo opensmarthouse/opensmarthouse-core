@@ -14,6 +14,7 @@ package org.openhab.core.io.rest.auth.internal;
 
 import java.util.Optional;
 import javax.ws.rs.container.ContainerRequestContext;
+import org.openhab.core.io.http.facade.Cookie;
 import org.openhab.core.io.http.facade.HttpRequestDelegate;
 
 /**
@@ -34,4 +35,12 @@ public class JaxRsRequestDelegate implements HttpRequestDelegate {
     return Optional.ofNullable(request.getHeaderString(headerName));
   }
 
+  @Override
+  public Optional<Cookie> getCookie(String cookieName) {
+    if (request.getCookies().containsKey(cookieName)) {
+      javax.ws.rs.core.Cookie cookie = request.getCookies().get(cookieName);
+      return Optional.of(new Cookie(cookie.getName(), cookie.getValue()));
+    }
+    return Optional.empty();
+  }
 }

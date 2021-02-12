@@ -20,6 +20,10 @@
     </dependency>
     <dependency>
       <groupId>org.opensmarthouse.core.bundles</groupId>
+      <artifactId>org.opensmarthouse.core.auth.cookie</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.opensmarthouse.core.bundles</groupId>
       <artifactId>org.opensmarthouse.core.auth.jwt</artifactId>
     </dependency>
     <dependency>

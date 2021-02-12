@@ -12,8 +12,10 @@
  */
 package org.openhab.core.io.http.auth.internal;
 
+import java.util.Arrays;
 import java.util.Optional;
 import javax.servlet.http.HttpServletRequest;
+import org.openhab.core.io.http.facade.Cookie;
 import org.openhab.core.io.http.facade.HttpRequestDelegate;
 
 /**
@@ -34,4 +36,10 @@ public class ServletRequestDelegate implements HttpRequestDelegate {
     return Optional.ofNullable(request.getHeader(headerName));
   }
 
+  @Override
+  public Optional<Cookie> getCookie(String cookieName) {
+    return Arrays.stream(request.getCookies()).filter(cookie -> cookieName.equals(cookie.getName()))
+        .map(cookie -> new Cookie(cookie.getName(), cookie.getValue()))
+        .findFirst();
+  }
 }

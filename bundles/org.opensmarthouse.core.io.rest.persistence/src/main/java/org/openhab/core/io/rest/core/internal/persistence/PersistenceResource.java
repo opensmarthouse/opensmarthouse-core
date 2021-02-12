@@ -187,7 +187,7 @@ public class PersistenceResource implements RESTResource {
             @Parameter(description = "The length of each page.") @QueryParam("pagelength") int pageLength,
             @Parameter(description = "Gets one value before and after the requested period.") @QueryParam("boundary") boolean boundary) {
 
-        if (!authorizationManager.hasPermission(Permissions.PERSISTENCE, itemName, Item.class, authenticationContextHolder.getAuthentication())) {
+        if (!authorizationManager.hasPermission(Permissions.READ, itemName, Item.class, authenticationContextHolder.getAuthentication())) {
             return Response.status(Status.UNAUTHORIZED).build();
         }
         return getItemHistoryDTO(serviceId, itemName, startTime, endTime, pageNumber, pageLength, boundary);
@@ -540,7 +540,7 @@ public class PersistenceResource implements RESTResource {
 
         @Override
         public Boolean apply(Authentication auth, PersistenceItemInfo info) {
-            return authorizationManager.hasPermission(Permissions.PERSISTENCE, info.getName(), Item.class, auth);
+            return authorizationManager.hasPermission(Permissions.READ, info.getName(), Item.class, auth);
         }
     }
 }

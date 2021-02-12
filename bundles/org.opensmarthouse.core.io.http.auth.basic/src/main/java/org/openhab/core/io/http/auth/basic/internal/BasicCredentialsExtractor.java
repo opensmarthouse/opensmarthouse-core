@@ -18,7 +18,7 @@ import java.util.Optional;
 import javax.servlet.http.HttpServletRequest;
 
 import org.openhab.core.auth.Credentials;
-import org.openhab.core.auth.UsernamePasswordCredentials;
+import org.openhab.core.auth.password.UsernamePasswordCredentials;
 import org.openhab.core.io.auth.CredentialsExtractor;
 import org.openhab.core.io.http.facade.HttpRequestDelegate;
 import org.osgi.service.component.annotations.Component;
