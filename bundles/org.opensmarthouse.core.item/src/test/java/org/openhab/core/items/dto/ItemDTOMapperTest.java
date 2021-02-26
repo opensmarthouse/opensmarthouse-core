@@ -20,18 +20,25 @@ import static org.junit.Assert.assertThat;
 
 import org.junit.Ignore;
 import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.mockito.Mock;
+import org.mockito.junit.MockitoJUnitRunner;
 import org.openhab.core.items.GenericItem;
 import org.openhab.core.items.GroupFunction;
+import org.openhab.core.items.ItemBuilderFactory;
 import org.openhab.core.items.TestNumberItem;
 import org.openhab.core.library.types.StringType;
 
 /**
  * @author Stefan Triller - Initial contribution
  */
+@RunWith(MockitoJUnitRunner.class)
 public class ItemDTOMapperTest {
 
+    @Mock
+    private ItemBuilderFactory factory;
+
     @Test
-    @Ignore
     public void testMapFunctionWithNumberItemAndCountFunction() {
         // testing Group:Number:Count(".*hello.*")
         GenericItem item1 = new TestNumberItem("item1");
@@ -41,7 +48,7 @@ public class ItemDTOMapperTest {
         gFuncDTO.params = new String[] { ".*hello.*" };
 
         // FIXME This gonna fail
-        GroupFunction gFunc = ItemDTOMapper.mapFunction(item1, gFuncDTO);
+        GroupFunction gFunc = ItemDTOMapper.mapFunction(item1, gFuncDTO, factory);
 
         assertThat(gFunc, instanceOf(GroupFunction.class));
         assertThat(gFunc.getParameters().length, is(1));

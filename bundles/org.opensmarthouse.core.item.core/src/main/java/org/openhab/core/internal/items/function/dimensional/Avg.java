@@ -12,8 +12,12 @@
  */
 package org.openhab.core.internal.items.function.dimensional;
 
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.Set;
+
 import javax.measure.Quantity;
+
 import org.eclipse.jdt.annotation.NonNullByDefault;
 import org.eclipse.jdt.annotation.Nullable;
 import org.openhab.core.items.Item;
@@ -21,15 +25,16 @@ import org.openhab.core.library.types.QuantityType;
 import org.openhab.core.types.State;
 import org.openhab.core.types.UnDefType;
 
+
 /**
- * This calculates the minimum value of all item states of {@link QuantityType}.
+ * This calculates the numeric average over all item states of {@link QuantityType}.
  *
  * @author Henning Treu - Initial contribution
  */
 @NonNullByDefault
-public class DimensionalMin extends DimensionalGroupFunction {
+public class Avg extends DimensionalGroupFunction {
 
-    public DimensionalMin(Class<? extends Quantity<?>> dimension) {
+    public Avg(Class<? extends Quantity<?>> dimension) {
         super(dimension);
     }
 
@@ -40,20 +45,29 @@ public class DimensionalMin extends DimensionalGroupFunction {
             return UnDefType.UNDEF;
         }
 
-        QuantityType<?> min = null;
+        QuantityType<?> sum = null;
+        int count = 0;
         for (Item item : items) {
             if (isSameDimension(item)) {
                 QuantityType itemState = item.getStateAs(QuantityType.class);
                 if (itemState != null) {
-                    if (min == null
-                            || (min.getUnit().isCompatible(itemState.getUnit()) && min.compareTo(itemState) > 0)) {
-                        min = itemState;
+                    if (sum == null) {
+                        sum = itemState; // initialise the sum from the first item
+                        count++;
+                    } else {
+                        sum = sum.add(itemState);
+                        count++;
                     }
                 }
             }
         }
 
-        return min != null ? min : UnDefType.UNDEF;
+        if (sum != null && count > 0) {
+            BigDecimal result = sum.toBigDecimal().divide(BigDecimal.valueOf(count), RoundingMode.HALF_UP);
+            return new QuantityType(result, sum.getUnit());
+        }
+
+        return UnDefType.UNDEF;
     }
 
 }

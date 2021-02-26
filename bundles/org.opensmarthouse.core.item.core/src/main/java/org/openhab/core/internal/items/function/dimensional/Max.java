@@ -12,12 +12,8 @@
  */
 package org.openhab.core.internal.items.function.dimensional;
 
-import java.math.BigDecimal;
-import java.math.RoundingMode;
 import java.util.Set;
-
 import javax.measure.Quantity;
-
 import org.eclipse.jdt.annotation.NonNullByDefault;
 import org.eclipse.jdt.annotation.Nullable;
 import org.openhab.core.items.Item;
@@ -25,16 +21,15 @@ import org.openhab.core.library.types.QuantityType;
 import org.openhab.core.types.State;
 import org.openhab.core.types.UnDefType;
 
-
 /**
- * This calculates the numeric average over all item states of {@link QuantityType}.
+ * This calculates the maximum value of all item states of {@link QuantityType}.
  *
  * @author Henning Treu - Initial contribution
  */
 @NonNullByDefault
-public class DimensionalAvg extends DimensionalGroupFunction {
+public class Max extends DimensionalGroupFunction {
 
-    public DimensionalAvg(Class<? extends Quantity<?>> dimension) {
+    public Max(Class<? extends Quantity<?>> dimension) {
         super(dimension);
     }
 
@@ -45,29 +40,20 @@ public class DimensionalAvg extends DimensionalGroupFunction {
             return UnDefType.UNDEF;
         }
 
-        QuantityType<?> sum = null;
-        int count = 0;
+        QuantityType<?> max = null;
         for (Item item : items) {
             if (isSameDimension(item)) {
                 QuantityType itemState = item.getStateAs(QuantityType.class);
                 if (itemState != null) {
-                    if (sum == null) {
-                        sum = itemState; // initialise the sum from the first item
-                        count++;
-                    } else {
-                        sum = sum.add(itemState);
-                        count++;
+                    if (max == null
+                            || (max.getUnit().isCompatible(itemState.getUnit()) && max.compareTo(itemState) < 0)) {
+                        max = itemState;
                     }
                 }
             }
         }
 
-        if (sum != null && count > 0) {
-            BigDecimal result = sum.toBigDecimal().divide(BigDecimal.valueOf(count), RoundingMode.HALF_UP);
-            return new QuantityType(result, sum.getUnit());
-        }
-
-        return UnDefType.UNDEF;
+        return max != null ? max : UnDefType.UNDEF;
     }
 
 }

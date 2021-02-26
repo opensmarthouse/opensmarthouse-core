@@ -27,9 +27,9 @@ import org.openhab.core.types.UnDefType;
  * @author Henning Treu - Initial contribution
  */
 @NonNullByDefault
-public class DimensionalSum extends DimensionalGroupFunction {
+public class Sum extends DimensionalGroupFunction {
 
-    public DimensionalSum(Class<? extends Quantity<?>> dimension) {
+    public Sum(Class<? extends Quantity<?>> dimension) {
         super(dimension);
     }
 
