@@ -21,20 +21,16 @@ import javax.measure.Quantity;
 import org.eclipse.jdt.annotation.NonNullByDefault;
 import org.eclipse.jdt.annotation.Nullable;
 import org.openhab.core.internal.items.function.And;
-import org.openhab.core.internal.items.function.Avg;
 import org.openhab.core.internal.items.function.Count;
 import org.openhab.core.internal.items.function.Earliest;
 import org.openhab.core.internal.items.function.Latest;
-import org.openhab.core.internal.items.function.Max;
-import org.openhab.core.internal.items.function.Min;
 import org.openhab.core.internal.items.function.NAnd;
 import org.openhab.core.internal.items.function.NOr;
 import org.openhab.core.internal.items.function.Or;
-import org.openhab.core.internal.items.function.Sum;
-import org.openhab.core.internal.items.function.dimensional.DimensionalAvg;
-import org.openhab.core.internal.items.function.dimensional.DimensionalMax;
-import org.openhab.core.internal.items.function.dimensional.DimensionalMin;
-import org.openhab.core.internal.items.function.dimensional.DimensionalSum;
+import org.openhab.core.internal.items.function.dimensional.Avg;
+import org.openhab.core.internal.items.function.dimensional.Max;
+import org.openhab.core.internal.items.function.dimensional.Min;
+import org.openhab.core.internal.items.function.dimensional.Sum;
 import org.openhab.core.items.GroupFunction;
 import org.openhab.core.items.Item;
 import org.openhab.core.items.dto.GroupFunctionDTO;
@@ -105,13 +101,13 @@ public class GroupFunctionHelper {
         final String functionName = function.name;
         switch (functionName.toUpperCase()) {
             case "AVG":
-                return new DimensionalAvg(dimension);
+                return new Avg(dimension);
             case "SUM":
-                return new DimensionalSum(dimension);
+                return new Sum(dimension);
             case "MIN":
-                return new DimensionalMin(dimension);
+                return new Min(dimension);
             case "MAX":
-                return new DimensionalMax(dimension);
+                return new Max(dimension);
             default:
                 return createDefaultGroupFunction(function, baseItem);
         }
@@ -163,13 +159,13 @@ public class GroupFunctionHelper {
                 }
                 break;
             case "AVG":
-                return new Avg();
+                return new org.openhab.core.internal.items.function.Avg();
             case "SUM":
-                return new Sum();
+                return new org.openhab.core.internal.items.function.Sum();
             case "MIN":
-                return new Min();
+                return new org.openhab.core.internal.items.function.Min();
             case "MAX":
-                return new Max();
+                return new org.openhab.core.internal.items.function.Max();
             case "LATEST":
                 return new Latest();
             case "EARLIEST":
