@@ -90,6 +90,21 @@ public class SemanticTagsTest {
     }
 
     @Test
+    public void testGetLocation() {
+        assertEquals(Bathroom.class, SemanticTags.getLocation(locationItem));
+    }
+
+    @Test
+    public void testGetEquipment() {
+        assertEquals(CleaningRobot.class, SemanticTags.getEquipment(equipmentItem));
+    }
+
+    @Test
+    public void testGetPoint() {
+        assertEquals(Measurement.class, SemanticTags.getPoint(pointItem));
+    }
+
+    @Test
     public void testGetProperty() {
         assertEquals(Temperature.class, SemanticTags.getProperty(pointItem));
     }
