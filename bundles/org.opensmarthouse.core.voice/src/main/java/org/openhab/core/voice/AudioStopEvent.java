@@ -13,10 +13,13 @@
  */
 package org.openhab.core.voice;
 
+import org.eclipse.jdt.annotation.NonNullByDefault;
+
 /**
  * A {@link STTEvent} fired when the {@link STTService} stops hearing audio.
  *
  * @author Kelly Davis - Initial contribution
  */
+@NonNullByDefault
 public class AudioStopEvent implements STTEvent {
 }

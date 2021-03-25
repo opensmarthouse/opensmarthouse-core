@@ -13,8 +13,11 @@
  */
 package org.openhab.core.voice.internal;
 
+import static org.openhab.core.voice.internal.VoiceManagerImpl.getBestMatch;
+
 import java.util.HashSet;
 import java.util.Locale;
+import java.util.Set;
 
 import org.openhab.core.audio.AudioException;
 import org.openhab.core.audio.AudioFormat;
@@ -105,7 +108,7 @@ public class DialogProcessor implements KSListener, STTListener {
 
     public void start() {
         try {
-            ks.spot(this, source.getInputStream(format), locale, this.keyword);
+            ks.spot(this, source.getInputStream(format), locale, keyword);
         } catch (KSException e) {
             logger.error("Encountered error calling spot: {}", e.getMessage());
         } catch (AudioException e) {
@@ -114,10 +117,10 @@ public class DialogProcessor implements KSListener, STTListener {
     }
 
     private void toggleProcessing(boolean value) {
-        if (this.processing == value) {
+        if (processing == value) {
             return;
         }
-        this.processing = value;
+        processing = value;
         if (listeningItem != null && ItemUtil.isValidItemName(listeningItem)) {
             OnOffType command = (value) ? OnOffType.ON : OnOffType.OFF;
             eventPublisher.post(ItemEventFactory.createCommandEvent(listeningItem, command));
@@ -127,13 +130,12 @@ public class DialogProcessor implements KSListener, STTListener {
     @Override
     public void ksEventReceived(KSEvent ksEvent) {
         if (!processing) {
-            this.isSTTServerAborting = false;
+            isSTTServerAborting = false;
             if (ksEvent instanceof KSpottedEvent) {
                 toggleProcessing(true);
                 if (stt != null) {
                     try {
-                        this.sttServiceHandle = stt.recognize(this, source.getInputStream(format), this.locale,
-                                new HashSet<>());
+                        sttServiceHandle = stt.recognize(this, source.getInputStream(format), locale, new HashSet<>());
                     } catch (STTException e) {
                         say("Error during recognition: " + e.getMessage());
                     } catch (AudioException e) {
@@ -150,14 +152,14 @@ public class DialogProcessor implements KSListener, STTListener {
     @Override
     public synchronized void sttEventReceived(STTEvent sttEvent) {
         if (sttEvent instanceof SpeechRecognitionEvent) {
-            if (!this.isSTTServerAborting) {
-                this.sttServiceHandle.abort();
-                this.isSTTServerAborting = true;
+            if (!isSTTServerAborting) {
+                sttServiceHandle.abort();
+                isSTTServerAborting = true;
                 SpeechRecognitionEvent sre = (SpeechRecognitionEvent) sttEvent;
                 String question = sre.getTranscript();
                 try {
                     toggleProcessing(false);
-                    String answer = hli.interpret(this.locale, question);
+                    String answer = hli.interpret(locale, question);
                     if (answer != null) {
                         say(answer);
                     }
@@ -168,9 +170,9 @@ public class DialogProcessor implements KSListener, STTListener {
         } else if (sttEvent instanceof RecognitionStopEvent) {
             toggleProcessing(false);
         } else if (sttEvent instanceof SpeechRecognitionErrorEvent) {
-            if (!this.isSTTServerAborting) {
-                this.sttServiceHandle.abort();
-                this.isSTTServerAborting = true;
+            if (!isSTTServerAborting) {
+                sttServiceHandle.abort();
+                isSTTServerAborting = true;
                 toggleProcessing(false);
                 SpeechRecognitionErrorEvent sre = (SpeechRecognitionErrorEvent) sttEvent;
                 say("Encountered error: " + sre.getMessage());
@@ -187,15 +189,23 @@ public class DialogProcessor implements KSListener, STTListener {
         try {
             Voice voice = null;
             for (Voice currentVoice : tts.getAvailableVoices()) {
-                if (this.locale.getLanguage().equals(currentVoice.getLocale().getLanguage())) {
+                if (locale.getLanguage().equals(currentVoice.getLocale().getLanguage())) {
                     voice = currentVoice;
                     break;
                 }
             }
-            if (null == voice) {
+            if (voice == null) {
                 throw new TTSException("Unable to find a suitable voice");
             }
-            AudioStream audioStream = tts.synthesize(text, voice, null);
+
+            Set<AudioFormat> audioFormats = tts.getSupportedFormats();
+            AudioFormat audioFormat = getBestMatch(audioFormats, sink.getSupportedFormats());
+            if (audioFormat == null) {
+                throw new TTSException("No compatible audio format found for TTS '" + tts.getId() + "' and sink '"
+                        + sink.getId() + "'");
+            }
+
+            AudioStream audioStream = tts.synthesize(text, voice, audioFormat);
 
             if (sink.getSupportedStreams().stream().anyMatch(clazz -> clazz.isInstance(audioStream))) {
                 try {

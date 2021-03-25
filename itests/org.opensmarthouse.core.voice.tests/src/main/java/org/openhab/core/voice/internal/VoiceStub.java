@@ -15,6 +15,7 @@ package org.openhab.core.voice.internal;
 
 import java.util.Locale;
 
+import org.eclipse.jdt.annotation.NonNullByDefault;
 import org.openhab.core.voice.Voice;
 
 /**
@@ -23,6 +24,7 @@ import org.openhab.core.voice.Voice;
  * @author Mihaela Memova - Initial contribution
  * @author Velin Yordanov - migrated from groovy to java
  */
+@NonNullByDefault
 public class VoiceStub implements Voice {
 
     private TTSServiceStub ttsService = new TTSServiceStub();

@@ -13,6 +13,8 @@
  */
 package org.openhab.core.voice;
 
+import org.eclipse.jdt.annotation.NonNullByDefault;
+
 /**
  * The listener interface for receiving {@link STTEvent} events.
  *
@@ -23,6 +25,7 @@ package org.openhab.core.voice;
  *
  * @author Kelly Davis - Initial contribution
  */
+@NonNullByDefault
 public interface STTListener {
 
     /**

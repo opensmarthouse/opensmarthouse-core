@@ -13,10 +13,13 @@
  */
 package org.openhab.core.voice;
 
+import org.eclipse.jdt.annotation.NonNullByDefault;
+
 /**
  * A tagging interface for keyword spotting events.
  *
  * @author Kelly Davis - Initial contribution
  */
+@NonNullByDefault
 public interface KSEvent {
 }
