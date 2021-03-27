@@ -6,7 +6,7 @@
   <parent>
     <groupId>org.opensmarthouse.core.bundles</groupId>
     <artifactId>org.opensmarthouse.core.reactor.bundles</artifactId>
-    <version>0.9.2</version>
+    <version>0.9.3-SNAPSHOT</version>
   </parent>
 
   <artifactId>org.opensmarthouse.core.io.rest.log</artifactId>
