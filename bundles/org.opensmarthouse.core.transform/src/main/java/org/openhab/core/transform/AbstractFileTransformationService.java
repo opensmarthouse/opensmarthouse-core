@@ -11,12 +11,10 @@
  * SPDX-License-Identifier: EPL-2.0
  */
 package org.openhab.core.transform;
-
-import static java.nio.file.StandardWatchEventKinds.ENTRY_DELETE;
-import static java.nio.file.StandardWatchEventKinds.ENTRY_MODIFY;
-import static java.nio.file.StandardWatchEventKinds.OVERFLOW;
+import static java.nio.file.StandardWatchEventKinds.*;
 
 import java.io.File;
+import java.io.FilenameFilter;
 import java.io.IOException;
 import java.nio.file.FileSystems;
 import java.nio.file.Path;
@@ -34,8 +32,8 @@ import java.util.stream.Collectors;
 
 import org.eclipse.jdt.annotation.NonNullByDefault;
 import org.eclipse.jdt.annotation.Nullable;
+import org.openhab.core.OpenHAB;
 import org.openhab.core.i18n.LocaleProvider;
-import org.opensmarthouse.core.OpenSmartHouse;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.ServiceReference;
 import org.osgi.util.tracker.ServiceTracker;
@@ -286,7 +284,7 @@ public abstract class AbstractFileTransformationService<T> implements Transforma
      * Returns the path to the root of the transformation folder
      */
     protected String getSourcePath() {
-        return OpenSmartHouse.getConfigFolder() + File.separator + TransformationService.TRANSFORM_FOLDER_NAME
+        return OpenHAB.getConfigFolder() + File.separator + TransformationService.TRANSFORM_FOLDER_NAME
                 + File.separator;
     }
 

@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2010-2020 Contributors to the openHAB project
+ * Copyright (c) 2010-2021 Contributors to the openHAB project
  *
  * See the NOTICE file(s) distributed with this work for additional
  * information.
@@ -20,6 +20,7 @@ import java.util.Optional;
 import org.eclipse.jdt.annotation.NonNullByDefault;
 import org.openhab.core.io.transport.modbus.ModbusConstants.ValueType;
 import org.openhab.core.library.types.DecimalType;
+import org.openhab.core.library.types.NumberType;
 import org.openhab.core.library.types.OnOffType;
 import org.openhab.core.library.types.OpenClosedType;
 import org.openhab.core.library.types.QuantityType;
@@ -629,7 +630,7 @@ public class ModbusBitUtilities {
      *             and 8-bit value types. Also raised with unsupported command types
      */
     public static ModbusRegisterArray commandToRegisters(Command command, ModbusConstants.ValueType type) {
-        Number numericCommand;
+        NumberType numericCommand;
         if (command instanceof OnOffType || command instanceof OpenClosedType) {
             numericCommand = translateCommand2Boolean(command).get() ? new DecimalType(BigDecimal.ONE)
                     : DecimalType.ZERO;
