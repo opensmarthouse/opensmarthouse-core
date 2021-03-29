@@ -1,5 +1,6 @@
 /**
- * Copyright (c) 2010-2020 Contributors to the openHAB project
+ * Copyright (c) 2020-2021 Contributors to the OpenSmartHouse project
+ * Copyright (c) 2010-2021 Contributors to the openHAB project
  *
  * See the NOTICE file(s) distributed with this work for additional
  * information.
@@ -179,12 +180,20 @@ public class RuleResource implements RESTResource {
                     .header("Location", "rules/" + URLEncoder.encode(newRule.getUID(), StandardCharsets.UTF_8)).build();
         } catch (IllegalArgumentException e) {
             String errMessage = "Creation of the rule is refused: " + e.getMessage();
-            logger.warn("{}", errMessage);
+            logException(e, errMessage);
             return JSONResponse.createErrorResponse(Status.CONFLICT, errMessage);
         } catch (RuntimeException e) {
             String errMessage = "Creation of the rule is refused: " + e.getMessage();
-            logger.warn("{}", errMessage);
+            logException(e, errMessage);
             return JSONResponse.createErrorResponse(Status.BAD_REQUEST, errMessage);
+        }
+    }
+
+    private void logException(RuntimeException e, String errMessage) {
+        if (logger.isDebugEnabled()) {
+            logger.warn("{}", errMessage, e);
+        } else {
+            logger.warn("{}", errMessage);
         }
     }
 

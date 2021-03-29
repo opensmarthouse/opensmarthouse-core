@@ -1,5 +1,6 @@
 /**
- * Copyright (c) 2010-2020 Contributors to the openHAB project
+ * Copyright (c) 2020-2021 Contributors to the OpenSmartHouse project
+ * Copyright (c) 2010-2021 Contributors to the openHAB project
  *
  * See the NOTICE file(s) distributed with this work for additional
  * information.
@@ -280,11 +281,6 @@ class CronAdjuster implements SchedulerTemporalAdjuster {
         final String[] increments = sub.split("/");
         final int[] range = parseRange(cronExpression, chronoField, increments[0], min, max, names);
 
-        if (chronoField == ChronoField.DAY_OF_WEEK) {
-            range[0] = range[0] - 1;
-            range[1] = range[1] - 1;
-        }
-
         if (increments.length == 2) {
             // we had a / expression
             final int increment = parseInt(cronExpression, chronoField, increments[1]);
@@ -488,7 +484,7 @@ class CronAdjuster implements SchedulerTemporalAdjuster {
         if (nameIndex == null) {
             return parseInt(cronExpression, chronoField, name);
         } else {
-            return min + nameIndex;
+            return min + nameIndex - (chronoField == ChronoField.DAY_OF_WEEK ? 1 : 0);
         }
     }
 

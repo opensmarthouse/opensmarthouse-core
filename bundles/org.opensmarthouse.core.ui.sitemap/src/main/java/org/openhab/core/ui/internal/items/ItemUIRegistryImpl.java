@@ -1,5 +1,6 @@
 /**
- * Copyright (c) 2010-2020 Contributors to the openHAB project
+ * Copyright (c) 2020-2021 Contributors to the OpenSmartHouse project
+ * Copyright (c) 2010-2021 Contributors to the openHAB project
  *
  * See the NOTICE file(s) distributed with this work for additional
  * information.
@@ -746,7 +747,8 @@ public class ItemUIRegistryImpl implements ItemUIRegistry {
                     logger.warn("Item '{}' is not a group.", item.getName());
                 }
             } else {
-                logger.warn("Group does not specify an associated item - ignoring it.");
+                logger.warn("Dynamic group with label '{}' does not specify an associated item - ignoring it.",
+                        group.getLabel());
             }
         } catch (ItemNotFoundException e) {
             logger.warn("Dynamic group with label '{}' will be ignored, because its item '{}' does not exist.",
@@ -1265,6 +1267,11 @@ public class ItemUIRegistryImpl implements ItemUIRegistry {
 
             // we require the item to define a dimension, otherwise no unit will be reported to the UIs.
             if (item instanceof NumberItem && ((NumberItem) item).getDimension() != null) {
+                if (w.getLabel() == null) {
+                    // if no Label was assigned to the Widget we fallback to the items unit
+                    return ((NumberItem) item).getUnitSymbol();
+                }
+
                 String unit = getUnitFromLabel(w.getLabel());
                 if (!UnitUtils.UNIT_PLACEHOLDER.equals(unit)) {
                     return unit;
