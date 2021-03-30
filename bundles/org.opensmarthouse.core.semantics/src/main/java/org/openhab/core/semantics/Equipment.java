@@ -11,15 +11,24 @@
  *
  * SPDX-License-Identifier: EPL-2.0
  */
-package org.openhab.core.semantics.model;
+package org.openhab.core.semantics;
 
 import org.eclipse.jdt.annotation.NonNullByDefault;
+import org.eclipse.jdt.annotation.Nullable;
 
 /**
- * This is a marker interface for all semantic tag classes.
+ * This is the super interface for all types that represent an Equipment.
+ * The interface describes the relations to other entity types.
  *
  * @author Kai Kreuzer - Initial contribution
  */
 @NonNullByDefault
-public interface Tag {
+@TagInfo(id = "Equipment")
+public interface Equipment extends Tag {
+
+    @Nullable
+    Equipment isPartOf();
+
+    @Nullable
+    Location hasLocation();
 }

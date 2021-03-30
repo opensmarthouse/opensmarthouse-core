@@ -70,9 +70,9 @@ def createTagSetClass(def line, String tagSet) {
     file.write("package org.openhab.core.semantics.model." + pkg + ";\n\n")
     file.write("import org.eclipse.jdt.annotation.NonNullByDefault;\n")
     if (!parent) {
-            file.write("import org.openhab.core.semantics.model." + type + ";\n")
+            file.write("import org.openhab.core.semantics." + type + ";\n")
     }
-    file.write("""import org.openhab.core.semantics.model.TagInfo;
+    file.write("""import org.openhab.core.semantics.TagInfo;
 
 /**
  * This class defines a ${label}.
@@ -105,7 +105,7 @@ import java.util.Set;
 import java.util.stream.Stream;
 
 import org.eclipse.jdt.annotation.NonNullByDefault;
-import org.openhab.core.semantics.model.Location;
+import org.openhab.core.semantics.Location;
 
 /**
  * This class provides a stream of all defined locations.
@@ -143,7 +143,7 @@ import java.util.Set;
 import java.util.stream.Stream;
 
 import org.eclipse.jdt.annotation.NonNullByDefault;
-import org.openhab.core.semantics.model.Equipment;
+import org.openhab.core.semantics.Equipment;
 
 /**
  * This class provides a stream of all defined equipments.
@@ -181,7 +181,7 @@ import java.util.Set;
 import java.util.stream.Stream;
 
 import org.eclipse.jdt.annotation.NonNullByDefault;
-import org.openhab.core.semantics.model.Point;
+import org.openhab.core.semantics.Point;
 
 /**
  * This class provides a stream of all defined points.
@@ -219,7 +219,7 @@ import java.util.Set;
 import java.util.stream.Stream;
 
 import org.eclipse.jdt.annotation.NonNullByDefault;
-import org.openhab.core.semantics.model.Property;
+import org.openhab.core.semantics.Property;
 
 /**
  * This class provides a stream of all defined properties.
