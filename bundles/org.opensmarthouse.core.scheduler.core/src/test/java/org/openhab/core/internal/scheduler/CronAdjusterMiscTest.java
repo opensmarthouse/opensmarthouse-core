@@ -15,6 +15,7 @@ package org.openhab.core.internal.scheduler;
 
 import static org.hamcrest.CoreMatchers.*;
 import static org.junit.Assert.assertThat;
+import org.openhab.core.scheduler.CronAdjuster;
 
 import org.junit.Test;
 
