@@ -197,10 +197,11 @@ public class ThingManagerImpl
 
             if (ThingStatus.REMOVING.equals(oldStatusInfo.getStatus())
                     && !ThingStatus.REMOVED.equals(statusInfo.getStatus())) {
-                // only allow REMOVING -> REMOVED transition, all others are illegal
-                throw new IllegalArgumentException(MessageFormat.format(
-                        "Illegal status transition from REMOVING to {0}, only REMOVED would have been allowed.",
-                        statusInfo.getStatus()));
+                // only allow REMOVING -> REMOVED transition, all others are ignored because they are illegal
+                logger.debug(
+                        "Ignoring illegal status transition for thing {} from REMOVING to {}, only REMOVED would have been allowed.",
+                        thing.getUID(), statusInfo.getStatus());
+                return;
             }
 
             // update thing status and send event about new status
