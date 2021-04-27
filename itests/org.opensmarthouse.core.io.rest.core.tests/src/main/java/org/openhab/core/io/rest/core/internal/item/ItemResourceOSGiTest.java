@@ -51,7 +51,6 @@ import org.openhab.core.library.items.DimmerItem;
 import org.openhab.core.library.items.StringItem;
 import org.openhab.core.library.items.SwitchItem;
 import org.openhab.core.test.java.JavaOSGiTest;
-import org.openhab.core.test.storage.VolatileStorageService;
 
 import com.google.gson.JsonElement;
 import com.google.gson.JsonParser;
@@ -174,14 +173,13 @@ public class ItemResourceOSGiTest extends JavaOSGiTest {
 
     @Test
     public void shouldIncludeRequestedFieldsOnly() throws Exception {
-        JsonParser parser = new JsonParser();
         managedItemProvider.add(new SwitchItem("Switch"));
         itemResource.addTag("Switch", "MyTag");
         Response response = itemResource.getItems(uriInfo, httpHeaders, null, null, "MyTag", null, false, "type,name");
 
-        JsonElement result = parser
-                .parse(new String(((InputStream) response.getEntity()).readAllBytes(), StandardCharsets.UTF_8));
-        JsonElement expected = parser.parse("[{type: \"Switch\", name: \"Switch\"}]");
+        JsonElement result = JsonParser
+                .parseString(new String(((InputStream) response.getEntity()).readAllBytes(), StandardCharsets.UTF_8));
+        JsonElement expected = JsonParser.parseString("[{type: \"Switch\", name: \"Switch\"}]");
         assertEquals(expected, result);
     }
 
