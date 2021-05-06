@@ -14,6 +14,7 @@
 package org.openhab.core.magic.binding.handler;
 
 import org.eclipse.jdt.annotation.NonNullByDefault;
+import org.openhab.core.library.types.DateTimeType;
 import org.openhab.core.thing.ChannelUID;
 import org.openhab.core.thing.Thing;
 import org.openhab.core.thing.ThingStatus;
@@ -36,6 +37,7 @@ public class MagicOnOffLightHandler extends BaseThingHandler {
     @Override
     public void handleCommand(ChannelUID channelUID, Command command) {
         triggerChannel("trigger", command.toString());
+        updateState("timestamp", new DateTimeType());
     }
 
     @Override
