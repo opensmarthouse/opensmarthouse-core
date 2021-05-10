@@ -28,6 +28,7 @@ import java.util.IllegalFormatConversionException;
 import javax.measure.Dimension;
 import javax.measure.IncommensurableException;
 import javax.measure.Quantity;
+import javax.measure.Quantity.Scale;
 import javax.measure.UnconvertibleException;
 import javax.measure.Unit;
 import javax.measure.UnitConverter;
@@ -43,9 +44,9 @@ import org.openhab.core.types.util.UnitUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import tec.uom.se.AbstractUnit;
-import tec.uom.se.function.QuantityFunctions;
-import tec.uom.se.quantity.Quantities;
+import tech.units.indriya.AbstractUnit;
+import tech.units.indriya.quantity.Quantities;
+import tech.uom.lib.common.function.QuantityFunctions;
 
 /**
  * The measure type extends DecimalType to handle physical unit measurement
@@ -98,11 +99,57 @@ public class QuantityType<T extends Quantity<T>> extends NumberType
      */
     @SuppressWarnings("unchecked")
     public QuantityType(String value) {
+        this(value, Locale.ENGLISH);
+    }
+
+    /**
+     * Creates a new {@link QuantityType} with the given value. The value may contain a unit. The specific
+     * {@link Quantity} is obtained by {@link NumberDelimiterQuantityFormat#parse(CharSequence)}.
+     *
+     * @param value the non null value representing a quantity with an optional unit.
+     * @param locale the locale used to determine (decimal/grouping) separator characters.
+     *
+     * @throws NumberFormatException when a quantity without a unit could not be parsed
+     * @throws IllegalArgumentException when a quantity with a unit could not be parsed
+     */
+    @SuppressWarnings("unchecked")
+    public QuantityType(String value, Locale locale) {
         String[] constituents = value.split(UNIT_PATTERN);
 
         // getQuantity needs a space between numeric value and unit
         String formatted = String.join(" ", constituents);
-        quantity = (Quantity<T>) Quantities.getQuantity(formatted);
+        if (!formatted.contains(" ")) {
+            DecimalFormat df = (DecimalFormat) NumberFormat.getInstance(locale);
+            df.setParseBigDecimal(true);
+            ParsePosition position = new ParsePosition(0);
+            BigDecimal parsedValue = (BigDecimal) df.parseObject(value, position);
+            if (parsedValue == null || position.getErrorIndex() != -1 || position.getIndex() < value.length()) {
+                throw new NumberFormatException("Invalid BigDecimal value: " + value);
+            }
+            quantity = (Quantity<T>) Quantities.getQuantity(parsedValue, AbstractUnit.ONE, Scale.RELATIVE);
+        } else {
+            SimpleUnitFormat unitFormat = SimpleUnitFormat.getInstance();
+            NumberDelimiterQuantityFormat quantityFormat = new NumberDelimiterQuantityFormat.Builder()
+                    .setNumberFormat(NumberFormat.getInstance(locale)).setUnitFormat(unitFormat)
+                    .setLocaleSensitive(true).build();
+            ParsePosition position = new ParsePosition(0);
+            try {
+                Quantity<T> absoluteQuantity = (Quantity<T>) quantityFormat.parse(formatted, position);
+                Unit<T> unit = absoluteQuantity.getUnit();
+                if (position.getErrorIndex() != -1 || (position.getIndex() < value.length())) {
+                    // The position is now at the end of the parsed number. Because it does not always fully
+                    // parse the whole number, an exception is thrown if the remaining string cannot be
+                    // parsed to a unit that equals the parsed unit.
+                    if (!unit.equals(unitFormat.parse(value.substring(position.getIndex()).trim()))) {
+                        throw new IllegalArgumentException("Invalid Quantity value: " + value);
+                    }
+                }
+                quantity = Quantities.getQuantity(absoluteQuantity.getValue(), absoluteQuantity.getUnit(),
+                        Scale.RELATIVE);
+            } catch (MeasurementParseException e) {
+                throw new IllegalArgumentException("Invalid Quantity value: " + value, e);
+            }
+        }
     }
 
     /**
@@ -117,6 +164,7 @@ public class QuantityType<T extends Quantity<T>> extends NumberType
         // Avoid scientific notation for double
         BigDecimal bd = new BigDecimal(value.toString());
         quantity = Quantities.getQuantity(bd, unit);
+        quantity = (Quantity<T>) Quantities.getQuantity(bd, unit, Scale.RELATIVE);
     }
 
     /**
@@ -161,7 +209,7 @@ public class QuantityType<T extends Quantity<T>> extends NumberType
             return false;
         }
         QuantityType<?> other = (QuantityType<?>) obj;
-        if (!quantity.getUnit().getDimension().equals(other.quantity.getUnit().getDimension())) {
+        if (!quantity.getUnit().isCompatible(other.quantity.getUnit())) {
             return false;
         } else if (compareTo((QuantityType<T>) other) != 0) {
             return false;
@@ -424,7 +472,7 @@ public class QuantityType<T extends Quantity<T>> extends NumberType
      * @return the negated value of this QuantityType.
      */
     public QuantityType<T> negate() {
-        return new QuantityType<>(quantity.multiply(-1));
+        return new QuantityType<>(quantity.negate());
     }
 
     /**

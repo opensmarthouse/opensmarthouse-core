@@ -13,7 +13,9 @@
  */
 package org.openhab.core.library.unit;
 
-import static org.hamcrest.CoreMatchers.*;
+import static org.hamcrest.CoreMatchers.equalTo;
+import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.junit.Assert.assertThat;
 
 import javax.measure.Unit;
@@ -65,7 +67,8 @@ public class VolumetricFlowRateTest {
 
         ComparableQuantity<VolumetricFlowRate> convertedQuantity = quantity.to(BASE_UNIT);
 
-        assertThat(convertedQuantity, is(equalTo(quantityInBase)));
+        assertThat(convertedQuantity.getValue().doubleValue(),
+                is(closeTo(quantityInBase.getValue().doubleValue(), 1e-10)));
     }
 
     /**
@@ -85,6 +88,6 @@ public class VolumetricFlowRateTest {
                 new Object[] { Units.CUBICMETRE_PER_SECOND, "m³/s", 100.0, 360000.0 },
                 new Object[] { Units.CUBICMETRE_PER_MINUTE, "m³/min", 100.0, 6000.0 },
                 new Object[] { Units.CUBICMETRE_PER_HOUR, "m³/h", 100.0, 100.0 },
-                new Object[] { Units.CUBICMETRE_PER_DAY, "m³/d", 100.0, 4.166666666666667 } };
+                new Object[] { Units.CUBICMETRE_PER_DAY, "m³/d", 100.0, 4.166666666666666666666666666666667 } };
     }
 }

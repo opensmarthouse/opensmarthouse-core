@@ -13,7 +13,7 @@
  */
 package org.openhab.core.library.unit;
 
-import tec.uom.se.AbstractSystemOfUnits;
+import tech.units.indriya.AbstractSystemOfUnits;
 
 /**
  * Base class for all custom unit classes added in openHAB.
