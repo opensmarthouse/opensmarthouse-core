@@ -11,14 +11,14 @@
  *
  * SPDX-License-Identifier: EPL-2.0
  */
-package org.openhab.core.internal.items.function;
+package org.openhab.core.library.types;
 
-import static org.junit.Assert.assertEquals;
-import static org.mockito.Mockito.when;
-import static org.mockito.MockitoAnnotations.initMocks;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import java.util.LinkedHashSet;
+import java.util.Locale;
 import java.util.Set;
+import java.util.stream.Stream;
 
 import javax.measure.Quantity;
 import javax.measure.quantity.Dimensionless;
@@ -26,243 +26,299 @@ import javax.measure.quantity.Power;
 import javax.measure.quantity.Pressure;
 import javax.measure.quantity.Temperature;
 
-import org.junit.Before;
-import org.junit.Test;
+import org.eclipse.jdt.annotation.NonNullByDefault;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.MethodSource;
 import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
 import org.openhab.core.i18n.UnitProvider;
-import org.openhab.core.internal.items.function.dimensional.Avg;
-import org.openhab.core.internal.items.function.dimensional.Max;
-import org.openhab.core.internal.items.function.dimensional.Min;
-import org.openhab.core.internal.items.function.dimensional.Sum;
 import org.openhab.core.items.GroupFunction;
 import org.openhab.core.items.GroupItem;
 import org.openhab.core.items.Item;
 import org.openhab.core.library.CoreItemFactory;
 import org.openhab.core.library.items.NumberItem;
-import org.openhab.core.library.types.QuantityType;
 import org.openhab.core.types.State;
 import org.openhab.core.types.UnDefType;
-
-import tec.uom.se.unit.Units;
 
 /**
  * @author Henning Treu - Initial contribution
  */
+@ExtendWith(MockitoExtension.class)
+@NonNullByDefault
 public class QuantityTypeArithmeticGroupFunctionTest {
 
-    private GroupFunction function;
-    private Set<Item> items;
+        private @NonNullByDefault({}) @Mock UnitProvider unitProvider;
 
-    @Mock
-    UnitProvider unitProvider;
+        /**
+         * Locales having a different decimal and grouping separators to test string
+         * parsing and generation.
+         */
+        static Stream<Locale> locales() {
+                return Stream.of(
+                                // ٫٬ (Arabic, Egypt)
+                                Locale.forLanguageTag("ar-EG"),
+                                // ,. (German, Germany)
+                                Locale.forLanguageTag("de-DE"),
+                                // ., (English, United States)
+                                Locale.forLanguageTag("en-US"));
+        }
 
-    @Before
-    public void init() {
-        initMocks(this);
-        items = new LinkedHashSet<>();
+        @ParameterizedTest
+        @MethodSource("locales")
+        public void testSumFunctionQuantityType(Locale locale) {
+                Locale.setDefault(locale);
 
-        when(unitProvider.getUnit(Temperature.class)).thenReturn(Units.CELSIUS);
-    }
+                Set<Item> items = new LinkedHashSet<>();
+                items.add(createNumberItem("TestItem1", Temperature.class, new QuantityType<>("23.54 °C")));
+                items.add(createNumberItem("TestItem2", Temperature.class, UnDefType.NULL));
+                items.add(createNumberItem("TestItem3", Temperature.class, new QuantityType<>("89 °C")));
+                items.add(createNumberItem("TestItem4", Temperature.class, UnDefType.UNDEF));
+                items.add(createNumberItem("TestItem5", Temperature.class, new QuantityType<>("122.41 °C")));
 
-    @Test
-    public void testSumFunctionQuantityType() {
-        items.add(createNumberItem("TestItem1", Temperature.class, new QuantityType<>("23.54 °C")));
-        items.add(createNumberItem("TestItem2", Temperature.class, UnDefType.NULL));
-        items.add(createNumberItem("TestItem3", Temperature.class, new QuantityType<>("89 °C")));
-        items.add(createNumberItem("TestItem4", Temperature.class, UnDefType.UNDEF));
-        items.add(createNumberItem("TestItem5", Temperature.class, new QuantityType<>("122.41 °C")));
+                GroupFunction function = new QuantityTypeArithmeticGroupFunction.Sum(Temperature.class);
+                State state = function.calculate(items);
 
-        function = new Sum(Temperature.class);
-        State state = function.calculate(items);
+                assertEquals(new QuantityType<>("234.95 °C"), state);
+        }
 
-        assertEquals(new QuantityType<>("234.95 °C"), state);
-    }
+        @ParameterizedTest
+        @MethodSource("locales")
+        public void testSumFunctionQuantityTypeDifferentUnits(Locale locale) {
+                Locale.setDefault(locale);
 
-    @Test
-    public void testSumFunctionQuantityTypeDifferentUnits() {
-        items.add(createNumberItem("TestItem1", Temperature.class, new QuantityType<>("23.54 °C")));
-        items.add(createNumberItem("TestItem2", Temperature.class, UnDefType.NULL));
-        items.add(createNumberItem("TestItem3", Temperature.class, new QuantityType<>("192.2 °F")));
-        items.add(createNumberItem("TestItem4", Temperature.class, UnDefType.UNDEF));
-        items.add(createNumberItem("TestItem5", Temperature.class, new QuantityType<>("395.56 K")));
+                Set<Item> items = new LinkedHashSet<>();
+                items.add(createNumberItem("TestItem1", Temperature.class, new QuantityType<>("23.54 °C")));
+                items.add(createNumberItem("TestItem2", Temperature.class, UnDefType.NULL));
+                items.add(createNumberItem("TestItem3", Temperature.class, new QuantityType<>("192.2 °F")));
+                items.add(createNumberItem("TestItem4", Temperature.class, UnDefType.UNDEF));
+                items.add(createNumberItem("TestItem5", Temperature.class, new QuantityType<>("395.56 K")));
 
-        function = new Sum(Temperature.class);
-        State state = function.calculate(items);
+                GroupFunction function = new QuantityTypeArithmeticGroupFunction.Sum(Temperature.class);
+                State state = function.calculate(items);
 
-        assertEquals(new QuantityType<>("234.95 °C"), state);
-    }
+                assertEquals(new QuantityType<>("234.95 °C"), state);
+        }
 
-    @Test
-    public void testSumFunctionQuantityTypeIncompatibleUnits() {
-        items = new LinkedHashSet<>(); // we need an ordered set to guarantee the Unit of the first entry
-        items.add(createNumberItem("TestItem1", Temperature.class, new QuantityType<>("23.54 °C")));
-        items.add(createNumberItem("TestItem2", Temperature.class, UnDefType.NULL));
-        items.add(createNumberItem("TestItem3", Pressure.class, new QuantityType<>("192.2 hPa")));
+        @ParameterizedTest
+        @MethodSource("locales")
+        public void testSumFunctionQuantityTypeIncompatibleUnits(Locale locale) {
+                Locale.setDefault(locale);
 
-        function = new Sum(Temperature.class);
-        State state = function.calculate(items);
+                Set<Item> items = new LinkedHashSet<>(); // we need an ordered set to guarantee the Unit of the first
+                                                         // entry
+                items.add(createNumberItem("TestItem1", Temperature.class, new QuantityType<>("23.54 °C")));
+                items.add(createNumberItem("TestItem2", Temperature.class, UnDefType.NULL));
+                items.add(createNumberItem("TestItem3", Pressure.class, new QuantityType<>("192.2 hPa")));
 
-        assertEquals(new QuantityType<>("23.54 °C"), state);
-    }
+                GroupFunction function = new QuantityTypeArithmeticGroupFunction.Sum(Temperature.class);
+                State state = function.calculate(items);
 
-    @Test
-    public void testAvgFunctionQuantityType() {
-        items.add(createNumberItem("TestItem1", Temperature.class, new QuantityType<>("100 °C")));
-        items.add(createNumberItem("TestItem2", Temperature.class, UnDefType.NULL));
-        items.add(createNumberItem("TestItem3", Temperature.class, new QuantityType<>("200 °C")));
-        items.add(createNumberItem("TestItem4", Temperature.class, UnDefType.UNDEF));
-        items.add(createNumberItem("TestItem5", Temperature.class, new QuantityType<>("300 °C")));
+                assertEquals(new QuantityType<>("23.54 °C"), state);
+        }
 
-        function = new Avg(Temperature.class);
-        State state = function.calculate(items);
+        @ParameterizedTest
+        @MethodSource("locales")
+        public void testAvgFunctionQuantityType(Locale locale) {
+                Locale.setDefault(locale);
 
-        assertEquals(new QuantityType<>("200 °C"), state);
-    }
+                Set<Item> items = new LinkedHashSet<>();
+                items.add(createNumberItem("TestItem1", Temperature.class, new QuantityType<>("100 °C")));
+                items.add(createNumberItem("TestItem2", Temperature.class, UnDefType.NULL));
+                items.add(createNumberItem("TestItem3", Temperature.class, new QuantityType<>("200 °C")));
+                items.add(createNumberItem("TestItem4", Temperature.class, UnDefType.UNDEF));
+                items.add(createNumberItem("TestItem5", Temperature.class, new QuantityType<>("300 °C")));
 
-    @Test
-    public void testAvgFunctionQuantityTypeDifferentUnits() {
-        items.add(createNumberItem("TestItem1", Temperature.class, new QuantityType<>("100 °C")));
-        items.add(createNumberItem("TestItem2", Temperature.class, UnDefType.NULL));
-        items.add(createNumberItem("TestItem3", Temperature.class, new QuantityType<>("113 °F")));
-        items.add(createNumberItem("TestItem4", Temperature.class, UnDefType.UNDEF));
-        items.add(createNumberItem("TestItem5", Temperature.class, new QuantityType<>("294.15 K")));
+                GroupFunction function = new QuantityTypeArithmeticGroupFunction.Avg(Temperature.class);
+                State state = function.calculate(items);
 
-        function = new Avg(Temperature.class);
-        State state = function.calculate(items);
+                assertEquals(new QuantityType<>("200 °C"), state);
+        }
 
-        assertEquals(new QuantityType<>("55.33 °C"), state);
-    }
+        @ParameterizedTest
+        @MethodSource("locales")
+        public void testAvgFunctionQuantityTypeDifferentUnits(Locale locale) {
+                Locale.setDefault(locale);
 
-    @Test
-    public void testAvgFunctionQuantityTypeIncompatibleUnits() {
-        items.add(createNumberItem("TestItem1", Temperature.class, new QuantityType<>("23.54 °C")));
-        items.add(createNumberItem("TestItem2", Temperature.class, UnDefType.NULL));
-        items.add(createNumberItem("TestItem3", Pressure.class, new QuantityType<>("192.2 hPa")));
+                Set<Item> items = new LinkedHashSet<>();
+                items.add(createNumberItem("TestItem1", Temperature.class, new QuantityType<>("100 °C")));
+                items.add(createNumberItem("TestItem2", Temperature.class, UnDefType.NULL));
+                items.add(createNumberItem("TestItem3", Temperature.class, new QuantityType<>("113 °F")));
+                items.add(createNumberItem("TestItem4", Temperature.class, UnDefType.UNDEF));
+                items.add(createNumberItem("TestItem5", Temperature.class, new QuantityType<>("294.15 K")));
 
-        function = new Avg(Temperature.class);
-        State state = function.calculate(items);
+                GroupFunction function = new QuantityTypeArithmeticGroupFunction.Avg(Temperature.class);
+                State state = function.calculate(items);
 
-        assertEquals(new QuantityType<>("23.54 °C"), state);
-    }
+                assertEquals(new QuantityType<>("55.33333333333333333333333333333334 °C"), state);
+        }
 
-    @Test
-    public void testMaxFunctionQuantityType() {
-        items.add(createNumberItem("TestItem1", Temperature.class, new QuantityType<>("100 °C")));
-        items.add(createNumberItem("TestItem2", Temperature.class, UnDefType.NULL));
-        items.add(createNumberItem("TestItem3", Temperature.class, new QuantityType<>("200 °C")));
-        items.add(createNumberItem("TestItem4", Temperature.class, UnDefType.UNDEF));
-        items.add(createNumberItem("TestItem5", Temperature.class, new QuantityType<>("300 °C")));
+        @ParameterizedTest
+        @MethodSource("locales")
+        public void testAvgFunctionQuantityTypeIncompatibleUnits(Locale locale) {
+                Locale.setDefault(locale);
 
-        function = new Max(Temperature.class);
-        State state = function.calculate(items);
+                Set<Item> items = new LinkedHashSet<>();
+                items.add(createNumberItem("TestItem1", Temperature.class, new QuantityType<>("23.54 °C")));
+                items.add(createNumberItem("TestItem2", Temperature.class, UnDefType.NULL));
+                items.add(createNumberItem("TestItem3", Pressure.class, new QuantityType<>("192.2 hPa")));
 
-        assertEquals(new QuantityType<>("300 °C"), state);
-    }
+                GroupFunction function = new QuantityTypeArithmeticGroupFunction.Avg(Temperature.class);
+                State state = function.calculate(items);
 
-    @Test
-    public void testMaxFunctionQuantityTypeDifferentUnits() {
-        items.add(createNumberItem("TestItem1", Temperature.class, new QuantityType<>("100 °C")));
-        items.add(createNumberItem("TestItem2", Temperature.class, UnDefType.NULL));
-        items.add(createNumberItem("TestItem3", Temperature.class, new QuantityType<>("113 °F")));
-        items.add(createNumberItem("TestItem4", Temperature.class, UnDefType.UNDEF));
-        items.add(createNumberItem("TestItem5", Temperature.class, new QuantityType<>("294.15 K")));
+                assertEquals(new QuantityType<>("23.54 °C"), state);
+        }
 
-        function = new Max(Temperature.class);
-        State state = function.calculate(items);
+        @ParameterizedTest
+        @MethodSource("locales")
+        public void testMaxFunctionQuantityType(Locale locale) {
+                Locale.setDefault(locale);
 
-        assertEquals(new QuantityType<>("100 °C"), state);
-    }
+                Set<Item> items = new LinkedHashSet<>();
+                items.add(createNumberItem("TestItem1", Temperature.class, new QuantityType<>("100 °C")));
+                items.add(createNumberItem("TestItem2", Temperature.class, UnDefType.NULL));
+                items.add(createNumberItem("TestItem3", Temperature.class, new QuantityType<>("200 °C")));
+                items.add(createNumberItem("TestItem4", Temperature.class, UnDefType.UNDEF));
+                items.add(createNumberItem("TestItem5", Temperature.class, new QuantityType<>("300 °C")));
 
-    @Test
-    public void testMaxFunctionQuantityTypeIncompatibleUnits() {
-        items.add(createNumberItem("TestItem1", Temperature.class, new QuantityType<>("23.54 °C")));
-        items.add(createNumberItem("TestItem2", Temperature.class, UnDefType.NULL));
-        items.add(createNumberItem("TestItem3", Pressure.class, new QuantityType<>("192.2 hPa")));
+                GroupFunction function = new QuantityTypeArithmeticGroupFunction.Max(Temperature.class);
+                State state = function.calculate(items);
 
-        function = new Max(Temperature.class);
-        State state = function.calculate(items);
+                assertEquals(new QuantityType<>("300 °C"), state);
+        }
 
-        assertEquals(new QuantityType<>("23.54 °C"), state);
-    }
+        @ParameterizedTest
+        @MethodSource("locales")
+        public void testMaxFunctionQuantityTypeDifferentUnits(Locale locale) {
+                Locale.setDefault(locale);
 
-    @Test
-    public void testMinFunctionQuantityType() {
-        items.add(createNumberItem("TestItem1", Temperature.class, new QuantityType<>("100 °C")));
-        items.add(createNumberItem("TestItem2", Temperature.class, UnDefType.NULL));
-        items.add(createNumberItem("TestItem3", Temperature.class, new QuantityType<>("200 °C")));
-        items.add(createNumberItem("TestItem4", Temperature.class, UnDefType.UNDEF));
-        items.add(createNumberItem("TestItem5", Temperature.class, new QuantityType<>("300 °C")));
+                Set<Item> items = new LinkedHashSet<>();
+                items.add(createNumberItem("TestItem1", Temperature.class, new QuantityType<>("100 °C")));
+                items.add(createNumberItem("TestItem2", Temperature.class, UnDefType.NULL));
+                items.add(createNumberItem("TestItem3", Temperature.class, new QuantityType<>("113 °F")));
+                items.add(createNumberItem("TestItem4", Temperature.class, UnDefType.UNDEF));
+                items.add(createNumberItem("TestItem5", Temperature.class, new QuantityType<>("294.15 K")));
 
-        function = new Min(Temperature.class);
-        State state = function.calculate(items);
+                GroupFunction function = new QuantityTypeArithmeticGroupFunction.Max(Temperature.class);
+                State state = function.calculate(items);
 
-        assertEquals(new QuantityType<>("100 °C"), state);
-    }
+                assertEquals(new QuantityType<>("100 °C"), state);
+        }
 
-    @Test
-    public void testMaxFunctionQuantityTypeOnDimensionless() {
-        items.add(createNumberItem("TestItem1", Dimensionless.class, new QuantityType<>("48 %")));
-        items.add(createNumberItem("TestItem2", Dimensionless.class, new QuantityType<>("36 %")));
-        items.add(createNumberItem("TestItem3", Dimensionless.class, new QuantityType<>("0 %")));
-        items.add(createNumberItem("TestItem4", Dimensionless.class, new QuantityType<>("48 %")));
-        items.add(createNumberItem("TestItem5", Dimensionless.class, new QuantityType<>("0 %")));
-        items.add(createNumberItem("TestItem6", Dimensionless.class, new QuantityType<>("0 %")));
+        @ParameterizedTest
+        @MethodSource("locales")
+        public void testMaxFunctionQuantityTypeIncompatibleUnits(Locale locale) {
+                Locale.setDefault(locale);
 
-        function = new Max(Dimensionless.class);
-        State state = function.calculate(items);
+                Set<Item> items = new LinkedHashSet<>();
+                items.add(createNumberItem("TestItem1", Temperature.class, new QuantityType<>("23.54 °C")));
+                items.add(createNumberItem("TestItem2", Temperature.class, UnDefType.NULL));
+                items.add(createNumberItem("TestItem3", Pressure.class, new QuantityType<>("192.2 hPa")));
 
-        assertEquals(new QuantityType<>("48 %"), state);
-    }
+                GroupFunction function = new QuantityTypeArithmeticGroupFunction.Max(Temperature.class);
+                State state = function.calculate(items);
 
-    @Test
-    public void testMinFunctionQuantityTypeDifferentUnits() {
-        items.add(createNumberItem("TestItem1", Temperature.class, new QuantityType<>("100 °C")));
-        items.add(createNumberItem("TestItem2", Temperature.class, UnDefType.NULL));
-        items.add(createNumberItem("TestItem3", Temperature.class, new QuantityType<>("113 °F")));
-        items.add(createNumberItem("TestItem4", Temperature.class, UnDefType.UNDEF));
-        items.add(createNumberItem("TestItem5", Temperature.class, new QuantityType<>("294.15 K")));
+                assertEquals(new QuantityType<>("23.54 °C"), state);
+        }
 
-        function = new Min(Temperature.class);
-        State state = function.calculate(items);
+        @ParameterizedTest
+        @MethodSource("locales")
+        public void testMinFunctionQuantityType(Locale locale) {
+                Locale.setDefault(locale);
 
-        assertEquals(new QuantityType<>("294.15 K"), state);
-    }
+                Set<Item> items = new LinkedHashSet<>();
+                items.add(createNumberItem("TestItem1", Temperature.class, new QuantityType<>("100 °C")));
+                items.add(createNumberItem("TestItem2", Temperature.class, UnDefType.NULL));
+                items.add(createNumberItem("TestItem3", Temperature.class, new QuantityType<>("200 °C")));
+                items.add(createNumberItem("TestItem4", Temperature.class, UnDefType.UNDEF));
+                items.add(createNumberItem("TestItem5", Temperature.class, new QuantityType<>("300 °C")));
 
-    @Test
-    public void testMinFunctionQuantityTypeIncompatibleUnits() {
-        items.add(createNumberItem("TestItem1", Temperature.class, new QuantityType<>("23.54 °C")));
-        items.add(createNumberItem("TestItem2", Temperature.class, UnDefType.NULL));
-        items.add(createNumberItem("TestItem3", Pressure.class, new QuantityType<>("192.2 hPa")));
+                GroupFunction function = new QuantityTypeArithmeticGroupFunction.Min(Temperature.class);
+                State state = function.calculate(items);
 
-        function = new Min(Temperature.class);
-        State state = function.calculate(items);
+                assertEquals(new QuantityType<>("100 °C"), state);
+        }
 
-        assertEquals(new QuantityType<>("23.54 °C"), state);
-    }
+        @ParameterizedTest
+        @MethodSource("locales")
+        public void testMaxFunctionQuantityTypeOnDimensionless(Locale locale) {
+                Locale.setDefault(locale);
 
-    @Test
-    public void testSumFunctionQuantityTypeWithGroups() {
-        items.add(createNumberItem("TestItem1", Power.class, new QuantityType<>("5 W")));
-        items.add(createGroupItem("TestGroup1", Power.class, new QuantityType<>("5 W")));
+                Set<Item> items = new LinkedHashSet<>();
+                items.add(createNumberItem("TestItem1", Dimensionless.class, new QuantityType<>("48 %")));
+                items.add(createNumberItem("TestItem2", Dimensionless.class, new QuantityType<>("36 %")));
+                items.add(createNumberItem("TestItem3", Dimensionless.class, new QuantityType<>("0 %")));
+                items.add(createNumberItem("TestItem4", Dimensionless.class, new QuantityType<>("48 %")));
+                items.add(createNumberItem("TestItem5", Dimensionless.class, new QuantityType<>("0 %")));
+                items.add(createNumberItem("TestItem6", Dimensionless.class, new QuantityType<>("0 %")));
 
-        function = new Sum(Power.class);
-        State state = function.calculate(items);
+                GroupFunction function = new QuantityTypeArithmeticGroupFunction.Max(Dimensionless.class);
+                State state = function.calculate(items);
 
-        assertEquals(new QuantityType<>("10 W"), state);
-    }
+                assertEquals(new QuantityType<>("48 %"), state);
+        }
 
-    private NumberItem createNumberItem(String name, Class<? extends Quantity<?>> dimension, State state) {
-        NumberItem item = new NumberItem(CoreItemFactory.NUMBER + ":" + dimension.getSimpleName(), name);
-        item.setUnitProvider(unitProvider);
-        item.setState(state);
-        return item;
-    }
+        @ParameterizedTest
+        @MethodSource("locales")
+        public void testMinFunctionQuantityTypeDifferentUnits(Locale locale) {
+                Locale.setDefault(locale);
 
-    private GroupItem createGroupItem(String name, Class<? extends Quantity<?>> dimension, State state) {
-        GroupItem item = new GroupItem(name,
-                new NumberItem(CoreItemFactory.NUMBER + ":" + dimension.getSimpleName(), name));
-        item.setUnitProvider(unitProvider);
-        item.setState(state);
-        return item;
-    }
+                Set<Item> items = new LinkedHashSet<>();
+                items.add(createNumberItem("TestItem1", Temperature.class, new QuantityType<>("100 °C")));
+                items.add(createNumberItem("TestItem2", Temperature.class, UnDefType.NULL));
+                items.add(createNumberItem("TestItem3", Temperature.class, new QuantityType<>("113 °F")));
+                items.add(createNumberItem("TestItem4", Temperature.class, UnDefType.UNDEF));
+                items.add(createNumberItem("TestItem5", Temperature.class, new QuantityType<>("294.15 K")));
+
+                GroupFunction function = new QuantityTypeArithmeticGroupFunction.Min(Temperature.class);
+                State state = function.calculate(items);
+
+                assertEquals(new QuantityType<>("294.15 K"), state);
+        }
+
+        @ParameterizedTest
+        @MethodSource("locales")
+        public void testMinFunctionQuantityTypeIncompatibleUnits(Locale locale) {
+                Locale.setDefault(locale);
+
+                Set<Item> items = new LinkedHashSet<>();
+                items.add(createNumberItem("TestItem1", Temperature.class, new QuantityType<>("23.54 °C")));
+                items.add(createNumberItem("TestItem2", Temperature.class, UnDefType.NULL));
+                items.add(createNumberItem("TestItem3", Pressure.class, new QuantityType<>("192.2 hPa")));
+
+                GroupFunction function = new QuantityTypeArithmeticGroupFunction.Min(Temperature.class);
+                State state = function.calculate(items);
+
+                assertEquals(new QuantityType<>("23.54 °C"), state);
+        }
+
+        @ParameterizedTest
+        @MethodSource("locales")
+        public void testSumFunctionQuantityTypeWithGroups(Locale locale) {
+                Locale.setDefault(locale);
+
+                Set<Item> items = new LinkedHashSet<>();
+                items.add(createNumberItem("TestItem1", Power.class, new QuantityType<>("5 W")));
+                items.add(createGroupItem("TestGroup1", Power.class, new QuantityType<>("5 W")));
+
+                GroupFunction function = new QuantityTypeArithmeticGroupFunction.Sum(Power.class);
+                State state = function.calculate(items);
+
+                assertEquals(new QuantityType<>("10 W"), state);
+        }
+
+        private NumberItem createNumberItem(String name, Class<? extends Quantity<?>> dimension, State state) {
+                NumberItem item = new NumberItem(CoreItemFactory.NUMBER + ":" + dimension.getSimpleName(), name);
+                item.setUnitProvider(unitProvider);
+                item.setState(state);
+                return item;
+        }
+
+        private GroupItem createGroupItem(String name, Class<? extends Quantity<?>> dimension, State state) {
+                GroupItem item = new GroupItem(name,
+                                new NumberItem(CoreItemFactory.NUMBER + ":" + dimension.getSimpleName(), name));
+                item.setUnitProvider(unitProvider);
+                item.setState(state);
+                return item;
+        }
 }

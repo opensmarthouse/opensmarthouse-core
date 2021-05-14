@@ -25,6 +25,8 @@ import static org.openhab.core.library.unit.MetricPrefix.CENTI;
 import java.lang.reflect.InvocationTargetException;
 import java.math.BigDecimal;
 import java.text.DecimalFormatSymbols;
+import java.util.Locale;
+import java.util.stream.Stream;
 
 import javax.measure.format.MeasurementParseException;
 import javax.measure.quantity.Dimensionless;
@@ -54,8 +56,18 @@ import tech.units.indriya.unit.UnitDimension;
 @SuppressWarnings("null")
 public class QuantityTypeTest {
 
-    // we need to get the decimal separator of the default locale for our tests
-    private static final char SEP = new DecimalFormatSymbols().getDecimalSeparator();
+    /**
+     * Locales having a different decimal separator to test string parsing and generation.
+     */
+    static Stream<Locale> locales() {
+        return Stream.of(
+                // ٫ (Arabic, Egypt)
+                Locale.forLanguageTag("ar-EG"),
+                // , (German, Germany)
+                Locale.forLanguageTag("de-DE"),
+                // . (English, United States)
+                Locale.forLanguageTag("en-US"));
+    }
 
     @Test
     public void testDimensionless() {
@@ -133,12 +145,14 @@ public class QuantityTypeTest {
         QuantityType<Time> millis = seconds.toUnit(MetricPrefix.MILLI(Units.SECOND));
         QuantityType<Time> minutes = seconds.toUnit(Units.MINUTE);
 
-        assertThat(seconds.format("%.1f " + UnitUtils.UNIT_PLACEHOLDER), is("80" + SEP + "0 s"));
-        assertThat(millis.format("%.1f " + UnitUtils.UNIT_PLACEHOLDER), is("80000" + SEP + "0 ms"));
-        assertThat(minutes.format("%.1f " + UnitUtils.UNIT_PLACEHOLDER), is("1" + SEP + "3 min"));
+        char sep = new DecimalFormatSymbols().getDecimalSeparator();
 
-        assertThat(seconds.format("%.1f"), is("80" + SEP + "0"));
-        assertThat(minutes.format("%.1f"), is("1" + SEP + "3"));
+        assertThat(seconds.format("%.1f " + UnitUtils.UNIT_PLACEHOLDER), is("80" + sep + "0 s"));
+        assertThat(millis.format("%.1f " + UnitUtils.UNIT_PLACEHOLDER), is("80000" + sep + "0 ms"));
+        assertThat(minutes.format("%.1f " + UnitUtils.UNIT_PLACEHOLDER), is("1" + sep + "3 min"));
+
+        assertThat(seconds.format("%.1f"), is("80" + sep + "0"));
+        assertThat(minutes.format("%.1f"), is("1" + sep + "3"));
 
         assertThat(seconds.format("%1$tH:%1$tM:%1$tS"), is("00:01:20"));
         assertThat(millis.format("%1$tHh %1$tMm %1$tSs"), is("00h 01m 20s"));
@@ -201,28 +215,41 @@ public class QuantityTypeTest {
         assertNull(new QuantityType<>("0.5").as(OpenClosedType.class));
     }
 
-    @Test
-    public void testConversionToHSBType() {
+    @ParameterizedTest
+    @MethodSource("locales")
+    public void testConversionToHSBType(Locale locale) {
+        Locale.setDefault(locale);
+
         assertEquals(new HSBType("0,0,0"), new QuantityType<>("0.0").as(HSBType.class));
         assertEquals(new HSBType("0,0,100"), new QuantityType<>("1.0").as(HSBType.class));
         assertEquals(new HSBType("0,0,50"), new QuantityType<>("0.5").as(HSBType.class));
     }
 
-    @Test
-    public void testConversionToPercentType() {
+    @ParameterizedTest
+    @MethodSource("locales")
+    public void testConversionToPercentType(Locale locale) {
+        Locale.setDefault(locale);
+
         assertEquals(PercentType.HUNDRED, new QuantityType<>("100 %").as(PercentType.class));
         assertEquals(PercentType.ZERO, new QuantityType<>("0 %").as(PercentType.class));
     }
 
-    @Test
-    public void toFullStringShouldParseToEqualState() {
+    @ParameterizedTest
+    @MethodSource("locales")
+    public void toFullStringShouldParseToEqualState(Locale locale) {
+        Locale.setDefault(locale);
+
         QuantityType<Temperature> temp = new QuantityType<>("20 °C");
 
         assertThat(temp.toFullString(), is("20 °C"));
         assertThat(QuantityType.valueOf(temp.toFullString()), is(temp));
     }
 
-    public void testAdd() {
+    @ParameterizedTest
+    @MethodSource("locales")
+    public void testAdd(Locale locale) {
+        Locale.setDefault(locale);
+
         QuantityType<?> result = new QuantityType<>("20 m").add(new QuantityType<>("20cm"));
         assertThat(result, is(new QuantityType<>("20.20 m")));
     }
@@ -232,8 +259,11 @@ public class QuantityTypeTest {
         assertThat(new QuantityType<>("20 °C").negate(), is(new QuantityType<>("-20 °C")));
     }
 
-    @Test
-    public void testSubtract() {
+    @ParameterizedTest
+    @MethodSource("locales")
+    public void testSubtract(Locale locale) {
+        Locale.setDefault(locale);
+
         QuantityType<?> result = new QuantityType<>("20 m").subtract(new QuantityType<>("20cm"));
         assertThat(result, is(new QuantityType<>("19.80 m")));
     }
