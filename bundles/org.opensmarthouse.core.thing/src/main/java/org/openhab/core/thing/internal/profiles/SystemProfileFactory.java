@@ -191,9 +191,9 @@ public class SystemProfileFactory implements ProfileFactory, ProfileAdvisor, Pro
         } else if (RAWBUTTON_TOGGLE_SWITCH.equals(profileTypeUID)) {
             return new RawButtonToggleSwitchProfile(callback);
         } else if (RAWBUTTON_TOGGLE_PLAYER.equals(profileTypeUID)) {
-            return new RawButtonToggleRollershutterProfile(callback);
-        } else if (RAWBUTTON_TOGGLE_PLAYER.equals(profileTypeUID)) {
             return new RawButtonTogglePlayerProfile(callback);
+        } else if (RAWBUTTON_TOGGLE_ROLLERSHUTTER.equals(profileTypeUID)) {
+            return new RawButtonToggleRollershutterProfile(callback);
         } else if (RAWROCKER_DIMMER.equals(profileTypeUID)) {
             return new RawRockerDimmerProfile(callback, context);
         } else if (RAWROCKER_NEXT_PREVIOUS.equals(profileTypeUID)) {
@@ -210,6 +210,8 @@ public class SystemProfileFactory implements ProfileFactory, ProfileAdvisor, Pro
             return new RawRockerUpDownProfile(callback);
         } else if (TIMESTAMP_CHANGE.equals(profileTypeUID)) {
             return new TimestampChangeProfile(callback);
+        } else if (TIMESTAMP_OFFSET.equals(profileTypeUID)) {
+            return new TimestampOffsetProfile(callback, context);
         } else if (TIMESTAMP_UPDATE.equals(profileTypeUID)) {
             return new TimestampUpdateProfile(callback);
         } else {
@@ -282,27 +284,21 @@ public class SystemProfileFactory implements ProfileFactory, ProfileAdvisor, Pro
     }
 
     private ProfileType createLocalizedProfileType(ProfileType profileType, @Nullable Locale locale) {
-        LocalizedKey localizedKey = getLocalizedProfileTypeKey(profileType.getUID(), locale);
+        LocalizedKey localizedKey = new LocalizedKey(profileType.getUID(),
+                locale != null ? locale.toLanguageTag() : null);
 
         ProfileType cachedEntry = localizedProfileTypeCache.get(localizedKey);
         if (cachedEntry != null) {
             return cachedEntry;
         }
 
-        ProfileType localizedProfileType = localize(profileType, locale);
+        ProfileType localizedProfileType = profileTypeI18nLocalizationService.createLocalizedProfileType(bundle,
+                profileType, locale);
         if (localizedProfileType != null) {
             localizedProfileTypeCache.put(localizedKey, localizedProfileType);
             return localizedProfileType;
         } else {
             return profileType;
         }
-    }
-
-    private @Nullable ProfileType localize(ProfileType profileType, @Nullable Locale locale) {
-        return profileTypeI18nLocalizationService.createLocalizedProfileType(bundle, profileType, locale);
-    }
-
-    private LocalizedKey getLocalizedProfileTypeKey(UID uid, @Nullable Locale locale) {
-        return new LocalizedKey(uid, locale != null ? locale.toLanguageTag() : null);
     }
 }

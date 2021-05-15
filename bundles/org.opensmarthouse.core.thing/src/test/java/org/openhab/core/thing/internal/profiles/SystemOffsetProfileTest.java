@@ -25,6 +25,7 @@ import static org.mockito.Mockito.when;
 import javax.measure.Unit;
 import javax.measure.quantity.Temperature;
 
+import org.eclipse.jdt.annotation.NonNullByDefault;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.ArgumentCaptor;
@@ -43,6 +44,7 @@ import org.openhab.core.types.State;
  *
  * @author Stefan Triller - Initial contribution
  */
+@NonNullByDefault
 public class SystemOffsetProfileTest {
 
     @BeforeEach

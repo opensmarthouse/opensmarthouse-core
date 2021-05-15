@@ -14,11 +14,14 @@
 package org.openhab.core.thing.internal.profiles;
 
 import static org.junit.Assert.assertTrue;
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
 
 import java.time.ZonedDateTime;
 import java.time.temporal.ChronoUnit;
 
+import org.eclipse.jdt.annotation.NonNullByDefault;
 import org.junit.Test;
 import org.mockito.ArgumentCaptor;
 import org.openhab.core.library.types.DateTimeType;
@@ -32,6 +35,7 @@ import org.openhab.core.types.State;
  *
  * @author Gaël L'hopital - Initial contribution
  */
+@NonNullByDefault
 public class TimestampProfileTest extends JavaTest {
 
     @Test
