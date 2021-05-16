@@ -59,6 +59,7 @@ cp $1 $1.tmp
 refactor $1 "bundles/org.openhab.core/src/main/java/org/openhab/core/internal/service/BundleResolverImpl.java"                                 "bundles/org.opensmarthouse.core.common/src/main/java/org/openhab/core/internal/common/osgi/BundleResolverImpl.java"
 
 refactor $1 "bundles/org.openhab.core/src/main/java/org/openhab/core/types/util/UnitUtils.java"                                                "bundles/org.opensmarthouse.core.library.unit/src/main/java/org/openhab/core/types/util/UnitUtils.java"
+refactor $1 "bundles/org.openhab.core/src/test/java/org/openhab/core/types/util/UnitUtilsTest.java"                                            "bundles/org.opensmarthouse.core.library.unit/src/test/java/org/openhab/core/types/util/UnitUtilsTest.java"
 
 refactor $1 "bundles/org.openhab.core/src/main/java/org/openhab/core/items/ManagedItemProvider.java"                                           "bundles/org.opensmarthouse.core.item.core/src/main/java/org/openhab/core/internal/items/StorageItemProvider.java" 
 

@@ -11,7 +11,7 @@
  *
  * SPDX-License-Identifier: EPL-2.0
  */
-package org.openhab.core.type.util;
+package org.openhab.core.types.util;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.nullValue;
@@ -104,6 +104,12 @@ public class UnitUtilsTest {
         assertThat(UnitUtils.parseUnit("°F"), is(ImperialUnits.FAHRENHEIT));
         assertThat(UnitUtils.parseUnit("m"), is(SIUnits.METRE));
         assertThat(UnitUtils.parseUnit("%"), is(Units.PERCENT));
+    }
+
+    @Test
+    public void testParseUnknownUnit() {
+        assertNull(UnitUtils.parseUnit("123 Hello World"));
+        assertNull(UnitUtils.parseUnit("Lux"));
     }
 
     @Test

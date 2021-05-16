@@ -75,13 +75,6 @@ public class QuantityType<T extends Quantity<T>> extends NumberType
 
     private final Quantity<T> quantity;
 
-    /*
-     * FIXME Not sure why we need this here.
-     * static {
-     * UnitInitializer.init();
-     * }
-     */
-
     /**
      * Creates a dimensionless {@link QuantityType} with scalar 0 and unit {@link AbstractUnit#ONE}.
      * A default constructor is needed by {@link org.openhab.core.internal.items.ItemUpdater#receiveUpdate})
