@@ -25,6 +25,12 @@ import java.time.ZonedDateTime;
 import java.util.Arrays;
 import java.util.IllegalFormatConversionException;
 
+import java.text.DecimalFormat;
+import java.text.NumberFormat;
+import java.text.ParsePosition;
+
+import java.util.Locale;
+
 import javax.measure.Dimension;
 import javax.measure.IncommensurableException;
 import javax.measure.Quantity;
@@ -32,6 +38,7 @@ import javax.measure.Quantity.Scale;
 import javax.measure.UnconvertibleException;
 import javax.measure.Unit;
 import javax.measure.UnitConverter;
+import javax.measure.format.MeasurementParseException;
 import javax.measure.quantity.Dimensionless;
 
 import org.eclipse.jdt.annotation.NonNullByDefault;
@@ -45,6 +52,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import tech.units.indriya.AbstractUnit;
+import tech.units.indriya.format.NumberDelimiterQuantityFormat;
+import tech.units.indriya.format.SimpleUnitFormat;
 import tech.units.indriya.quantity.Quantities;
 import tech.uom.lib.common.function.QuantityFunctions;
 
@@ -62,6 +71,7 @@ public class QuantityType<T extends Quantity<T>> extends NumberType
     private final Logger logger = LoggerFactory.getLogger(QuantityType.class);
 
     private static final long serialVersionUID = 8828949721938234629L;
+    private static final char DOT_DECIMAL_SEPARATOR = '.';
     private static final BigDecimal HUNDRED = BigDecimal.valueOf(100);
 
     public static final QuantityType<Dimensionless> ZERO = new QuantityType<>(0, AbstractUnit.ONE);
@@ -86,11 +96,11 @@ public class QuantityType<T extends Quantity<T>> extends NumberType
 
     /**
      * Creates a new {@link QuantityType} with the given value. The value may contain a unit. The specific
-     * {@link Quantity} is obtained by {@link Quantities#getQuantity(CharSequence)}.
+     * {@link Quantity} is obtained by {@link NumberDelimiterQuantityFormat#parse(CharSequence)}.
+     * The English locale is used to determine (decimal/grouping) separator characters.
      *
      * @param value the non null value representing a quantity with an optional unit.
      */
-    @SuppressWarnings("unchecked")
     public QuantityType(String value) {
         this(value, Locale.ENGLISH);
     }

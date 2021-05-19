@@ -28,7 +28,6 @@ import java.text.DecimalFormatSymbols;
 import java.util.Locale;
 import java.util.stream.Stream;
 
-import javax.measure.format.MeasurementParseException;
 import javax.measure.quantity.Dimensionless;
 import javax.measure.quantity.Energy;
 import javax.measure.quantity.Length;
@@ -57,15 +56,15 @@ import tech.units.indriya.unit.UnitDimension;
 public class QuantityTypeTest {
 
     /**
-     * Locales having a different decimal separator to test string parsing and generation.
+     * Locales having a different decimal and grouping separators to test string parsing and generation.
      */
     static Stream<Locale> locales() {
         return Stream.of(
-                // ٫ (Arabic, Egypt)
+                // ٫٬ (Arabic, Egypt)
                 Locale.forLanguageTag("ar-EG"),
-                // , (German, Germany)
+                // ,. (German, Germany)
                 Locale.forLanguageTag("de-DE"),
-                // . (English, United States)
+                // ., (English, United States)
                 Locale.forLanguageTag("en-US"));
     }
 
@@ -131,12 +130,8 @@ public class QuantityTypeTest {
         assertEquals("2 kg", dt4.toString());
         // check that beside the fact that we've got the same value, we don't have the same unit
         assertFalse(dt2.equals(dt4));
-        try {
-            dt2.compareTo(dt4);
-            fail();
-        } catch (Exception e) {
-            // That's what we expect.
-        }
+
+        assertThrows(IllegalArgumentException.class, () -> dt2.compareTo(dt4));
     }
 
     @Test
@@ -145,14 +140,14 @@ public class QuantityTypeTest {
         QuantityType<Time> millis = seconds.toUnit(MetricPrefix.MILLI(Units.SECOND));
         QuantityType<Time> minutes = seconds.toUnit(Units.MINUTE);
 
-        char sep = new DecimalFormatSymbols().getDecimalSeparator();
+        char ds = new DecimalFormatSymbols().getDecimalSeparator();
 
-        assertThat(seconds.format("%.1f " + UnitUtils.UNIT_PLACEHOLDER), is("80" + sep + "0 s"));
-        assertThat(millis.format("%.1f " + UnitUtils.UNIT_PLACEHOLDER), is("80000" + sep + "0 ms"));
-        assertThat(minutes.format("%.1f " + UnitUtils.UNIT_PLACEHOLDER), is("1" + sep + "3 min"));
+        assertThat(seconds.format("%.1f " + UnitUtils.UNIT_PLACEHOLDER), is("80" + ds + "0 s"));
+        assertThat(millis.format("%.1f " + UnitUtils.UNIT_PLACEHOLDER), is("80000" + ds + "0 ms"));
+        assertThat(minutes.format("%.1f " + UnitUtils.UNIT_PLACEHOLDER), is("1" + ds + "3 min"));
 
-        assertThat(seconds.format("%.1f"), is("80" + sep + "0"));
-        assertThat(minutes.format("%.1f"), is("1" + sep + "3"));
+        assertThat(seconds.format("%.1f"), is("80" + ds + "0"));
+        assertThat(minutes.format("%.1f"), is("1" + ds + "3"));
 
         assertThat(seconds.format("%1$tH:%1$tM:%1$tS"), is("00:01:20"));
         assertThat(millis.format("%1$tHh %1$tMm %1$tSs"), is("00h 01m 20s"));

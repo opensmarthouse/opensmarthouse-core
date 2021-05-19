@@ -56,13 +56,7 @@ public class DecimalTypeTest {
         assertEquals("0x57", dt.format("%#x"));
 
         // A float value cannot be converted into hex.
-        dt = new DecimalType("87.5");
-        try {
-            dt.format("%x");
-            fail();
-        } catch (Exception e) {
-            // That's what we expect.
-        }
+        assertThrows(IllegalFormatConversionException.class, () -> new DecimalType("87.5").format("%x"));
 
         // An integer (with different representation) with int conversion.
         dt = new DecimalType("11.0");
