@@ -100,6 +100,9 @@ public class QuantityType<T extends Quantity<T>> extends NumberType
      * The English locale is used to determine (decimal/grouping) separator characters.
      *
      * @param value the non null value representing a quantity with an optional unit.
+     *
+     * @throws NumberFormatException when a quantity without a unit could not be parsed
+     * @throws IllegalArgumentException when a quantity with a unit could not be parsed
      */
     public QuantityType(String value) {
         this(value, Locale.ENGLISH);
@@ -195,6 +198,15 @@ public class QuantityType<T extends Quantity<T>> extends NumberType
         return toFullString();
     }
 
+    /**
+     * Static access to {@link QuantityType#QuantityType(String)}.
+     *
+     * @param value the non null value representing a quantity with an optional unit
+     * @return a new {@link QuantityType}
+     *
+     * @throws NumberFormatException when a quantity without a unit could not be parsed
+     * @throws IllegalArgumentException when a quantity with a unit could not be parsed
+     */
     public static QuantityType<? extends Quantity<?>> valueOf(String value) {
         return new QuantityType<>(value);
     }
