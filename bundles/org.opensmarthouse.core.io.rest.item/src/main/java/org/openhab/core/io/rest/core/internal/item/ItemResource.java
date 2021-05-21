@@ -149,13 +149,21 @@ public class ItemResource implements RESTResource {
      */
     private static void respectForwarded(final UriBuilder uriBuilder, final @Context HttpHeaders httpHeaders) {
         Optional.ofNullable(httpHeaders.getHeaderString("X-Forwarded-Host")).ifPresent(host -> {
+            if (host.contains(",")) {
+                host = host.split(",")[0];
+            }
             final String[] parts = host.split(":");
             uriBuilder.host(parts[0]);
             if (parts.length > 1) {
                 uriBuilder.port(Integer.parseInt(parts[1]));
             }
         });
-        Optional.ofNullable(httpHeaders.getHeaderString("X-Forwarded-Proto")).ifPresent(uriBuilder::scheme);
+        Optional.ofNullable(httpHeaders.getHeaderString("X-Forwarded-Proto")).map(scheme -> {
+            if (scheme.contains(",")) {
+                return scheme.split(",")[0];
+            }
+            return scheme;
+        }).ifPresent(uriBuilder::scheme);
     }
 
     private final Logger logger = LoggerFactory.getLogger(ItemResource.class);
