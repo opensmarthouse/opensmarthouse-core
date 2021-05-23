@@ -212,6 +212,8 @@ public class SystemProfileFactory implements ProfileFactory, ProfileAdvisor, Pro
             return new TimestampChangeProfile(callback);
         } else if (TIMESTAMP_OFFSET.equals(profileTypeUID)) {
             return new TimestampOffsetProfile(callback, context);
+        } else if (TIMESTAMP_TRIGGER.equals(profileTypeUID)) {
+            return new TimestampTriggerProfile(callback);
         } else if (TIMESTAMP_UPDATE.equals(profileTypeUID)) {
             return new TimestampUpdateProfile(callback);
         } else {
