@@ -21,6 +21,7 @@ import java.util.Hashtable;
 
 import org.openhab.core.events.Event;
 import org.openhab.core.events.EventPublisher;
+import org.osgi.service.component.annotations.Activate;
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Reference;
 import org.osgi.service.event.EventAdmin;
@@ -37,15 +38,11 @@ import org.osgi.service.event.EventAdmin;
 @Component
 public class OSGiEventPublisher implements EventPublisher {
 
-    private EventAdmin osgiEventAdmin;
+    private final EventAdmin osgiEventAdmin;
 
-    @Reference
-    protected void setEventAdmin(EventAdmin eventAdmin) {
+    @Activate
+    public OSGiEventPublisher(final @Reference EventAdmin eventAdmin) {
         this.osgiEventAdmin = eventAdmin;
-    }
-
-    protected void unsetEventAdmin(EventAdmin eventAdmin) {
-        this.osgiEventAdmin = null;
     }
 
     @Override
@@ -65,8 +62,9 @@ public class OSGiEventPublisher implements EventPublisher {
                     properties.put("type", event.getType());
                     properties.put("payload", event.getPayload());
                     properties.put("topic", event.getTopic());
-                    if (event.getSource() != null) {
-                        properties.put("source", event.getSource());
+                    String source = event.getSource();
+                    if (source != null) {
+                        properties.put("source", source);
                     }
                     eventAdmin.postEvent(new org.osgi.service.event.Event("openhab", properties));
                     return null;

@@ -13,6 +13,7 @@
  */
 package org.openhab.core.items.events;
 
+import org.eclipse.jdt.annotation.NonNullByDefault;
 import org.openhab.core.items.dto.ItemDTO;
 
 /**
@@ -21,6 +22,7 @@ import org.openhab.core.items.dto.ItemDTO;
  *
  * @author Stefan Bußweiler - Initial contribution
  */
+@NonNullByDefault
 public class ItemAddedEvent extends AbstractItemRegistryEvent {
 
     /**

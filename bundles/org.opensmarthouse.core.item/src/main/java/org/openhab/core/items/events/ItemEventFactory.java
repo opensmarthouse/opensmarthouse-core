@@ -15,9 +15,10 @@ package org.openhab.core.items.events;
 
 import java.util.LinkedList;
 import java.util.List;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
+import java.util.Set;
 
+import org.eclipse.jdt.annotation.NonNullByDefault;
+import org.eclipse.jdt.annotation.Nullable;
 import org.openhab.core.events.AbstractEventFactory;
 import org.openhab.core.events.Event;
 import org.openhab.core.events.EventFactory;
@@ -39,6 +40,7 @@ import org.osgi.service.component.annotations.ReferencePolicy;
  * @author Stefan Bußweiler - Initial contribution
  * @author Chris Jackson - Refactor for OpenSmartHouse to use {@link TypeFactory}
  */
+@NonNullByDefault
 @Component(immediate = true, service = EventFactory.class)
 public class ItemEventFactory extends AbstractEventFactory {
 
@@ -66,9 +68,9 @@ public class ItemEventFactory extends AbstractEventFactory {
      * Constructs a new ItemEventFactory.
      */
     public ItemEventFactory() {
-        super(Stream.of(ItemCommandEvent.TYPE, ItemStateEvent.TYPE, ItemStatePredictedEvent.TYPE,
+        super(Set.of(ItemCommandEvent.TYPE, ItemStateEvent.TYPE, ItemStatePredictedEvent.TYPE,
                 ItemStateChangedEvent.TYPE, ItemAddedEvent.TYPE, ItemUpdatedEvent.TYPE, ItemRemovedEvent.TYPE,
-                GroupItemStateChangedEvent.TYPE).collect(Collectors.toSet()));
+                GroupItemStateChangedEvent.TYPE));
     }
 
     @org.osgi.service.component.annotations.Reference(cardinality = ReferenceCardinality.MANDATORY, policy = ReferencePolicy.DYNAMIC)
@@ -81,7 +83,8 @@ public class ItemEventFactory extends AbstractEventFactory {
     }
 
     @Override
-    protected Event createEventByType(String eventType, String topic, String payload, String source) throws Exception {
+    protected Event createEventByType(String eventType, String topic, String payload, @Nullable String source)
+            throws Exception {
         if (ItemCommandEvent.TYPE.equals(eventType)) {
             return createCommandEvent(topic, payload, source);
         } else if (ItemStateEvent.TYPE.equals(eventType)) {
@@ -111,14 +114,14 @@ public class ItemEventFactory extends AbstractEventFactory {
         return new GroupItemStateChangedEvent(topic, payload, itemName, memberName, state, oldState);
     }
 
-    private Event createCommandEvent(String topic, String payload, String source) {
+    private Event createCommandEvent(String topic, String payload, @Nullable String source) {
         String itemName = getItemName(topic);
         ItemEventPayloadBean bean = deserializePayload(payload, ItemEventPayloadBean.class);
         Command command = parseType(bean.getType(), bean.getValue(), Command.class);
         return new ItemCommandEvent(topic, payload, itemName, command, source);
     }
 
-    private Event createStateEvent(String topic, String payload, String source) {
+    private Event createStateEvent(String topic, String payload, @Nullable String source) {
         String itemName = getItemName(topic);
         ItemEventPayloadBean bean = deserializePayload(payload, ItemEventPayloadBean.class);
         State state = getState(bean.getType(), bean.getValue());
@@ -206,7 +209,7 @@ public class ItemEventFactory extends AbstractEventFactory {
      * @return the created item command event
      * @throws IllegalArgumentException if itemName or command is null
      */
-    public static ItemCommandEvent createCommandEvent(String itemName, Command command, String source) {
+    public static ItemCommandEvent createCommandEvent(String itemName, Command command, @Nullable String source) {
         assertValidArguments(itemName, command, "command");
         String topic = buildTopic(ITEM_COMAND_EVENT_TOPIC, itemName);
         ItemEventPayloadBean bean = new ItemEventPayloadBean(getCommandType(command), command.toString());
@@ -235,7 +238,7 @@ public class ItemEventFactory extends AbstractEventFactory {
      * @return the created item state event
      * @throws IllegalArgumentException if itemName or state is null
      */
-    public static ItemStateEvent createStateEvent(String itemName, State state, String source) {
+    public static ItemStateEvent createStateEvent(String itemName, State state, @Nullable String source) {
         assertValidArguments(itemName, state, "state");
         String topic = buildTopic(ITEM_STATE_EVENT_TOPIC, itemName);
         ItemEventPayloadBean bean = new ItemEventPayloadBean(getStateType(state), state.toFullString());
@@ -404,8 +407,8 @@ public class ItemEventFactory extends AbstractEventFactory {
      * This is a java bean that is used to serialize/deserialize item event payload.
      */
     private static class ItemEventPayloadBean {
-        private String type;
-        private String value;
+        private @NonNullByDefault({}) String type;
+        private @NonNullByDefault({}) String value;
 
         /**
          * Default constructor for deserialization e.g. by Gson.
@@ -432,8 +435,8 @@ public class ItemEventFactory extends AbstractEventFactory {
      * This is a java bean that is used to serialize/deserialize item state changed event payload.
      */
     private static class ItemStatePredictedEventPayloadBean {
-        private String predictedType;
-        private String predictedValue;
+        private @NonNullByDefault({}) String predictedType;
+        private @NonNullByDefault({}) String predictedValue;
         private boolean isConfirmation;
 
         /**
@@ -466,10 +469,10 @@ public class ItemEventFactory extends AbstractEventFactory {
      * This is a java bean that is used to serialize/deserialize item state changed event payload.
      */
     private static class ItemStateChangedEventPayloadBean {
-        private String type;
-        private String value;
-        private String oldType;
-        private String oldValue;
+        private @NonNullByDefault({}) String type;
+        private @NonNullByDefault({}) String value;
+        private @NonNullByDefault({}) String oldType;
+        private @NonNullByDefault({}) String oldValue;
 
         /**
          * Default constructor for deserialization e.g. by Gson.

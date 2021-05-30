@@ -13,6 +13,8 @@
  */
 package org.openhab.core.items.events;
 
+import org.eclipse.jdt.annotation.NonNullByDefault;
+import org.eclipse.jdt.annotation.Nullable;
 import org.openhab.core.events.AbstractEvent;
 import org.openhab.core.items.ItemRegistry;
 import org.openhab.core.items.dto.ItemDTO;
@@ -23,6 +25,7 @@ import org.openhab.core.items.dto.ItemDTO;
  *
  * @author Stefan Bußweiler - Initial contribution
  */
+@NonNullByDefault
 public abstract class AbstractItemRegistryEvent extends AbstractEvent {
 
     private final ItemDTO item;
@@ -32,17 +35,17 @@ public abstract class AbstractItemRegistryEvent extends AbstractEvent {
      *
      * @param topic the topic
      * @param payload the payload
-     * @param source the source, can be null
+     * @param source the source
      * @param item the item data transfer object
      */
-    protected AbstractItemRegistryEvent(String topic, String payload, String source, ItemDTO item) {
+    protected AbstractItemRegistryEvent(String topic, String payload, @Nullable String source, ItemDTO item) {
         super(topic, payload, source);
         this.item = item;
     }
 
     /**
      * Gets the item.
-     * 
+     *
      * @return the item
      */
     public ItemDTO getItem() {
