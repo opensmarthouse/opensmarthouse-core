@@ -18,6 +18,7 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.StringTokenizer;
+import java.util.concurrent.ScheduledExecutorService;
 
 import org.eclipse.jdt.annotation.Nullable;
 import org.openhab.core.automation.ModuleHandlerCallback;
@@ -103,6 +104,11 @@ public class CompositeTriggerHandler
             }
             callback.triggered(module, result);
         }
+    }
+
+    @Override
+    public ScheduledExecutorService getScheduler() {
+        return callback.getScheduler();
     }
 
     /**

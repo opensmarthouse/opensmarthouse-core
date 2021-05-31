@@ -14,6 +14,7 @@
 package org.openhab.core.automation.handler;
 
 import java.util.Map;
+import java.util.concurrent.ScheduledExecutorService;
 
 import org.openhab.core.automation.ModuleHandlerCallback;
 import org.openhab.core.automation.Rule;
@@ -28,6 +29,7 @@ import org.openhab.core.automation.type.Output;
  *
  * @author Yordan Mihaylov - Initial contribution
  * @author Kai Kreuzer - made it a sub-interface of ModuleHandlerCallback
+ * @author Fabian Wolter - Add method for retrieving the handler's scheduler
  */
 public interface TriggerHandlerCallback extends ModuleHandlerCallback {
 
@@ -46,4 +48,9 @@ public interface TriggerHandlerCallback extends ModuleHandlerCallback {
      *            </ul>
      */
     public void triggered(Trigger trigger, Map<String, ?> context);
+
+    /**
+     * @return the scheduler of this rule
+     */
+    public ScheduledExecutorService getScheduler();
 }
