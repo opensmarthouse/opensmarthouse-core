@@ -15,11 +15,10 @@ package org.openhab.core.magic.binding.internal;
 
 import static org.openhab.core.magic.binding.MagicBindingConstants.*;
 
-import java.util.Collections;
 import java.util.Set;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
+import org.eclipse.jdt.annotation.NonNullByDefault;
+import org.eclipse.jdt.annotation.Nullable;
 import org.openhab.core.magic.binding.handler.MagicActionModuleThingHandler;
 import org.openhab.core.magic.binding.handler.MagicBridgeHandler;
 import org.openhab.core.magic.binding.handler.MagicBridgedThingHandler;
@@ -45,27 +44,35 @@ import org.openhab.core.thing.ThingTypeUID;
 import org.openhab.core.thing.binding.BaseThingHandlerFactory;
 import org.openhab.core.thing.binding.ThingHandler;
 import org.openhab.core.thing.binding.ThingHandlerFactory;
+import org.osgi.service.component.annotations.Activate;
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Reference;
 
 /**
- * The {@link MagicHandlerFactory} is responsible for creating things and thing
- * handlers.
+ * The {@link MagicHandlerFactory} is responsible for creating things and thing handlers.
  *
  * @author Henning Treu - Initial contribution
  */
 @Component(service = ThingHandlerFactory.class, configurationPid = "binding.magic")
+@NonNullByDefault
 public class MagicHandlerFactory extends BaseThingHandlerFactory {
 
-    private static final Set<ThingTypeUID> SUPPORTED_THING_TYPES_UIDS = Collections
-            .unmodifiableSet(Stream.of(THING_TYPE_EXTENSIBLE_THING, THING_TYPE_ON_OFF_LIGHT, THING_TYPE_DIMMABLE_LIGHT,
-                    THING_TYPE_COLOR_LIGHT, THING_TYPE_CONTACT_SENSOR, THING_TYPE_CONFIG_THING,
-                    THING_TYPE_DELAYED_THING, THING_TYPE_LOCATION, THING_TYPE_THERMOSTAT, THING_TYPE_FIRMWARE_UPDATE,
-                    THING_TYPE_BRIDGE_1, THING_TYPE_BRIDGE_2, THING_TYPE_BRIDGED_THING, THING_TYPE_CHATTY_THING,
-                    THING_TYPE_ROLLERSHUTTER, THING_TYPE_PLAYER, THING_TYPE_IMAGE, THING_TYPE_ACTION_MODULE,
-                    THING_TYPE_DYNAMIC_STATE_DESCRIPTION, THING_TYPE_ONLINE_OFFLINE).collect(Collectors.toSet()));
+    private static final Set<ThingTypeUID> SUPPORTED_THING_TYPES_UIDS = Set.of(THING_TYPE_EXTENSIBLE_THING,
+            THING_TYPE_ON_OFF_LIGHT, THING_TYPE_DIMMABLE_LIGHT, THING_TYPE_COLOR_LIGHT, THING_TYPE_CONTACT_SENSOR,
+            THING_TYPE_CONFIG_THING, THING_TYPE_DELAYED_THING, THING_TYPE_LOCATION, THING_TYPE_THERMOSTAT,
+            THING_TYPE_FIRMWARE_UPDATE, THING_TYPE_BRIDGE_1, THING_TYPE_BRIDGE_2, THING_TYPE_BRIDGED_THING,
+            THING_TYPE_CHATTY_THING, THING_TYPE_ROLLERSHUTTER, THING_TYPE_PLAYER, THING_TYPE_IMAGE,
+            THING_TYPE_ACTION_MODULE, THING_TYPE_DYNAMIC_STATE_DESCRIPTION, THING_TYPE_ONLINE_OFFLINE);
 
-    private MagicDynamicStateDescriptionProvider stateDescriptionProvider;
+    private final MagicDynamicCommandDescriptionProvider commandDescriptionProvider;
+    private final MagicDynamicStateDescriptionProvider stateDescriptionProvider;
+
+    @Activate
+    public MagicHandlerFactory(final @Reference MagicDynamicCommandDescriptionProvider commandDescriptionProvider, //
+            final @Reference MagicDynamicStateDescriptionProvider stateDescriptionProvider) {
+        this.commandDescriptionProvider = commandDescriptionProvider;
+        this.stateDescriptionProvider = stateDescriptionProvider;
+    }
 
     @Override
     public boolean supportsThingType(ThingTypeUID thingTypeUID) {
@@ -73,77 +80,68 @@ public class MagicHandlerFactory extends BaseThingHandlerFactory {
     }
 
     @Override
-    protected ThingHandler createHandler(Thing thing) {
+    protected @Nullable ThingHandler createHandler(Thing thing) {
         ThingTypeUID thingTypeUID = thing.getThingTypeUID();
 
-        if (thingTypeUID.equals(THING_TYPE_EXTENSIBLE_THING)) {
+        if (THING_TYPE_EXTENSIBLE_THING.equals(thingTypeUID)) {
             return new MagicExtensibleThingHandler(thing);
         }
-        if (thingTypeUID.equals(THING_TYPE_ON_OFF_LIGHT)) {
+        if (THING_TYPE_ON_OFF_LIGHT.equals(thingTypeUID)) {
             return new MagicOnOffLightHandler(thing);
         }
-        if (thingTypeUID.equals(THING_TYPE_DIMMABLE_LIGHT)) {
+        if (THING_TYPE_DIMMABLE_LIGHT.equals(thingTypeUID)) {
             return new MagicDimmableLightHandler(thing);
         }
-        if (thingTypeUID.equals(THING_TYPE_COLOR_LIGHT)) {
+        if (THING_TYPE_COLOR_LIGHT.equals(thingTypeUID)) {
             return new MagicColorLightHandler(thing);
         }
-        if (thingTypeUID.equals(THING_TYPE_CONTACT_SENSOR)) {
+        if (THING_TYPE_CONTACT_SENSOR.equals(thingTypeUID)) {
             return new MagicContactHandler(thing);
         }
-        if (thingTypeUID.equals(THING_TYPE_CONFIG_THING)) {
+        if (THING_TYPE_CONFIG_THING.equals(thingTypeUID)) {
             return new MagicConfigurableThingHandler(thing);
         }
-        if (thingTypeUID.equals(THING_TYPE_DELAYED_THING)) {
+        if (THING_TYPE_DELAYED_THING.equals(thingTypeUID)) {
             return new MagicDelayedOnlineHandler(thing);
         }
-        if (thingTypeUID.equals(THING_TYPE_LOCATION)) {
+        if (THING_TYPE_LOCATION.equals(thingTypeUID)) {
             return new MagicLocationThingHandler(thing);
         }
-        if (thingTypeUID.equals(THING_TYPE_THERMOSTAT)) {
+        if (THING_TYPE_THERMOSTAT.equals(thingTypeUID)) {
             return new MagicThermostatThingHandler(thing);
         }
-        if (thingTypeUID.equals(THING_TYPE_FIRMWARE_UPDATE)) {
+        if (THING_TYPE_FIRMWARE_UPDATE.equals(thingTypeUID)) {
             return new MagicFirmwareUpdateThingHandler(thing);
         }
-        if (thingTypeUID.equals(THING_TYPE_BRIDGED_THING)) {
+        if (THING_TYPE_BRIDGED_THING.equals(thingTypeUID)) {
             return new MagicBridgedThingHandler(thing);
         }
-        if (thingTypeUID.equals(THING_TYPE_CHATTY_THING)) {
+        if (THING_TYPE_CHATTY_THING.equals(thingTypeUID)) {
             return new MagicChattyThingHandler(thing);
         }
-        if (thingTypeUID.equals(THING_TYPE_ROLLERSHUTTER)) {
+        if (THING_TYPE_ROLLERSHUTTER.equals(thingTypeUID)) {
             return new MagicRolllershutterHandler(thing);
         }
-        if (thingTypeUID.equals(THING_TYPE_PLAYER)) {
+        if (THING_TYPE_PLAYER.equals(thingTypeUID)) {
             return new MagicPlayerHandler(thing);
         }
-        if (thingTypeUID.equals(THING_TYPE_IMAGE)) {
+        if (THING_TYPE_IMAGE.equals(thingTypeUID)) {
             return new MagicImageHandler(thing);
         }
-        if (thingTypeUID.equals(THING_TYPE_ACTION_MODULE)) {
+        if (THING_TYPE_ACTION_MODULE.equals(thingTypeUID)) {
             return new MagicActionModuleThingHandler(thing);
         }
-        if (thingTypeUID.equals(THING_TYPE_DYNAMIC_STATE_DESCRIPTION)) {
-            return new MagicDynamicStateDescriptionThingHandler(thing, stateDescriptionProvider);
+        if (THING_TYPE_DYNAMIC_STATE_DESCRIPTION.equals(thingTypeUID)) {
+            return new MagicDynamicStateDescriptionThingHandler(thing, commandDescriptionProvider,
+                    stateDescriptionProvider);
         }
-        if (thingTypeUID.equals(THING_TYPE_ONLINE_OFFLINE)) {
+        if (THING_TYPE_ONLINE_OFFLINE.equals(thingTypeUID)) {
             return new MagicOnlineOfflineHandler(thing);
         }
-
-        if (thingTypeUID.equals(THING_TYPE_BRIDGE_1) || thingTypeUID.equals(THING_TYPE_BRIDGE_2)) {
+        if (THING_TYPE_BRIDGE_1.equals(thingTypeUID) || THING_TYPE_BRIDGE_2.equals(thingTypeUID)) {
             return new MagicBridgeHandler((Bridge) thing);
         }
 
         return null;
-    }
-
-    @Reference
-    protected void setDynamicStateDescriptionProvider(MagicDynamicStateDescriptionProvider stateDescriptionProvider) {
-        this.stateDescriptionProvider = stateDescriptionProvider;
-    }
-
-    protected void unsetDynamicStateDescriptionProvider(MagicDynamicStateDescriptionProvider stateDescriptionProvider) {
-        this.stateDescriptionProvider = null;
     }
 }

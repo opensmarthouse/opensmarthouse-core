@@ -59,6 +59,11 @@ public class ChannelTriggeredEvent extends AbstractEvent {
         this.channel = channel;
     }
 
+    @Override
+    public String getType() {
+        return TYPE;
+    }
+
     /**
      * Returns the event.
      *
@@ -76,12 +81,7 @@ public class ChannelTriggeredEvent extends AbstractEvent {
     }
 
     @Override
-    public String getType() {
-        return TYPE;
-    }
-
-    @Override
     public String toString() {
-        return channel + " triggered " + event;
+        return String.format("%s triggered %s", channel, event);
     }
 }

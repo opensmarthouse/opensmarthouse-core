@@ -35,8 +35,8 @@ public abstract class AbstractThingRegistryEvent extends AbstractEvent {
      *
      * @param topic the topic
      * @param payload the payload
-     * @param source the source, can be null
-     * @param thing the thing
+     * @param source the source
+     * @param thing the thing data transfer object
      */
     protected AbstractThingRegistryEvent(String topic, String payload, @Nullable String source, ThingDTO thing) {
         super(topic, payload, source);
@@ -44,9 +44,9 @@ public abstract class AbstractThingRegistryEvent extends AbstractEvent {
     }
 
     /**
-     * Gets the thing.
+     * Gets the thing data transfer object.
      *
-     * @return the thing
+     * @return the thing data transfer object
      */
     public ThingDTO getThing() {
         return thing;
