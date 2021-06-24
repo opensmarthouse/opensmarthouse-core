@@ -56,6 +56,9 @@ fi
 cp $1 $1.tmp
 
 # Patch specific classes that have moved package
+refactor $1 "bundles/org.openhab.core/src/main/java/org/openhab/core/internal/service/StateDescriptionServiceImpl.java"                        "bundles/org.opensmarthouse.core.type/src/main/java/org/openhab/core/types/internal/StateDescriptionServiceImpl.java"
+refactor $1 "bundles/org.openhab.core/src/test/java/org/openhab/core/internal/service/StateDescriptionServiceImplTest.java"                    "bundles/org.opensmarthouse.core.type/src/test/java/org/openhab/core/types/internal/StateDescriptionServiceImplTest.java"
+
 refactor $1 "bundles/org.openhab.core/src/main/java/org/openhab/core/internal/service/BundleResolverImpl.java"                                 "bundles/org.opensmarthouse.core.common/src/main/java/org/openhab/core/internal/common/osgi/BundleResolverImpl.java"
 
 refactor $1 "bundles/org.openhab.core/src/main/java/org/openhab/core/types/util/UnitUtils.java"                                                "bundles/org.opensmarthouse.core.library.unit/src/main/java/org/openhab/core/types/util/UnitUtils.java"
