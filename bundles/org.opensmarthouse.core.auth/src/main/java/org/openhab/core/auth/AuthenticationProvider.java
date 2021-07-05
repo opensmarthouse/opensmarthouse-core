@@ -30,7 +30,7 @@ public interface AuthenticationProvider {
      * @return null if credentials were not valid for this provider
      * @throws AuthenticationException if authentication failed due to credentials mismatch.
      */
-    Authentication authenticate(Credentials credentials) throws AuthenticationException;
+    AuthenticationResult authenticate(Credentials credentials) throws AuthenticationException;
 
     /**
      * Additional method to verify if given authentication provider can handle given type of credentials.

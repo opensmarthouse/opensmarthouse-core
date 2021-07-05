@@ -21,10 +21,11 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.eclipse.jdt.annotation.NonNullByDefault;
 import org.openhab.core.auth.AuthenticationException;
+import org.openhab.core.auth.AuthenticationManager;
 import org.openhab.core.auth.AuthenticationProvider;
-import org.openhab.core.auth.ManagedUser;
-import org.openhab.core.auth.User;
-import org.openhab.core.auth.UserRegistry;
+import org.openhab.core.auth.local.ManagedUser;
+import org.openhab.core.auth.local.User;
+import org.openhab.core.auth.local.UserRegistry;
 import org.openhab.core.i18n.LocaleProvider;
 import org.osgi.framework.BundleContext;
 import org.osgi.service.component.annotations.Activate;
@@ -52,9 +53,9 @@ public class ChangePasswordPageServlet extends AbstractAuthPageServlet {
 
     @Activate
     public ChangePasswordPageServlet(BundleContext bundleContext, @Reference HttpService httpService,
-            @Reference UserRegistry userRegistry, @Reference AuthenticationProvider authProvider,
+            @Reference UserRegistry userRegistry, @Reference AuthenticationManager authManager,
             @Reference LocaleProvider localeProvider) {
-        super(bundleContext, httpService, userRegistry, authProvider, localeProvider);
+        super(bundleContext, httpService, userRegistry, authManager, localeProvider);
         try {
             httpService.registerServlet("/changePassword", this, null, null);
         } catch (NamespaceException | ServletException e) {

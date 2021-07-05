@@ -49,12 +49,6 @@
       <version>${karaf.compile.version}</version>
       <scope>provided</scope>
     </dependency>
-    <dependency>
-      <groupId>org.apache.karaf.jaas</groupId>
-      <artifactId>org.apache.karaf.jaas.modules</artifactId>
-      <version>${karaf.compile.version}</version>
-      <scope>provided</scope>
-    </dependency>
   </dependencies>
 
 </project>

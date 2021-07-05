@@ -17,6 +17,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
 import java.util.Iterator;
+import java.util.function.Predicate;
 import java.util.stream.Stream;
 
 import org.openhab.core.library.types.DateTimeType;
@@ -41,6 +42,7 @@ public class Stream2JSONInputStream extends InputStream implements JSONInputStre
     private boolean firstIteratorElement;
 
     private final Gson gson = new GsonBuilder().setDateFormat(DateTimeType.DATE_PATTERN_WITH_TZ_AND_MS).create();
+    private Predicate<Object> predicate;
 
     /**
      * Creates a new {@link Stream2JSONInputStream} backed by the given {@link Stream} source.
@@ -53,9 +55,20 @@ public class Stream2JSONInputStream extends InputStream implements JSONInputStre
             throw new IllegalArgumentException("The source must not be null!");
         }
 
-        iterator = source.map(e -> gson.toJson(e)).iterator();
+        iterator = source.filter(this::filter).map(e -> gson.toJson(e)).iterator();
         jsonElementStream = new ByteArrayInputStream(new byte[0]);
         firstIteratorElement = true;
+    }
+
+    public void setFilter(Predicate<Object> predicate) {
+        this.predicate = predicate;
+    }
+
+    private boolean filter(Object element) {
+        if (this.predicate == null) {
+            return true;
+        }
+        return predicate.test(element);
     }
 
     @Override

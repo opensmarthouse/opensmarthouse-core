@@ -39,6 +39,17 @@
       <groupId>org.bitbucket.b_c</groupId>
       <artifactId>jose4j</artifactId>
     </dependency>
+    <dependency>
+      <groupId>org.opensmarthouse.core.bundles</groupId>
+      <artifactId>org.opensmarthouse.core.io.http.facade</artifactId>
+      <version>0.9.3-SNAPSHOT</version>
+      <scope>compile</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.opensmarthouse.core.bundles</groupId>
+      <artifactId>org.opensmarthouse.core.io.auth</artifactId>
+      <scope>compile</scope>
+    </dependency>
   </dependencies>
 
 </project>

@@ -20,6 +20,8 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
 
+import java.util.Set;
+import java.util.function.BiFunction;
 import javax.annotation.security.RolesAllowed;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
@@ -37,6 +39,11 @@ import javax.ws.rs.core.Response.Status;
 
 import org.eclipse.jdt.annotation.NonNullByDefault;
 import org.eclipse.jdt.annotation.Nullable;
+import org.openhab.core.auth.Authentication;
+import org.openhab.core.auth.AuthenticationContextHolder;
+import org.openhab.core.auth.AuthorizationManager;
+import org.openhab.core.auth.AuthorizationManagerFilters;
+import org.openhab.core.auth.Permissions;
 import org.openhab.core.auth.Role;
 import org.openhab.core.i18n.TimeZoneProvider;
 import org.openhab.core.io.rest.JSONResponse;
@@ -53,6 +60,7 @@ import org.openhab.core.persistence.FilterCriteria;
 import org.openhab.core.persistence.FilterCriteria.Ordering;
 import org.openhab.core.persistence.HistoricItem;
 import org.openhab.core.persistence.ModifiablePersistenceService;
+import org.openhab.core.persistence.PersistenceItemInfo;
 import org.openhab.core.persistence.PersistenceService;
 import org.openhab.core.persistence.PersistenceServiceRegistry;
 import org.openhab.core.persistence.QueryablePersistenceService;
@@ -115,17 +123,23 @@ public class PersistenceResource implements RESTResource {
     private final LocaleService localeService;
     private final PersistenceServiceRegistry persistenceServiceRegistry;
     private final TimeZoneProvider timeZoneProvider;
+    private final AuthorizationManager authorizationManager;
+    private final AuthenticationContextHolder authenticationContextHolder;
 
     @Activate
     public PersistenceResource( //
             final @Reference ItemRegistry itemRegistry, //
             final @Reference LocaleService localeService,
             final @Reference PersistenceServiceRegistry persistenceServiceRegistry,
-            final @Reference TimeZoneProvider timeZoneProvider) {
+            final @Reference TimeZoneProvider timeZoneProvider,
+            final @Reference AuthorizationManager authorizationManager,
+            final @Reference AuthenticationContextHolder authenticationContextHolder) {
         this.itemRegistry = itemRegistry;
         this.localeService = localeService;
         this.persistenceServiceRegistry = persistenceServiceRegistry;
         this.timeZoneProvider = timeZoneProvider;
+        this.authorizationManager = authorizationManager;
+        this.authenticationContextHolder = authenticationContextHolder;
     }
 
     @GET
@@ -172,6 +186,10 @@ public class PersistenceResource implements RESTResource {
             @Parameter(description = "Page number of data to return. This parameter will enable paging.") @QueryParam("page") int pageNumber,
             @Parameter(description = "The length of each page.") @QueryParam("pagelength") int pageLength,
             @Parameter(description = "Gets one value before and after the requested period.") @QueryParam("boundary") boolean boundary) {
+
+        if (!authorizationManager.hasPermission(Permissions.READ, itemName, Item.class, authenticationContextHolder.getAuthentication())) {
+            return Response.status(Status.UNAUTHORIZED).build();
+        }
         return getItemHistoryDTO(serviceId, itemName, startTime, endTime, pageNumber, pageLength, boundary);
     }
 
@@ -184,6 +202,7 @@ public class PersistenceResource implements RESTResource {
                     @ApiResponse(responseCode = "200", description = "OK", content = @Content(array = @ArraySchema(schema = @Schema(implementation = String.class)))),
                     @ApiResponse(responseCode = "400", description = "Invalid filter parameters"),
                     @ApiResponse(responseCode = "404", description = "Unknown persistence service") })
+
     public Response httpDeletePersistenceServiceItem(@Context HttpHeaders headers,
             @Parameter(description = "Id of the persistence service.", required = true) @QueryParam("serviceId") String serviceId,
             @Parameter(description = "The item name.") @PathParam("itemname") String itemName,
@@ -361,7 +380,7 @@ public class PersistenceResource implements RESTResource {
     /**
      * Gets a list of persistence services currently configured in the system
      *
-     * @return list of persistence services as {@link ServiceBean}
+     * @return list of persistence services as {@link PersistenceServiceDTO}
      */
     private List<PersistenceServiceDTO> getPersistenceServiceList(Locale locale) {
         List<PersistenceServiceDTO> dtoList = new ArrayList<>();
@@ -407,7 +426,9 @@ public class PersistenceResource implements RESTResource {
 
         QueryablePersistenceService qService = (QueryablePersistenceService) service;
 
-        return JSONResponse.createResponse(Status.OK, qService.getItemInfo(), "");
+        Set<PersistenceItemInfo> itemInfo = AuthorizationManagerFilters.filter(authenticationContextHolder.getAuthentication(),
+            new AuthorizationCheck(authorizationManager), qService.getItemInfo());
+        return JSONResponse.createResponse(Status.OK, itemInfo, "");
     }
 
     private Response deletePersistenceItemData(@Nullable String serviceId, String itemName, @Nullable String timeBegin,
@@ -507,5 +528,19 @@ public class PersistenceResource implements RESTResource {
 
         mService.store(item, Date.from(dateTime.toInstant()), state);
         return Response.status(Status.OK).build();
+    }
+
+    static class AuthorizationCheck implements BiFunction<Authentication, PersistenceItemInfo, Boolean> {
+
+        private final AuthorizationManager authorizationManager;
+
+        AuthorizationCheck(AuthorizationManager authorizationManager) {
+            this.authorizationManager = authorizationManager;
+        }
+
+        @Override
+        public Boolean apply(Authentication auth, PersistenceItemInfo info) {
+            return authorizationManager.hasPermission(Permissions.READ, info.getName(), Item.class, auth);
+        }
     }
 }

@@ -17,21 +17,36 @@ package org.openhab.core.items.dto;
 
 import static org.hamcrest.CoreMatchers.*;
 import static org.junit.Assert.assertThat;
+import static org.mockito.Mockito.when;
 
 import org.junit.Ignore;
 import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.mockito.Mock;
+import org.mockito.invocation.InvocationOnMock;
+import org.mockito.junit.MockitoJUnitRunner;
+import org.mockito.stubbing.Answer;
 import org.openhab.core.items.GenericItem;
 import org.openhab.core.items.GroupFunction;
+import org.openhab.core.items.Item;
+import org.openhab.core.items.ItemBuilderFactory;
 import org.openhab.core.items.TestNumberItem;
 import org.openhab.core.library.types.StringType;
+import org.openhab.core.types.State;
 
 /**
  * @author Stefan Triller - Initial contribution
  */
+@RunWith(MockitoJUnitRunner.class)
 public class ItemDTOMapperTest {
 
+    @Mock
+    private ItemBuilderFactory factory;
+
+    @Mock
+    private GroupFunction function;
+
     @Test
-    @Ignore
     public void testMapFunctionWithNumberItemAndCountFunction() {
         // testing Group:Number:Count(".*hello.*")
         GenericItem item1 = new TestNumberItem("item1");
@@ -40,8 +55,11 @@ public class ItemDTOMapperTest {
         gFuncDTO.name = "COUNT";
         gFuncDTO.params = new String[] { ".*hello.*" };
 
+        when(factory.newFunctionBuilder(item1, gFuncDTO)).thenReturn(function);
+        when(function.getParameters()).thenReturn(new State[] {new StringType()});
+
         // FIXME This gonna fail
-        GroupFunction gFunc = ItemDTOMapper.mapFunction(item1, gFuncDTO);
+        GroupFunction gFunc = ItemDTOMapper.mapFunction(item1, gFuncDTO, factory);
 
         assertThat(gFunc, instanceOf(GroupFunction.class));
         assertThat(gFunc.getParameters().length, is(1));

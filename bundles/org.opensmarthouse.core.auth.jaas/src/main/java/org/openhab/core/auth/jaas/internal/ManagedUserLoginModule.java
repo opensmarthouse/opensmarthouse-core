@@ -16,12 +16,13 @@ import java.util.Map;
 
 import javax.security.auth.Subject;
 import javax.security.auth.callback.CallbackHandler;
+import javax.security.auth.login.FailedLoginException;
 import javax.security.auth.login.LoginException;
 import javax.security.auth.spi.LoginModule;
 
 import org.openhab.core.auth.AuthenticationException;
 import org.openhab.core.auth.Credentials;
-import org.openhab.core.auth.UserRegistry;
+import org.openhab.core.auth.local.UserRegistry;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.FrameworkUtil;
 import org.osgi.framework.ServiceReference;
@@ -37,8 +38,6 @@ public class ManagedUserLoginModule implements LoginModule {
 
     private final Logger logger = LoggerFactory.getLogger(ManagedUserLoginModule.class);
 
-    private UserRegistry userRegistry;
-
     private Subject subject;
 
     @Override
@@ -49,23 +48,25 @@ public class ManagedUserLoginModule implements LoginModule {
 
     @Override
     public boolean login() throws LoginException {
+        BundleContext bundleContext = FrameworkUtil.getBundle(UserRegistry.class).getBundleContext();
+        ServiceReference<UserRegistry> serviceReference = null;
         try {
             // try to get the UserRegistry instance
-            BundleContext bundleContext = FrameworkUtil.getBundle(UserRegistry.class).getBundleContext();
-            ServiceReference<UserRegistry> serviceReference = bundleContext.getServiceReference(UserRegistry.class);
+            serviceReference = bundleContext.getServiceReference(UserRegistry.class);
 
-            userRegistry = bundleContext.getService(serviceReference);
-        } catch (Exception e) {
-            logger.error("Cannot initialize the ManagedLoginModule", e);
-            throw new LoginException("Authorization failed");
-        }
-
-        try {
+            UserRegistry userRegistry = bundleContext.getService(serviceReference);
             Credentials credentials = (Credentials) this.subject.getPrivateCredentials().iterator().next();
             userRegistry.authenticate(credentials);
             return true;
         } catch (AuthenticationException e) {
-            throw new LoginException(e.getMessage());
+            throw new FailedLoginException(e.getMessage());
+        } catch (Exception e) {
+            logger.error("Cannot initialize the ManagedLoginModule", e);
+            throw new LoginException("Authorization failed");
+        } finally {
+            if (serviceReference != null) {
+                bundleContext.ungetService(serviceReference);
+            }
         }
     }
 

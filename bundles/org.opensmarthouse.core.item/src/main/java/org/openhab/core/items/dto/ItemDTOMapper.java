@@ -86,8 +86,8 @@ public class ItemDTOMapper {
         return null;
     }
 
-    public static GroupFunction mapFunction(@Nullable Item baseItem, GroupFunctionDTO function) {
-        throw new AbstractMethodError("This method has been moved!");
+    public static GroupFunction mapFunction(@Nullable Item baseItem, GroupFunctionDTO function, ItemBuilderFactory itemBuilderFactory) {
+        return itemBuilderFactory.newFunctionBuilder(baseItem, function);
     }
 
     /**

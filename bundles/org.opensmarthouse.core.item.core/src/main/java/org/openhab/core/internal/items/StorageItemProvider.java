@@ -269,7 +269,7 @@ public class StorageItemProvider extends AbstractManagedProvider<Item, String, S
         if (persistedItem.functionParams != null) {
             functionDTO.params = persistedItem.functionParams.toArray(new String[persistedItem.functionParams.size()]);
         }
-        return ItemDTOMapper.mapFunction(baseItem, functionDTO);
+        return ItemDTOMapper.mapFunction(baseItem, functionDTO, itemBuilderFactory);
     }
 
     private void configureItem(PersistedItem persistedItem, GenericItem item) {

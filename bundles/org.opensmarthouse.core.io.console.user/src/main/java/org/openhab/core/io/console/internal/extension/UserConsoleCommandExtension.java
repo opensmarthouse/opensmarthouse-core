@@ -17,10 +17,10 @@ import java.util.Optional;
 import java.util.Set;
 
 import org.eclipse.jdt.annotation.NonNullByDefault;
-import org.openhab.core.auth.ManagedUser;
-import org.openhab.core.auth.User;
-import org.openhab.core.auth.UserApiToken;
-import org.openhab.core.auth.UserRegistry;
+import org.openhab.core.auth.local.ManagedUser;
+import org.openhab.core.auth.local.User;
+import org.openhab.core.auth.local.UserApiToken;
+import org.openhab.core.auth.local.UserRegistry;
 import org.openhab.core.io.console.Console;
 import org.openhab.core.io.console.extensions.AbstractConsoleCommandExtension;
 import org.openhab.core.io.console.extensions.ConsoleCommandExtension;

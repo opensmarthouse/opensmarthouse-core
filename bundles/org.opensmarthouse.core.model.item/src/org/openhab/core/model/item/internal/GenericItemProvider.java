@@ -36,6 +36,7 @@ import org.openhab.core.items.GroupFunction;
 import org.openhab.core.items.GroupItem;
 import org.openhab.core.items.Item;
 import org.openhab.core.items.ItemFactory;
+import org.openhab.core.items.ItemBuilderFactory;
 import org.openhab.core.items.ItemProvider;
 import org.openhab.core.items.ItemUtil;
 import org.openhab.core.items.dto.GroupFunctionDTO;
@@ -85,6 +86,7 @@ public class GenericItemProvider extends AbstractProvider<Item>
     private final GenericMetadataProvider genericMetaDataProvider;
 
     private final StateDescriptionFragmentBuilderFactory stateDescriptionFragmentBuilderFactory;
+    private final ItemBuilderFactory itemBuilderFactory;
 
     private final Map<String, Collection<Item>> itemsMap = new ConcurrentHashMap<>();
 
@@ -98,10 +100,12 @@ public class GenericItemProvider extends AbstractProvider<Item>
     public GenericItemProvider(final @Reference ModelRepository modelRepository,
             final @Reference GenericMetadataProvider genericMetadataProvider,
             final @Reference StateDescriptionFragmentBuilderFactory stateDescriptionFragmentBuilderFactory,
+            final @Reference ItemBuilderFactory itemBuilderFactory,
             Map<String, Object> properties) {
         this.modelRepository = modelRepository;
         this.genericMetaDataProvider = genericMetadataProvider;
         this.stateDescriptionFragmentBuilderFactory = stateDescriptionFragmentBuilderFactory;
+        this.itemBuilderFactory = itemBuilderFactory;
 
         Object serviceRanking = properties.get(Constants.SERVICE_RANKING);
         if (serviceRanking instanceof Integer) {
@@ -295,7 +299,7 @@ public class GenericItemProvider extends AbstractProvider<Item>
         dto.name = function.getName();
         dto.params = modelGroupItem.getArgs().toArray(new String[modelGroupItem.getArgs().size()]);
 
-        GroupFunction groupFunction = ItemDTOMapper.mapFunction(baseItem, dto);
+        GroupFunction groupFunction = ItemDTOMapper.mapFunction(baseItem, dto, itemBuilderFactory);
 
         return new GroupItem(modelGroupItem.getName(), baseItem, groupFunction);
     }

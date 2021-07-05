@@ -16,7 +16,12 @@ import java.util.List;
 import java.util.function.Predicate;
 
 import org.eclipse.jdt.annotation.NonNullByDefault;
+import org.eclipse.jdt.annotation.Nullable;
+import org.openhab.core.auth.Authentication;
+import org.openhab.core.auth.AuthorizationManager;
+import org.openhab.core.auth.Permissions;
 import org.openhab.core.io.rest.sse.internal.util.SseUtil;
+import org.openhab.core.items.Item;
 
 /**
  * The specific information we need to hold for a SSE sink which subscribes to event topics.
@@ -27,12 +32,23 @@ import org.openhab.core.io.rest.sse.internal.util.SseUtil;
 public class SseSinkTopicInfo {
 
     private final List<String> regexFilters;
+    private final @Nullable Authentication authentication;
 
-    public SseSinkTopicInfo(String topicFilter) {
+    public SseSinkTopicInfo(String topicFilter, @Nullable Authentication authentication) {
         this.regexFilters = SseUtil.convertToRegex(topicFilter);
+        this.authentication = authentication;
     }
 
     public static Predicate<SseSinkTopicInfo> matchesTopic(final String topic) {
         return info -> info.regexFilters.stream().anyMatch(topic::matches);
+    }
+
+    public static Predicate<SseSinkTopicInfo> hasItemAccess(final AuthorizationManager manager, final String item) {
+        return info -> {
+            if (info.authentication == null) {
+                return false;
+            }
+            return manager.hasPermission(Permissions.READ, item, Item.class, info.authentication);
+        };
     }
 }

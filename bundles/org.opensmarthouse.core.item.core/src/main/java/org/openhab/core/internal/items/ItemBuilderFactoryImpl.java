@@ -16,6 +16,7 @@ import java.util.Set;
 import java.util.concurrent.CopyOnWriteArraySet;
 
 import org.eclipse.jdt.annotation.NonNullByDefault;
+import org.eclipse.jdt.annotation.Nullable;
 import org.openhab.core.items.GroupFunction;
 import org.openhab.core.items.Item;
 import org.openhab.core.items.ItemBuilder;
@@ -44,7 +45,7 @@ public class ItemBuilderFactoryImpl implements ItemBuilderFactory {
 
     @Activate
     public ItemBuilderFactoryImpl(
-            final @Reference(target = "(component.name=org.openhab.core.library.CoreItemFactory)") ItemFactory coreItemFactory) {
+        final @Reference(target = "(component.name=org.openhab.core.library.CoreItemFactory)") ItemFactory coreItemFactory) {
         itemFactories.add(coreItemFactory);
     }
 
@@ -59,8 +60,8 @@ public class ItemBuilderFactoryImpl implements ItemBuilderFactory {
     }
 
     @Override
-    public GroupFunction newFunctionBuilder(Item baseItem, GroupFunctionDTO function) {
-        throw new AbstractMethodError("Not implemented yet");
+    public GroupFunction newFunctionBuilder(@Nullable Item baseItem, GroupFunctionDTO function) {
+        return new GroupFunctionHelper().createGroupFunction(function, baseItem);
     }
 
     @Reference(cardinality = ReferenceCardinality.MULTIPLE, policy = ReferencePolicy.DYNAMIC)

@@ -427,6 +427,11 @@ Import-Package: \\
           <artifactId>build-helper-maven-plugin</artifactId>
           <version>${mojohaus-buildhelper-plugin.version}</version>
         </plugin>
+        <plugin>
+          <groupId>org.apache.karaf.tooling</groupId>
+          <artifactId>karaf-maven-plugin</artifactId>
+          <version>${karaf.tooling.version}</version>
+        </plugin>
 
         <plugin>
           <groupId>com.mycila</groupId>
