@@ -22,14 +22,14 @@ import org.openhab.core.types.State;
 import org.openhab.core.types.UnDefType;
 
 /**
- * This calculates the maximum value of all item states of {@link QuantityType}.
+ * This calculates the minimum value of all item states of {@link QuantityType}.
  *
  * @author Henning Treu - Initial contribution
  */
 @NonNullByDefault
-public class DimensionalMax extends DimensionalGroupFunction {
+public class Min extends DimensionalGroupFunction {
 
-    public DimensionalMax(Class<? extends Quantity<?>> dimension) {
+    public Min(Class<? extends Quantity<?>> dimension) {
         super(dimension);
     }
 
@@ -40,20 +40,20 @@ public class DimensionalMax extends DimensionalGroupFunction {
             return UnDefType.UNDEF;
         }
 
-        QuantityType<?> max = null;
+        QuantityType<?> min = null;
         for (Item item : items) {
             if (isSameDimension(item)) {
                 QuantityType itemState = item.getStateAs(QuantityType.class);
                 if (itemState != null) {
-                    if (max == null
-                            || (max.getUnit().isCompatible(itemState.getUnit()) && max.compareTo(itemState) < 0)) {
-                        max = itemState;
+                    if (min == null
+                            || (min.getUnit().isCompatible(itemState.getUnit()) && min.compareTo(itemState) > 0)) {
+                        min = itemState;
                     }
                 }
             }
         }
 
-        return max != null ? max : UnDefType.UNDEF;
+        return min != null ? min : UnDefType.UNDEF;
     }
 
 }

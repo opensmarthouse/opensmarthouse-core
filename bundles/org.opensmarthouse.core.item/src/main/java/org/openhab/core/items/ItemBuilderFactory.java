@@ -13,6 +13,7 @@
 package org.openhab.core.items;
 
 import org.eclipse.jdt.annotation.NonNullByDefault;
+import org.eclipse.jdt.annotation.Nullable;
 import org.openhab.core.items.dto.GroupFunctionDTO;
 
 /**
@@ -41,5 +42,5 @@ public interface ItemBuilderFactory {
     ItemBuilder newItemBuilder(String itemType, String itemName);
 
     // FIXME verify if that's valid approach
-    GroupFunction newFunctionBuilder(Item baseItem, GroupFunctionDTO function);
+    GroupFunction newFunctionBuilder(@Nullable Item baseItem, GroupFunctionDTO function);
 }
