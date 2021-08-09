@@ -17,12 +17,10 @@
     <dependency>
       <groupId>org.opensmarthouse.core.bundles</groupId>
       <artifactId>org.opensmarthouse.core.config</artifactId>
-      <version>${project.version}</version>
     </dependency>
     <dependency>
       <groupId>org.opensmarthouse.core.bundles</groupId>
       <artifactId>org.opensmarthouse.core.io.transport.serial</artifactId>
-      <version>${project.version}</version>
     </dependency>
   </dependencies>
 

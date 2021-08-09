@@ -132,6 +132,14 @@
       <name>OpenSmartHouse Release (Sonatype)</name>
       <url>https://oss.sonatype.org/service/local/staging/deploy/maven2</url>
     </repository>
+    <repository>
+			<id>openhab-jfrog-release</id>
+			<url>https://openhab.jfrog.io/openhab/libs-release-local</url>
+    </repository>
+    <repository>
+			<id>openhab-jfrog-snapshot</id>
+			<url>https://openhab.jfrog.io/openhab/libs-snapshot-local</url>
+    </repository>
   </repositories>
 
   <build>

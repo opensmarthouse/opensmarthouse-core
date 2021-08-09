@@ -89,6 +89,12 @@
     </dependency>
     <dependency>
       <groupId>org.opensmarthouse.core.bundles</groupId>
+      <artifactId>org.opensmarthouse.core.net</artifactId>
+      <version>${project.version}</version>
+      <scope>compile</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.opensmarthouse.core.bundles</groupId>
       <artifactId>org.opensmarthouse.core.persistence</artifactId>
       <version>${project.version}</version>
       <scope>compile</scope>

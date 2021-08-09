@@ -42,7 +42,7 @@
     <dependency>
       <groupId>net.wimpi</groupId>
       <artifactId>jamod</artifactId>
-      <version>1.3.0.OH</version>
+      <version>1.3.3.OH</version>
       <scope>compile</scope>
     </dependency>
     <dependency>
