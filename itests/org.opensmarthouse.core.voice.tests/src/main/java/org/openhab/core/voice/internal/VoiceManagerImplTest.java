@@ -387,4 +387,16 @@ public class VoiceManagerImplTest extends JavaOSGiTest {
 
         assertTrue(isVoiceStubInTheOptions);
     }
+
+    @Test
+    public void getPreferredVoiceOfAvailableTTSService() {
+        Voice voice = voiceManager.getPreferredVoice(ttsService.getAvailableVoices());
+        assertNotNull(voice);
+    }
+
+    @Test
+    public void getPreferredVoiceOfEmptySet() {
+        Voice voice = voiceManager.getPreferredVoice(Set.of());
+        assertNull(voice);
+    }
 }
