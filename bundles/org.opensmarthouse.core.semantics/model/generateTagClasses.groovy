@@ -13,6 +13,9 @@
  */
 @Grab('com.xlson.groovycsv:groovycsv:1.1')
 import static com.xlson.groovycsv.CsvParser.parseCsv
+import java.nio.file.Paths
+
+baseDir = Paths.get(getClass().protectionDomain.codeSource.location.toURI()).getParent().getParent().toAbsolutePath()
 
 def tagSets = new TreeMap<String, String>()
 def locations = new TreeSet<String>()
@@ -20,10 +23,10 @@ def equipments = new TreeSet<String>()
 def points = new TreeSet<String>()
 def properties = new TreeSet<String>()
 
-def labelsFile = new FileWriter('../src/main/resources/tags.properties')
+def labelsFile = new FileWriter("${baseDir}/src/main/resources/tags.properties")
 labelsFile.write("# Generated content - do not edit!\n")
 
-for(line in parseCsv(new FileReader('SemanticTags.csv'), separator: ',')) {
+for (line in parseCsv(new FileReader("${baseDir}/model/SemanticTags.csv"), separator: ',')) {
     println "Processing Tag $line.Tag"
 
     def tagSet = (line.Parent ? tagSets.get(line.Parent) : line.Type) + "_" + line.Tag
@@ -38,7 +41,7 @@ for(line in parseCsv(new FileReader('SemanticTags.csv'), separator: ',')) {
         case "Point"               : points.add(line.Tag); break;
         case "Property"            : properties.add(line.Tag); break;
         default : println "Unrecognized type " + line.Type
-    }    
+    }
 }
 
 labelsFile.close()
@@ -49,8 +52,8 @@ createPointsFile(points)
 createPropertiesFile(properties)
 
 println "\n\nTagSets:"
-for(String tagSet : tagSets) {
-    println tagSet    
+for (String tagSet : tagSets) {
+    println tagSet
 }
 
 def createTagSetClass(def line, String tagSet) {
@@ -62,11 +65,11 @@ def createTagSetClass(def line, String tagSet) {
     def parent = line.Parent
     def parentClass = parent ? parent : type
     def pkg = type.toLowerCase()
-    def file = new FileWriter("../src/main/java/org/openhab/core/semantics/model/" + pkg + "/" + tag + ".java")
+    def file = new FileWriter("${baseDir}/src/main/java/org/openhab/core/semantics/model/${pkg}/${tag}.java")
     file.write(header())
     file.write("package org.openhab.core.semantics.model." + pkg + ";\n\n")
     file.write("import org.eclipse.jdt.annotation.NonNullByDefault;\n")
-    if(!parent) {
+    if (!parent) {
             file.write("import org.openhab.core.semantics.model." + type + ";\n")
     }
     file.write("""import org.openhab.core.semantics.model.TagInfo;
@@ -86,19 +89,19 @@ public interface ${tag} extends ${parentClass} {
 
 def appendLabelsFile(FileWriter file, def line, String tagSet) {
     file.write(tagSet + "=" + line.Label)
-    if(line.Synonyms) {
+    if (line.Synonyms) {
         file.write("," + line.Synonyms.replaceAll(", ", ","))
     }
     file.write("\n")
 }
 
 def createLocationsFile(Set<String> locations) {
-    def file = new FileWriter("../src/main/java/org/openhab/core/semantics/model/location/Locations.java")
+    def file = new FileWriter("${baseDir}/src/main/java/org/openhab/core/semantics/model/location/Locations.java")
     file.write(header())
     file.write("""package org.openhab.core.semantics.model.location;
 
-import java.util.Set;
 import java.util.HashSet;
+import java.util.Set;
 import java.util.stream.Stream;
 
 import org.eclipse.jdt.annotation.NonNullByDefault;
@@ -117,10 +120,8 @@ public class Locations {
     static {
         LOCATIONS.add(Location.class);
 """)    
-    Iterator it = locations.iterator();
-    while(it.hasNext() ) {
-        String location = it.next();
-        file.write("        LOCATIONS.add(" + location + ".class);\n")
+    for (String location : locations) {
+        file.write("        LOCATIONS.add(${location}.class);\n")
     }
     file.write("""    }
 
@@ -133,12 +134,12 @@ public class Locations {
 }
 
 def createEquipmentsFile(Set<String> equipments) {
-    def file = new FileWriter("../src/main/java/org/openhab/core/semantics/model/equipment/Equipments.java")
+    def file = new FileWriter("${baseDir}/src/main/java/org/openhab/core/semantics/model/equipment/Equipments.java")
     file.write(header())
     file.write("""package org.openhab.core.semantics.model.equipment;
 
-import java.util.Set;
 import java.util.HashSet;
+import java.util.Set;
 import java.util.stream.Stream;
 
 import org.eclipse.jdt.annotation.NonNullByDefault;
@@ -157,10 +158,8 @@ public class Equipments {
     static {
         EQUIPMENTS.add(Equipment.class);
 """)    
-    Iterator it = equipments.iterator();
-    while(it.hasNext() ) {
-        String equipment = it.next();
-        file.write("        EQUIPMENTS.add(" + equipment + ".class);\n")
+    for (String equipment : equipments) {
+        file.write("        EQUIPMENTS.add(${equipment}.class);\n")
     }
     file.write("""    }
 
@@ -173,12 +172,12 @@ public class Equipments {
 }
 
 def createPointsFile(Set<String> points) {
-    def file = new FileWriter("../src/main/java/org/openhab/core/semantics/model/point/Points.java")
+    def file = new FileWriter("${baseDir}/src/main/java/org/openhab/core/semantics/model/point/Points.java")
     file.write(header())
     file.write("""package org.openhab.core.semantics.model.point;
 
-import java.util.Set;
 import java.util.HashSet;
+import java.util.Set;
 import java.util.stream.Stream;
 
 import org.eclipse.jdt.annotation.NonNullByDefault;
@@ -197,10 +196,8 @@ public class Points {
     static {
         POINTS.add(Point.class);
 """)    
-    Iterator it = points.iterator();
-    while(it.hasNext() ) {
-        String point = it.next();
-        file.write("        POINTS.add(" + point + ".class);\n")
+    for (String point : points) {
+        file.write("        POINTS.add(${point}.class);\n")
     }
     file.write("""    }
 
@@ -213,12 +210,12 @@ public class Points {
 }
 
 def createPropertiesFile(Set<String> properties) {
-    def file = new FileWriter("../src/main/java/org/openhab/core/semantics/model/property/Properties.java")
+    def file = new FileWriter("${baseDir}/src/main/java/org/openhab/core/semantics/model/property/Properties.java")
     file.write(header())
     file.write("""package org.openhab.core.semantics.model.property;
 
-import java.util.Set;
 import java.util.HashSet;
+import java.util.Set;
 import java.util.stream.Stream;
 
 import org.eclipse.jdt.annotation.NonNullByDefault;
@@ -237,10 +234,8 @@ public class Properties {
     static {
         PROPERTIES.add(Property.class);
 """)    
-    Iterator it = properties.iterator();
-    while(it.hasNext() ) {
-        String property = it.next();
-        file.write("        PROPERTIES.add(" + property + ".class);\n")
+    for (String property : properties) {
+        file.write("        PROPERTIES.add(${property}.class);\n")
     }
     file.write("""    }
 
