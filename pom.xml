@@ -68,7 +68,7 @@
     <jackson.version>2.12.2</jackson.version>
     <jetty.version>9.4.20.v20190813</jetty.version>
     <pax.web.version>7.2.14</pax.web.version>
-    <swagger.version>2.1.0</swagger.version>
+    <swagger.version>2.1.7</swagger.version>
     <netty.version>4.1.42.Final</netty.version>
 
     <eea.version>2.2.1</eea.version>

@@ -282,14 +282,14 @@
     </feature>
 
     <feature name="opensmarthouse-tp-swagger-jax-rs" description="JAX-RS Whiteboard Swagger" version="${project.version}">
-		<capability>opensmarthouse-tp;feature=swagger-jaxrs;version=2.1.0</capability>
+		<capability>opensmarthouse-tp;feature=swagger-jaxrs;version=${swagger.version}</capability>
         <feature dependency="true">opensmarthouse-tp-jax-rs-whiteboard</feature>
         <feature dependency="true">opensmarthouse-tp-jackson</feature>
-		<bundle dependency="true">mvn:io.swagger.core.v3/swagger-annotations/2.1.0</bundle>
-		<bundle dependency="true">mvn:io.swagger.core.v3/swagger-core/2.1.0</bundle>
-		<bundle dependency="true">mvn:io.swagger.core.v3/swagger-integration/2.1.0</bundle>
-		<bundle dependency="true">mvn:io.swagger.core.v3/swagger-jaxrs2/2.1.0</bundle>
-		<bundle dependency="true">mvn:io.swagger.core.v3/swagger-models/2.1.0</bundle>
+		<bundle dependency="true">mvn:io.swagger.core.v3/swagger-annotations/${swagger.version}</bundle>
+		<bundle dependency="true">mvn:io.swagger.core.v3/swagger-core/${swagger.version}</bundle>
+		<bundle dependency="true">mvn:io.swagger.core.v3/swagger-integration/${swagger.version}</bundle>
+		<bundle dependency="true">mvn:io.swagger.core.v3/swagger-jaxrs2/${swagger.version}</bundle>
+		<bundle dependency="true">mvn:io.swagger.core.v3/swagger-models/${swagger.version}</bundle>
         <bundle dependency="true">mvn:com.google.guava/guava/27.1-jre</bundle>
         <bundle dependency="true">mvn:com.google.guava/failureaccess/1.0.1</bundle>
         <bundle dependency="true">mvn:javax.validation/validation-api/1.1.0.Final</bundle>
