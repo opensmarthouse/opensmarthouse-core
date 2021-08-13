@@ -194,8 +194,10 @@ public class CronAdjusterTest {
                         "2022-01-01T00:00", "2200-01-01T00:00" }, } });
     }
 
-    @Test(timeout = 1000)
-    public void testCronExpression() {
+    @ParameterizedTest
+    @MethodSource("arguments")
+    @Timeout(value = 2, unit = TimeUnit.SECONDS)
+    public void testCronExpression(String in, String cron, String[] outs) {
         final CronAdjuster cronAdjuster = new CronAdjuster(cron);
         Temporal ldt = LocalDateTime.parse(in);
 
@@ -205,4 +207,5 @@ public class CronAdjusterTest {
                     equalTo(out));
         }
     }
+
 }
