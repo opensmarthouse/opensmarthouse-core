@@ -65,7 +65,7 @@
     <release.repository-name>OpenSmartHouse Release (Sonatype)</release.repository-name>
     <release.repository-url>https://oss.sonatype.org/service/local/staging/deploy/maven2</release.repository-url>
 
-    <jackson.version>2.10.3</jackson.version>
+    <jackson.version>2.12.2</jackson.version>
     <jetty.version>9.4.20.v20190813</jetty.version>
     <pax.web.version>7.2.14</pax.web.version>
     <swagger.version>2.1.0</swagger.version>
