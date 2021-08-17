@@ -293,7 +293,7 @@
         <bundle dependency="true">mvn:com.google.guava/guava/27.1-jre</bundle>
         <bundle dependency="true">mvn:com.google.guava/failureaccess/1.0.1</bundle>
         <bundle dependency="true">mvn:javax.validation/validation-api/1.1.0.Final</bundle>
-		<bundle dependency="true">mvn:org.apache.commons/commons-lang3/3.11</bundle>
+		<bundle dependency="true">mvn:org.apache.commons/commons-lang3/3.12</bundle>
 		<bundle dependency="true">mvn:org.javassist/javassist/3.26.0-GA</bundle>
 		<bundle dependency="true">mvn:org.reflections/reflections/0.9.12</bundle>
 		<bundle dependency="true">mvn:io.github.classgraph/classgraph/4.8.87</bundle>
