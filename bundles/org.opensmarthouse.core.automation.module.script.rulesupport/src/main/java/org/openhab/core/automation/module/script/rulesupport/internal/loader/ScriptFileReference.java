@@ -18,12 +18,14 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Arrays;
 import java.util.HashSet;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import org.eclipse.jdt.annotation.NonNullByDefault;
+import org.eclipse.jdt.annotation.Nullable;
 import org.openhab.core.service.StartLevelService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -115,5 +117,22 @@ public class ScriptFileReference implements Comparable<ScriptFileReference> {
             logger.error("URI syntax exception", e);
             return 0;
         }
+    }
+
+    @Override
+    public boolean equals(@Nullable Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
+        ScriptFileReference that = (ScriptFileReference) o;
+        return scriptFileURL.equals(that.scriptFileURL);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(scriptFileURL);
     }
 }
