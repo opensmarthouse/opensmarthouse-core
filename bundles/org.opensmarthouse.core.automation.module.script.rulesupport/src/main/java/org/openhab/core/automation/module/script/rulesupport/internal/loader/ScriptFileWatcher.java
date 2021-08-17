@@ -1,6 +1,5 @@
 /**
- * Copyright (c) 2020-2021 Contributors to the OpenSmartHouse project
- * Copyright (c) 2010-2021 Contributors to the openHAB project
+ * Copyright (c) 2010-2020 Contributors to the openHAB project
  *
  * See the NOTICE file(s) distributed with this work for additional
  * information.
@@ -13,9 +12,7 @@
  */
 package org.openhab.core.automation.module.script.rulesupport.internal.loader;
 
-import static java.nio.file.StandardWatchEventKinds.ENTRY_CREATE;
-import static java.nio.file.StandardWatchEventKinds.ENTRY_DELETE;
-import static java.nio.file.StandardWatchEventKinds.ENTRY_MODIFY;
+import static java.nio.file.StandardWatchEventKinds.*;
 
 import java.io.BufferedInputStream;
 import java.io.File;
@@ -42,91 +39,64 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 
-import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
+import org.openhab.core.OpenHAB;
 import org.openhab.core.automation.module.script.ScriptEngineContainer;
 import org.openhab.core.automation.module.script.ScriptEngineManager;
-import org.openhab.core.common.NamedThreadFactory;
 import org.openhab.core.service.AbstractWatchService;
-import org.openhab.core.service.ReadyMarker;
-import org.openhab.core.service.ReadyMarkerFilter;
-import org.openhab.core.service.ReadyService;
-import org.openhab.core.service.ReadyService.ReadyTracker;
-import org.openhab.core.service.StartLevelService;
-import org.opensmarthouse.core.OpenSmartHouse;
 import org.osgi.service.component.annotations.Activate;
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Deactivate;
 import org.osgi.service.component.annotations.Reference;
 
-import javax.script.ScriptEngine;
-
 /**
- * The {@link ScriptFileWatcher} watches the jsr223 directory for files. If a new/modified file is detected, the script
- * is read and passed to the {@link ScriptEngineManager}.
+ * The {@link ScriptFileWatcher} watches the jsr223 directory for files. If a
+ * new/modified file is detected, the script is read and passed to the
+ * {@link ScriptEngineManager}.
  *
  * @author Simon Merschjohann - Initial contribution
  * @author Kai Kreuzer - improved logging and removed thread pool
  */
 @Component(immediate = true)
-public class ScriptFileWatcher extends AbstractWatchService implements ReadyTracker {
+public class ScriptFileWatcher extends AbstractWatchService {
     private static final Set<String> EXCLUDED_FILE_EXTENSIONS = new HashSet<>(
             Arrays.asList("txt", "old", "example", "backup", "md", "swp", "tmp", "bak"));
     private static final String FILE_DIRECTORY = "automation" + File.separator + "jsr223";
+    private static final long INITIAL_DELAY = 25;
     private static final long RECHECK_INTERVAL = 20;
 
-    private boolean started = false;
+    private final long earliestStart = System.currentTimeMillis() + INITIAL_DELAY * 1000;
 
     private final ScriptEngineManager manager;
-    private final ReadyService readyService;
-    private @Nullable DependencyTracker dependencyTracker;
     private @Nullable ScheduledExecutorService scheduler;
 
     private final Map<String, Set<URL>> urlsByScriptExtension = new ConcurrentHashMap<>();
     private final Set<URL> loaded = new HashSet<>();
 
     @Activate
-    public ScriptFileWatcher(final @Reference ScriptEngineManager manager, final @Reference ReadyService readyService) {
-        super(OpenSmartHouse.getConfigFolder() + File.separator + FILE_DIRECTORY);
+    public ScriptFileWatcher(final @Reference ScriptEngineManager manager) {
+        super(OpenHAB.getConfigFolder() + File.separator + FILE_DIRECTORY);
         this.manager = manager;
-        this.readyService = readyService;
     }
 
+    @SuppressWarnings("null")
     @Activate
     @Override
     public void activate() {
         super.activate();
-        readyService.registerTracker(this, new ReadyMarkerFilter().withType(StartLevelService.STARTLEVEL_MARKER_TYPE)
-                .withIdentifier(Integer.toString(StartLevelService.STARTLEVEL_MODEL)));
-        dependencyTracker = new DependencyTracker() {
-            @Override
-            public void reimportScript(String scriptPath) {
-                logger.debug("Reimporting {}...", scriptPath);
-                try {
-                    importFile(new URL(scriptPath));
-                } catch (MalformedURLException e) {
-                    logger.warn("Failed to reimport {} as it cannot be parsed as a URL", scriptPath);
-                }
-            }
-        };
-        dependencyTracker.activate();
+        importResources(new File(pathToWatch));
+        scheduler = Executors.newSingleThreadScheduledExecutor();
+        scheduler.scheduleWithFixedDelay(this::checkFiles, INITIAL_DELAY, RECHECK_INTERVAL, TimeUnit.SECONDS);
     }
 
     @Deactivate
     @Override
     public void deactivate() {
-        readyService.unregisterTracker(this);
         ScheduledExecutorService localScheduler = scheduler;
         if (localScheduler != null) {
             localScheduler.shutdownNow();
             scheduler = null;
         }
-
-        if (dependencyTracker != null) {
-            dependencyTracker.deactivate();
-            dependencyTracker = null;
-        }
-
         super.deactivate();
     }
 
@@ -187,9 +157,7 @@ public class ScriptFileWatcher extends AbstractWatchService implements ReadyTrac
 
     private void removeFile(URL url) {
         dequeueUrl(url);
-        String scriptIdentifier = getScriptIdentifier(url);
-        dependencyTracker.removeScript(scriptIdentifier);
-        manager.removeEngine(scriptIdentifier);
+        manager.removeEngine(getScriptIdentifier(url));
         loaded.remove(url);
     }
 
@@ -201,7 +169,7 @@ public class ScriptFileWatcher extends AbstractWatchService implements ReadyTrac
 
         String scriptType = getScriptType(url);
         if (scriptType != null) {
-            if (!started) {
+            if (System.currentTimeMillis() < earliestStart) {
                 enqueueUrl(url, scriptType);
             } else {
                 if (manager.isSupported(scriptType)) {
@@ -209,13 +177,11 @@ public class ScriptFileWatcher extends AbstractWatchService implements ReadyTrac
                             StandardCharsets.UTF_8)) {
                         logger.info("Loading script '{}'", fileName);
 
-                        String scriptIdentifier = getScriptIdentifier(url);
-                        ScriptEngineContainer container = manager.createScriptEngine(scriptType, scriptIdentifier);
+                        ScriptEngineContainer container = manager.createScriptEngine(scriptType,
+                                getScriptIdentifier(url));
 
                         if (container != null) {
-                            container.getScriptEngine().put(ScriptEngine.FILENAME, fileName);
-                            manager.loadScript(container.getIdentifier(), reader,
-                                    dependency -> dependencyTracker.addLibForScript(scriptIdentifier, dependency));
+                            manager.loadScript(container.getIdentifier(), reader);
                             loaded.add(url);
                             logger.debug("Script loaded: {}", fileName);
                         } else {
@@ -323,21 +289,5 @@ public class ScriptFileWatcher extends AbstractWatchService implements ReadyTrac
         for (URL url : reimportUrls) {
             importFile(url);
         }
-    }
-
-    @Override
-    public void onReadyMarkerAdded(@NonNull ReadyMarker readyMarker) {
-        started = true;
-
-        ScheduledExecutorService localScheduler = Executors
-                .newSingleThreadScheduledExecutor(new NamedThreadFactory("scriptwatcher"));
-        scheduler = localScheduler;
-        localScheduler.submit(() -> importResources(new File(pathToWatch)));
-        localScheduler.scheduleWithFixedDelay(this::checkFiles, RECHECK_INTERVAL, RECHECK_INTERVAL, TimeUnit.SECONDS);
-    }
-
-    @Override
-    public void onReadyMarkerRemoved(@NonNull ReadyMarker readyMarker) {
-        started = false;
     }
 }
