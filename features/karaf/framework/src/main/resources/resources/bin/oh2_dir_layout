@@ -16,11 +16,11 @@ if [ -z ${OSH_RUNTIME} ]; then
 fi
 
 if [ -z ${OSH_USERDATA} ]; then
-    export OSH_USERDATA="${OSH_HOME}/data"
+    export OSH_USERDATA="${OSH_HOME}/userdata"
 fi
 
 if [ -z ${OSH_LOGDIR} ]; then
-    export OSH_LOGDIR="${OSH_USERDATA}/log"
+    export OSH_LOGDIR="${OSH_RUNTIME}/log"
 fi
 
 if [ -z ${OSH_BACKUPS} ]; then
