@@ -45,7 +45,7 @@
         <feature>opensmarthouse-tp-event</feature>
 
         <!-- Apache Commons -->
-        <bundle dependency="true">mvn:commons-codec/commons-codec/1.6</bundle>
+		<bundle dependency="true">mvn:org.apache.commons/commons-lang3/3.12.0</bundle>
 
         <!-- Measurement -->
         <bundle dependency="true">mvn:javax.measure/unit-api/1.0</bundle>
