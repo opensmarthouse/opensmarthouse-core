@@ -207,8 +207,8 @@
     </feature>
 
     <feature name="opensmarthouse-tp-jose4j" description="jose4j JWT library" version="${project.version}">
-        <capability>opensmarthouse-tp;feature=jose4j;version=0.7.0</capability>
-        <bundle>mvn:org.bitbucket.b_c/jose4j/0.7.0</bundle>
+        <capability>opensmarthouse-tp;feature=jose4j;version=0.7.7</capability>
+        <bundle>mvn:org.bitbucket.b_c/jose4j/0.7.7</bundle>
     </feature>
 
     <feature name="opensmarthouse-tp-jupnp" description="UPnP/DLNA library for Java" version="${project.version}">
