@@ -292,6 +292,12 @@
         <version>1.2.2</version>
         <scope>compile</scope>
       </dependency>
+      <dependency>
+        <groupId>org.openhab.osgiify</groupId>
+        <artifactId>com.google.dagger</artifactId>
+       <version>2.27</version>
+        <scope>compile</scope>
+      </dependency>
 
       <!-- Quartz -->
       <dependency>
