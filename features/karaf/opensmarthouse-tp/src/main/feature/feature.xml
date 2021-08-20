@@ -62,7 +62,7 @@
 
     <feature name="opensmarthouse-tp-xstream" description="XStream library" version="${project.version}">
         <!-- TODO: Unbundled libraries -->
-        <bundle dependency="true">mvn:org.apache.servicemix.bundles/org.apache.servicemix.bundles.xstream/1.4.11.1_1</bundle>
+		<bundle dependency="true">mvn:com.thoughtworks.xstream/xstream/1.4.17</bundle>
     </feature>
 
     <feature name="opensmarthouse-tp-coap" description="Californium CoAP library" version="${project.version}">
