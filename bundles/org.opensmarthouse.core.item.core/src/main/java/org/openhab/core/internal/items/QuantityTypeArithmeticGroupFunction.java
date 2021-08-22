@@ -11,7 +11,7 @@
  *
  * SPDX-License-Identifier: EPL-2.0
  */
-package org.openhab.core.items;
+package org.openhab.core.internal.items;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
@@ -21,7 +21,11 @@ import javax.measure.Quantity;
 
 import org.eclipse.jdt.annotation.NonNullByDefault;
 import org.eclipse.jdt.annotation.Nullable;
+import org.openhab.core.items.GroupFunction;
+import org.openhab.core.items.GroupItem;
+import org.openhab.core.items.Item;
 import org.openhab.core.library.items.NumberItem;
+import org.openhab.core.library.types.QuantityType;
 import org.openhab.core.types.State;
 import org.openhab.core.types.UnDefType;
 

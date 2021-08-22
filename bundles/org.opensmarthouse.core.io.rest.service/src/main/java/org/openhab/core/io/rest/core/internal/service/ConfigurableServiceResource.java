@@ -288,10 +288,10 @@ public class ConfigurableServiceResource implements RESTResource {
                 ConfigurableService configurableService = ConfigurableServiceUtil
                         .asConfigurableService((key) -> serviceReference.getProperty(key));
 
-                String label = configurableService.label();
-                if (label.isEmpty()) { // for multi context services the label can be changed and must be read from
-                                       // config admin.
-                    label = configurationService.getProperty(id, OpenSmartHouse.SERVICE_CONTEXT);
+                String defaultLabel = configurableService.label();
+                if (defaultLabel.isEmpty()) { // for multi context services the label can be changed and must be read
+                                              // from config admin.
+                    defaultLabel = configurationService.getProperty(id, OpenSmartHouse.SERVICE_CONTEXT);
                 }
 
                 String key = I18nUtil.stripConstantOr(defaultLabel,

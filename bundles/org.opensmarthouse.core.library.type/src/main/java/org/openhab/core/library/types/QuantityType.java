@@ -169,7 +169,6 @@ public class QuantityType<T extends Quantity<T>> extends NumberType
     public QuantityType(Number value, Unit<T> unit) {
         // Avoid scientific notation for double
         BigDecimal bd = new BigDecimal(value.toString());
-        quantity = Quantities.getQuantity(bd, unit);
         quantity = (Quantity<T>) Quantities.getQuantity(bd, unit, Scale.RELATIVE);
     }
 

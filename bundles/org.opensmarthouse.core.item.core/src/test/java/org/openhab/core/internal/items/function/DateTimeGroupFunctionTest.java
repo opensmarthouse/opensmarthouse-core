@@ -23,9 +23,9 @@ import java.util.Set;
 
 import org.junit.Before;
 import org.junit.Test;
+import org.openhab.core.internal.items.DateTimeGroupFunction;
 import org.openhab.core.internal.items.function.Earliest;
 import org.openhab.core.internal.items.function.Latest;
-import org.openhab.core.items.DateTimeGroupFunction;
 import org.openhab.core.items.GenericItem;
 import org.openhab.core.items.GroupFunction;
 import org.openhab.core.items.Item;

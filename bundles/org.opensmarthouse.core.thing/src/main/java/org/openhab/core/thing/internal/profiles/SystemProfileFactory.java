@@ -13,7 +13,25 @@
  */
 package org.openhab.core.thing.internal.profiles;
 
-import static org.openhab.core.thing.profiles.SystemProfiles.*;
+import static org.openhab.core.thing.profiles.SystemProfiles.DEFAULT;
+import static org.openhab.core.thing.profiles.SystemProfiles.FOLLOW;
+import static org.openhab.core.thing.profiles.SystemProfiles.HYSTERESIS;
+import static org.openhab.core.thing.profiles.SystemProfiles.OFFSET;
+import static org.openhab.core.thing.profiles.SystemProfiles.RAWBUTTON_ON_OFF_SWITCH;
+import static org.openhab.core.thing.profiles.SystemProfiles.RAWBUTTON_TOGGLE_PLAYER;
+import static org.openhab.core.thing.profiles.SystemProfiles.RAWBUTTON_TOGGLE_ROLLERSHUTTER;
+import static org.openhab.core.thing.profiles.SystemProfiles.RAWBUTTON_TOGGLE_SWITCH;
+import static org.openhab.core.thing.profiles.SystemProfiles.RAWROCKER_DIMMER;
+import static org.openhab.core.thing.profiles.SystemProfiles.RAWROCKER_NEXT_PREVIOUS;
+import static org.openhab.core.thing.profiles.SystemProfiles.RAWROCKER_ON_OFF;
+import static org.openhab.core.thing.profiles.SystemProfiles.RAWROCKER_PLAY_PAUSE;
+import static org.openhab.core.thing.profiles.SystemProfiles.RAWROCKER_REWIND_FASTFORWARD;
+import static org.openhab.core.thing.profiles.SystemProfiles.RAWROCKER_STOP_MOVE;
+import static org.openhab.core.thing.profiles.SystemProfiles.RAWROCKER_UP_DOWN;
+import static org.openhab.core.thing.profiles.SystemProfiles.TIMESTAMP_CHANGE;
+import static org.openhab.core.thing.profiles.SystemProfiles.TIMESTAMP_OFFSET;
+import static org.openhab.core.thing.profiles.SystemProfiles.TIMESTAMP_TRIGGER;
+import static org.openhab.core.thing.profiles.SystemProfiles.TIMESTAMP_UPDATE;
 
 import java.util.Collection;
 import java.util.Collections;
@@ -27,18 +45,17 @@ import java.util.stream.Stream;
 
 import org.eclipse.jdt.annotation.NonNullByDefault;
 import org.eclipse.jdt.annotation.Nullable;
+import org.openhab.core.common.osgi.BundleResolver;
 import org.openhab.core.i18n.LocalizedKey;
 import org.openhab.core.library.CoreItemFactory;
 import org.openhab.core.thing.Channel;
 import org.openhab.core.thing.SystemChannelTypeConstants;
-import org.openhab.core.thing.UID;
 import org.openhab.core.thing.profiles.Profile;
 import org.openhab.core.thing.profiles.ProfileAdvisor;
 import org.openhab.core.thing.profiles.ProfileCallback;
 import org.openhab.core.thing.profiles.ProfileContext;
 import org.openhab.core.thing.profiles.ProfileFactory;
 import org.openhab.core.thing.profiles.ProfileType;
-import org.openhab.core.thing.profiles.ProfileTypeBuilder;
 import org.openhab.core.thing.profiles.ProfileTypeBuilderFactory;
 import org.openhab.core.thing.profiles.ProfileTypeProvider;
 import org.openhab.core.thing.profiles.ProfileTypeUID;
@@ -47,7 +64,6 @@ import org.openhab.core.thing.profiles.TriggerProfileType;
 import org.openhab.core.thing.profiles.i18n.ProfileTypeI18nLocalizationService;
 import org.openhab.core.thing.type.ChannelType;
 import org.openhab.core.thing.type.ChannelTypeRegistry;
-import org.openhab.core.common.osgi.BundleResolver;
 import org.osgi.framework.Bundle;
 import org.osgi.service.component.annotations.Activate;
 import org.osgi.service.component.annotations.Component;
@@ -70,17 +86,19 @@ public class SystemProfileFactory implements ProfileFactory, ProfileAdvisor, Pro
 
     private final ChannelTypeRegistry channelTypeRegistry;
 
-    Function<ProfileTypeBuilderFactory, StateProfileType> DEFAULT_TYPE = profileTypeBuilderFactory -> profileTypeBuilderFactory.newState(DEFAULT, "Default").build();
+    Function<ProfileTypeBuilderFactory, StateProfileType> DEFAULT_TYPE = profileTypeBuilderFactory -> profileTypeBuilderFactory
+            .newState(DEFAULT, "Default").build();
 
-    Function<ProfileTypeBuilderFactory, StateProfileType> FOLLOW_TYPE = profileTypeBuilderFactory -> profileTypeBuilderFactory.newState(FOLLOW, "Follow").build();
+    Function<ProfileTypeBuilderFactory, StateProfileType> FOLLOW_TYPE = profileTypeBuilderFactory -> profileTypeBuilderFactory
+            .newState(FOLLOW, "Follow").build();
 
-    Function<ProfileTypeBuilderFactory, StateProfileType> HYSTERESIS_TYPE = profileTypeBuilderFactory -> profileTypeBuilderFactory.newState(HYSTERESIS, "Hysteresis")
-        .withSupportedItemTypes(CoreItemFactory.SWITCH).withSupportedItemTypesOfChannel(CoreItemFactory.DIMMER, CoreItemFactory.NUMBER)
-        .build();
+    Function<ProfileTypeBuilderFactory, StateProfileType> HYSTERESIS_TYPE = profileTypeBuilderFactory -> profileTypeBuilderFactory
+            .newState(HYSTERESIS, "Hysteresis").withSupportedItemTypes(CoreItemFactory.SWITCH)
+            .withSupportedItemTypesOfChannel(CoreItemFactory.DIMMER, CoreItemFactory.NUMBER).build();
 
-    Function<ProfileTypeBuilderFactory, StateProfileType> OFFSET_TYPE = profileTypeBuilderFactory -> profileTypeBuilderFactory.newState(OFFSET, "Offset")
-            .withSupportedItemTypes(CoreItemFactory.NUMBER).withSupportedItemTypesOfChannel(CoreItemFactory.NUMBER)
-            .build();
+    Function<ProfileTypeBuilderFactory, StateProfileType> OFFSET_TYPE = profileTypeBuilderFactory -> profileTypeBuilderFactory
+            .newState(OFFSET, "Offset").withSupportedItemTypes(CoreItemFactory.NUMBER)
+            .withSupportedItemTypesOfChannel(CoreItemFactory.NUMBER).build();
 
     Function<ProfileTypeBuilderFactory, ProfileType> RAWBUTTON_ON_OFF_SWITCH_TYPE = profileTypeBuilderFactory -> profileTypeBuilderFactory
             .newTrigger(RAWBUTTON_ON_OFF_SWITCH, "Raw Button To On Off")
@@ -108,8 +126,7 @@ public class SystemProfileFactory implements ProfileFactory, ProfileAdvisor, Pro
             .withSupportedChannelTypeUIDs(SystemChannelTypeConstants.SYSTEM_RAWROCKER).build();
 
     Function<ProfileTypeBuilderFactory, TriggerProfileType> RAWROCKER_DIMMER_TYPE = profileTypeBuilderFactory -> profileTypeBuilderFactory
-            .newTrigger(RAWROCKER_DIMMER, "Raw Rocker To Dimmer")
-            .withSupportedItemTypes(CoreItemFactory.DIMMER)
+            .newTrigger(RAWROCKER_DIMMER, "Raw Rocker To Dimmer").withSupportedItemTypes(CoreItemFactory.DIMMER)
             .withSupportedChannelTypeUIDs(SystemChannelTypeConstants.SYSTEM_RAWROCKER).build();
 
     Function<ProfileTypeBuilderFactory, TriggerProfileType> RAWROCKER_NEXT_PREVIOUS_TYPE = profileTypeBuilderFactory -> profileTypeBuilderFactory
@@ -137,20 +154,25 @@ public class SystemProfileFactory implements ProfileFactory, ProfileAdvisor, Pro
             .withSupportedChannelTypeUIDs(SystemChannelTypeConstants.SYSTEM_RAWROCKER).build();
 
     Function<ProfileTypeBuilderFactory, StateProfileType> TIMESTAMP_CHANGE_TYPE = profileTypeBuilderFactory -> profileTypeBuilderFactory
-            .newState(TIMESTAMP_CHANGE, "Timestamp on change")
-            .withSupportedItemTypes(CoreItemFactory.DATETIME).build();
+            .newState(TIMESTAMP_CHANGE, "Timestamp on change").withSupportedItemTypes(CoreItemFactory.DATETIME).build();
+
+    Function<ProfileTypeBuilderFactory, StateProfileType> TIMESTAMP_OFFSET_TYPE = profileTypeBuilderFactory -> profileTypeBuilderFactory
+            .newState(TIMESTAMP_OFFSET, "Timestamp Offset").withSupportedItemTypes(CoreItemFactory.DATETIME).build();
+
+    Function<ProfileTypeBuilderFactory, StateProfileType> TIMESTAMP_TRIGGERED_TYPE = profileTypeBuilderFactory -> profileTypeBuilderFactory
+            .newState(TIMESTAMP_TRIGGER, "Timestamp trigger").withSupportedItemTypes(CoreItemFactory.DATETIME).build();
 
     Function<ProfileTypeBuilderFactory, StateProfileType> TIMESTAMP_UPDATE_TYPE = profileTypeBuilderFactory -> profileTypeBuilderFactory
-            .newState(TIMESTAMP_UPDATE, "Timestamp on update")
-            .withSupportedItemTypes(CoreItemFactory.DATETIME).build();
+            .newState(TIMESTAMP_UPDATE, "Timestamp on update").withSupportedItemTypes(CoreItemFactory.DATETIME).build();
 
     private final Set<ProfileType> SUPPORTED_PROFILE_TYPES;
 
-    private static final Set<ProfileTypeUID> SUPPORTED_PROFILE_TYPE_UIDS = Collections
-            .unmodifiableSet(Stream.of(DEFAULT, FOLLOW, OFFSET, HYSTERESIS, RAWBUTTON_ON_OFF_SWITCH, RAWBUTTON_TOGGLE_PLAYER,
+    private static final Set<ProfileTypeUID> SUPPORTED_PROFILE_TYPE_UIDS = Collections.unmodifiableSet(Stream
+            .of(DEFAULT, FOLLOW, OFFSET, HYSTERESIS, RAWBUTTON_ON_OFF_SWITCH, RAWBUTTON_TOGGLE_PLAYER,
                     RAWBUTTON_TOGGLE_PLAYER, RAWBUTTON_TOGGLE_SWITCH, RAWROCKER_DIMMER, RAWROCKER_NEXT_PREVIOUS,
                     RAWROCKER_ON_OFF, RAWROCKER_PLAY_PAUSE, RAWROCKER_REWIND_FASTFORWARD, RAWROCKER_STOP_MOVE,
-                    RAWROCKER_UP_DOWN, TIMESTAMP_CHANGE, TIMESTAMP_UPDATE).collect(Collectors.toSet()));
+                    RAWROCKER_UP_DOWN, TIMESTAMP_CHANGE, TIMESTAMP_OFFSET, TIMESTAMP_TRIGGER, TIMESTAMP_UPDATE)
+            .collect(Collectors.toSet()));
 
     private final Map<LocalizedKey, ProfileType> localizedProfileTypeCache = new ConcurrentHashMap<>();
 
@@ -166,13 +188,13 @@ public class SystemProfileFactory implements ProfileFactory, ProfileAdvisor, Pro
         this.profileTypeI18nLocalizationService = profileTypeI18nLocalizationService;
         this.bundle = bundleResolver.resolveBundle(SystemProfileFactory.class);
 
-        SUPPORTED_PROFILE_TYPES = Stream.of(DEFAULT_TYPE, FOLLOW_TYPE, OFFSET_TYPE, HYSTERESIS_TYPE, RAWBUTTON_ON_OFF_SWITCH_TYPE,
-                RAWBUTTON_TOGGLE_PLAYER_TYPE, RAWBUTTON_TOGGLE_PLAYER_TYPE, RAWBUTTON_TOGGLE_SWITCH_TYPE,
-                RAWROCKER_DIMMER_TYPE, RAWROCKER_NEXT_PREVIOUS_TYPE, RAWROCKER_ON_OFF_TYPE,
-                RAWROCKER_PLAY_PAUSE_TYPE, RAWROCKER_REWIND_FASTFORWARD_TYPE, RAWROCKER_STOP_MOVE_TYPE,
-                RAWROCKER_UP_DOWN_TYPE, TIMESTAMP_CHANGE_TYPE, TIMESTAMP_UPDATE_TYPE)
-            .map(function -> function.apply(profileTypeBuilderFactory))
-            .collect(Collectors.toSet());
+        SUPPORTED_PROFILE_TYPES = Stream
+                .of(DEFAULT_TYPE, FOLLOW_TYPE, OFFSET_TYPE, HYSTERESIS_TYPE, RAWBUTTON_ON_OFF_SWITCH_TYPE,
+                        RAWBUTTON_TOGGLE_PLAYER_TYPE, RAWBUTTON_TOGGLE_PLAYER_TYPE, RAWBUTTON_TOGGLE_SWITCH_TYPE,
+                        RAWROCKER_DIMMER_TYPE, RAWROCKER_NEXT_PREVIOUS_TYPE, RAWROCKER_ON_OFF_TYPE,
+                        RAWROCKER_PLAY_PAUSE_TYPE, RAWROCKER_REWIND_FASTFORWARD_TYPE, RAWROCKER_STOP_MOVE_TYPE,
+                        RAWROCKER_UP_DOWN_TYPE, TIMESTAMP_CHANGE_TYPE, TIMESTAMP_UPDATE_TYPE)
+                .map(function -> function.apply(profileTypeBuilderFactory)).collect(Collectors.toSet());
     }
 
     @Override

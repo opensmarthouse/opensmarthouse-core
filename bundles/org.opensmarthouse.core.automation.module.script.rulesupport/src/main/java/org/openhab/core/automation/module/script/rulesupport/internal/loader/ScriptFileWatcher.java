@@ -1,4 +1,5 @@
 /**
+ * Copyright (c) 2020-2021 Contributors to the OpenSmartHouse project
  * Copyright (c) 2010-2021 Contributors to the openHAB project
  *
  * See the NOTICE file(s) distributed with this work for additional
@@ -37,11 +38,11 @@ import java.util.function.Supplier;
 import java.util.stream.Collectors;
 
 import javax.script.ScriptEngine;
-import javax.script.ScriptEngineManager;
 
 import org.eclipse.jdt.annotation.Nullable;
 import org.openhab.core.OpenHAB;
 import org.openhab.core.automation.module.script.ScriptEngineContainer;
+import org.openhab.core.automation.module.script.ScriptEngineManager;
 import org.openhab.core.common.NamedThreadFactory;
 import org.openhab.core.service.AbstractWatchService;
 import org.openhab.core.service.ReadyMarker;

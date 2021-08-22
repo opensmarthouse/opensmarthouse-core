@@ -33,10 +33,10 @@ import org.openhab.core.types.UnDefType;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import tec.uom.se.AbstractUnit;
+import tech.units.indriya.AbstractUnit;
 
 /***
- * This is the default implementation for a {@link SystemHysteresisStateProfile}}.
+ * This is the default implementation for a {@link SystemHysteresisStateProfile}.
  *
  * @author Christoph Weitkamp - Initial contribution
  */

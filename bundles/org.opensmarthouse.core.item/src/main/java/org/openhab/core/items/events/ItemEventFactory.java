@@ -62,7 +62,7 @@ public class ItemEventFactory extends AbstractEventFactory {
 
     private static final String ITEM_UPDATED_EVENT_TOPIC = "openhab/items/{itemName}/updated";
 
-    private TypeFactory typeRegistry = null;
+    private @Nullable TypeFactory typeRegistry = null;
 
     /**
      * Constructs a new ItemEventFactory.
@@ -78,8 +78,8 @@ public class ItemEventFactory extends AbstractEventFactory {
         this.typeRegistry = typeRegistry;
     }
 
-    public void removeTypeRegistry(TypeFactory typeRegistry) {
-        typeRegistry = null;
+    public void removeTypeRegistry(@Nullable TypeFactory typeRegistry) {
+        this.typeRegistry = null;
     }
 
     @Override

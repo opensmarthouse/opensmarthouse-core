@@ -24,6 +24,7 @@ import org.openhab.core.automation.RuleStatus;
 import org.openhab.core.automation.RuleStatusInfo;
 import org.openhab.core.automation.Trigger;
 import org.openhab.core.automation.handler.TriggerHandlerCallback;
+import org.openhab.core.common.NamedThreadFactory;
 
 /**
  * This class is implementation of {@link TriggerHandlerCallback} used by the {@link Trigger}s to notify rule engine

@@ -41,6 +41,8 @@ public interface SystemProfiles {
     ProfileTypeUID RAWROCKER_STOP_MOVE = new ProfileTypeUID(SYSTEM_SCOPE, "rawrocker-to-stop-move");
     ProfileTypeUID RAWROCKER_UP_DOWN = new ProfileTypeUID(SYSTEM_SCOPE, "rawrocker-to-up-down");
     ProfileTypeUID TIMESTAMP_CHANGE = new ProfileTypeUID(SYSTEM_SCOPE, "timestamp-change");
+    ProfileTypeUID TIMESTAMP_OFFSET = new ProfileTypeUID(SYSTEM_SCOPE, "timestamp-offset");
+    ProfileTypeUID TIMESTAMP_TRIGGER = new ProfileTypeUID(SYSTEM_SCOPE, "timestamp-trigger");
     ProfileTypeUID TIMESTAMP_UPDATE = new ProfileTypeUID(SYSTEM_SCOPE, "timestamp-update");
 
 }

@@ -1,4 +1,5 @@
 /**
+ * Copyright (c) 2020-2021 Contributors to the OpenSmartHouse project
  * Copyright (c) 2010-2021 Contributors to the openHAB project
  *
  * See the NOTICE file(s) distributed with this work for additional
@@ -19,7 +20,6 @@ import java.time.ZonedDateTime;
 
 import org.eclipse.jdt.annotation.NonNullByDefault;
 import org.eclipse.jdt.annotation.Nullable;
-import org.openhab.core.internal.i18n.I18nProviderImpl;
 import org.openhab.core.library.types.DateTimeType;
 import org.openhab.core.thing.profiles.ProfileCallback;
 import org.openhab.core.thing.profiles.ProfileContext;
@@ -35,8 +35,6 @@ import org.slf4j.LoggerFactory;
 
 /**
  * Applies the given parameter "offset" to a {@link DateTimeType} state.
- *
- * Options for the "timezone" parameter are provided by the {@link I18nProviderImpl}.
  *
  * @author Christoph Weitkamp - Initial contribution
  */

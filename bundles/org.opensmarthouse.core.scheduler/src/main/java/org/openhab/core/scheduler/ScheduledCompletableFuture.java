@@ -13,6 +13,7 @@
  */
 package org.openhab.core.scheduler;
 
+import java.time.ZonedDateTime;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ScheduledFuture;
 
@@ -30,4 +31,9 @@ public interface ScheduledCompletableFuture<T> extends ScheduledFuture<T> {
      * @return Returns the {@link CompletableFuture} associated with the scheduled job.
      */
     CompletableFuture<T> getPromise();
+
+    /**
+     * @return Returns the timestamp the jobs is scheduled to run at.
+     */
+    ZonedDateTime getScheduledTime();
 }

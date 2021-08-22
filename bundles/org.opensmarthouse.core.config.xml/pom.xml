@@ -23,8 +23,8 @@
       <artifactId>org.opensmarthouse.core.service</artifactId>
     </dependency>
     <dependency>
-      <groupId>org.apache.servicemix.bundles</groupId>
-      <artifactId>org.apache.servicemix.bundles.xstream</artifactId>
+      <groupId>com.thoughtworks.xstream</groupId>
+      <artifactId>xstream</artifactId>
     </dependency>
   </dependencies>
 

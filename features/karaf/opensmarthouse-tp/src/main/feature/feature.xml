@@ -81,7 +81,7 @@
 
     <feature name="opensmarthouse-tp-gson" description="Gson" version="${project.version}">
         <capability>opensmarthouse-tp;feature=gson;version=${gson.version}</capability>
-        <bundle>mvn:org.eclipse.orbit.bundles/com.google.gson/${gson.version}</bundle>
+		<bundle>mvn:com.google.code.gson/gson/2.8.6</bundle>
     </feature>
 
     <feature name="opensmarthouse-tp-hivemqclient" description="MQTT Client" version="${project.version}">

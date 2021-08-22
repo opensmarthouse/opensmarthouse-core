@@ -39,7 +39,7 @@ import org.slf4j.LoggerFactory;
 @Component(immediate = true)
 public final class TypeParser {
 
-    private final static Logger logger = LoggerFactory.getLogger(TypeParser.class);
+    private static final Logger logger = LoggerFactory.getLogger(TypeParser.class);
     private @Nullable static TypeFactory typeRegistry;
 
     /**
