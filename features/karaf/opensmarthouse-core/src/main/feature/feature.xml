@@ -21,11 +21,10 @@
     <feature name="opensmarthouse-core-base" description="Open SmartHouse Core" version="${project.version}">
         <details>Open SmartHouse Core Bundles</details>
 
-        <requirement>opensmarthouse-tp;filter:="(feature=base)"</requirement>
         <feature dependency="true">opensmarthouse-tp-base</feature>
         <feature dependency="true">opensmarthouse-tp-gson</feature>
 
-        <requirement>opensmarthouse-tp;filter:="(&amp;(feature=xtext)(version&gt;=2.22.0)(!(version&gt;=2.23.0)))"</requirement>
+        <requirement>opensmarthouse-tp;filter:="(feature=xtext)"</requirement>
         <feature dependency="true">opensmarthouse-tp-xtext</feature>
 
         <requirement>opensmarthouse-tp;filter:="(feature=jax-rs)"</requirement>
@@ -34,16 +33,16 @@
         <requirement>opensmarthouse-tp;filter:="(feature=httpclient)"</requirement>
         <feature dependency="true">opensmarthouse-tp-httpclient</feature>
 
+        <!-- core -->
+        <feature>opensmarthouse-core-common</feature>
+        <feature>opensmarthouse-core-service-core</feature>
+        <feature>opensmarthouse-core-event-core</feature>
+        <feature>opensmarthouse-core-storage</feature>
+
         <feature>opensmarthouse-core-config-core</feature>
         <feature>opensmarthouse-core-config-discovery</feature>
         <feature>opensmarthouse-core-config-dispatch</feature>
         <feature>opensmarthouse-core-config-xml</feature>
-
-        <!-- core -->
-        <feature>opensmarthouse-core-common</feature>
-        <feature>opensmarthouse-core-service</feature>
-        <feature>opensmarthouse-core-event-core</feature>
-        <feature>opensmarthouse-core-storage</feature>
 
         <feature>opensmarthouse-core-id</feature>
         <feature>opensmarthouse-core-persistence</feature>
@@ -78,7 +77,6 @@
         <feature>opensmarthouse-core-io-rest-thing</feature>
         <feature>opensmarthouse-core-io-rest-ui</feature>
 
-        <feature>opensmarthouse-core-service-core</feature>
         <feature>opensmarthouse-core-auth-core</feature>
         <feature>opensmarthouse-core-audio-core</feature>
         <feature>opensmarthouse-core-i18n-core</feature>

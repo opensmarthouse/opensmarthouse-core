@@ -13,9 +13,14 @@
  */
 package org.openhab.core.library.types;
 
+import static org.junit.jupiter.api.Assertions.*;
+
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.MethodSource;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;
@@ -28,6 +33,7 @@ import java.text.DecimalFormatSymbols;
 import java.util.Locale;
 import java.util.stream.Stream;
 
+import javax.measure.format.MeasurementParseException;
 import javax.measure.quantity.Dimensionless;
 import javax.measure.quantity.Energy;
 import javax.measure.quantity.Length;
@@ -79,20 +85,66 @@ public class QuantityTypeTest {
         assertTrue(dt0.getUnit().getDimension() == UnitDimension.NONE);
     }
 
-    @Test(expected = IllegalArgumentException.class)
-    public void testKnownInvalidConstructors() throws Exception {
-        assertThrows(MeasurementParseException.class, () -> new QuantityType<>("123 Hello World"));
+    @ParameterizedTest
+    @MethodSource("locales")
+    public void testKnownInvalidConstructors(Locale locale) {
+        Locale.setDefault(locale);
+
+        assertThrows(IllegalArgumentException.class, () -> new QuantityType<>("123 Hello World"));
+
+        assertThrows(NumberFormatException.class, () -> new QuantityType<>("abc"));
+        assertThrows(NumberFormatException.class, () -> new QuantityType<>("°C"));
+        assertThrows(IllegalArgumentException.class, () -> new QuantityType<>(". °C"));
+        assertThrows(IllegalArgumentException.class, () -> new QuantityType<>("1 2 °C"));
+        assertThrows(IllegalArgumentException.class, () -> new QuantityType<>("123..56 °C"));
+        assertThrows(IllegalArgumentException.class, () -> new QuantityType<>("123abc56 °C"));
+        assertThrows(IllegalArgumentException.class, () -> new QuantityType<>("123.123,56 °C"));
+        assertThrows(IllegalArgumentException.class, () -> new QuantityType<>("123٬123٫56 °C"));
+
+        assertThrows(NumberFormatException.class, () -> new QuantityType<>("abc", Locale.ENGLISH));
+        assertThrows(NumberFormatException.class, () -> new QuantityType<>("°C", Locale.ENGLISH));
+        assertThrows(IllegalArgumentException.class, () -> new QuantityType<>(". °C", Locale.ENGLISH));
+        assertThrows(IllegalArgumentException.class, () -> new QuantityType<>("1 2 °C", Locale.ENGLISH));
+        assertThrows(IllegalArgumentException.class, () -> new QuantityType<>("123..56 °C", Locale.ENGLISH));
+        assertThrows(IllegalArgumentException.class, () -> new QuantityType<>("123abc56 °C", Locale.ENGLISH));
+        assertThrows(IllegalArgumentException.class, () -> new QuantityType<>("123.123,56 °C", Locale.ENGLISH));
+        assertThrows(IllegalArgumentException.class, () -> new QuantityType<>("123٬123٫56 °C", Locale.ENGLISH));
+
+        assertThrows(NumberFormatException.class, () -> new QuantityType<>("abc", Locale.GERMAN));
+        assertThrows(NumberFormatException.class, () -> new QuantityType<>("°C", Locale.GERMAN));
+        assertThrows(IllegalArgumentException.class, () -> new QuantityType<>(", °C", Locale.GERMAN));
+        assertThrows(IllegalArgumentException.class, () -> new QuantityType<>("1 2 °C", Locale.GERMAN));
+        assertThrows(IllegalArgumentException.class, () -> new QuantityType<>("123,,56 °C", Locale.GERMAN));
+        assertThrows(IllegalArgumentException.class, () -> new QuantityType<>("123abc56 °C", Locale.GERMAN));
+        assertThrows(IllegalArgumentException.class, () -> new QuantityType<>("123,123.56 °C", Locale.GERMAN));
+        assertThrows(IllegalArgumentException.class, () -> new QuantityType<>("123٬123٫56 °C", Locale.GERMAN));
     }
 
-    @Test
-    public void testValidConstructors() throws Exception {
-        // Testing various quantities in order to ensure split and parsing is working
-        // as expected
+    @ParameterizedTest
+    @MethodSource("locales")
+    public void testValidConstructors(Locale locale) {
+        Locale.setDefault(locale);
+
+        // Testing various quantities in order to ensure split and parsing is working as expected
+        new QuantityType<>("-2,000.5°C");
+        new QuantityType<>("-2.5°C");
+        new QuantityType<>("-2°C");
+        new QuantityType<>("-0°");
+        new QuantityType<>("0°");
         new QuantityType<>("2°");
         new QuantityType<>("2°C");
+        new QuantityType<>("2.5°C");
+        new QuantityType<>("2,000.5°C");
+        new QuantityType<>("10 dBm");
         new QuantityType<>("3 µs");
         new QuantityType<>("3km/h");
         new QuantityType<>("1084 hPa");
+        new QuantityType<>("-10E3");
+        new QuantityType<>("-10E-3");
+        new QuantityType<>("-0E-22 m");
+        new QuantityType<>("-0E0");
+        new QuantityType<>("-0E-0 m");
+        new QuantityType<>("0E0");
         new QuantityType<>("0E-22 m");
         new QuantityType<>("10E-3");
         new QuantityType<>("10E3");
@@ -236,7 +288,7 @@ public class QuantityTypeTest {
 
         QuantityType<Temperature> temp = new QuantityType<>("20 °C");
 
-        assertThat(temp.toFullString(), is("20 °C"));
+        assertThat(temp.toFullString(), is("20 ℃"));
         assertThat(QuantityType.valueOf(temp.toFullString()), is(temp));
     }
 
@@ -251,7 +303,7 @@ public class QuantityTypeTest {
 
     @Test
     public void testNegate() {
-        assertThat(new QuantityType<>("20 °C").negate(), is(new QuantityType<>("-20 °C")));
+        assertThat(new QuantityType<>("20 ℃").negate(), is(new QuantityType<>("-20 °C")));
     }
 
     @ParameterizedTest
@@ -283,8 +335,11 @@ public class QuantityTypeTest {
         assertThat(new QuantityType<>("4 m").divide(new QuantityType<>("2 cm")), is(new QuantityType<>("2 m/cm")));
     }
 
-    @Test(expected = ArithmeticException.class)
-    public void testDivideZero() {
+    @ParameterizedTest
+    @MethodSource("locales")
+    public void testDivideZero(Locale locale) {
+        Locale.setDefault(locale);
+
         assertThrows(IllegalArgumentException.class, () -> new QuantityType<>("4 m").divide(QuantityType.ZERO));
     }
 

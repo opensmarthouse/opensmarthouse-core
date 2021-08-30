@@ -14,6 +14,7 @@
 package org.openhab.core.library.unit;
 
 import java.util.Objects;
+
 import javax.measure.IncommensurableException;
 import javax.measure.Quantity;
 import javax.measure.UnconvertibleException;
@@ -22,11 +23,12 @@ import javax.measure.UnitConverter;
 
 import org.eclipse.jdt.annotation.Nullable;
 
-import tec.uom.se.AbstractUnit;
-import tec.uom.se.quantity.Quantities;
+import tech.units.indriya.AbstractUnit;
+import tech.units.indriya.quantity.Quantities;
 
 /**
- * A naive copy of {@link org.openhab.core.library.types.QuantityType} with basic functionality to test system of the units.
+ * A naive copy of {@link org.openhab.core.library.types.QuantityType} with basic functionality to test system of the
+ * units.
  *
  * Introduced to avoid cyclic dependency from library.unit to library.type packages.
  *
@@ -84,6 +86,7 @@ public class QType<T extends Quantity<T>> {
         return quantity.getUnit();
     }
 
+    @Override
     public String toString() {
         return quantity.toString();
     }

@@ -68,7 +68,7 @@ import tech.uom.lib.common.function.QuantityFunctions;
                                                                     // annotated.
 public class QuantityType<T extends Quantity<T>> extends NumberType
         implements State, Command, Comparable<QuantityType<T>> {
-    private final Logger logger = LoggerFactory.getLogger(QuantityType.class);
+    private final transient Logger logger = LoggerFactory.getLogger(QuantityType.class);
 
     private static final long serialVersionUID = 8828949721938234629L;
     private static final char DOT_DECIMAL_SEPARATOR = '.';

@@ -18,6 +18,7 @@ import static org.hamcrest.CoreMatchers.nullValue;
 import static org.hamcrest.number.IsCloseTo.closeTo;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;
 import static org.openhab.core.library.unit.MetricPrefix.CENTI;
@@ -38,7 +39,6 @@ import org.openhab.core.library.unit.ImperialUnits;
 import org.openhab.core.library.unit.MetricPrefix;
 import org.openhab.core.library.unit.SIUnits;
 import org.openhab.core.library.unit.Units;
-import org.openhab.core.types.util.UnitUtils;
 
 /**
  * @author Henning Treu - Initial contribution
@@ -79,12 +79,9 @@ public class UnitUtilsTest {
 
     @Test
     public void testConversionOfUnit() {
-        assertThat(Units.DECIBEL_MILLIWATTS.getConverterTo(Units.WATT).convert(50),
-                closeTo(100, 0.001));
-        assertThat(Units.WATT.getConverterTo(Units.DECIBEL_MILLIWATTS).convert(0.1),
-                closeTo(20, 0.0001));
-        assertThat(
-                Units.METRE_PER_SQUARE_SECOND.getConverterTo(Units.STANDARD_GRAVITY).convert(9.8065),
+        assertThat(Units.DECIBEL_MILLIWATTS.getConverterTo(Units.WATT).convert(50), closeTo(100, 0.001));
+        assertThat(Units.WATT.getConverterTo(Units.DECIBEL_MILLIWATTS).convert(0.1), closeTo(20, 0.0001));
+        assertThat(Units.METRE_PER_SQUARE_SECOND.getConverterTo(Units.STANDARD_GRAVITY).convert(9.8065),
                 closeTo(1.0, 0.0001));
     }
 

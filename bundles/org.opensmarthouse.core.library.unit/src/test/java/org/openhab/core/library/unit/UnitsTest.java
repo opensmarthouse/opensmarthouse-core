@@ -13,11 +13,9 @@
  */
 package org.openhab.core.library.unit;
 
-import static org.hamcrest.CoreMatchers.anyOf;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.number.IsCloseTo.closeTo;
-import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import java.math.BigDecimal;
 
@@ -33,12 +31,10 @@ import javax.measure.quantity.Temperature;
 import org.hamcrest.Matcher;
 import org.hamcrest.core.IsEqual;
 import org.junit.Test;
-import org.openhab.core.library.dimension.ArealDensity;
 import org.openhab.core.library.dimension.Density;
 import org.openhab.core.library.dimension.Intensity;
-import org.openhab.core.library.types.QuantityType;
 
-import tec.uom.se.quantity.Quantities;
+import tech.units.indriya.quantity.Quantities;
 
 /**
  * Test for the framework defined {@link Units}.
@@ -140,15 +136,6 @@ public class UnitsTest {
     }
 
     @Test
-    public void testCelsiusSpecialChar() {
-        QuantityType<Temperature> celsius = new QuantityType<>("20 ℃");
-        assertThat(celsius, is(new QuantityType<>("20 °C")));
-        assertThat(celsius.toFullString(), is("20 °C"));
-
-        assertThat(celsius.getUnit().toString(), is("°C"));
-    }
-
-    @Test
     public void testKmh2Mih() {
         Quantity<Speed> kmh = Quantities.getQuantity(BigDecimal.TEN, SIUnits.KILOMETRE_PER_HOUR);
 
@@ -201,11 +188,6 @@ public class UnitsTest {
     }
 
     @Test
-    public void testKVarHFromString() {
-        assertThat(QuantityType.valueOf("2.60 kvarh").getUnit().toString(), is("kvarh"));
-    }
-
-    @Test
     public void testVoltAmpereUnitSymbol() {
         assertThat(Units.VOLT_AMPERE.toString(), is("VA"));
         assertThat(Units.VOLT_AMPERE.getSymbol(), is("VA"));
@@ -216,11 +198,6 @@ public class UnitsTest {
 
         Quantity<Energy> kVAh = Quantities.getQuantity(BigDecimal.TEN, MetricPrefix.KILO(Units.VOLT_AMPERE_HOUR));
         assertThat(kVAh.getUnit().toString(), is("kVAh"));
-    }
-
-    @Test
-    public void testVoltAmpereHFromString() {
-        assertThat(QuantityType.valueOf("2.60 VAh").getUnit().toString(), is("VAh"));
     }
 
     @Test
@@ -288,28 +265,6 @@ public class UnitsTest {
     }
 
     @Test
-    public void testPpm() {
-        QuantityType<Dimensionless> ppm = new QuantityType<>("500 ppm");
-        assertEquals("0.05 %", ppm.toUnit(Units.PERCENT).toString());
-    }
-
-    @Test
-    public void testDb() {
-        QuantityType<Dimensionless> ratio = new QuantityType<>("100");
-        assertEquals(20.0, ratio.toUnit("dB").doubleValue(), DEFAULT_ERROR);
-    }
-
-    @Test
-    public void testDobsonUnits() {
-        // https://en.wikipedia.org/wiki/Dobson_unit
-        QuantityType<ArealDensity> oneDU = new QuantityType<>("1 DU");
-        QuantityType<ArealDensity> mmolpsq = oneDU
-                .toUnit(MetricPrefix.MILLI(Units.MOLE).multiply(tech.units.indriya.unit.Units.METRE.pow(-2)));
-        assertThat(mmolpsq.doubleValue(), is(closeTo(0.4462d, DEFAULT_ERROR)));
-        assertThat(mmolpsq.toUnit(Units.DOBSON_UNIT).doubleValue(), is(closeTo(1, DEFAULT_ERROR)));
-    }
-
-    @Test
     public void testBar2Pascal() {
         Quantity<Pressure> bar = Quantities.getQuantity(BigDecimal.valueOf(1), Units.BAR);
         assertThat(bar.to(SIUnits.PASCAL), is(Quantities.getQuantity(100000, SIUnits.PASCAL)));
@@ -328,11 +283,6 @@ public class UnitsTest {
     }
 
     @Test
-    public void testMicrogramPerCubicMeterFromString() {
-        assertThat(QuantityType.valueOf("2.60 µg/m³").getUnit().toString(), is("µg/m³"));
-    }
-
-    @Test
     public void testMicrowattPerSquareCentimetre2KilogramPerSquareCentiMetre() {
         Quantity<Intensity> oneMwCm2 = Quantities.getQuantity(BigDecimal.ONE, Units.IRRADIANCE);
         Quantity<Intensity> converted = oneMwCm2.to(Units.MICROWATT_PER_SQUARE_CENTIMETRE);
@@ -342,31 +292,6 @@ public class UnitsTest {
     @Test
     public void testMicrowattPerSquareCentimetreUnitSymbol() {
         assertThat(Units.MICROWATT_PER_SQUARE_CENTIMETRE.toString(), is("µW/cm²"));
-    }
-
-    @Test
-    public void testMicrowattPerSquareCentimetreFromString() {
-        assertThat(QuantityType.valueOf("2.60 µW/cm²").getUnit().toString(),
-                anyOf(is("\u00B5W/cm²"), is("\u03BCW/cm²")));
-
-        assertThat(QuantityType.valueOf("2.60 \u03BCW/cm²").getUnit().toString(),
-                anyOf(is("\u00B5W/cm²"), is("\u03BCW/cm²")));
-    }
-
-    @Test
-    public void testElectricCharge() {
-        QuantityType<?> oneAh = QuantityType.valueOf("3600 C");
-        QuantityType<?> converted = oneAh.toUnit(Units.AMPERE_HOUR);
-        QuantityType<?> converted2 = oneAh.toUnit(Units.MILLIAMPERE_HOUR);
-        assertThat(converted.doubleValue(), is(closeTo(1.00, DEFAULT_ERROR)));
-        assertEquals("1000 mAh", converted2.toString());
-    }
-
-    @Test
-    public void testConductivity() {
-        QuantityType<?> oneSM = QuantityType.valueOf("1 S/m");
-        QuantityType<?> converted = oneSM.toUnit("µS/cm");
-        assertThat(converted.toString(), anyOf(is("10000 \u00B5S/cm"), is("10000 \u03BCS/cm")));
     }
 
     private static class QuantityEquals extends IsEqual<Quantity<?>> {

@@ -39,7 +39,7 @@
     </feature>
 
     <feature name="opensmarthouse-tp-base" description="Open SmartHouse Core Target Platform Base" version="${project.version}">
-        <capability>opensmarthouse-tp;feature=base;version=1.0.0</capability>
+        <capability>opensmarthouse-tp;feature=base;version=${project.version}</capability>
 
         <feature>opensmarthouse-tp-scr</feature>
         <feature>opensmarthouse-tp-event</feature>
