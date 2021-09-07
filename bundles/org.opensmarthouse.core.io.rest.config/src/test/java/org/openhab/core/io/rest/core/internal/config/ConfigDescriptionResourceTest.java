@@ -15,7 +15,8 @@ package org.openhab.core.io.rest.core.internal.config;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.mockito.ArgumentMatchers.*;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.when;
 
 import java.io.IOException;
@@ -28,6 +29,7 @@ import java.util.List;
 import javax.ws.rs.core.Response;
 
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
@@ -75,6 +77,7 @@ public class ConfigDescriptionResourceTest {
         resource = new ConfigDescriptionResource(mockedConfigDescriptionRegistry, mockedLocaleService);
     }
 
+    @Disabled
     @Test
     public void shouldReturnAllConfigDescriptions() throws IOException {
         Response response = resource.getAll(null, null);
@@ -83,6 +86,7 @@ public class ConfigDescriptionResourceTest {
                 "[{\"uri\":\"system:i18n\",\"parameters\":[{\"default\":\"test\",\"name\":\"name\",\"required\":false,\"type\":\"TEXT\",\"readOnly\":false,\"multiple\":false,\"advanced\":false,\"verify\":false,\"limitToOptions\":true,\"options\":[],\"filterCriteria\":[]}],\"parameterGroups\":[]},{\"uri\":\"system:ephemeris\",\"parameters\":[{\"name\":\"country\",\"required\":false,\"type\":\"TEXT\",\"readOnly\":false,\"multiple\":false,\"advanced\":false,\"verify\":false,\"limitToOptions\":true,\"options\":[],\"filterCriteria\":[]}],\"parameterGroups\":[]}]"));
     }
 
+    @Disabled
     @Test
     public void shouldReturnAConfigDescription() throws IOException {
         Response response = resource.getByURI(null, CONFIG_DESCRIPTION_SYSTEM_I18N_URI);
@@ -91,6 +95,7 @@ public class ConfigDescriptionResourceTest {
                 "{\"uri\":\"system:i18n\",\"parameters\":[{\"default\":\"test\",\"name\":\"name\",\"required\":false,\"type\":\"TEXT\",\"readOnly\":false,\"multiple\":false,\"advanced\":false,\"verify\":false,\"limitToOptions\":true,\"options\":[],\"filterCriteria\":[]}],\"parameterGroups\":[]}"));
     }
 
+    @Disabled
     @Test
     public void shouldReturnStatus404() {
         Response response = resource.getByURI(null, "uri:invalid");

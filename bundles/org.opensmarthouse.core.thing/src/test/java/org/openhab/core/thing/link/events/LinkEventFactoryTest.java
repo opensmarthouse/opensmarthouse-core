@@ -13,7 +13,8 @@
  */
 package org.openhab.core.thing.link.events;
 
-import static org.hamcrest.CoreMatchers.*;
+import static org.hamcrest.CoreMatchers.instanceOf;
+import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
@@ -21,6 +22,9 @@ import org.eclipse.jdt.annotation.NonNullByDefault;
 import org.junit.Test;
 import org.openhab.core.events.Event;
 import org.openhab.core.thing.ChannelUID;
+import org.openhab.core.thing.internal.link.events.ItemChannelLinkAddedEvent;
+import org.openhab.core.thing.internal.link.events.ItemChannelLinkRemovedEvent;
+import org.openhab.core.thing.internal.link.events.LinkEventFactory;
 import org.openhab.core.thing.link.ItemChannelLink;
 import org.openhab.core.thing.link.dto.ItemChannelLinkDTO;
 

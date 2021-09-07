@@ -14,7 +14,9 @@
 package org.openhab.core.automation.module.script.rulesupport.internal.loader;
 
 import static java.nio.file.StandardWatchEventKinds.ENTRY_CREATE;
+import static java.nio.file.StandardWatchEventKinds.ENTRY_MODIFY;
 import static org.junit.jupiter.api.Assertions.fail;
+import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.*;
 
 import java.io.File;
@@ -25,6 +27,7 @@ import java.util.concurrent.ScheduledExecutorService;
 
 import javax.script.ScriptEngine;
 
+import org.eclipse.jdt.annotation.NonNullByDefault;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -44,15 +47,15 @@ import org.opentest4j.AssertionFailedError;
  *
  * @author Jonathan Gilbert - initial contribution
  */
+@NonNullByDefault
 class ScriptFileWatcherTest {
 
-    private ScriptFileWatcher scriptFileWatcher;
-    private ScriptEngineManager scriptEngineManager;
-    private DependencyTracker dependencyTracker;
-    private ReadyService readyService;
+    private @NonNullByDefault({}) ScriptFileWatcher scriptFileWatcher;
+    private @NonNullByDefault({}) ScriptEngineManager scriptEngineManager;
+    private @NonNullByDefault({}) DependencyTracker dependencyTracker;
+    private @NonNullByDefault({}) ReadyService readyService;
 
-    @TempDir
-    Path tempScriptDir;
+    protected @NonNullByDefault({}) @TempDir Path tempScriptDir;
 
     @BeforeEach
     public void setUp() {
@@ -207,12 +210,11 @@ class ScriptFileWatcherTest {
 
     @Test
     public void testLoadOneDefaultFileDelayedSupport() {
-
         // set an executor which captures the scheduled task
         ScheduledExecutorService scheduledExecutorService = spy(
                 new DelegatingScheduledExecutorService(Executors.newSingleThreadScheduledExecutor()));
         ArgumentCaptor<Runnable> scheduledTask = ArgumentCaptor.forClass(Runnable.class);
-        scriptFileWatcher.setExecuterFactory(() -> scheduledExecutorService);
+        scriptFileWatcher.setExecutorFactory(() -> scheduledExecutorService);
 
         when(scriptEngineManager.isSupported("js")).thenReturn(false);
         ScriptEngineContainer scriptEngineContainer = mock(ScriptEngineContainer.class);
@@ -324,8 +326,11 @@ class ScriptFileWatcherTest {
         verify(dependencyTracker).addLibForScript(p.toFile().toURI().toString(), "test");
     }
 
+    /**
+     * @see https://github.com/openhab/openhab-core/issues/2246
+     */
     @Test
-    public void testRemoveBeforeReAdd_bug2246() {
+    public void testRemoveBeforeReAdd() {
         when(scriptEngineManager.isSupported("js")).thenReturn(true);
         ScriptEngineContainer scriptEngineContainer = mock(ScriptEngineContainer.class);
         when(scriptEngineContainer.getScriptEngine()).thenReturn(mock(ScriptEngine.class));

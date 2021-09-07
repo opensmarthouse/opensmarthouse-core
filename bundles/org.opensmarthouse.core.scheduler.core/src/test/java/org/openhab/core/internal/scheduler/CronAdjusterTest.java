@@ -14,18 +14,17 @@
 package org.openhab.core.internal.scheduler;
 
 import static org.hamcrest.CoreMatchers.equalTo;
-import static org.junit.Assert.assertThat;
+import static org.hamcrest.MatcherAssert.assertThat;
 
 import java.time.LocalDateTime;
 import java.time.temporal.Temporal;
-import java.util.Arrays;
 import java.util.Collection;
+import java.util.List;
+import java.util.concurrent.TimeUnit;
 
-import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.junit.runners.Parameterized;
-import org.junit.runners.Parameterized.Parameter;
-import org.junit.runners.Parameterized.Parameters;
+import org.junit.jupiter.api.Timeout;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.MethodSource;
 import org.openhab.core.scheduler.CronAdjuster;
 
 /**
@@ -34,22 +33,13 @@ import org.openhab.core.scheduler.CronAdjuster;
  * @author Simon Kaufmann - adapted to Java 8
  * @author Hilbrand Bouwkamp - refactored to run as parameterized unit test and added missing cases to complete coverage
  */
-@RunWith(Parameterized.class)
 public class CronAdjusterTest {
 
     private static final String JAN_1ST_2000 = "2000-01-01T00:00:00";
     private static final String JAN_1ST_2015 = "2015-01-01T00:00:00";
 
-    @Parameter(value = 0)
-    public String in;
-    @Parameter(value = 1)
-    public String cron;
-    @Parameter(value = 2)
-    public String[] outs;
-
-    @Parameters(name = "CronAdjusterTest pattern: {1}")
-    public static Collection<Object[]> data() {
-        return Arrays.asList(new Object[][] { { JAN_1ST_2015, "@reboot", new String[] { "2200-01-01T00:00" } },
+    public static Collection<Object[]> arguments() {
+        return List.of(new Object[][] { { JAN_1ST_2015, "@reboot", new String[] { "2200-01-01T00:00" } },
                 { JAN_1ST_2015, "@hourly",
                         new String[] { "2015-01-01T01:00", "2015-01-01T02:00", "2015-01-01T03:00",
                                 "2015-01-01T04:00" } },
@@ -71,11 +61,9 @@ public class CronAdjusterTest {
                 { JAN_1ST_2015, "0 15 10 LW * ?",
                         new String[] { "2015-01-30T10:15", "2015-02-27T10:15", "2015-03-31T10:15", "2015-04-30T10:15",
                                 "2015-05-29T10:15" } },
-
                 { JAN_1ST_2015, "0 15 10 WL * ?",
                         new String[] { "2015-01-30T10:15", "2015-02-27T10:15", "2015-03-31T10:15", "2015-04-30T10:15",
                                 "2015-05-29T10:15" } },
-
                 { JAN_1ST_2015, "0 15 10 3W * ?",
                         new String[] { "2015-01-02T10:15", "2015-02-03T10:15", "2015-03-03T10:15", "2015-04-03T10:15",
                                 "2015-05-04T10:15" } },
@@ -208,5 +196,4 @@ public class CronAdjusterTest {
                     equalTo(out));
         }
     }
-
 }

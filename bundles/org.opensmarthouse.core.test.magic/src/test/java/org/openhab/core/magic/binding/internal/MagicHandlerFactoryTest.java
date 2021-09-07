@@ -43,6 +43,7 @@ public class MagicHandlerFactoryTest {
                 mock(MagicDynamicStateDescriptionProvider.class));
     }
 
+    
     @Test
     public void shoudlReturnNullForUnknownThingTypeUID() {
         Thing thing = mock(Thing.class);

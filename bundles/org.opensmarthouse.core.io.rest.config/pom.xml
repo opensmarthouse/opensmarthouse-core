@@ -32,12 +32,14 @@
     </dependency>
 
     <dependency>
-      <groupId>junit</groupId>
-      <artifactId>junit</artifactId>
+      <groupId>org.opensmarthouse.core.bundles</groupId>
+      <artifactId>org.opensmarthouse.core.test</artifactId>
+      <scope>test</scope>
     </dependency>
     <dependency>
       <groupId>org.osgi</groupId>
       <artifactId>osgi.enroute.hamcrest.wrapper</artifactId>
+      <scope>test</scope>
     </dependency>
   </dependencies>
 

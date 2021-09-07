@@ -14,14 +14,23 @@
 package org.openhab.core.internal.items;
 
 import static org.hamcrest.CoreMatchers.is;
-import static org.junit.Assert.*;
-import static org.mockito.Mockito.*;
+import static org.junit.Assert.assertThat;
+import static org.junit.Assert.assertTrue;
+import static org.mockito.Mockito.doReturn;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
+
+import java.util.Locale;
+import java.util.stream.Stream;
 
 import javax.measure.quantity.Length;
 import javax.measure.quantity.Temperature;
 
+import org.eclipse.jdt.annotation.NonNullByDefault;
 import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.Disabled;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.MethodSource;
 import org.openhab.core.i18n.UnitProvider;
 import org.openhab.core.items.Item;
 import org.openhab.core.library.items.NumberItem;
@@ -38,9 +47,23 @@ import org.openhab.core.types.UnDefType;
  *
  * @author Henning Treu - Initial contribution
  */
+@Disabled
 public class ItemStateConverterImplTest {
 
-    private ItemStateConverterImpl itemStateConverter;
+    private @NonNullByDefault({}) ItemStateConverterImpl itemStateConverter;
+
+    /**
+     * Locales having a different decimal and grouping separators to test string parsing and generation.
+     */
+    static Stream<Locale> locales() {
+        return Stream.of(
+                // ٫٬ (Arabic, Egypt)
+                Locale.forLanguageTag("ar-EG"),
+                // ,. (German, Germany)
+                Locale.forLanguageTag("de-DE"),
+                // ., (English, United States)
+                Locale.forLanguageTag("en-US"));
+    }
 
     @Before
     public void setup() {
@@ -49,15 +72,22 @@ public class ItemStateConverterImplTest {
         itemStateConverter = new ItemStateConverterImpl(unitProvider);
     }
 
-    @Test
-    public void testNullState() {
+    @ParameterizedTest
+    @MethodSource("locales")
+    public void testNullState(Locale locale) {
+        Locale.setDefault(locale);
+
         State undef = itemStateConverter.convertToAcceptedState(null, null);
 
         assertThat(undef, is(UnDefType.NULL));
     }
 
-    @Test
-    public void testNoConversion() {
+    @ParameterizedTest
+    @MethodSource("locales")
+    @SuppressWarnings("PMD.CompareObjectsWithEquals")
+    public void testNoConversion(Locale locale) {
+        Locale.setDefault(locale);
+
         Item item = new NumberItem("number");
         State originalState = new DecimalType(12.34);
         State state = itemStateConverter.convertToAcceptedState(originalState, item);
