@@ -18,10 +18,7 @@ import java.util.HashSet;
 
 import org.eclipse.jdt.annotation.NonNullByDefault;
 import org.openhab.core.thing.profiles.ProfileType;
-import org.openhab.core.thing.profiles.ProfileTypeBuilder;
-import org.openhab.core.thing.profiles.ProfileTypeBuilderFactory;
 import org.openhab.core.thing.profiles.ProfileTypeUID;
-import org.openhab.core.thing.profiles.StateProfile;
 import org.openhab.core.thing.profiles.StateProfileType;
 import org.openhab.core.thing.profiles.TriggerProfileType;
 import org.openhab.core.thing.type.ChannelTypeUID;
@@ -36,7 +33,7 @@ import org.openhab.core.thing.type.ChannelTypeUID;
  * @param <T> the concrete {@link ProfileType} sub-interface.
  */
 @NonNullByDefault
-public abstract class ProfileTypeBuilderImpl<T extends ProfileType> implements ProfileTypeBuilder<T> {
+public abstract class ProfileTypeBuilderImpl<T extends ProfileType> {
 
     protected final ProfileTypeUID profileTypeUID;
     protected final Collection<String> supportedItemTypes = new HashSet<>();
@@ -49,38 +46,32 @@ public abstract class ProfileTypeBuilderImpl<T extends ProfileType> implements P
         this.label = label;
     }
 
-    @Override
-    public ProfileTypeBuilder<T> withSupportedItemTypes(String... itemType) {
+    public ProfileTypeBuilderImpl<T> withSupportedItemTypes(String... itemType) {
         supportedItemTypes.addAll(Arrays.asList(itemType));
         return this;
     }
 
-    @Override
-    public ProfileTypeBuilder<T> withSupportedItemTypes(Collection<String> itemTypes) {
+    public ProfileTypeBuilderImpl<T> withSupportedItemTypes(Collection<String> itemTypes) {
         supportedItemTypes.addAll(itemTypes);
         return this;
     }
 
-    @Override
-    public ProfileTypeBuilder<T> withSupportedChannelTypeUIDs(ChannelTypeUID... channelTypeUIDs) {
+    public ProfileTypeBuilderImpl<T> withSupportedChannelTypeUIDs(ChannelTypeUID... channelTypeUIDs) {
         supportedChannelTypeUIDs.addAll(Arrays.asList(channelTypeUIDs));
         return this;
     }
 
-    @Override
-    public ProfileTypeBuilder<T> withSupportedChannelTypeUIDs(Collection<ChannelTypeUID> channelTypeUIDs) {
+    public ProfileTypeBuilderImpl<T> withSupportedChannelTypeUIDs(Collection<ChannelTypeUID> channelTypeUIDs) {
         supportedChannelTypeUIDs.addAll(channelTypeUIDs);
         return this;
     }
 
-    @Override
-    public ProfileTypeBuilder<T> withSupportedItemTypesOfChannel(String... supportedItemTypesOfChannel) {
+    public ProfileTypeBuilderImpl<T> withSupportedItemTypesOfChannel(String... supportedItemTypesOfChannel) {
         this.supportedItemTypesOfChannel.addAll(Arrays.asList(supportedItemTypesOfChannel));
         return this;
     }
 
-    @Override
-    public ProfileTypeBuilder<T> withSupportedItemTypesOfChannel(Collection<String> supportedItemTypesOfChannel) {
+    public ProfileTypeBuilderImpl<T> withSupportedItemTypesOfChannel(Collection<String> supportedItemTypesOfChannel) {
         this.supportedItemTypesOfChannel.addAll(supportedItemTypesOfChannel);
         return this;
     }
@@ -91,7 +82,6 @@ public abstract class ProfileTypeBuilderImpl<T extends ProfileType> implements P
             super(profileTypeUID, label);
         }
 
-        @Override
         public StateProfileType build() {
             return new StateProfileTypeImpl(profileTypeUID, label, supportedItemTypes, supportedItemTypesOfChannel);
         }
@@ -103,7 +93,6 @@ public abstract class ProfileTypeBuilderImpl<T extends ProfileType> implements P
             super(profileTypeUID, label);
         }
 
-        @Override
         public TriggerProfileType build() {
             return new TriggerProfileTypeImpl(profileTypeUID, label, supportedItemTypes, supportedChannelTypeUIDs);
         }

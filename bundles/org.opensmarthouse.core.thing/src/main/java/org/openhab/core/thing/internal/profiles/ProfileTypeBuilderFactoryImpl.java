@@ -31,12 +31,12 @@ public final class ProfileTypeBuilderFactoryImpl implements ProfileTypeBuilderFa
 
     @Override
     public ProfileTypeBuilder<StateProfileType> newState(ProfileTypeUID profileTypeUID, String label) {
-        return new ProfileTypeBuilderImpl.StateProfileTypeBuilder(profileTypeUID, label);
+        return ProfileTypeBuilder.newState(profileTypeUID, label);
     }
 
     @Override
     public ProfileTypeBuilder<TriggerProfileType> newTrigger(ProfileTypeUID profileTypeUID, String label) {
-        return new ProfileTypeBuilderImpl.TriggerProfileTypeBuilder(profileTypeUID, label);
+        return ProfileTypeBuilder.newTrigger(profileTypeUID, label);
     }
 
 }
