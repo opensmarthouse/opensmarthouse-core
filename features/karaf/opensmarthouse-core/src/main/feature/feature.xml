@@ -47,14 +47,11 @@
         <feature>opensmarthouse-core-id</feature>
         <feature>opensmarthouse-core-persistence</feature>
         <feature>opensmarthouse-core-semantics</feature>
-        <feature>opensmarthouse-core-scheduler</feature>
         <feature>opensmarthouse-core-binding-xml</feature>
 
         <feature>opensmarthouse-core-thing</feature>
         <feature>opensmarthouse-core-thing-xml</feature>
         <feature>opensmarthouse-core-transform</feature>
-        <feature>opensmarthouse-core-audio</feature>
-        <feature>opensmarthouse-core-voice</feature>
         <feature>opensmarthouse-core-io-console</feature>
         <feature>opensmarthouse-core-io-monitor</feature>
         <feature>opensmarthouse-core-io-net</feature>
@@ -312,8 +309,9 @@
         <feature>opensmarthouse-core</feature>
         <feature>opensmarthouse-tp-jax-rs</feature>
         <feature>opensmarthouse-tp-gson</feature>
-        <feature>opensmarthouse-core-i18n</feature>
         <feature>opensmarthouse-tp-jax-rs-whiteboard</feature>
+        <feature>opensmarthouse-core-i18n</feature>
+        <feature>opensmarthouse-core-auth</feature>
         <bundle>mvn:org.opensmarthouse.core.bundles/org.opensmarthouse.core.io.rest/${project.version}</bundle>
     </feature>
 

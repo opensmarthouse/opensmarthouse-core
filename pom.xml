@@ -66,8 +66,8 @@
     <release.repository-url>https://oss.sonatype.org/service/local/staging/deploy/maven2</release.repository-url>
 
     <jackson.version>2.12.3</jackson.version>
-    <jetty.version>9.4.38.v20210224</jetty.version>
-    <pax.web.version>7.2.14</pax.web.version>
+    <jetty.version>9.4.43.v20210629</jetty.version>
+    <pax.web.version>7.3.19</pax.web.version>
     <swagger.version>2.1.9</swagger.version>
     <netty.version>4.1.42.Final</netty.version>
 
@@ -505,7 +505,7 @@ Import-Package: \\
                   <pluginExecutionFilter>
                     <groupId>org.apache.karaf.tooling</groupId>
                     <artifactId>karaf-maven-plugin</artifactId>
-                    <versionRange>[4.2.1,)</versionRange>
+                    <versionRange>[4.3.3,)</versionRange>
                     <goals>
                       <goal>features-generate-descriptor</goal>
                       <goal>verify</goal>
