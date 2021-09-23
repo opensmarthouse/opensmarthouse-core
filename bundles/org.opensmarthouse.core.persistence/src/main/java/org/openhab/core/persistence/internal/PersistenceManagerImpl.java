@@ -25,6 +25,7 @@ import java.util.Set;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
+import java.util.function.Predicate;
 import org.eclipse.jdt.annotation.NonNullByDefault;
 import org.eclipse.jdt.annotation.Nullable;
 import org.openhab.core.common.NamedThreadFactory;
@@ -38,6 +39,7 @@ import org.openhab.core.items.ItemRegistryChangeListener;
 import org.openhab.core.items.StateChangeListener;
 import org.openhab.core.persistence.FilterCriteria;
 import org.openhab.core.persistence.HistoricItem;
+import org.openhab.core.persistence.PersistenceFilter;
 import org.openhab.core.persistence.PersistenceItemConfiguration;
 import org.openhab.core.persistence.PersistenceManager;
 import org.openhab.core.persistence.PersistenceService;
@@ -189,6 +191,16 @@ public class PersistenceManagerImpl
      */
     private boolean appliesToItem(PersistenceItemConfiguration config, Item item) {
         for (PersistenceConfig itemCfg : config.getItems()) {
+            // handling of items excluded from certain configuration, a filter works as an removal criteria!
+            if (config.getFilters() != null) {
+                for (PersistenceFilter filter : config.getFilters()) {
+                    if (filter instanceof Predicate) {
+                        if (((Predicate<Item>) filter).test(item)) {
+                            return false;
+                        }
+                    }
+                }
+            }
             if (itemCfg instanceof PersistenceAllConfig) {
                 return true;
             }

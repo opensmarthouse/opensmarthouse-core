@@ -60,7 +60,8 @@ public class PersistenceItemConfiguration {
     @Override
     public String toString() {
         return String.format("%s [items=%s, alias=%s, strategies=%s, filters=%s]", getClass().getSimpleName(),
-                Arrays.toString(items.toArray()), alias, Arrays.toString(strategies.toArray()),
-                Arrays.toString(filters.toArray()));
+                Arrays.toString(items.toArray()), alias,
+                strategies == null ? "" : Arrays.toString(strategies.toArray()),
+                filters == null ? "" : Arrays.toString(filters.toArray()));
     }
 }
