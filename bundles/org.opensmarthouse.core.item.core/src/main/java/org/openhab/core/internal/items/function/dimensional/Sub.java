@@ -17,24 +17,20 @@ import javax.measure.Quantity;
 import org.eclipse.jdt.annotation.NonNullByDefault;
 import org.eclipse.jdt.annotation.Nullable;
 import org.openhab.core.items.Item;
-import org.openhab.core.library.types.OnOffType;
 import org.openhab.core.library.types.QuantityType;
 import org.openhab.core.types.State;
 import org.openhab.core.types.UnDefType;
 
 /**
- * This calculates the numeric sum over all item states of {@link QuantityType}.
+ * Subtract value between members {@link QuantityType}.
  *
- * @author Henning Treu - Initial contribution
+ * @author Łukas Dywicki - Initial contribution
  */
 @NonNullByDefault
-public class Sum extends DimensionalGroupFunction {
+public class Sub extends DimensionalGroupFunction {
 
-    private final OnOffType allMembers;
-
-    public Sum(Class<? extends Quantity<?>> dimension, OnOffType allMembers) {
+    public Sub(Class<? extends Quantity<?>> dimension) {
         super(dimension);
-        this.allMembers = allMembers;
     }
 
     @Override
@@ -44,34 +40,34 @@ public class Sum extends DimensionalGroupFunction {
             return UnDefType.UNDEF;
         }
 
-        QuantityType<?> sum = null;
+        QuantityType<?> sub = null;
         for (Item item : items) {
             if (isSameDimension(item)) {
                 QuantityType itemState = item.getStateAs(QuantityType.class);
-                if (itemState != null) {
-                    if (sum == null) {
-                        sum = itemState; // initialise the sum from the first item
-                    } else if (sum.getUnit().isCompatible(itemState.getUnit())) {
-                        sum = sum.add(itemState);
-                    }
+                if (itemState == null) {
+                    // we got an empty value which means that we can't reliably calculate end value
+                    // we break the loop here to avoid invalid results
+                    return UnDefType.UNDEF;
+                }
+
+                if (sub == null) {
+                    sub = itemState; // initialise the sub from the first item
                 } else {
-                    if (allMembers == OnOffType.ON) {
+                    if (sub.getUnit().isCompatible(itemState.getUnit())) {
+                        sub = sub.subtract(itemState);
+                    } else {
+                        // we got an incompatible value, we must break the loop here to avoid invalid results
                         return UnDefType.UNDEF;
                     }
                 }
             }
         }
 
-        return sum != null ? sum : UnDefType.UNDEF;
-    }
-
-    @Override
-    public State[] getParameters() {
-        return new State[] {allMembers};
+        return sub;
     }
 
     @Override
     public String toString() {
-        return "SUM(" + allMembers + ")";
+        return "SUB()";
     }
 }

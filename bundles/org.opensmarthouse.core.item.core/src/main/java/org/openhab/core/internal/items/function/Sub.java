@@ -19,42 +19,44 @@ import org.eclipse.jdt.annotation.Nullable;
 import org.openhab.core.items.GroupFunction;
 import org.openhab.core.items.Item;
 import org.openhab.core.library.types.DecimalType;
-import org.openhab.core.library.types.OnOffType;
-import org.openhab.core.library.types.UnDefType;
 import org.openhab.core.types.State;
+import org.openhab.core.types.UnDefType;
 
 /**
- * This calculates the numeric sum over all item states of decimal type.
+ * This subtracts values between members of the group.
  *
- * @author Kai Kreuzer - Initial contribution
- * @author Thomas Eichstädt-Engelen - Added "N" functions
- * @author Gaël L'hopital - Added count function
+ * In this regard this group kind is dependant on the order its members are defined!
+ *
+ * @author Łukasz Dywicki - Initial contribution
  */
 @NonNullByDefault
-public class Sum implements GroupFunction {
+public class Sub implements GroupFunction {
 
-    private final OnOffType allMembers;
-
-    public Sum(OnOffType allMembers) {
-        this.allMembers = allMembers;
+    public Sub() {
     }
 
     @Override
     public State calculate(@Nullable Set<Item> items) {
-        BigDecimal sum = BigDecimal.ZERO;
-        if (items != null) {
-            for (Item item : items) {
-                DecimalType itemState = item.getStateAs(DecimalType.class);
-                if (itemState != null) {
-                    sum = sum.add(itemState.toBigDecimal());
-                } else {
-                    if (OnOffType.ON == allMembers) {
-                        return UnDefType.UNDEF;
-                    }
-                }
+        if (items == null || items.isEmpty()) {
+            return UnDefType.UNDEF;
+        }
+
+        BigDecimal sub = null;
+        for (Item item : items) {
+            DecimalType itemState = item.getStateAs(DecimalType.class);
+            if (itemState == null) {
+                // we got an empty value which means that we can't reliably calculate end value
+                // we break the loop here to avoid invalid results
+                return UnDefType.UNDEF;
+            }
+
+            if (sub == null) {
+                sub = itemState.toBigDecimal();
+            } else {
+                sub = sub.subtract(itemState.toBigDecimal());
             }
         }
-        return new DecimalType(sum);
+        return new DecimalType(sub);
     }
 
     @Override
@@ -69,12 +71,11 @@ public class Sum implements GroupFunction {
 
     @Override
     public State[] getParameters() {
-        return new State[] { allMembers};
+        return new State[0];
     }
 
     @Override
     public String toString() {
-        return "SUM(" + allMembers + ")";
+        return "SUB";
     }
-
 }

@@ -38,6 +38,7 @@ import org.openhab.core.items.GroupItem;
 import org.openhab.core.items.Item;
 import org.openhab.core.library.CoreItemFactory;
 import org.openhab.core.library.items.NumberItem;
+import org.openhab.core.library.types.OnOffType;
 import org.openhab.core.library.types.QuantityType;
 import org.openhab.core.types.State;
 import org.openhab.core.types.UnDefType;
@@ -71,7 +72,7 @@ public class QuantityTypeArithmeticGroupFunctionTest {
         items.add(createNumberItem("TestItem4", Temperature.class, UnDefType.UNDEF));
         items.add(createNumberItem("TestItem5", Temperature.class, new QuantityType<>("122.41 °C")));
 
-        function = new Sum(Temperature.class);
+        function = new Sum(Temperature.class, OnOffType.OFF);
         State state = function.calculate(items);
 
         assertEquals(new QuantityType<>("234.95 °C"), state);
@@ -85,7 +86,7 @@ public class QuantityTypeArithmeticGroupFunctionTest {
         items.add(createNumberItem("TestItem4", Temperature.class, UnDefType.UNDEF));
         items.add(createNumberItem("TestItem5", Temperature.class, new QuantityType<>("395.56 K")));
 
-        function = new Sum(Temperature.class);
+        function = new Sum(Temperature.class, OnOffType.OFF);
         State state = function.calculate(items);
 
         assertEquals(new QuantityType<>("234.95 °C"), state);
@@ -98,7 +99,7 @@ public class QuantityTypeArithmeticGroupFunctionTest {
         items.add(createNumberItem("TestItem2", Temperature.class, UnDefType.NULL));
         items.add(createNumberItem("TestItem3", Pressure.class, new QuantityType<>("192.2 hPa")));
 
-        function = new Sum(Temperature.class);
+        function = new Sum(Temperature.class, OnOffType.OFF);
         State state = function.calculate(items);
 
         assertEquals(new QuantityType<>("23.54 °C"), state);
@@ -244,7 +245,7 @@ public class QuantityTypeArithmeticGroupFunctionTest {
         items.add(createNumberItem("TestItem1", Power.class, new QuantityType<>("5 W")));
         items.add(createGroupItem("TestGroup1", Power.class, new QuantityType<>("5 W")));
 
-        function = new Sum(Power.class);
+        function = new Sum(Power.class, OnOffType.OFF);
         State state = function.calculate(items);
 
         assertEquals(new QuantityType<>("10 W"), state);
