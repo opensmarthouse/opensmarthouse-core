@@ -19,8 +19,8 @@ import static org.openhab.core.config.core.ConfigUtil.normalizeTypes;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
-import java.util.HashMap;
 import java.util.HashSet;
+import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Set;
 
@@ -72,7 +72,7 @@ public class Configuration {
      * @param alreadyNormalized flag if the properties are already normalized
      */
     private Configuration(final Map<String, Object> properties, final boolean alreadyNormalized) {
-        this.properties = synchronizedMap(alreadyNormalized ? new HashMap<>(properties) : normalizeTypes(properties));
+        this.properties = synchronizedMap(alreadyNormalized ? new LinkedHashMap<>(properties) : normalizeTypes(properties));
     }
 
     public <T> T as(Class<T> configurationClass) {
@@ -118,7 +118,7 @@ public class Configuration {
 
     public Map<String, Object> getProperties() {
         synchronized (properties) {
-            return Collections.unmodifiableMap(new HashMap<>(properties));
+            return Collections.unmodifiableMap(new LinkedHashMap<>(properties));
         }
     }
 
