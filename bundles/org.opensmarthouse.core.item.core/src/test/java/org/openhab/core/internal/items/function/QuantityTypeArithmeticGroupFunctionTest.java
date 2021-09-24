@@ -11,7 +11,7 @@
  *
  * SPDX-License-Identifier: EPL-2.0
  */
-package org.openhab.core.library.types;
+package org.openhab.core.internal.items.function;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 

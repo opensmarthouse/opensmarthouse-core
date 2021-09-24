@@ -11,7 +11,7 @@
  *
  * SPDX-License-Identifier: EPL-2.0
  */
-package org.openhab.core.thing.link.events;
+package org.openhab.core.thing.internal.link.events;
 
 import static org.hamcrest.CoreMatchers.instanceOf;
 import static org.hamcrest.CoreMatchers.is;

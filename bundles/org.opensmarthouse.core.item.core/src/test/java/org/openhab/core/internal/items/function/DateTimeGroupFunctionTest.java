@@ -13,7 +13,7 @@
  */
 package org.openhab.core.internal.items.function;
 
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.*;
 
 import java.time.ZonedDateTime;
 import java.util.Collections;
@@ -21,8 +21,8 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.openhab.core.internal.items.DateTimeGroupFunction;
 import org.openhab.core.internal.items.function.Earliest;
 import org.openhab.core.internal.items.function.Latest;
@@ -42,7 +42,7 @@ public class DateTimeGroupFunctionTest {
     private GroupFunction function;
     private Set<Item> items;
 
-    @Before
+    @BeforeEach
     public void init() {
         items = new HashSet<>();
     }
