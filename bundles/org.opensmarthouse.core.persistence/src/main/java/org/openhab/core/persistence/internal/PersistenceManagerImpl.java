@@ -151,6 +151,7 @@ public class PersistenceManagerImpl
                         if (hasStrategy(config, itemConfig, onlyChanges ? PersistenceStrategy.Globals.CHANGE
                                 : PersistenceStrategy.Globals.UPDATE)) {
                             if (appliesToItem(itemConfig, item)) {
+                                logger.trace("Persistence config {} causes storing of item {} state {}", itemConfig.getAlias(), item.getName(), item.getState());
                                 persistenceServices.get(serviceName).store(item, itemConfig.getAlias());
                             }
                         }
@@ -195,6 +196,7 @@ public class PersistenceManagerImpl
             if (config.getFilters() != null) {
                 for (PersistenceFilter filter : config.getFilters()) {
                     if (filter instanceof Predicate) {
+                        logger.trace("Checking filter {}", filter);
                         if (((Predicate<Item>) filter).test(item)) {
                             return false;
                         }
