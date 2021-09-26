@@ -5,13 +5,13 @@
   <parent>
     <groupId>org.opensmarthouse</groupId>
     <artifactId>parent</artifactId>
-    <version>0.9.3-SNAPSHOT</version>
+    <version>0.10.0-SNAPSHOT</version>
     <relativePath />
   </parent>
 
   <groupId>org.opensmarthouse.core</groupId>
   <artifactId>org.opensmarthouse.core.reactor</artifactId>
-  <version>0.9.3-SNAPSHOT</version>
+  <version>0.10.0-SNAPSHOT</version>
 
   <packaging>pom</packaging>
 
@@ -54,7 +54,7 @@
 
   <properties>
     <!-- This is version tag for published/public openhab packages -->
-    <openhab-api.version>3.0.0-SNAPSHOT</openhab-api.version>
+    <openhab-api.version>3.1.0</openhab-api.version>
     <opensmarthouse-api.version>${project.version}</opensmarthouse-api.version>
 
     <snapshot.repository-id>opensmarthouse-sonatype-snapshot</snapshot.repository-id>
