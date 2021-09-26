@@ -33,36 +33,33 @@
     </feature>
 
     <feature name="opensmarthouse-tp-unit-of-measurement" description="Runtime - Units of Measurement" version="${project.version}">
-        <bundle dependency="true">mvn:javax.measure/unit-api/1.0</bundle>
-        <bundle dependency="true">mvn:tec.uom/uom-se/1.0.10</bundle>
-        <bundle dependency="true">mvn:tec.uom.lib/uom-lib-common/1.0.3</bundle>
+      <bundle dependency="true">wrap:mvn:javax.measure/unit-api/2.1.2$overwrite=merge&amp;Import-Package=jakarta.annotation;resolution:=optional,*</bundle>
+      <!-- The si.uom:si-units manifest has no Export-Package entry. As workaround this OSGi-ify bundle is used. -->
+      <bundle dependency="true">wrap:mvn:si.uom/si-units/2.0.1$overwrite=merge&amp;Bundle-SymbolicName=si-units&amp;Import-Package=jakarta.annotation;resolution:=optional,javax.inject;resolution:=optional,*</bundle>
+      <bundle dependency="true">mvn:si.uom/si-quantity/2.0.1</bundle>
+      <bundle dependency="true">wrap:mvn:tech.units/indriya/2.1.2$overwrite=merge&amp;Bundle-SymbolicName=si-units&amp;Import-Package=javax.inject;resolution:=optional,*</bundle>
+      <bundle dependency="true">mvn:tech.uom.lib/uom-lib-common/2.1</bundle>
     </feature>
 
     <feature name="opensmarthouse-tp-base" description="Open SmartHouse Core Target Platform Base" version="${project.version}">
-        <capability>opensmarthouse-tp;feature=base;version=${project.version}</capability>
+      <capability>opensmarthouse-tp;feature=base;version=${project.version}</capability>
 
-        <feature>opensmarthouse-tp-scr</feature>
-        <feature>opensmarthouse-tp-event</feature>
+      <feature>opensmarthouse-tp-unit-of-measurement</feature>
+      <feature>opensmarthouse-tp-scr</feature>
+      <feature>opensmarthouse-tp-event</feature>
 
-        <!-- Apache Commons -->
-		<bundle dependency="true">mvn:org.apache.commons/commons-lang3/3.12.0</bundle>
+      <!-- Apache Commons -->
+      <bundle dependency="true">mvn:org.apache.commons/commons-lang3/3.12.0</bundle>
 
-        <!-- Measurement -->
-		<bundle dependency="true">mvn:jakarta.annotation/jakarta.annotation-api/2.0.0</bundle>
-		<bundle dependency="true">mvn:jakarta.inject/jakarta.inject-api/2.0.0</bundle>
-		<bundle dependency="true">mvn:javax.measure/unit-api/2.1.2</bundle>
-		<!-- The si.uom:si-units manifest has no Export-Package entry. As workaround this OSGi-ify bundle is used. -->
-		<bundle dependency="true">mvn:org.openhab.osgiify/si.uom.si-units/2.0.1</bundle>
-		<bundle dependency="true">mvn:si.uom/si-quantity/2.0.1</bundle>
-		<bundle dependency="true">mvn:tech.units/indriya/2.1.2</bundle>
-		<bundle dependency="true">mvn:tech.uom.lib/uom-lib-common/2.1</bundle>
+      <!-- Measurement -->
+      <bundle dependency="true">mvn:jakarta.annotation/jakarta.annotation-api/2.0.0</bundle>
+      <bundle dependency="true">mvn:jakarta.inject/jakarta.inject-api/2.0.0</bundle>
 
-        <feature>opensmarthouse-tp-xstream</feature>
+      <feature>opensmarthouse-tp-xstream</feature>
     </feature>
 
     <feature name="opensmarthouse-tp-xstream" description="XStream library" version="${project.version}">
-        <!-- TODO: Unbundled libraries -->
-		<bundle dependency="true">mvn:com.thoughtworks.xstream/xstream/1.4.17</bundle>
+        <bundle dependency="true">mvn:org.apache.servicemix.bundles/org.apache.servicemix.bundles.xstream/1.4.18_1</bundle>
     </feature>
 
     <feature name="opensmarthouse-tp-coap" description="Californium CoAP library" version="${project.version}">
@@ -119,7 +116,7 @@
         <bundle dependency="true">mvn:com.fasterxml.jackson.jaxrs/jackson-jaxrs-base/${jackson.version}</bundle>
         <bundle dependency="true">mvn:com.fasterxml.jackson.jaxrs/jackson-jaxrs-json-provider/${jackson.version}</bundle>
         <bundle dependency="true">mvn:com.fasterxml.jackson.module/jackson-module-jaxb-annotations/${jackson.version}</bundle>
-        <bundle dependency="true">mvn:org.yaml/snakeyaml/1.24</bundle>
+        <bundle dependency="true">mvn:org.yaml/snakeyaml/${snakeyaml.version}</bundle>
     </feature>
 
     <feature name="opensmarthouse-tp-jax-rs" version="${project.version}">
@@ -135,7 +132,7 @@
         <bundle dependency="true">mvn:org.osgi/org.osgi.util.function/1.1.0</bundle>
         <bundle dependency="true">mvn:org.osgi/org.osgi.util.promise/1.1.1</bundle>
         <bundle dependency="true">mvn:org.osgi/org.osgi.service.jaxrs/1.0.0</bundle>
-		<bundle>mvn:org.apache.aries.component-dsl/org.apache.aries.component-dsl.component-dsl/1.2.2</bundle>
+        <bundle>mvn:org.apache.aries.component-dsl/org.apache.aries.component-dsl.component-dsl/1.2.2</bundle>
         <bundle>mvn:org.apache.aries.jax.rs/org.apache.aries.jax.rs.whiteboard/2.0.0</bundle>
     </feature>
 
@@ -245,17 +242,20 @@
         <bundle>mvn:com.neuronrobotics/nrjavaserial/5.1.1</bundle>
     </feature>
 
+    <feature name="opensmarthouse-tp-classgraph" version="${project.version}">
+      <!-- some day we will be able mock up Xtext and Karaf/Felix resolver with below
+      <feature prerequisite="true">wrap</feature>
+      <bundle dependency="true">wrap:mvn:io.github.classgraph/classgraph/${classgraph.version}$overwrite=merge&amp;Bundle-SymbolicName=io.github.classgraph</bundle>
+       -->
+      <bundle dependency="true">mvn:org.eclipse.orbit.bundles/io.github.classgraph/4.8.35.v20190528-1517</bundle>
+    </feature>
+
     <feature name="opensmarthouse-tp-xtext" description="Xtext - Language Engineering Made Easy"
         version="${project.version}">
         <capability>opensmarthouse-tp;feature=xtext;version=${xtext.version}</capability>
+        <feature>opensmarthouse-tp-classgraph</feature>
 
         <bundle>mvn:org.eclipse.xtext/org.eclipse.xtext/${xtext.version}</bundle>
-
-        <!-- some day we will be able mock up Xtext and Karaf/Felix resolver with below
-        <feature prerequisite="true">wrap</feature>
-        <bundle dependency="true">wrap:mvn:io.github.classgraph/classgraph/${classgraph.version}$overwrite=merge&amp;Bundle-SymbolicName=io.github.classgraph</bundle>
-         -->
-        <bundle dependency="true">mvn:org.eclipse.orbit.bundles/io.github.classgraph/4.8.35.v20190528-1517</bundle>
 
         <bundle dependency="true">mvn:org.eclipse.emf/org.eclipse.emf.common/${emf-common.version}</bundle>
         <bundle dependency="true">mvn:org.eclipse.emf/org.eclipse.emf.ecore/${emf-ecore.version}</bundle>
@@ -284,28 +284,32 @@
         <bundle dependency="true">mvn:de.maggu2810.p2redist/com.google.inject/3.0.0.v201312141243</bundle>
         <bundle dependency="true">mvn:de.maggu2810.p2redist/org.antlr.runtime/3.2.0.v201101311130</bundle>
 
-        <bundle dependency="true">mvn:org.eclipse.platform/org.eclipse.equinox.common/3.10.400</bundle>
-        <bundle dependency="true">mvn:org.eclipse.platform/org.eclipse.equinox.registry/3.8.400</bundle>
+        <bundle dependency="true">mvn:org.eclipse.platform/org.eclipse.equinox.common/3.13.0</bundle>
+        <bundle dependency="true">mvn:org.eclipse.platform/org.eclipse.equinox.registry/3.9.0</bundle>
         <bundle dependency="true">mvn:org.eclipse.platform/org.eclipse.equinox.supplement/1.9.0</bundle>
 
         <!-- Add ASM package -->
         <!-- org.eclipse.xtext.common.types is using Require-Bundle -->
-        <bundle dependency="true" start-level="20">mvn:org.ow2.asm/asm/8.0.1</bundle>
+        <bundle dependency="true" start-level="20">mvn:org.ow2.asm/asm/9.1</bundle>
     </feature>
 
     <feature name="opensmarthouse-tp-xtext-ide" description="Xtext - IDE Support" version="${project.version}">
-        <capability>opensmarthouse-tp;feature=xtext-ide;version=2.22.0</capability>
+        <capability>opensmarthouse-tp;feature=xtext-ide;version=${xtext.version}</capability>
         <feature dependency="true">opensmarthouse-tp-xtext</feature>
 
         <!-- Support for the Language Server Protocol -->
-        <bundle dependency="true">mvn:org.eclipse.xtext/org.eclipse.xtext.ide/2.22.0</bundle>
-        <bundle dependency="true">mvn:org.eclipse.xtext/org.eclipse.xtext.xbase.ide/2.22.0</bundle>
+        <bundle dependency="true">mvn:org.eclipse.xtext/org.eclipse.xtext.ide/${xtext.version}</bundle>
+        <bundle dependency="true">mvn:org.eclipse.xtext/org.eclipse.xtext.xbase.ide/${xtext.version}</bundle>
     </feature>
 
     <feature name="opensmarthouse-tp-swagger-jax-rs" description="JAX-RS Whiteboard Swagger" version="${project.version}">
 		<capability>opensmarthouse-tp;feature=swagger-jaxrs;version=${swagger.version}</capability>
+        <feature dependency="true">opensmarthouse-tp-classgraph</feature>
         <feature dependency="true">opensmarthouse-tp-jax-rs-whiteboard</feature>
         <feature dependency="true">opensmarthouse-tp-jackson</feature>
+        <!-- ??? -->
+        <bundle dependency="true">mvn:org.apache.commons/commons-lang3/3.12.0</bundle>
+
 		<bundle dependency="true">mvn:io.swagger.core.v3/swagger-annotations/${swagger.version}</bundle>
 		<bundle dependency="true">mvn:io.swagger.core.v3/swagger-core/${swagger.version}</bundle>
 		<bundle dependency="true">mvn:io.swagger.core.v3/swagger-integration/${swagger.version}</bundle>

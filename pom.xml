@@ -66,6 +66,7 @@
     <release.repository-url>https://oss.sonatype.org/service/local/staging/deploy/maven2</release.repository-url>
 
     <jackson.version>2.12.3</jackson.version>
+    <snakeyaml.version>1.27</snakeyaml.version>
     <jetty.version>9.4.43.v20210629</jetty.version>
     <pax.web.version>7.3.19</pax.web.version>
     <swagger.version>2.1.9</swagger.version>

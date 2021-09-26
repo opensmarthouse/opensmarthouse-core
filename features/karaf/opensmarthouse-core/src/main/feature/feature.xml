@@ -432,6 +432,9 @@
 
     <feature name="opensmarthouse-core-io-monitor" version="${project.version}">
         <feature>opensmarthouse-core-service</feature>
+        <feature>opensmarthouse-core-service</feature>
+        <feature>opensmarthouse-core-automation</feature>
+
         <bundle>mvn:org.opensmarthouse.core.bundles/org.opensmarthouse.core.io.monitor/${project.version}</bundle>
     </feature>
 
@@ -752,7 +755,7 @@
     </feature>
 
     <feature name="opensmarthouse-core-model-lsp" version="${project.version}">
-        <requirement>opensmarthouse-tp;filter:="(&amp;(feature=xtext-ide)(version&gt;=2.22.0)(!(version&gt;=2.23.0)))"</requirement>
+        <requirement>opensmarthouse-tp;filter:="(&amp;(feature=xtext-ide)(version&gt;=${xtext.version)(!(version&gt;=2.26.0)))"</requirement>
         <feature dependency="true">opensmarthouse-tp-xtext-ide</feature>
 
         <!-- fails for no reason
