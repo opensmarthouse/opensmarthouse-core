@@ -33,7 +33,7 @@
     </feature>
 
     <feature name="opensmarthouse-tp-unit-of-measurement" description="Runtime - Units of Measurement" version="${project.version}">
-      <bundle dependency="true">wrap:mvn:javax.measure/unit-api/2.1.2$overwrite=merge&amp;Import-Package=jakarta.annotation;resolution:=optional,*</bundle>
+      <bundle dependency="true">wrap:mvn:javax.measure/unit-api/2.1.2$overwrite=merge&amp;Import-Package=jakarta.annotation;resolution:=optional,jakarta.inject;resolution:=optional,javax.inject;resolution:=optional,*</bundle>
       <!-- The si.uom:si-units manifest has no Export-Package entry. As workaround this OSGi-ify bundle is used. -->
       <bundle dependency="true">wrap:mvn:si.uom/si-units/2.0.1$overwrite=merge&amp;Bundle-SymbolicName=si-units&amp;Import-Package=jakarta.annotation;resolution:=optional,javax.inject;resolution:=optional,*</bundle>
       <bundle dependency="true">mvn:si.uom/si-quantity/2.0.1</bundle>
@@ -59,6 +59,7 @@
     </feature>
 
     <feature name="opensmarthouse-tp-xstream" description="XStream library" version="${project.version}">
+        <bundle dependency="true" start-level="10">mvn:org.apache.servicemix.specs/org.apache.servicemix.specs.activation-api-1.1/2.9.0</bundle>
         <bundle dependency="true">mvn:org.apache.servicemix.bundles/org.apache.servicemix.bundles.xstream/1.4.18_1</bundle>
     </feature>
 
