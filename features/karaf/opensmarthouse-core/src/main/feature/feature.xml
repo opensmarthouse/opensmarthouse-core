@@ -432,7 +432,6 @@
 
     <feature name="opensmarthouse-core-io-monitor" version="${project.version}">
         <feature>opensmarthouse-core-service</feature>
-        <feature>opensmarthouse-core-service</feature>
         <feature>opensmarthouse-core-automation</feature>
 
         <bundle>mvn:org.opensmarthouse.core.bundles/org.opensmarthouse.core.io.monitor/${project.version}</bundle>
