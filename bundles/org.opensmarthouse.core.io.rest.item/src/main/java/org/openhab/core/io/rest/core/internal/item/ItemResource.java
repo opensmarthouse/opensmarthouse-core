@@ -47,8 +47,13 @@ import javax.ws.rs.core.UriInfo;
 
 import org.eclipse.jdt.annotation.NonNullByDefault;
 import org.eclipse.jdt.annotation.Nullable;
+import org.openhab.core.auth.Authentication;
+import org.openhab.core.auth.AuthenticationContextHolder;
+import org.openhab.core.auth.AuthorizationManager;
+import org.openhab.core.auth.Permissions;
 import org.openhab.core.auth.Role;
 import org.openhab.core.events.EventPublisher;
+import org.openhab.core.i18n.TranslationProvider;
 import org.openhab.core.io.rest.DTOMapper;
 import org.openhab.core.io.rest.JSONResponse;
 import org.openhab.core.io.rest.LocaleService;
@@ -145,13 +150,21 @@ public class ItemResource implements RESTResource {
      */
     private static void respectForwarded(final UriBuilder uriBuilder, final @Context HttpHeaders httpHeaders) {
         Optional.ofNullable(httpHeaders.getHeaderString("X-Forwarded-Host")).ifPresent(host -> {
+            if (host.contains(",")) {
+                host = host.split(",")[0];
+            }
             final String[] parts = host.split(":");
             uriBuilder.host(parts[0]);
             if (parts.length > 1) {
                 uriBuilder.port(Integer.parseInt(parts[1]));
             }
         });
-        Optional.ofNullable(httpHeaders.getHeaderString("X-Forwarded-Proto")).ifPresent(uriBuilder::scheme);
+        Optional.ofNullable(httpHeaders.getHeaderString("X-Forwarded-Proto")).map(scheme -> {
+            if (scheme.contains(",")) {
+                return scheme.split(",")[0];
+            }
+            return scheme;
+        }).ifPresent(uriBuilder::scheme);
     }
 
     private final Logger logger = LoggerFactory.getLogger(ItemResource.class);
@@ -161,9 +174,12 @@ public class ItemResource implements RESTResource {
     private final ItemBuilderFactory itemBuilderFactory;
     private final ItemRegistry itemRegistry;
     private final LocaleService localeService;
+    private final TranslationProvider translationProvider;
     private final ManagedItemProvider managedItemProvider;
     private final MetadataRegistry metadataRegistry;
     private final MetadataSelectorMatcher metadataSelectorMatcher;
+    private final AuthorizationManager authorizationManager;
+    private final AuthenticationContextHolder authenticationContextHolder;
 
     @Activate
     public ItemResource(//
@@ -172,17 +188,23 @@ public class ItemResource implements RESTResource {
             final @Reference ItemBuilderFactory itemBuilderFactory, //
             final @Reference ItemRegistry itemRegistry, //
             final @Reference LocaleService localeService, //
+            final @Reference TranslationProvider translationProvider, //
             final @Reference ManagedItemProvider managedItemProvider,
             final @Reference MetadataRegistry metadataRegistry,
-            final @Reference MetadataSelectorMatcher metadataSelectorMatcher) {
+            final @Reference MetadataSelectorMatcher metadataSelectorMatcher,
+            final @Reference AuthorizationManager authorizationManager,
+            final @Reference AuthenticationContextHolder authenticationContextHolder) {
         this.dtoMapper = dtoMapper;
         this.eventPublisher = eventPublisher;
         this.itemBuilderFactory = itemBuilderFactory;
         this.itemRegistry = itemRegistry;
         this.localeService = localeService;
+        this.translationProvider = translationProvider;
         this.managedItemProvider = managedItemProvider;
         this.metadataRegistry = metadataRegistry;
         this.metadataSelectorMatcher = metadataSelectorMatcher;
+        this.authorizationManager = authorizationManager;
+        this.authenticationContextHolder = authenticationContextHolder;
     }
 
     private UriBuilder uriBuilder(final UriInfo uriInfo, final HttpHeaders httpHeaders) {
@@ -209,10 +231,13 @@ public class ItemResource implements RESTResource {
         final UriBuilder uriBuilder = uriBuilder(uriInfo, httpHeaders);
         uriBuilder.path("{itemName}");
 
+        final Authentication authentication = authenticationContextHolder.getAuthentication();
         Stream<EnrichedItemDTO> itemStream = getItems(type, tags).stream() //
+                .filter(item -> authorizationManager.hasPermission(Permissions.READ, item, authentication))
                 .map(item -> EnrichedItemDTOMapper.map(item, recursive, null, uriBuilder, locale)) //
                 .peek(dto -> addMetadata(dto, namespaces, null)) //
-                .peek(dto -> dto.editable = isEditable(dto.name));
+                .peek(dto -> dto.editable = isEditable(dto.name))
+                .peek(dto -> dto.label = translationProvider.getText(null, "item." + dto.name, dto.label, locale));
         itemStream = dtoMapper.limitToFields(itemStream, fields);
         return Response.ok(new Stream2JSONInputStream(itemStream)).build();
     }
@@ -228,6 +253,11 @@ public class ItemResource implements RESTResource {
             @HeaderParam(HttpHeaders.ACCEPT_LANGUAGE) @Parameter(description = "language") @Nullable String language,
             @QueryParam("metadata") @Parameter(description = "metadata selector") @Nullable String namespaceSelector,
             @PathParam("itemname") @Parameter(description = "item name") String itemname) {
+
+        if (!authorizationManager.hasPermission(Permissions.READ, itemname, Item.class, authenticationContextHolder.getAuthentication())) {
+            return Response.status(Status.UNAUTHORIZED).build();
+        }
+
         final Locale locale = localeService.getLocale(language);
         final Set<String> namespaces = splitAndFilterNamespaces(namespaceSelector, locale);
 
@@ -239,6 +269,7 @@ public class ItemResource implements RESTResource {
             EnrichedItemDTO dto = EnrichedItemDTOMapper.map(item, true, null, uriBuilder(uriInfo, httpHeaders), locale);
             addMetadata(dto, namespaces, null);
             dto.editable = isEditable(dto.name);
+            dto.label = translationProvider.getText(null, "item." + dto.name, dto.label, locale);
             return JSONResponse.createResponse(Status.OK, dto, null);
         } else {
             return getItemNotFoundResponse(itemname);
@@ -262,6 +293,10 @@ public class ItemResource implements RESTResource {
             @ApiResponse(responseCode = "200", description = "OK", content = @Content(schema = @Schema(implementation = String.class))),
             @ApiResponse(responseCode = "404", description = "Item not found") })
     public Response getPlainItemState(@PathParam("itemname") @Parameter(description = "item name") String itemname) {
+        if (!authorizationManager.hasPermission(Permissions.STATE, itemname, Item.class, authenticationContextHolder.getAuthentication())) {
+            return Response.status(Status.UNAUTHORIZED).build();
+        }
+
         // get item
         Item item = getItem(itemname);
 
@@ -287,6 +322,11 @@ public class ItemResource implements RESTResource {
             @HeaderParam(HttpHeaders.ACCEPT_LANGUAGE) @Parameter(description = "language") @Nullable String language,
             @PathParam("itemname") @Parameter(description = "item name") String itemname,
             @Parameter(description = "valid item state (e.g. ON, OFF)", required = true) String value) {
+
+        if (!authorizationManager.hasPermission(Permissions.STATE, itemname, Item.class, authenticationContextHolder.getAuthentication())) {
+            return Response.status(Status.UNAUTHORIZED).build();
+        }
+
         final Locale locale = localeService.getLocale(language);
 
         // get Item
@@ -321,6 +361,11 @@ public class ItemResource implements RESTResource {
             @ApiResponse(responseCode = "400", description = "Item command null") })
     public Response postItemCommand(@PathParam("itemname") @Parameter(description = "item name") String itemname,
             @Parameter(description = "valid item command (e.g. ON, OFF, UP, DOWN, REFRESH)", required = true) String value) {
+
+        if (!authorizationManager.hasPermission(Permissions.COMMAND, itemname, Item.class, authenticationContextHolder.getAuthentication())) {
+            return Response.status(Status.UNAUTHORIZED).build();
+        }
+
         Item item = getItem(itemname);
         Command command = null;
         if (item != null) {
@@ -718,7 +763,7 @@ public class ItemResource implements RESTResource {
     /**
      * helper: Response to be sent to client if a Thing cannot be found
      *
-     * @param thingUID
+     * @param itemname
      * @return Response configured for 'item not found'
      */
     private static Response getItemNotFoundResponse(String itemname) {

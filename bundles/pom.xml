@@ -21,9 +21,17 @@
     <module>org.opensmarthouse.core.audio.core</module>
     <module>org.opensmarthouse.core.auth</module>
     <module>org.opensmarthouse.core.auth.core</module>
+    <module>org.opensmarthouse.core.auth.apitoken</module>
+    <module>org.opensmarthouse.core.auth.apitoken.provider</module>
+    <module>org.opensmarthouse.core.auth.cookie</module>
     <module>org.opensmarthouse.core.auth.jaas</module>
+    <module>org.opensmarthouse.core.auth.jwt</module>
+    <module>org.opensmarthouse.core.auth.jwt.provider</module>
+    <module>org.opensmarthouse.core.auth.local</module>
+    <module>org.opensmarthouse.core.auth.local.provider</module>
     <module>org.opensmarthouse.core.auth.oauth2client</module>
     <module>org.opensmarthouse.core.auth.oauth2client.core</module>
+    <module>org.opensmarthouse.core.auth.password</module>
     <module>org.opensmarthouse.core.automation</module>
     <module>org.opensmarthouse.core.automation.module.media</module>
     <module>org.opensmarthouse.core.automation.module.script</module>
@@ -55,6 +63,7 @@
     <module>org.opensmarthouse.core.i18n</module>
     <module>org.opensmarthouse.core.i18n.core</module>
     <module>org.opensmarthouse.core.id</module>
+    <module>org.opensmarthouse.core.io.auth</module>
     <module>org.opensmarthouse.core.io.bin2json</module>
     <module>org.opensmarthouse.core.io.console</module>
     <module>org.opensmarthouse.core.io.console.eclipse</module>
@@ -63,13 +72,18 @@
     <module>org.opensmarthouse.core.io.console.user</module>
     <module>org.opensmarthouse.core.io.http</module>
     <module>org.opensmarthouse.core.io.http.auth</module>
+    <module>org.opensmarthouse.core.io.http.auth.apitoken</module>
     <module>org.opensmarthouse.core.io.http.auth.basic</module>
+    <module>org.opensmarthouse.core.io.http.auth.cookie</module>
+    <module>org.opensmarthouse.core.io.http.auth.jwt</module>
+    <module>org.opensmarthouse.core.io.http.facade</module>
     <module>org.opensmarthouse.core.io.jetty.certificate</module>
     <module>org.opensmarthouse.core.io.monitor</module>
     <module>org.opensmarthouse.core.io.net</module>
     <module>org.opensmarthouse.core.io.rest</module>
     <module>org.opensmarthouse.core.io.rest.audio</module>
     <module>org.opensmarthouse.core.io.rest.auth</module>
+    <module>org.opensmarthouse.core.io.rest.auth.local</module>
     <module>org.opensmarthouse.core.io.rest.binding</module>
     <module>org.opensmarthouse.core.io.rest.channel</module>
     <module>org.opensmarthouse.core.io.rest.config</module>
@@ -99,8 +113,10 @@
     <module>org.opensmarthouse.core.io.transport.serial.rxtx.rfc2217</module>
     <module>org.opensmarthouse.core.io.transport.upnp</module>
     <module>org.opensmarthouse.core.item</module>
+    <module>org.opensmarthouse.core.item.auth</module>
     <module>org.opensmarthouse.core.item.core</module>
     <module>org.opensmarthouse.core.karaf</module>
+    <module>org.opensmarthouse.core.karaf.jaas</module>
     <module>org.opensmarthouse.core.library.dimension</module>
     <module>org.opensmarthouse.core.library.item</module>
     <module>org.opensmarthouse.core.library.type</module>

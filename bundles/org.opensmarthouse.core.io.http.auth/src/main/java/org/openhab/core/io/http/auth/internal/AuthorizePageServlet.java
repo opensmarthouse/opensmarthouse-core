@@ -26,12 +26,12 @@ import org.eclipse.jdt.annotation.NonNullByDefault;
 import org.eclipse.jdt.annotation.Nullable;
 import org.eclipse.jetty.http.HttpStatus;
 import org.openhab.core.auth.AuthenticationException;
-import org.openhab.core.auth.AuthenticationProvider;
-import org.openhab.core.auth.ManagedUser;
-import org.openhab.core.auth.PendingToken;
+import org.openhab.core.auth.AuthenticationManager;
+import org.openhab.core.auth.local.ManagedUser;
+import org.openhab.core.auth.local.PendingToken;
 import org.openhab.core.auth.Role;
-import org.openhab.core.auth.User;
-import org.openhab.core.auth.UserRegistry;
+import org.openhab.core.auth.local.User;
+import org.openhab.core.auth.local.UserRegistry;
 import org.openhab.core.i18n.LocaleProvider;
 import org.osgi.framework.BundleContext;
 import org.osgi.service.component.annotations.Activate;
@@ -64,9 +64,9 @@ public class AuthorizePageServlet extends AbstractAuthPageServlet {
 
     @Activate
     public AuthorizePageServlet(BundleContext bundleContext, @Reference HttpService httpService,
-            @Reference UserRegistry userRegistry, @Reference AuthenticationProvider authProvider,
+            @Reference UserRegistry userRegistry, @Reference AuthenticationManager authManager,
             @Reference LocaleProvider localeProvider) {
-        super(bundleContext, httpService, userRegistry, authProvider, localeProvider);
+        super(bundleContext, httpService, userRegistry, authManager, localeProvider);
         try {
             httpService.registerServlet("/auth", this, null, null);
         } catch (NamespaceException | ServletException e) {

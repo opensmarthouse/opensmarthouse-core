@@ -225,7 +225,7 @@ public class ArithmeticGroupFunctionTest {
         items.add(new TestItem("TestItem4", UnDefType.UNDEF));
         items.add(new TestItem("TestItem5", new DecimalType("122.41")));
 
-        function = new Sum();
+        function = new Sum(OnOffType.OFF);
         State state = function.calculate(items);
 
         assertEquals(new DecimalType("234.95"), state);

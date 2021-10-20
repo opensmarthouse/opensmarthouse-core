@@ -30,11 +30,13 @@ import org.openhab.core.internal.items.function.Or;
 import org.openhab.core.internal.items.function.dimensional.Avg;
 import org.openhab.core.internal.items.function.dimensional.Max;
 import org.openhab.core.internal.items.function.dimensional.Min;
+import org.openhab.core.internal.items.function.dimensional.Sub;
 import org.openhab.core.internal.items.function.dimensional.Sum;
 import org.openhab.core.items.GroupFunction;
 import org.openhab.core.items.Item;
 import org.openhab.core.items.dto.GroupFunctionDTO;
 import org.openhab.core.library.items.NumberItem;
+import org.openhab.core.library.types.OnOffType;
 import org.openhab.core.library.types.StringType;
 import org.openhab.core.types.State;
 import org.openhab.core.types.TypeParser;
@@ -103,7 +105,12 @@ public class GroupFunctionHelper {
             case "AVG":
                 return new Avg(dimension);
             case "SUM":
-                return new Sum(dimension);
+                if (function.params != null && function.params.length == 1) {
+                    return new Sum(dimension, OnOffType.from(function.params[0]));
+                }
+                return new Sum(dimension, OnOffType.ON);
+            case "SUB":
+                return new Sub(dimension);
             case "MIN":
                 return new Min(dimension);
             case "MAX":
@@ -161,7 +168,12 @@ public class GroupFunctionHelper {
             case "AVG":
                 return new org.openhab.core.internal.items.function.Avg();
             case "SUM":
-                return new org.openhab.core.internal.items.function.Sum();
+                if (function.params != null && function.params.length == 1) {
+                    return new org.openhab.core.internal.items.function.Sum(OnOffType.from(function.params[0]));
+                }
+                return new org.openhab.core.internal.items.function.Sum(OnOffType.ON);
+            case "SUB":
+                return new org.openhab.core.internal.items.function.Sub();
             case "MIN":
                 return new org.openhab.core.internal.items.function.Min();
             case "MAX":

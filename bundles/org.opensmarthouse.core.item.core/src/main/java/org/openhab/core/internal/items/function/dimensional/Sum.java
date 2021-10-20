@@ -17,6 +17,7 @@ import javax.measure.Quantity;
 import org.eclipse.jdt.annotation.NonNullByDefault;
 import org.eclipse.jdt.annotation.Nullable;
 import org.openhab.core.items.Item;
+import org.openhab.core.library.types.OnOffType;
 import org.openhab.core.library.types.QuantityType;
 import org.openhab.core.types.State;
 import org.openhab.core.types.UnDefType;
@@ -29,8 +30,11 @@ import org.openhab.core.types.UnDefType;
 @NonNullByDefault
 public class Sum extends DimensionalGroupFunction {
 
-    public Sum(Class<? extends Quantity<?>> dimension) {
+    private final OnOffType allMembers;
+
+    public Sum(Class<? extends Quantity<?>> dimension, OnOffType allMembers) {
         super(dimension);
+        this.allMembers = allMembers;
     }
 
     @Override
@@ -50,6 +54,10 @@ public class Sum extends DimensionalGroupFunction {
                     } else if (sum.getUnit().isCompatible(itemState.getUnit())) {
                         sum = sum.add(itemState);
                     }
+                } else {
+                    if (allMembers == OnOffType.ON) {
+                        return UnDefType.UNDEF;
+                    }
                 }
             }
         }
@@ -57,4 +65,13 @@ public class Sum extends DimensionalGroupFunction {
         return sum != null ? sum : UnDefType.UNDEF;
     }
 
+    @Override
+    public State[] getParameters() {
+        return new State[] {allMembers};
+    }
+
+    @Override
+    public String toString() {
+        return "SUM(" + allMembers + ")";
+    }
 }

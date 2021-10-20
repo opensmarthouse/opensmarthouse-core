@@ -251,6 +251,21 @@
         <bundle>mvn:org.opensmarthouse.core.bundles/org.opensmarthouse.core.auth/${project.version}</bundle>
     </feature>
 
+    <feature name="opensmarthouse-core-auth-apitoken" description="Open SmartHouse Core: Auth API token" version="${project.version}">
+        <feature>opensmarthouse-core-auth</feature>
+        <bundle>mvn:org.opensmarthouse.core.bundles/org.opensmarthouse.core.auth.apitoken/${project.version}</bundle>
+    </feature>
+
+    <feature name="opensmarthouse-core-auth-apitoken-provider" description="Open SmartHouse Core: Auth API token provider" version="${project.version}">
+        <feature>opensmarthouse-core-auth-apitoken</feature>
+        <bundle>mvn:org.opensmarthouse.core.bundles/org.opensmarthouse.core.auth.apitoken/${project.version}</bundle>
+    </feature>
+
+    <feature name="opensmarthouse-core-auth-cookie" description="Open SmartHouse Core: Cookie credentials" version="${project.version}">
+        <feature>opensmarthouse-core-auth</feature>
+        <bundle>mvn:org.opensmarthouse.core.bundles/org.opensmarthouse.core.auth.cookie/${project.version}</bundle>
+    </feature>
+
     <feature name="opensmarthouse-core-auth-core" description="Open SmartHouse Core: Auth Provider" version="${project.version}">
         <feature>opensmarthouse-core-auth</feature>
         <feature>opensmarthouse-core-storage</feature>
@@ -259,7 +274,32 @@
 
     <feature name="opensmarthouse-core-auth-jaas" version="${project.version}">
         <feature>opensmarthouse-core-auth</feature>
+        <feature>opensmarthouse-core-auth-local</feature>
+        <feature>opensmarthouse-core-auth-password</feature>
         <bundle>mvn:org.opensmarthouse.core.bundles/org.opensmarthouse.core.auth.jaas/${project.version}</bundle>
+    </feature>
+
+    <feature name="opensmarthouse-core-auth-jwt" version="${project.version}">
+        <feature>opensmarthouse-core-auth</feature>
+        <bundle>mvn:org.opensmarthouse.core.bundles/org.opensmarthouse.core.auth.jwt/${project.version}</bundle>
+    </feature>
+
+    <feature name="opensmarthouse-core-auth-jwt-provider" version="${project.version}">
+        <requirement>opensmarthouse-tp;filter:="(feature=jose4j)"</requirement>
+        <feature dependency="true">opensmarthouse-tp-jose4j</feature>
+        <feature>opensmarthouse-core-auth-jwt</feature>
+        <bundle>mvn:org.opensmarthouse.core.bundles/org.opensmarthouse.core.auth.jwt.provider/${project.version}</bundle>
+    </feature>
+
+    <feature name="opensmarthouse-core-auth-local" version="${project.version}">
+        <feature>opensmarthouse-core-auth</feature>
+        <bundle>mvn:org.opensmarthouse.core.bundles/org.opensmarthouse.core.auth.local/${project.version}</bundle>
+    </feature>
+
+    <feature name="opensmarthouse-core-auth-local-provider" version="${project.version}">
+        <feature>opensmarthouse-core-auth-local</feature>
+        <feature>opensmarthouse-core-auth-password</feature>
+        <bundle>mvn:org.opensmarthouse.core.bundles/org.opensmarthouse.core.auth.local.provider/${project.version}</bundle>
     </feature>
 
     <feature name="opensmarthouse-core-auth-oauth2client" version="${project.version}">
@@ -273,6 +313,17 @@
         <feature>opensmarthouse-core-auth-oauth2client</feature>
         <feature>opensmarthouse-core-storage</feature>
         <bundle>mvn:org.opensmarthouse.core.bundles/org.opensmarthouse.core.auth.oauth2client.core/${project.version}</bundle>
+    </feature>
+
+    <feature name="opensmarthouse-core-auth-password" version="${project.version}">
+        <feature>opensmarthouse-core-auth</feature>
+        <bundle>mvn:org.opensmarthouse.core.bundles/org.opensmarthouse.core.auth.password/${project.version}</bundle>
+    </feature>
+
+    <feature name="opensmarthouse-core-authz-item" version="${project.version}">
+        <feature>opensmarthouse-core-auth</feature>
+        <feature>opensmarthouse-core-item</feature>
+        <bundle>mvn:org.opensmarthouse.core.bundles/org.opensmarthouse.core.item.auth/${project.version}</bundle>
     </feature>
 
     <feature name="opensmarthouse-core-automation" version="${project.version}">
@@ -445,6 +496,11 @@
         <bundle>mvn:org.opensmarthouse.core.bundles/org.opensmarthouse.core.io.console.karaf/${project.version}</bundle>
     </feature>
 
+    <feature name="opensmarthouse-core-io-auth" version="${project.version}">
+        <feature>opensmarthouse-core-auth</feature>
+        <bundle>mvn:org.opensmarthouse.core.bundles/org.opensmarthouse.core.io.auth/${project.version}</bundle>
+    </feature>
+
     <feature name="opensmarthouse-core-io-http" version="${project.version}">
         <feature dependency="true">http</feature>
         <bundle>mvn:org.opensmarthouse.core.bundles/org.opensmarthouse.core.io.http/${project.version}</bundle>
@@ -452,10 +508,26 @@
 
     <feature name="opensmarthouse-core-io-http-auth" version="${project.version}">
         <feature dependency="true">opensmarthouse-tp-jax-rs</feature>
+        <feature>opensmarthouse-core-io-auth</feature>
+        <feature>opensmarthouse-core-io-http-facade</feature>
         <feature>opensmarthouse-core-io-http</feature>
         <feature>opensmarthouse-core-i18n</feature>
         <feature>opensmarthouse-core-auth-jaas</feature>
         <bundle>mvn:org.opensmarthouse.core.bundles/org.opensmarthouse.core.io.http.auth/${project.version}</bundle>
+    </feature>
+
+    <feature name="opensmarthouse-core-io-http-auth-apitoken" version="${project.version}">
+        <feature>opensmarthouse-core-base</feature>
+        <feature>opensmarthouse-core-auth-apitoken</feature>
+        <feature>opensmarthouse-core-io-http-auth</feature>
+        <bundle>mvn:org.opensmarthouse.core.bundles/org.opensmarthouse.core.io.http.auth.apitoken/${project.version}</bundle>
+    </feature>
+
+    <feature name="opensmarthouse-core-io-http-auth-cookie" version="${project.version}">
+        <feature>opensmarthouse-core-base</feature>
+        <feature>opensmarthouse-core-auth-cookie</feature>
+        <feature>opensmarthouse-core-io-http-auth</feature>
+        <bundle>mvn:org.opensmarthouse.core.bundles/org.opensmarthouse.core.io.http.auth.cookie/${project.version}</bundle>
     </feature>
 
     <feature name="opensmarthouse-core-io-http-auth-basic" version="${project.version}">
@@ -468,13 +540,37 @@
         </config>
     </feature>
 
+    <feature name="opensmarthouse-core-io-http-auth-jwt" version="${project.version}">
+        <feature>opensmarthouse-core-base</feature>
+        <feature>opensmarthouse-core-io-http-auth</feature>
+        <feature>opensmarthouse-core-auth-jwt</feature>
+        <bundle>mvn:org.opensmarthouse.core.bundles/org.opensmarthouse.core.io.http.auth.jwt/${project.version}</bundle>
+    </feature>
+
+    <feature name="opensmarthouse-core-io-http-facade" version="${project.version}">
+        <bundle>mvn:org.opensmarthouse.core.bundles/org.opensmarthouse.core.io.http.facade/${project.version}</bundle>
+    </feature>
+
     <feature name="opensmarthouse-core-io-rest-auth" version="${project.version}">
         <feature>opensmarthouse-core-auth-core</feature>
+        <feature>opensmarthouse-core-io-auth</feature>
+        <feature>opensmarthouse-core-io-http-facade</feature>
         <feature>opensmarthouse-core-io-rest</feature>
         <feature>opensmarthouse-core-config</feature>
         <bundle>mvn:org.opensmarthouse.core.bundles/org.opensmarthouse.core.io.rest.auth/${project.version}</bundle>
+    </feature>
+
+    <feature name="opensmarthouse-core-io-rest-auth-local" version="${project.version}">
+        <feature dependency="true">opensmarthouse-tp-jax-rs</feature>
         <requirement>opensmarthouse-tp;filter:="(feature=jose4j)"</requirement>
         <feature dependency="true">opensmarthouse-tp-jose4j</feature>
+
+        <feature>opensmarthouse-core-io-http-auth-jwt</feature>
+        <feature>opensmarthouse-core-io-rest-auth</feature>
+        <feature>opensmarthouse-core-auth-cookie</feature>
+        <feature>opensmarthouse-core-auth-jwt</feature>
+        <feature>opensmarthouse-core-auth-local-provider</feature>
+        <bundle>mvn:org.opensmarthouse.core.bundles/org.opensmarthouse.core.io.rest.auth.local/${project.version}</bundle>
     </feature>
 
     <feature name="opensmarthouse-core-io-rest-log" version="${project.version}">
@@ -496,6 +592,7 @@
     <feature name="opensmarthouse-core-io-rest-item" version="${project.version}">
         <feature>opensmarthouse-core-library-item</feature>
         <feature>opensmarthouse-core-io-rest</feature>
+        <feature>opensmarthouse-core-auth</feature>
         <feature>opensmarthouse-core-registry</feature>
         <feature>opensmarthouse-core-config</feature>
         <feature>opensmarthouse-core-thing</feature>
@@ -506,6 +603,9 @@
     <feature name="opensmarthouse-core-io-rest-sse" version="${project.version}">
         <feature dependency="true">opensmarthouse-tp-javax-inject</feature>
         <feature>opensmarthouse-core-io-rest</feature>
+        <feature>opensmarthouse-core-io-rest-auth</feature>
+        <feature>opensmarthouse-core-io-http-auth-cookie</feature>
+        <feature>opensmarthouse-core-auth</feature>
         <feature>opensmarthouse-core-item</feature>
         <feature>opensmarthouse-core-transform</feature>
         <bundle>mvn:org.opensmarthouse.core.bundles/org.opensmarthouse.core.io.rest.sse/${project.version}</bundle>
@@ -824,11 +924,17 @@
         <feature dependency="true">opensmarthouse-tp-commons-net</feature>
         <feature>opensmarthouse-core-base</feature>
         <feature>opensmarthouse-core-auth-jaas</feature>
+        <feature>opensmarthouse-core-auth-jwt</feature>
+        <feature>opensmarthouse-core-auth-jwt-provider</feature>
+        <feature>opensmarthouse-core-auth-password</feature>
+        <feature>opensmarthouse-core-auth-local</feature>
+        <feature>opensmarthouse-core-auth-local-provider</feature>
         <feature>opensmarthouse-core-ephemeris</feature>
         <feature>opensmarthouse-core-io-console-karaf</feature>
         <feature>opensmarthouse-core-io-http</feature>
         <feature>opensmarthouse-core-io-http-auth</feature>
         <feature>opensmarthouse-core-io-rest-auth</feature>
+        <feature>opensmarthouse-core-io-rest-auth-local</feature>
         <feature>opensmarthouse-core-io-rest-audio</feature>
         <feature>opensmarthouse-core-io-rest-extension</feature>
         <feature>opensmarthouse-core-io-rest-sitemap</feature>
@@ -1000,6 +1106,7 @@
 
     <feature name="opensmarthouse-core-io-rest-persistence" version="${project.version}">
         <feature>opensmarthouse-core-io-rest</feature>
+        <feature>opensmarthouse-core-auth</feature>
         <feature>opensmarthouse-core-persistence</feature>
         <bundle>mvn:org.opensmarthouse.core.bundles/org.opensmarthouse.core.io.rest.persistence/${project.version}</bundle>
     </feature>

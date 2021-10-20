@@ -44,6 +44,10 @@
       <groupId>junit</groupId>
       <artifactId>junit</artifactId>
     </dependency>
+    <dependency>
+      <groupId>org.opensmarthouse.core.bundles</groupId>
+      <artifactId>org.opensmarthouse.core.io.rest.auth</artifactId>
+    </dependency>
   </dependencies>
 
 </project>

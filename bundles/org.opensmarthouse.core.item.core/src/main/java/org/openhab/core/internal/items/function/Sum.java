@@ -19,6 +19,8 @@ import org.eclipse.jdt.annotation.Nullable;
 import org.openhab.core.items.GroupFunction;
 import org.openhab.core.items.Item;
 import org.openhab.core.library.types.DecimalType;
+import org.openhab.core.library.types.OnOffType;
+import org.openhab.core.library.types.UnDefType;
 import org.openhab.core.types.State;
 
 /**
@@ -31,7 +33,10 @@ import org.openhab.core.types.State;
 @NonNullByDefault
 public class Sum implements GroupFunction {
 
-    public Sum() {
+    private final OnOffType allMembers;
+
+    public Sum(OnOffType allMembers) {
+        this.allMembers = allMembers;
     }
 
     @Override
@@ -42,6 +47,10 @@ public class Sum implements GroupFunction {
                 DecimalType itemState = item.getStateAs(DecimalType.class);
                 if (itemState != null) {
                     sum = sum.add(itemState.toBigDecimal());
+                } else {
+                    if (OnOffType.ON == allMembers) {
+                        return UnDefType.UNDEF;
+                    }
                 }
             }
         }
@@ -60,6 +69,12 @@ public class Sum implements GroupFunction {
 
     @Override
     public State[] getParameters() {
-        return new State[0];
+        return new State[] { allMembers};
     }
+
+    @Override
+    public String toString() {
+        return "SUM(" + allMembers + ")";
+    }
+
 }

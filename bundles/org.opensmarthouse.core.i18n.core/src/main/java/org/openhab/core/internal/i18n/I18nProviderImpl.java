@@ -18,11 +18,13 @@ import java.text.MessageFormat;
 import java.time.DateTimeException;
 import java.time.ZoneId;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Objects;
 import java.util.ResourceBundle;
 
+import java.util.concurrent.CopyOnWriteArrayList;
 import javax.measure.Quantity;
 import javax.measure.Unit;
 import javax.measure.quantity.Angle;
@@ -40,6 +42,7 @@ import org.eclipse.jdt.annotation.NonNullByDefault;
 import org.eclipse.jdt.annotation.Nullable;
 import org.openhab.core.i18n.LocaleProvider;
 import org.openhab.core.i18n.LocationProvider;
+import org.openhab.core.i18n.ResourceTranslationProvider;
 import org.openhab.core.i18n.TimeZoneProvider;
 import org.openhab.core.i18n.TranslationProvider;
 import org.openhab.core.i18n.UnitProvider;
@@ -57,6 +60,9 @@ import org.osgi.service.component.annotations.Activate;
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Deactivate;
 import org.osgi.service.component.annotations.Modified;
+import org.osgi.service.component.annotations.Reference;
+import org.osgi.service.component.annotations.ReferenceCardinality;
+import org.osgi.service.component.annotations.ReferencePolicy;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -78,6 +84,7 @@ import org.slf4j.LoggerFactory;
  * @author Markus Rathgeb - Initial contribution
  * @author Stefan Triller - Initial contribution
  * @author Erdoan Hadzhiyusein - Added time zone
+ * @author Łukasz Dywicki - Added support for dynamic translations
  */
 @Component(immediate = true, configurationPid = I18nProviderImpl.CONFIGURATION_PID, property = {
         Constants.SERVICE_PID + "=org.openhab.i18n", //
@@ -101,6 +108,7 @@ public class I18nProviderImpl
 
     // TranslationProvider
     private final ResourceBundleTracker resourceBundleTracker;
+    private final List<ResourceTranslationProvider> translationProviders = new CopyOnWriteArrayList<>();
 
     // LocationProvider
     static final String LOCATION = "location";
@@ -144,6 +152,15 @@ public class I18nProviderImpl
         setLocation(location);
         setLocale(language, script, region, variant);
         setMeasurementSystem(measurementSystem);
+    }
+
+    @Reference(cardinality = ReferenceCardinality.MULTIPLE, policy = ReferencePolicy.DYNAMIC)
+    void addResourceTranslationProvider(ResourceTranslationProvider translationProvider) {
+        this.translationProviders.add(translationProvider);
+    }
+
+    void removeResourceTranslationProvider(ResourceTranslationProvider translationProvider) {
+        this.translationProviders.remove(translationProvider);
     }
 
     private void setMeasurementSystem(@Nullable String measurementSystem) {
@@ -299,6 +316,13 @@ public class I18nProviderImpl
     @Override
     public @Nullable String getText(@Nullable Bundle bundle, @Nullable String key, @Nullable String defaultText,
             @Nullable Locale locale) {
+        for (ResourceTranslationProvider provider : translationProviders) {
+            String text = provider.getText(key, locale);
+            if (text != null) {
+                return text;
+            }
+        }
+
         LanguageResourceBundleManager languageResource = this.resourceBundleTracker.getLanguageResource(bundle);
 
         if (languageResource != null) {

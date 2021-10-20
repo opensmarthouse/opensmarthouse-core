@@ -427,6 +427,11 @@ Import-Package: \\
           <artifactId>build-helper-maven-plugin</artifactId>
           <version>${mojohaus-buildhelper-plugin.version}</version>
         </plugin>
+        <plugin>
+          <groupId>org.apache.karaf.tooling</groupId>
+          <artifactId>karaf-maven-plugin</artifactId>
+          <version>${karaf.tooling.version}</version>
+        </plugin>
 
         <plugin>
           <groupId>com.mycila</groupId>
@@ -527,19 +532,6 @@ Import-Package: \\
                     <ignore />
                   </action>
                 </pluginExecution>
-                <pluginExecution>
-                  <pluginExecutionFilter>
-                    <groupId>org.commonjava.maven.plugins</groupId>
-                    <artifactId>directory-maven-plugin</artifactId>
-                    <versionRange>[0.3.1,)</versionRange>
-                    <goals>
-                      <goal>highest-basedir</goal>
-                    </goals>
-                  </pluginExecutionFilter>
-                  <action>
-                    <ignore />
-                  </action>
-                </pluginExecution>
               </pluginExecutions>
             </lifecycleMappingMetadata>
           </configuration>
@@ -550,10 +542,10 @@ Import-Package: \\
           <artifactId>sat-plugin</artifactId>
           <version>${sat.version}</version>
           <configuration>
-            <pmdFilter>${basedirRoot}/tools/static-code-analysis/pmd/suppressions.properties</pmdFilter>
-            <checkstyleProperties>${basedirRoot}/tools/static-code-analysis/checkstyle/ruleset.properties</checkstyleProperties>
-            <checkstyleFilter>${basedirRoot}/tools/static-code-analysis/checkstyle/suppressions.xml</checkstyleFilter>
-            <spotbugsExclude>${basedirRoot}/tools/static-code-analysis/spotbugs/suppressions.xml</spotbugsExclude>
+            <pmdFilter>${maven.multiModuleProjectDirectory}/tools/static-code-analysis/pmd/suppressions.properties</pmdFilter>
+            <checkstyleProperties>${maven.multiModuleProjectDirectory}/tools/static-code-analysis/checkstyle/ruleset.properties</checkstyleProperties>
+            <checkstyleFilter>${maven.multiModuleProjectDirectory}/tools/static-code-analysis/checkstyle/suppressions.xml</checkstyleFilter>
+            <spotbugsExclude>${maven.multiModuleProjectDirectory}/tools/static-code-analysis/spotbugs/suppressions.xml</spotbugsExclude>
           </configuration>
           <executions>
             <execution>
@@ -663,23 +655,6 @@ Import-Package: \\
     </pluginManagement>
 
     <plugins>
-      <plugin>
-        <groupId>org.commonjava.maven.plugins</groupId>
-        <artifactId>directory-maven-plugin</artifactId>
-        <version>0.3.1</version>
-        <executions>
-          <execution>
-            <id>directories</id>
-            <goals>
-              <goal>highest-basedir</goal>
-            </goals>
-            <phase>initialize</phase>
-            <configuration>
-              <property>basedirRoot</property>
-            </configuration>
-          </execution>
-        </executions>
-      </plugin>
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-enforcer-plugin</artifactId>

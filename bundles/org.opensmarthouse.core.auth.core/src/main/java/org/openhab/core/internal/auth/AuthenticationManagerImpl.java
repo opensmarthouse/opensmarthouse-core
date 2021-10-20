@@ -19,6 +19,7 @@ import org.openhab.core.auth.Authentication;
 import org.openhab.core.auth.AuthenticationException;
 import org.openhab.core.auth.AuthenticationManager;
 import org.openhab.core.auth.AuthenticationProvider;
+import org.openhab.core.auth.AuthenticationResult;
 import org.openhab.core.auth.Credentials;
 import org.openhab.core.auth.UnsupportedCredentialsException;
 import org.osgi.service.component.annotations.Component;
@@ -41,15 +42,15 @@ public class AuthenticationManagerImpl implements AuthenticationManager {
     private final List<AuthenticationProvider> providers = new CopyOnWriteArrayList<>();
 
     @Override
-    public Authentication authenticate(Credentials credentials) throws AuthenticationException {
+    public AuthenticationResult authenticate(Credentials credentials) throws AuthenticationException {
         boolean unmatched = true;
         for (AuthenticationProvider provider : providers) {
             if (provider.supports(credentials.getClass())) {
                 unmatched = false;
                 try {
-                    Authentication authentication = provider.authenticate(credentials);
-                    if (authentication != null) {
-                        return authentication;
+                    AuthenticationResult authenticationResult = provider.authenticate(credentials);
+                    if (authenticationResult != null) {
+                        return authenticationResult;
                     }
                 } catch (AuthenticationException e) {
                     logger.info("Failed to authenticate credentials {} with provider {}", credentials.getClass(),

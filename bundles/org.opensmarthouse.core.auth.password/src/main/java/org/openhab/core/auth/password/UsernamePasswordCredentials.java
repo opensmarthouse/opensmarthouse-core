@@ -1,0 +1,79 @@
+/**
+ * Copyright (c) 2010-2020 Contributors to the openHAB project
+ *
+ * See the NOTICE file(s) distributed with this work for additional
+ * information.
+ *
+ * This program and the accompanying materials are made available under the
+ * terms of the Eclipse Public License 2.0 which is available at
+ * http://www.eclipse.org/legal/epl-2.0
+ *
+ * SPDX-License-Identifier: EPL-2.0
+ */
+package org.openhab.core.auth.password;
+
+import org.openhab.core.auth.Credentials;
+
+/**
+ * Credentials which represent user name and password.
+ *
+ * @author Łukasz Dywicki - Initial contribution
+ * @author Kai Kreuzer - Added JavaDoc
+ */
+public class UsernamePasswordCredentials implements Credentials {
+
+    private final String username;
+    private final String password;
+    private final String scheme;
+
+    /**
+     * Creates a new instance
+     *
+     * @param username name of the user
+     * @param password password of the user
+     */
+    public UsernamePasswordCredentials(String username, String password) {
+        this(username, password, "basic");
+    }
+
+    /**
+     * Creates a new instance with given scheme.
+     *
+     * @param username name of the user
+     * @param password password of the user
+     * @param scheme login scheme
+     */
+    public UsernamePasswordCredentials(String username, String password, String scheme) {
+        this.username = username;
+        this.password = password;
+        this.scheme = scheme;
+    }
+
+    /**
+     * Retrieves the user name
+     *
+     * @return the username
+     */
+    public String getUsername() {
+        return username;
+    }
+
+    /**
+     * Retrieves the password
+     *
+     * @return the password
+     */
+    public String getPassword() {
+        return password;
+    }
+
+    @Override
+    public String getScheme() {
+        return scheme;
+    }
+
+    @Override
+    public String toString() {
+        return scheme + "(" + username + ":[protected])";
+    }
+}

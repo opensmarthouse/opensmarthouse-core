@@ -23,6 +23,7 @@ import org.openhab.core.common.registry.ManagedProvider;
 import org.openhab.core.storage.Storage;
 import org.openhab.core.storage.StorageService;
 import org.openhab.core.ui.components.RootUIComponent;
+import org.openhab.core.ui.components.UIProvider;
 
 /**
  * A namespace-specific {@link ManagedProvider} for UI components.
@@ -31,7 +32,7 @@ import org.openhab.core.ui.components.RootUIComponent;
  */
 @NonNullByDefault
 public class UIComponentProvider extends AbstractProvider<RootUIComponent>
-        implements ManagedProvider<RootUIComponent, String> {
+        implements ManagedProvider<RootUIComponent, String>, UIProvider {
 
     private String namespace;
     private volatile Storage<RootUIComponent> storage;
@@ -46,6 +47,11 @@ public class UIComponentProvider extends AbstractProvider<RootUIComponent>
         this.namespace = namespace;
         this.storage = storageService.getStorage("uicomponents_" + namespace.replace(':', '_'),
                 this.getClass().getClassLoader());
+    }
+
+    @Override
+    public String getNamespace() {
+        return namespace;
     }
 
     @Override

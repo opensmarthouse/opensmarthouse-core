@@ -16,7 +16,6 @@
     <dependency>
       <groupId>org.opensmarthouse.core.bundles</groupId>
       <artifactId>org.opensmarthouse.core.config</artifactId>
-      <version>${project.version}</version>
     </dependency>
     <dependency>
       <groupId>com.hivemq</groupId>
@@ -30,7 +29,6 @@
     <dependency>
       <groupId>org.opensmarthouse.core.bundles</groupId>
       <artifactId>org.opensmarthouse.core.test</artifactId>
-      <version>${project.version}</version>
       <scope>test</scope>
     </dependency>
   </dependencies>
