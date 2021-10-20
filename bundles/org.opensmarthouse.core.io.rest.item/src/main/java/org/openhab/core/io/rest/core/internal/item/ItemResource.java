@@ -53,6 +53,7 @@ import org.openhab.core.auth.AuthorizationManager;
 import org.openhab.core.auth.Permissions;
 import org.openhab.core.auth.Role;
 import org.openhab.core.events.EventPublisher;
+import org.openhab.core.i18n.TranslationProvider;
 import org.openhab.core.io.rest.DTOMapper;
 import org.openhab.core.io.rest.JSONResponse;
 import org.openhab.core.io.rest.LocaleService;
@@ -173,6 +174,7 @@ public class ItemResource implements RESTResource {
     private final ItemBuilderFactory itemBuilderFactory;
     private final ItemRegistry itemRegistry;
     private final LocaleService localeService;
+    private final TranslationProvider translationProvider;
     private final ManagedItemProvider managedItemProvider;
     private final MetadataRegistry metadataRegistry;
     private final MetadataSelectorMatcher metadataSelectorMatcher;
@@ -186,6 +188,7 @@ public class ItemResource implements RESTResource {
             final @Reference ItemBuilderFactory itemBuilderFactory, //
             final @Reference ItemRegistry itemRegistry, //
             final @Reference LocaleService localeService, //
+            final @Reference TranslationProvider translationProvider, //
             final @Reference ManagedItemProvider managedItemProvider,
             final @Reference MetadataRegistry metadataRegistry,
             final @Reference MetadataSelectorMatcher metadataSelectorMatcher,
@@ -196,6 +199,7 @@ public class ItemResource implements RESTResource {
         this.itemBuilderFactory = itemBuilderFactory;
         this.itemRegistry = itemRegistry;
         this.localeService = localeService;
+        this.translationProvider = translationProvider;
         this.managedItemProvider = managedItemProvider;
         this.metadataRegistry = metadataRegistry;
         this.metadataSelectorMatcher = metadataSelectorMatcher;
@@ -232,7 +236,8 @@ public class ItemResource implements RESTResource {
                 .filter(item -> authorizationManager.hasPermission(Permissions.READ, item, authentication))
                 .map(item -> EnrichedItemDTOMapper.map(item, recursive, null, uriBuilder, locale)) //
                 .peek(dto -> addMetadata(dto, namespaces, null)) //
-                .peek(dto -> dto.editable = isEditable(dto.name));
+                .peek(dto -> dto.editable = isEditable(dto.name))
+                .peek(dto -> dto.label = translationProvider.getText(null, "item." + dto.name, dto.label, locale));
         itemStream = dtoMapper.limitToFields(itemStream, fields);
         return Response.ok(new Stream2JSONInputStream(itemStream)).build();
     }
@@ -264,6 +269,7 @@ public class ItemResource implements RESTResource {
             EnrichedItemDTO dto = EnrichedItemDTOMapper.map(item, true, null, uriBuilder(uriInfo, httpHeaders), locale);
             addMetadata(dto, namespaces, null);
             dto.editable = isEditable(dto.name);
+            dto.label = translationProvider.getText(null, "item." + dto.name, dto.label, locale);
             return JSONResponse.createResponse(Status.OK, dto, null);
         } else {
             return getItemNotFoundResponse(itemname);

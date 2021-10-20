@@ -22,6 +22,7 @@ import java.util.ResourceBundle;
 import java.util.ResourceBundle.Control;
 
 import org.openhab.core.common.osgi.ResourceBundleClassLoader;
+import org.openhab.core.i18n.ResourceTranslationProvider;
 import org.openhab.core.i18n.LocaleProvider;
 import org.osgi.framework.Bundle;
 
@@ -37,7 +38,7 @@ import org.osgi.framework.Bundle;
  * @author Michael Grammling - Initial contribution
  * @author Markus Rathgeb - Add locale provider support
  */
-public class LanguageResourceBundleManager {
+public class LanguageResourceBundleManager implements ResourceTranslationProvider {
 
     /** The directory within the bundle where the resource files are searched. */
     protected static final String RESOURCE_DIRECTORY = "/OH-INF/i18n";
@@ -135,6 +136,7 @@ public class LanguageResourceBundleManager {
      *
      * @return the translated text, or null if the key could not be translated
      */
+    @Override
     public String getText(String resource, String key, Locale locale) {
         if ((key != null) && (!key.isEmpty())) {
             Locale effectiveLocale = locale != null ? locale : localeProvider.getLocale();
@@ -167,6 +169,7 @@ public class LanguageResourceBundleManager {
      *
      * @return the translated text, or null if the key could not be translated
      */
+    @Override
     public String getText(String key, Locale locale) {
         return getText(null, key, locale);
     }
