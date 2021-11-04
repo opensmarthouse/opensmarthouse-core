@@ -5,13 +5,13 @@
   <parent>
     <groupId>org.opensmarthouse</groupId>
     <artifactId>parent</artifactId>
-    <version>0.10.0-SNAPSHOT</version>
+    <version>0.9.2</version>
     <relativePath />
   </parent>
 
   <groupId>org.opensmarthouse.core</groupId>
   <artifactId>org.opensmarthouse.core.reactor</artifactId>
-  <version>0.10.0-SNAPSHOT</version>
+  <version>0.9.3-SNAPSHOT</version>
 
   <packaging>pom</packaging>
 
@@ -53,8 +53,10 @@
   </distributionManagement>
 
   <properties>
+    <license.year>2021</license.year>
+
     <!-- This is version tag for published/public openhab packages -->
-    <openhab-api.version>3.1.0</openhab-api.version>
+    <openhab-api.version>3.0.0-SNAPSHOT</openhab-api.version>
     <opensmarthouse-api.version>${project.version}</opensmarthouse-api.version>
 
     <snapshot.repository-id>opensmarthouse-sonatype-snapshot</snapshot.repository-id>
@@ -65,14 +67,15 @@
     <release.repository-name>OpenSmartHouse Release (Sonatype)</release.repository-name>
     <release.repository-url>https://oss.sonatype.org/service/local/staging/deploy/maven2</release.repository-url>
 
-    <jackson.version>2.12.3</jackson.version>
-    <snakeyaml.version>1.27</snakeyaml.version>
-    <jetty.version>9.4.43.v20210629</jetty.version>
-    <pax.web.version>7.3.19</pax.web.version>
-    <swagger.version>2.1.9</swagger.version>
+    <jackson.version>2.10.3</jackson.version>
+    <jetty.version>9.4.20.v20190813</jetty.version>
+    <pax.web.version>7.2.14</pax.web.version>
+    <swagger.version>2.1.0</swagger.version>
     <netty.version>4.1.42.Final</netty.version>
 
     <gson.version>2.8.6</gson.version>
+
+    <purejavacomm.version>1.0.5</purejavacomm.version>
 
     <eea.version>2.3.0</eea.version>
     <sat.version>0.10.0</sat.version>
@@ -85,7 +88,7 @@
     <emf-ecore-xmi.version>2.16.0</emf-ecore-xmi.version>
     <emf-codegen.version>2.20.0</emf-codegen.version>
     <emf-mwe2.version>2.11.3</emf-mwe2.version>
-    <xtext.version>2.25.0</xtext.version>
+    <xtext.version>2.22.0</xtext.version>
 
     <spotless.version>2.0.3</spotless.version>
     <spotless.check.skip>true</spotless.check.skip>
@@ -134,14 +137,6 @@
       <id>opensmarthouse-sonatype-release</id>
       <name>OpenSmartHouse Release (Sonatype)</name>
       <url>https://oss.sonatype.org/service/local/staging/deploy/maven2</url>
-    </repository>
-    <repository>
-			<id>openhab-jfrog-release</id>
-			<url>https://openhab.jfrog.io/openhab/libs-release-local</url>
-    </repository>
-    <repository>
-			<id>openhab-jfrog-snapshot</id>
-			<url>https://openhab.jfrog.io/openhab/libs-snapshot-local</url>
     </repository>
   </repositories>
 
@@ -460,11 +455,6 @@ Import-Package: \\
               <headerDefinition>licenses/epl-2.0/xml-header-style.xml</headerDefinition>
             </headerDefinitions>
             <includes>
-              <include>**/org/openhab/core/**/*.java</include>
-              <include>**/org/openhab/core/**/*.mwe2</include>
-              <include>**/org/openhab/core/**/*.xtend</include>
-              <include>**/org/openhab/**/*.java</include>
-              <include>**/org.openhab.core.semantics/**/*.groovy</include>
               <include>**/org/opensmarthouse/core/**/*.java</include>
               <include>**/org/opensmarthouse/core/**/*.mwe2</include>
               <include>**/org/opensmarthouse/core/**/*.xtend</include>
@@ -506,7 +496,7 @@ Import-Package: \\
                   <pluginExecutionFilter>
                     <groupId>org.apache.karaf.tooling</groupId>
                     <artifactId>karaf-maven-plugin</artifactId>
-                    <versionRange>[4.3.3,)</versionRange>
+                    <versionRange>[4.2.1,)</versionRange>
                     <goals>
                       <goal>features-generate-descriptor</goal>
                       <goal>verify</goal>
@@ -543,6 +533,19 @@ Import-Package: \\
                     <ignore />
                   </action>
                 </pluginExecution>
+                <pluginExecution>
+                  <pluginExecutionFilter>
+                    <groupId>org.commonjava.maven.plugins</groupId>
+                    <artifactId>directory-maven-plugin</artifactId>
+                    <versionRange>[0.3.1,)</versionRange>
+                    <goals>
+                      <goal>highest-basedir</goal>
+                    </goals>
+                  </pluginExecutionFilter>
+                  <action>
+                    <ignore />
+                  </action>
+                </pluginExecution>
               </pluginExecutions>
             </lifecycleMappingMetadata>
           </configuration>
@@ -553,10 +556,10 @@ Import-Package: \\
           <artifactId>sat-plugin</artifactId>
           <version>${sat.version}</version>
           <configuration>
-            <pmdFilter>${maven.multiModuleProjectDirectory}/tools/static-code-analysis/pmd/suppressions.properties</pmdFilter>
-            <checkstyleProperties>${maven.multiModuleProjectDirectory}/tools/static-code-analysis/checkstyle/ruleset.properties</checkstyleProperties>
-            <checkstyleFilter>${maven.multiModuleProjectDirectory}/tools/static-code-analysis/checkstyle/suppressions.xml</checkstyleFilter>
-            <spotbugsExclude>${maven.multiModuleProjectDirectory}/tools/static-code-analysis/spotbugs/suppressions.xml</spotbugsExclude>
+            <pmdFilter>${basedirRoot}/tools/static-code-analysis/pmd/suppressions.properties</pmdFilter>
+            <checkstyleProperties>${basedirRoot}/tools/static-code-analysis/checkstyle/ruleset.properties</checkstyleProperties>
+            <checkstyleFilter>${basedirRoot}/tools/static-code-analysis/checkstyle/suppressions.xml</checkstyleFilter>
+            <spotbugsExclude>${basedirRoot}/tools/static-code-analysis/spotbugs/suppressions.xml</spotbugsExclude>
           </configuration>
           <executions>
             <execution>
@@ -666,6 +669,23 @@ Import-Package: \\
     </pluginManagement>
 
     <plugins>
+      <plugin>
+        <groupId>org.commonjava.maven.plugins</groupId>
+        <artifactId>directory-maven-plugin</artifactId>
+        <version>0.3.1</version>
+        <executions>
+          <execution>
+            <id>directories</id>
+            <goals>
+              <goal>highest-basedir</goal>
+            </goals>
+            <phase>initialize</phase>
+            <configuration>
+              <property>basedirRoot</property>
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-enforcer-plugin</artifactId>

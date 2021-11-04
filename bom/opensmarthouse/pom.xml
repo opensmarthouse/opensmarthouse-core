@@ -264,11 +264,6 @@
       </dependency>
       <dependency>
         <groupId>org.opensmarthouse.core.bundles</groupId>
-        <artifactId>org.opensmarthouse.core.io.transport.serial</artifactId>
-        <version>${project.version}</version>
-      </dependency>
-      <dependency>
-        <groupId>org.opensmarthouse.core.bundles</groupId>
         <artifactId>org.opensmarthouse.core.io.console.eclipse</artifactId>
         <version>${project.version}</version>
       </dependency>
@@ -394,7 +389,17 @@
       </dependency>
       <dependency>
         <groupId>org.opensmarthouse.core.bundles</groupId>
+        <artifactId>org.opensmarthouse.core.io.transport.serial</artifactId>
+        <version>${project.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.opensmarthouse.core.bundles</groupId>
         <artifactId>org.opensmarthouse.core.io.transport.serial.javacomm</artifactId>
+        <version>${project.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.opensmarthouse.core.bundles</groupId>
+        <artifactId>org.opensmarthouse.core.io.transport.serial.purejavacomm</artifactId>
         <version>${project.version}</version>
       </dependency>
       <dependency>

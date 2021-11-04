@@ -598,6 +598,13 @@
         <bundle>mvn:org.opensmarthouse.core.bundles/org.opensmarthouse.core.io.transport.serial.javacomm/${project.version}</bundle>
     </feature>
 
+    <feature name="opensmarthouse-core-io-transport-serial-purejavacomm" version="${project.version}">
+        <feature>opensmarthouse-runtime-jna</feature>
+        <feature>opensmarthouse-core-io-transport-serial</feature>
+        <bundle>mvn:org.opensmarthouse/purejavacomm/${purejavacomm.version}</bundle>
+        <bundle>mvn:org.opensmarthouse.core.bundles/org.opensmarthouse.core.io.transport.serial.purejavacomm/${project.version}</bundle>
+    </feature>
+
     <feature name="opensmarthouse-core-io-transport-serial-rxtx" version="${project.version}">
         <feature>opensmarthouse-tp-serial-rxtx</feature>
         <feature>opensmarthouse-core-io-transport-serial</feature>

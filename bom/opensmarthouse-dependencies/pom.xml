@@ -326,6 +326,12 @@
         <version>5.1.1</version>
         <scope>compile</scope>
       </dependency>
+      <dependency>
+        <groupId>org.opensmarthouse</groupId>
+        <artifactId>purejavacomm</artifactId>
+        <version>${purejavacomm.version}</version>
+        <scope>compile</scope>
+      </dependency>
 
       <!-- Servlet API -->
       <dependency>
