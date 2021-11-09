@@ -1,5 +1,6 @@
 /**
- * Copyright (c) 2010-2020 Contributors to the openHAB project
+ * Copyright (c) 2020-2021 Contributors to the OpenSmartHouse project
+ * Copyright (c) 2010-2021 Contributors to the openHAB project
  *
  * See the NOTICE file(s) distributed with this work for additional
  * information.
@@ -14,6 +15,7 @@ package org.openhab.core.library.types;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
+import java.util.Locale;
 
 import org.eclipse.jdt.annotation.NonNullByDefault;
 import org.eclipse.jdt.annotation.Nullable;
@@ -33,20 +35,59 @@ public class PercentType extends DecimalType {
     public static final PercentType ZERO = new PercentType(0);
     public static final PercentType HUNDRED = new PercentType(100);
 
+    /**
+     * Creates a new {@link PercentType} with 0 as value.
+     */
     public PercentType() {
         this(0);
     }
 
+    /**
+     * Creates a new {@link PercentType} with the given value.
+     *
+     * @param value the value representing a percentage
+     *
+     * @throws IllegalArgumentException when the value is not between 0 and 100
+     */
     public PercentType(int value) {
         super(value);
         validateValue(this.value);
     }
 
+    /**
+     * Creates a new {@link PercentType} with the given value.
+     * The English locale is used to determine (decimal/grouping) separator characters.
+     *
+     * @param value the non null value representing a percentage
+     *
+     * @throws NumberFormatException when the number could not be parsed to a {@link BigDecimal}
+     * @throws IllegalArgumentException when the value is not between 0 and 100
+     */
     public PercentType(String value) {
-        super(value);
+        this(value, Locale.ENGLISH);
+    }
+
+    /**
+     * Creates a new {@link PercentType} with the given value.
+     *
+     * @param value the non null value representing a percentage
+     * @param locale the locale used to determine (decimal/grouping) separator characters
+     *
+     * @throws NumberFormatException when the number could not be parsed to a {@link BigDecimal}
+     * @throws IllegalArgumentException when the value is not between 0 and 100
+     */
+    public PercentType(String value, Locale locale) {
+        super(value, locale);
         validateValue(this.value);
     }
 
+    /**
+     * Creates a new {@link PercentType} with the given value.
+     *
+     * @param value the value representing a percentage.
+     *
+     * @throws IllegalArgumentException when the value is not between 0 and 100
+     */
     public PercentType(BigDecimal value) {
         super(value);
         validateValue(this.value);
@@ -58,6 +99,15 @@ public class PercentType extends DecimalType {
         }
     }
 
+    /**
+     * Static access to {@link PercentType#PercentType(String)}.
+     *
+     * @param value the non null value representing a percentage
+     * @return new {@link PercentType}
+     *
+     * @throws NumberFormatException when the number could not be parsed to a {@link BigDecimal}
+     * @throws IllegalArgumentException when the value is not between 0 and 100
+     */
     public static PercentType valueOf(String value) {
         return new PercentType(value);
     }

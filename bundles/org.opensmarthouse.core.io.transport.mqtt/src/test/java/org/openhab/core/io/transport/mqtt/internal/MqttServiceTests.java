@@ -1,5 +1,6 @@
 /**
- * Copyright (c) 2010-2020 Contributors to the openHAB project
+ * Copyright (c) 2020-2021 Contributors to the OpenSmartHouse project
+ * Copyright (c) 2010-2021 Contributors to the openHAB project
  *
  * See the NOTICE file(s) distributed with this work for additional
  * information.
@@ -42,7 +43,7 @@ public class MqttServiceTests {
         service.addBrokersListener(observer);
         assertTrue(service.hasBrokerObservers());
 
-        MqttBrokerConnectionEx connection = new MqttBrokerConnectionEx("123.123.123.123", null, false,
+        MqttBrokerConnectionEx connection = new MqttBrokerConnectionEx("123.123.123.123", null, false, false,
                 "brokerConnectionListenerTests");
         assertTrue(service.addBrokerConnection("name", connection));
 
@@ -65,7 +66,7 @@ public class MqttServiceTests {
     @Test
     public void brokerConnectionAddRemoveEnumerateTests() {
         MqttService service = new MqttServiceImpl();
-        MqttBrokerConnectionEx connection = new MqttBrokerConnectionEx("tcp://123.123.123.123", null, false,
+        MqttBrokerConnectionEx connection = new MqttBrokerConnectionEx("tcp://123.123.123.123", null, false, false,
                 "brokerConnectionAddRemoveEnumerateTests");
         // Add
         assertThat(service.getAllBrokerConnections().size(), is(equalTo(0)));

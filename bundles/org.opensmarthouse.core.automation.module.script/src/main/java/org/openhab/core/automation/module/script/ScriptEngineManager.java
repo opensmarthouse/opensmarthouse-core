@@ -1,5 +1,6 @@
 /**
- * Copyright (c) 2010-2020 Contributors to the openHAB project
+ * Copyright (c) 2020-2021 Contributors to the OpenSmartHouse project
+ * Copyright (c) 2010-2021 Contributors to the openHAB project
  *
  * See the NOTICE file(s) distributed with this work for additional
  * information.
@@ -46,6 +47,16 @@ public interface ScriptEngineManager {
     void loadScript(String engineIdentifier, InputStreamReader scriptData);
 
     /**
+     * Loads a script and initializes its scope variables
+     *
+     * @param engineIdentifier the unique identifier for the ScriptEngine (script file path or UUID)
+     * @param scriptData the content of the script
+     * @param scriptDependencyListener listener to be notified of script dependencies
+     */
+    void loadScript(String engineIdentifier, InputStreamReader scriptData,
+            ScriptDependencyListener scriptDependencyListener);
+
+    /**
      * Unloads the ScriptEngine loaded with the engineIdentifier
      *
      * @param engineIdentifier the unique identifier for the ScriptEngine (script file path or UUID)
@@ -59,4 +70,35 @@ public interface ScriptEngineManager {
      * @return true, if supported, else false
      */
     boolean isSupported(String scriptType);
+
+    /**
+     * Add a listener that is notified when a ScriptEngineFactory is added or removed
+     *
+     * @param listener an object that implements {@link FactoryChangeListener}
+     */
+    void addFactoryChangeListener(FactoryChangeListener listener);
+
+    /**
+     * Remove a listener that is notified when a ScriptEngineFactory is added or removed
+     *
+     * @param listener an object that implements {@link FactoryChangeListener}
+     */
+    void removeFactoryChangeListener(FactoryChangeListener listener);
+
+    interface FactoryChangeListener {
+
+        /**
+         * Called by the {@link ScriptEngineManager} when a ScriptEngineFactory is added
+         *
+         * @param scriptType the script type supported by the newly added factory
+         */
+        void factoryAdded(String scriptType);
+
+        /**
+         * Called by the {@link ScriptEngineManager} when a ScriptEngineFactory is removed
+         *
+         * @param scriptType the script type supported by the removed factory
+         */
+        void factoryRemoved(String scriptType);
+    }
 }

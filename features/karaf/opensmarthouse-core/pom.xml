@@ -5,7 +5,7 @@
   <parent>
     <groupId>org.opensmarthouse.core.features.karaf</groupId>
     <artifactId>org.opensmarthouse.core.reactor.features.karaf</artifactId>
-    <version>0.9.3-SNAPSHOT</version>
+    <version>0.10.0-SNAPSHOT</version>
   </parent>
 
   <artifactId>org.opensmarthouse.core.features.karaf.opensmarthouse-core</artifactId>
@@ -16,7 +16,7 @@
 
   <properties>
     <jetty.version>9.4.20.v20190813</jetty.version>
-    <jna.version>5.4.0</jna.version>
+    <jna.version>5.9.0</jna.version>
   </properties>
 
   <dependencies>

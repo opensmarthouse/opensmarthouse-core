@@ -1,5 +1,6 @@
 /**
- * Copyright (c) 2010-2020 Contributors to the openHAB project
+ * Copyright (c) 2020-2021 Contributors to the OpenSmartHouse project
+ * Copyright (c) 2010-2021 Contributors to the openHAB project
  *
  * See the NOTICE file(s) distributed with this work for additional
  * information.
@@ -17,9 +18,10 @@ import java.util.List;
 
 import org.openhab.core.config.core.ConfigDescriptionParameter.Type;
 
+import com.google.gson.annotations.SerializedName;
+
 /**
- * This is a data transfer object that is used to serialize parameter of a
- * configuration description.
+ * This is a data transfer object that is used to serialize parameter of a configuration description.
  *
  * @author Dennis Nobel - Initial contribution
  * @author Alex Tugarev - Extended for options and filter criteria
@@ -30,6 +32,7 @@ import org.openhab.core.config.core.ConfigDescriptionParameter.Type;
 public class ConfigDescriptionParameterDTO {
 
     public String context;
+    @SerializedName(value = "default", alternate = "defaultValue")
     public String defaultValue;
     public String description;
     public String label;

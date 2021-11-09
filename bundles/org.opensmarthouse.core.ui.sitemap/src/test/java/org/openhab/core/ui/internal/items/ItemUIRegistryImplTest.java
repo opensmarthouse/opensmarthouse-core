@@ -1,5 +1,6 @@
 /**
- * Copyright (c) 2010-2020 Contributors to the openHAB project
+ * Copyright (c) 2020-2021 Contributors to the OpenSmartHouse project
+ * Copyright (c) 2010-2021 Contributors to the openHAB project
  *
  * See the NOTICE file(s) distributed with this work for additional
  * information.
@@ -12,6 +13,7 @@
  */
 package org.openhab.core.ui.internal.items;
 
+import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.instanceOf;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -20,6 +22,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
@@ -27,6 +30,8 @@ import java.text.DecimalFormatSymbols;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.TimeZone;
+
+import javax.measure.quantity.Temperature;
 
 import org.eclipse.emf.common.util.BasicEList;
 import org.junit.jupiter.api.BeforeEach;
@@ -878,5 +883,44 @@ public class ItemUIRegistryImplTest {
                 .toStateDescription());
         defaultWidget = uiRegistry.getDefaultWidget(StringItem.class, ITEM_NAME);
         assertThat(defaultWidget, is(instanceOf(Text.class)));
+    }
+
+    @Test
+    public void getUnitForWidgetForNonNumberItem() throws Exception {
+        String unit = uiRegistry.getUnitForWidget(widget);
+
+        assertThat(unit, is(""));
+    }
+
+    @Test
+    public void getUnitForWidgetWithWidgetLabel() throws Exception {
+        // a NumberItem having a Dimension must be returned
+        NumberItem item = mock(NumberItem.class);
+        when(registry.getItem(ITEM_NAME)).thenReturn(item);
+
+        doReturn(Temperature.class).when(item).getDimension();
+
+        // we set the Label on the widget itself
+        when(widget.getLabel()).thenReturn("Label [%.1f °C]");
+
+        String unit = uiRegistry.getUnitForWidget(widget);
+
+        assertThat(unit, is(equalTo("°C")));
+    }
+
+    @Test
+    public void getUnitForWidgetWithItemLabelAndWithoutWidgetLabel() throws Exception {
+        // a NumberItem having a Dimension must be returned
+        NumberItem item = mock(NumberItem.class);
+        when(registry.getItem(ITEM_NAME)).thenReturn(item);
+
+        doReturn(Temperature.class).when(item).getDimension();
+
+        // we set the UnitSymbol on the item, this must be used as a fallback if no Widget label was used
+        when(item.getUnitSymbol()).thenReturn("°C");
+
+        String unit = uiRegistry.getUnitForWidget(widget);
+
+        assertThat(unit, is(equalTo("°C")));
     }
 }

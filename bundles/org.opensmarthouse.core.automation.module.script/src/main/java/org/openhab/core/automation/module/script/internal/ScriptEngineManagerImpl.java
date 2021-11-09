@@ -1,5 +1,6 @@
 /**
- * Copyright (c) 2010-2020 Contributors to the openHAB project
+ * Copyright (c) 2020-2021 Contributors to the OpenSmartHouse project
+ * Copyright (c) 2010-2021 Contributors to the openHAB project
  *
  * See the NOTICE file(s) distributed with this work for additional
  * information.
@@ -12,13 +13,16 @@
  */
 package org.openhab.core.automation.module.script.internal;
 
+import static org.openhab.core.automation.module.script.ScriptEngineFactory.CONTEXT_KEY_DEPENDENCY_LISTENER;
 import static org.openhab.core.automation.module.script.ScriptEngineFactory.CONTEXT_KEY_ENGINE_IDENTIFIER;
 import static org.openhab.core.automation.module.script.ScriptEngineFactory.CONTEXT_KEY_EXTENSION_ACCESSOR;
 
 import java.io.InputStreamReader;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import javax.script.Invocable;
 import javax.script.ScriptContext;
@@ -28,6 +32,7 @@ import javax.script.SimpleScriptContext;
 
 import org.eclipse.jdt.annotation.NonNullByDefault;
 import org.eclipse.jdt.annotation.Nullable;
+import org.openhab.core.automation.module.script.ScriptDependencyListener;
 import org.openhab.core.automation.module.script.ScriptEngineContainer;
 import org.openhab.core.automation.module.script.ScriptEngineFactory;
 import org.openhab.core.automation.module.script.ScriptEngineManager;
@@ -54,6 +59,7 @@ public class ScriptEngineManagerImpl implements ScriptEngineManager {
     private final Map<String, ScriptEngineFactory> customSupport = new HashMap<>();
     private final Map<String, ScriptEngineFactory> genericSupport = new HashMap<>();
     private final ScriptExtensionManager scriptExtensionManager;
+    private final Set<FactoryChangeListener> listeners = new HashSet<>();
 
     @Activate
     public ScriptEngineManagerImpl(final @Reference ScriptExtensionManager scriptExtensionManager) {
@@ -70,6 +76,7 @@ public class ScriptEngineManagerImpl implements ScriptEngineManager {
             } else {
                 this.genericSupport.put(scriptType, engineFactory);
             }
+            listeners.forEach(listener -> listener.factoryAdded(scriptType));
         }
         if (logger.isDebugEnabled()) {
             if (!scriptTypes.isEmpty()) {
@@ -99,6 +106,7 @@ public class ScriptEngineManagerImpl implements ScriptEngineManager {
             } else {
                 this.genericSupport.remove(scriptType, engineFactory);
             }
+            listeners.forEach(listener -> listener.factoryRemoved(scriptType));
         }
         logger.debug("Removed {}", engineFactory.getClass().getSimpleName());
     }
@@ -136,17 +144,8 @@ public class ScriptEngineManagerImpl implements ScriptEngineManager {
                     logger.debug("Added ScriptEngine for language '{}' with identifier: {}", scriptType,
                             engineIdentifier);
 
-                    ScriptContext scriptContext = engine.getContext();
-
-                    if (scriptContext == null) {
-                        scriptContext = new SimpleScriptContext();
-                        engine.setContext(scriptContext);
-                    }
-
-                    scriptContext.setAttribute(CONTEXT_KEY_ENGINE_IDENTIFIER, engineIdentifier,
-                            ScriptContext.ENGINE_SCOPE);
-                    scriptContext.setAttribute(CONTEXT_KEY_EXTENSION_ACCESSOR, scriptExtensionManager,
-                            ScriptContext.ENGINE_SCOPE);
+                    addAttributeToScriptContext(engine, CONTEXT_KEY_ENGINE_IDENTIFIER, engineIdentifier);
+                    addAttributeToScriptContext(engine, CONTEXT_KEY_EXTENSION_ACCESSOR, scriptExtensionManager);
                 } else {
                     logger.error("ScriptEngine for language '{}' could not be created for identifier: {}", scriptType,
                             engineIdentifier);
@@ -161,11 +160,22 @@ public class ScriptEngineManagerImpl implements ScriptEngineManager {
 
     @Override
     public void loadScript(String engineIdentifier, InputStreamReader scriptData) {
+        loadScript(engineIdentifier, scriptData, null);
+    }
+
+    @Override
+    public void loadScript(String engineIdentifier, InputStreamReader scriptData,
+            @Nullable ScriptDependencyListener dependencyListener) {
         ScriptEngineContainer container = loadedScriptEngineInstances.get(engineIdentifier);
         if (container == null) {
             logger.error("Could not load script, as no ScriptEngine has been created");
         } else {
             ScriptEngine engine = container.getScriptEngine();
+
+            if (dependencyListener != null) {
+                addAttributeToScriptContext(engine, CONTEXT_KEY_DEPENDENCY_LISTENER, dependencyListener);
+            }
+
             try {
                 engine.eval(scriptData);
                 if (engine instanceof Invocable) {
@@ -234,5 +244,26 @@ public class ScriptEngineManagerImpl implements ScriptEngineManager {
     @Override
     public boolean isSupported(String scriptType) {
         return findEngineFactory(scriptType) != null;
+    }
+
+    private void addAttributeToScriptContext(ScriptEngine engine, String name, Object value) {
+        ScriptContext scriptContext = engine.getContext();
+
+        if (scriptContext == null) {
+            scriptContext = new SimpleScriptContext();
+            engine.setContext(scriptContext);
+        }
+
+        scriptContext.setAttribute(name, value, ScriptContext.ENGINE_SCOPE);
+    }
+
+    @Override
+    public void addFactoryChangeListener(FactoryChangeListener listener) {
+        listeners.add(listener);
+    }
+
+    @Override
+    public void removeFactoryChangeListener(FactoryChangeListener listener) {
+        listeners.remove(listener);
     }
 }

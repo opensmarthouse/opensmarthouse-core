@@ -1,5 +1,6 @@
 /**
- * Copyright (c) 2010-2020 Contributors to the openHAB project
+ * Copyright (c) 2020-2021 Contributors to the OpenSmartHouse project
+ * Copyright (c) 2010-2021 Contributors to the openHAB project
  *
  * See the NOTICE file(s) distributed with this work for additional
  * information.
@@ -196,10 +197,11 @@ public class ThingManagerImpl
 
             if (ThingStatus.REMOVING.equals(oldStatusInfo.getStatus())
                     && !ThingStatus.REMOVED.equals(statusInfo.getStatus())) {
-                // only allow REMOVING -> REMOVED transition, all others are illegal
-                throw new IllegalArgumentException(MessageFormat.format(
-                        "Illegal status transition from REMOVING to {0}, only REMOVED would have been allowed.",
-                        statusInfo.getStatus()));
+                // only allow REMOVING -> REMOVED transition, all others are ignored because they are illegal
+                logger.debug(
+                        "Ignoring illegal status transition for thing {} from REMOVING to {}, only REMOVED would have been allowed.",
+                        thing.getUID(), statusInfo.getStatus());
+                return;
             }
 
             // update thing status and send event about new status
@@ -367,8 +369,10 @@ public class ThingManagerImpl
                 ChannelType channelType = channelTypeRegistry.getChannelType(channelDefinition.getChannelTypeUID());
                 if (channelType != null) {
                     ChannelUID channelUID = new ChannelUID(channelGroupUID, channelDefinition.getId());
-                    channelBuilders.add(ThingFactoryHelper.createChannelBuilder(channelUID, channelType,
-                            configDescriptionRegistry));
+                    ChannelBuilder channelBuilder = ThingFactoryHelper.createChannelBuilder(channelUID,
+                            channelDefinition, configDescriptionRegistry);
+                    if (channelBuilder != null)
+                        channelBuilders.add(channelBuilder);
                 }
             }
             return channelBuilders;

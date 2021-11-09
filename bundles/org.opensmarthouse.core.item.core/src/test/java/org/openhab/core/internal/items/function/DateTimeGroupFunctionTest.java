@@ -1,5 +1,6 @@
 /**
- * Copyright (c) 2010-2020 Contributors to the openHAB project
+ * Copyright (c) 2020-2021 Contributors to the OpenSmartHouse project
+ * Copyright (c) 2010-2021 Contributors to the openHAB project
  *
  * See the NOTICE file(s) distributed with this work for additional
  * information.
@@ -12,7 +13,7 @@
  */
 package org.openhab.core.internal.items.function;
 
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.*;
 
 import java.time.ZonedDateTime;
 import java.util.Collections;
@@ -20,11 +21,11 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.openhab.core.internal.items.DateTimeGroupFunction;
 import org.openhab.core.internal.items.function.Earliest;
 import org.openhab.core.internal.items.function.Latest;
-import org.openhab.core.items.DateTimeGroupFunction;
 import org.openhab.core.items.GenericItem;
 import org.openhab.core.items.GroupFunction;
 import org.openhab.core.items.Item;
@@ -41,7 +42,7 @@ public class DateTimeGroupFunctionTest {
     private GroupFunction function;
     private Set<Item> items;
 
-    @Before
+    @BeforeEach
     public void init() {
         items = new HashSet<>();
     }

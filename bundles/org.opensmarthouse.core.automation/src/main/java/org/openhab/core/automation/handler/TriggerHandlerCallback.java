@@ -1,5 +1,6 @@
 /**
- * Copyright (c) 2010-2020 Contributors to the openHAB project
+ * Copyright (c) 2020-2021 Contributors to the OpenSmartHouse project
+ * Copyright (c) 2010-2021 Contributors to the openHAB project
  *
  * See the NOTICE file(s) distributed with this work for additional
  * information.
@@ -13,6 +14,7 @@
 package org.openhab.core.automation.handler;
 
 import java.util.Map;
+import java.util.concurrent.ScheduledExecutorService;
 
 import org.openhab.core.automation.ModuleHandlerCallback;
 import org.openhab.core.automation.Rule;
@@ -27,6 +29,7 @@ import org.openhab.core.automation.type.Output;
  *
  * @author Yordan Mihaylov - Initial contribution
  * @author Kai Kreuzer - made it a sub-interface of ModuleHandlerCallback
+ * @author Fabian Wolter - Add method for retrieving the handler's scheduler
  */
 public interface TriggerHandlerCallback extends ModuleHandlerCallback {
 
@@ -45,4 +48,9 @@ public interface TriggerHandlerCallback extends ModuleHandlerCallback {
      *            </ul>
      */
     public void triggered(Trigger trigger, Map<String, ?> context);
+
+    /**
+     * @return the scheduler of this rule
+     */
+    public ScheduledExecutorService getScheduler();
 }

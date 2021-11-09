@@ -1,5 +1,6 @@
 /**
- * Copyright (c) 2010-2020 Contributors to the openHAB project
+ * Copyright (c) 2020-2021 Contributors to the OpenSmartHouse project
+ * Copyright (c) 2010-2021 Contributors to the openHAB project
  *
  * See the NOTICE file(s) distributed with this work for additional
  * information.
@@ -176,16 +177,6 @@ public class OSGiEventManagerOSGiTest extends JavaOSGiTest {
         assertEventCount(subscriber2, 0);
         assertEventCount(subscriber3, 0);
         assertEventCount(subscriber4, 0);
-    }
-
-    @Test
-    public void testValidationEvent() {
-        try {
-            eventPublisher.post(null);
-            fail("IllegalArgumentException expected!");
-        } catch (IllegalArgumentException e) {
-            assertEquals("Argument 'event' must not be null.", e.getMessage());
-        }
     }
 
     @Test

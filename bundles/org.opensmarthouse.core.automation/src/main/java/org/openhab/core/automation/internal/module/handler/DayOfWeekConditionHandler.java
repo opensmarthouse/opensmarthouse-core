@@ -1,5 +1,6 @@
 /**
- * Copyright (c) 2010-2020 Contributors to the openHAB project
+ * Copyright (c) 2020-2021 Contributors to the OpenSmartHouse project
+ * Copyright (c) 2010-2021 Contributors to the openHAB project
  *
  * See the NOTICE file(s) distributed with this work for additional
  * information.
@@ -20,6 +21,7 @@ import java.util.Set;
 
 import org.openhab.core.automation.Condition;
 import org.openhab.core.automation.handler.BaseConditionModuleHandler;
+import org.openhab.core.automation.handler.TimeBasedConditionHandler;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -28,7 +30,7 @@ import org.slf4j.LoggerFactory;
  *
  * @author Kai Kreuzer - Initial contribution
  */
-public class DayOfWeekConditionHandler extends BaseConditionModuleHandler {
+public class DayOfWeekConditionHandler extends BaseConditionModuleHandler implements TimeBasedConditionHandler {
 
     public static final String MODULE_TYPE_ID = "timer.DayOfWeekCondition";
     public static final String MODULE_CONTEXT_NAME = "MODULE";
@@ -79,7 +81,12 @@ public class DayOfWeekConditionHandler extends BaseConditionModuleHandler {
 
     @Override
     public boolean isSatisfied(Map<String, Object> context) {
-        DayOfWeek dow = ZonedDateTime.now().getDayOfWeek();
+        return isSatisfiedAt(ZonedDateTime.now());
+    }
+
+    @Override
+    public boolean isSatisfiedAt(ZonedDateTime time) {
+        DayOfWeek dow = time.getDayOfWeek();
         return days.contains(dow);
     }
 }

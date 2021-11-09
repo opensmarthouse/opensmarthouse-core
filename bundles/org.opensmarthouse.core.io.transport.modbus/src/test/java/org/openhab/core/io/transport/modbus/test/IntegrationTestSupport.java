@@ -1,5 +1,6 @@
 /**
- * Copyright (c) 2010-2020 Contributors to the openHAB project
+ * Copyright (c) 2020-2021 Contributors to the OpenSmartHouse project
+ * Copyright (c) 2010-2021 Contributors to the openHAB project
  *
  * See the NOTICE file(s) distributed with this work for additional
  * information.
@@ -12,11 +13,15 @@
  */
 package org.openhab.core.io.transport.modbus.test;
 
-import static org.hamcrest.CoreMatchers.*;
+import static org.hamcrest.CoreMatchers.equalTo;
+import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.junit.jupiter.api.Assertions.assertNotSame;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.doAnswer;
+import static org.mockito.Mockito.spy;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
 
 import java.io.File;
 import java.net.DatagramSocket;
@@ -27,7 +32,6 @@ import java.net.UnknownHostException;
 import java.util.HashMap;
 import java.util.function.LongSupplier;
 
-import org.apache.commons.lang.NotImplementedException;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -39,6 +43,8 @@ import org.openhab.core.io.transport.modbus.endpoint.ModbusSlaveEndpoint;
 import org.openhab.core.io.transport.modbus.endpoint.ModbusTCPSlaveEndpoint;
 import org.openhab.core.io.transport.modbus.internal.ModbusManagerImpl;
 import org.openhab.core.test.java.JavaTest;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import gnu.io.SerialPort;
 import net.wimpi.modbus.Modbus;
@@ -69,6 +75,8 @@ import net.wimpi.modbus.util.SerialParameters;
 @MockitoSettings(strictness = Strictness.WARN)
 public class IntegrationTestSupport extends JavaTest {
 
+    private final Logger logger = LoggerFactory.getLogger(IntegrationTestSupport.class);
+
     public enum ServerType {
         TCP,
         UDP,
@@ -86,14 +94,14 @@ public class IntegrationTestSupport extends JavaTest {
 
     // One can perhaps test SERIAL with https://github.com/freemed/tty0tty
     // and using those virtual ports? Not the same thing as real serial device of course
-    private static String SERIAL_SERVER_PORT = "/dev/pts/7";
-    private static String SERIAL_CLIENT_PORT = "/dev/pts/8";
+    private static final String SERIAL_SERVER_PORT = "/dev/pts/7";
+    private static final String SERIAL_CLIENT_PORT = "/dev/pts/8";
 
-    private static SerialParameters SERIAL_PARAMETERS_CLIENT = new SerialParameters(SERIAL_CLIENT_PORT, 115200,
+    private static final SerialParameters SERIAL_PARAMETERS_CLIENT = new SerialParameters(SERIAL_CLIENT_PORT, 115200,
             SerialPort.FLOWCONTROL_NONE, SerialPort.FLOWCONTROL_NONE, SerialPort.DATABITS_8, SerialPort.STOPBITS_1,
             SerialPort.PARITY_NONE, Modbus.SERIAL_ENCODING_ASCII, false, 1000);
 
-    private static SerialParameters SERIAL_PARAMETERS_SERVER = new SerialParameters(SERIAL_SERVER_PORT,
+    private static final SerialParameters SERIAL_PARAMETERS_SERVER = new SerialParameters(SERIAL_SERVER_PORT,
             SERIAL_PARAMETERS_CLIENT.getBaudRate(), SERIAL_PARAMETERS_CLIENT.getFlowControlIn(),
             SERIAL_PARAMETERS_CLIENT.getFlowControlOut(), SERIAL_PARAMETERS_CLIENT.getDatabits(),
             SERIAL_PARAMETERS_CLIENT.getStopbits(), SERIAL_PARAMETERS_CLIENT.getParity(),
@@ -107,14 +115,14 @@ public class IntegrationTestSupport extends JavaTest {
     /**
      * Max time to wait for connections/requests from client
      */
-    protected int MAX_WAIT_REQUESTS_MILLIS = 1000;
+    protected static final int MAX_WAIT_REQUESTS_MILLIS = 1000;
 
     /**
      * The server runs in single thread, only one connection is accepted at a time.
      * This makes the tests as strict as possible -- connection must be closed.
      */
     private static final int SERVER_THREADS = 1;
-    protected static int SLAVE_UNIT_ID = 1;
+    protected static final int SLAVE_UNIT_ID = 1;
 
     private static AtomicCounter udpServerIndex = new AtomicCounter(0);
 
@@ -176,13 +184,11 @@ public class IntegrationTestSupport extends JavaTest {
             if (ServerType.TCP.equals(serverType)) {
                 verify(tcpConnectionFactory, times(expectedConnections)).create(any(Socket.class));
             } else if (ServerType.UDP.equals(serverType)) {
-                // No-op
-                // verify(udpTerminalFactory, times(expectedConnections)).create(any(InetAddress.class),
-                // any(Integer.class));
+                logger.debug("No-op, UDP server type");
             } else if (ServerType.SERIAL.equals(serverType)) {
-                // No-op
+                logger.debug("No-op, SERIAL server type");
             } else {
-                throw new NotImplementedException();
+                throw new UnsupportedOperationException();
             }
         }, MAX_WAIT_REQUESTS_MILLIS, 10);
     }
@@ -200,25 +206,26 @@ public class IntegrationTestSupport extends JavaTest {
         } else if (ServerType.SERIAL.equals(serverType)) {
             startSerialServer();
         } else {
-            throw new NotImplementedException();
+            throw new UnsupportedOperationException();
         }
     }
 
     private void stopServer() {
         if (ServerType.TCP.equals(serverType)) {
             tcpListener.stop();
+            logger.debug("Stopped TCP listener, tcpModbusPort={}", tcpModbusPort);
         } else if (ServerType.UDP.equals(serverType)) {
             udpListener.stop();
-            System.err.println(udpModbusPort);
+            logger.debug("Stopped UDP listener, udpModbusPort={}", udpModbusPort);
         } else if (ServerType.SERIAL.equals(serverType)) {
             try {
                 serialServerThread.join(100);
             } catch (InterruptedException e) {
-                System.err.println("Serial server thread .join() interrupted! Will interrupt it now.");
+                logger.debug("Serial server thread .join() interrupted! Will interrupt it now.");
             }
             serialServerThread.interrupt();
         } else {
-            throw new NotImplementedException();
+            throw new UnsupportedOperationException();
         }
     }
 
@@ -271,7 +278,7 @@ public class IntegrationTestSupport extends JavaTest {
 
     public ModbusSlaveEndpoint getEndpoint() {
         assert tcpModbusPort > 0;
-        return new ModbusTCPSlaveEndpoint("127.0.0.1", tcpModbusPort);
+        return new ModbusTCPSlaveEndpoint("127.0.0.1", tcpModbusPort, false);
     }
 
     /**

@@ -1,5 +1,6 @@
 /**
- * Copyright (c) 2010-2020 Contributors to the openHAB project
+ * Copyright (c) 2020-2021 Contributors to the OpenSmartHouse project
+ * Copyright (c) 2010-2021 Contributors to the openHAB project
  *
  * See the NOTICE file(s) distributed with this work for additional
  * information.
@@ -15,6 +16,8 @@ package org.openhab.core.voice.internal;
 import java.util.Locale;
 import java.util.Set;
 
+import org.eclipse.jdt.annotation.NonNullByDefault;
+import org.eclipse.jdt.annotation.Nullable;
 import org.openhab.core.audio.AudioFormat;
 import org.openhab.core.audio.AudioStream;
 import org.openhab.core.voice.STTException;
@@ -28,6 +31,7 @@ import org.openhab.core.voice.STTServiceHandle;
  * @author Mihaela Memova - Initial contribution
  * @author Velin Yordanov - migrated from groovy to java
  */
+@NonNullByDefault
 public class STTServiceStub implements STTService {
 
     private static final Set<AudioFormat> SUPPORTED_FORMATS = Set.of(AudioFormat.MP3, AudioFormat.WAV);
@@ -41,13 +45,13 @@ public class STTServiceStub implements STTService {
     }
 
     @Override
-    public String getLabel(Locale locale) {
+    public String getLabel(@Nullable Locale locale) {
         return STTSERVICE_STUB_LABEL;
     }
 
     @Override
     public Set<Locale> getSupportedLocales() {
-        return null;
+        return Set.of();
     }
 
     @Override

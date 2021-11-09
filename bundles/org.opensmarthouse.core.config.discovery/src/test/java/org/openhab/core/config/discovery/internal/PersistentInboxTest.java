@@ -1,5 +1,6 @@
 /**
- * Copyright (c) 2010-2020 Contributors to the openHAB project
+ * Copyright (c) 2020-2021 Contributors to the OpenSmartHouse project
+ * Copyright (c) 2010-2021 Contributors to the openHAB project
  *
  * See the NOTICE file(s) distributed with this work for additional
  * information.
@@ -15,7 +16,7 @@ package org.openhab.core.config.discovery.internal;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.collection.IsMapContaining.hasEntry;
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
@@ -179,7 +180,15 @@ public class PersistentInboxTest {
         when(storage.getValues()).thenReturn(List.of(result));
 
         inbox.activate();
-        assertNull(inbox.approve(THING_UID, "Test", "invalid:id"));
+        Exception exception = assertThrows(IllegalArgumentException.class, () -> {
+            inbox.approve(THING_UID, "Test", "invalid:id");
+        });
+        assertEquals("New Thing ID invalid:id must not contain multiple segments", exception.getMessage());
+
+        exception = assertThrows(IllegalArgumentException.class, () -> {
+            inbox.approve(THING_UID, "Test", "invalid$id");
+        });
+        assertEquals("Invalid thing UID test:test:invalid$id", exception.getMessage());
     }
 
     @Test

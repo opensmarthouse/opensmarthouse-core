@@ -1,5 +1,6 @@
 /**
- * Copyright (c) 2010-2020 Contributors to the openHAB project
+ * Copyright (c) 2020-2021 Contributors to the OpenSmartHouse project
+ * Copyright (c) 2010-2021 Contributors to the openHAB project
  *
  * See the NOTICE file(s) distributed with this work for additional
  * information.
@@ -43,6 +44,9 @@ import org.osgi.service.jaxrs.whiteboard.propertytypes.JaxrsResource;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.media.ArraySchema;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 
@@ -87,7 +91,7 @@ public class IconSetResource implements RESTResource {
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     @Operation(operationId = "getIconSets", summary = "Gets all icon sets.", responses = {
-            @ApiResponse(responseCode = "200", description = "OK") })
+            @ApiResponse(responseCode = "200", description = "OK", content = @Content(array = @ArraySchema(schema = @Schema(implementation = IconSet.class)))) })
     public Response getAll(
             @HeaderParam("Accept-Language") @Parameter(description = "language") @Nullable String language) {
         Locale locale = localeService.getLocale(language);

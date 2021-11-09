@@ -1,5 +1,6 @@
 /**
- * Copyright (c) 2010-2020 Contributors to the openHAB project
+ * Copyright (c) 2020-2021 Contributors to the OpenSmartHouse project
+ * Copyright (c) 2010-2021 Contributors to the openHAB project
  *
  * See the NOTICE file(s) distributed with this work for additional
  * information.
@@ -65,14 +66,17 @@ public class ItemStateUpdateActionHandler extends BaseActionModuleHandler {
                 Item item = itemRegistry.getItem(itemName);
 
                 State stateObj = null;
-                final Object st = inputs.get(STATE);
 
-                if (st instanceof State) {
-                    if (item.getAcceptedDataTypes().contains(st.getClass())) {
-                        stateObj = (State) st;
-                    }
-                } else {
+                if (state != null) {
                     stateObj = TypeParser.parseState(item.getAcceptedDataTypes(), state);
+                } else {
+                    final Object st = inputs.get(STATE);
+
+                    if (st instanceof State) {
+                        if (item.getAcceptedDataTypes().contains(st.getClass())) {
+                            stateObj = (State) st;
+                        }
+                    }
                 }
                 if (stateObj != null) {
                     final ItemStateEvent itemStateEvent = (ItemStateEvent) ItemEventFactory.createStateEvent(itemName,
@@ -81,7 +85,7 @@ public class ItemStateUpdateActionHandler extends BaseActionModuleHandler {
                             itemStateEvent.getItemState());
                     eventPublisher.post(itemStateEvent);
                 } else {
-                    logger.warn("State '{}' is not valid for item '{}'.", state, itemName);
+                    logger.debug("State '{}' is not valid for item '{}'.", state, itemName);
                 }
             } catch (ItemNotFoundException e) {
                 logger.error("Item with name {} not found in ItemRegistry.", itemName);

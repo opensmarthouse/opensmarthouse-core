@@ -1,5 +1,6 @@
 /**
- * Copyright (c) 2010-2020 Contributors to the openHAB project
+ * Copyright (c) 2020-2021 Contributors to the OpenSmartHouse project
+ * Copyright (c) 2010-2021 Contributors to the openHAB project
  *
  * See the NOTICE file(s) distributed with this work for additional
  * information.
@@ -27,13 +28,10 @@ import javax.measure.Quantity;
 import javax.measure.Unit;
 import javax.measure.quantity.Angle;
 import javax.measure.quantity.Dimensionless;
-import javax.measure.quantity.Energy;
 import javax.measure.quantity.Length;
-import javax.measure.quantity.Power;
 import javax.measure.quantity.Pressure;
 import javax.measure.quantity.Speed;
 import javax.measure.quantity.Temperature;
-import javax.measure.quantity.Volume;
 import javax.measure.spi.SystemOfUnits;
 
 import org.eclipse.jdt.annotation.NonNullByDefault;
@@ -44,10 +42,8 @@ import org.openhab.core.i18n.TimeZoneProvider;
 import org.openhab.core.i18n.TranslationProvider;
 import org.openhab.core.i18n.UnitProvider;
 import org.openhab.core.library.dimension.Intensity;
-import org.openhab.core.library.dimension.VolumetricFlowRate;
 import org.openhab.core.library.types.PointType;
 import org.openhab.core.library.unit.ImperialUnits;
-import org.openhab.core.library.unit.MetricPrefix;
 import org.openhab.core.library.unit.SIUnits;
 import org.openhab.core.library.unit.Units;
 import org.osgi.framework.Bundle;
@@ -71,7 +67,8 @@ import org.slf4j.LoggerFactory;
  * using one certain {@link LanguageResourceBundleManager} which is responsible for the translation.
  * <p>
  * <p>
- * It reads a user defined configuration to set a locale and a location for this installation.
+ * It reads a user defined configuration to set a locale and a location for this installation. Options for the
+ * parameters "language", "region", "variant" and "timezone" are provided by the I18nConfigOptionsProvider.
  *
  * @author Michael Grammling - Initial contribution
  * @author Thomas Höfer - Added getText operation with arguments
@@ -382,21 +379,5 @@ public class I18nProviderImpl
         angleMap.put(SIUnits.getInstance(), Units.DEGREE_ANGLE);
         angleMap.put(ImperialUnits.getInstance(), Units.DEGREE_ANGLE);
         dimensionMap.put(Angle.class, angleMap);
-
-        Map<SystemOfUnits, Unit<? extends Quantity<?>>> volumeMap = new HashMap<>();
-        volumeMap.put(SIUnits.getInstance(), tec.uom.se.unit.Units.CUBIC_METRE);
-        dimensionMap.put(Volume.class, volumeMap);
-
-        Map<SystemOfUnits, Unit<? extends Quantity<?>>> volumeFlowMap = new HashMap<>();
-        volumeFlowMap.put(SIUnits.getInstance(), Units.CUBICMETRE_PER_HOUR);
-        dimensionMap.put(VolumetricFlowRate.class, volumeFlowMap);
-
-        Map<SystemOfUnits, Unit<? extends Quantity<?>>> energyMap = new HashMap<>();
-        energyMap.put(SIUnits.getInstance(), Units.KILOWATT_HOUR);
-        dimensionMap.put(Energy.class, energyMap);
-
-        Map<SystemOfUnits, Unit<? extends Quantity<?>>> powerMap = new HashMap<>();
-        powerMap.put(SIUnits.getInstance(), MetricPrefix.KILO(Units.WATT));
-        dimensionMap.put(Power.class, powerMap);
     }
 }

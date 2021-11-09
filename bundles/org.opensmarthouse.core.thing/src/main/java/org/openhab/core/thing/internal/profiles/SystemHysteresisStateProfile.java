@@ -1,5 +1,6 @@
 /**
- * Copyright (c) 2010-2020 Contributors to the openHAB project
+ * Copyright (c) 2020-2021 Contributors to the OpenSmartHouse project
+ * Copyright (c) 2010-2021 Contributors to the openHAB project
  *
  * See the NOTICE file(s) distributed with this work for additional
  * information.
@@ -32,10 +33,10 @@ import org.openhab.core.types.UnDefType;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import tec.uom.se.AbstractUnit;
+import tech.units.indriya.AbstractUnit;
 
 /***
- * This is the default implementation for a {@link SystemHysteresisStateProfile}}.
+ * This is the default implementation for a {@link SystemHysteresisStateProfile}.
  *
  * @author Christoph Weitkamp - Initial contribution
  */

@@ -1,5 +1,6 @@
 /**
- * Copyright (c) 2010-2020 Contributors to the openHAB project
+ * Copyright (c) 2020-2021 Contributors to the OpenSmartHouse project
+ * Copyright (c) 2010-2021 Contributors to the openHAB project
  *
  * See the NOTICE file(s) distributed with this work for additional
  * information.
@@ -75,7 +76,8 @@ public class StateDescriptionServiceImpl implements StateDescriptionService {
 
             // we pick up the first valid StateDescriptionFragment here:
             if (result == null) {
-                result = (StateDescriptionFragmentImpl) fragment;
+                // create a deep copy of the first found fragment before merging other fragments into it
+                result = new StateDescriptionFragmentImpl((StateDescriptionFragmentImpl) fragment);
             } else {
                 result.merge(fragment);
             }

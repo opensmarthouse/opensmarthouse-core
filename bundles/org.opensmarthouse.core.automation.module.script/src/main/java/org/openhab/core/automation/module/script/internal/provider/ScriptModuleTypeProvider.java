@@ -1,5 +1,6 @@
 /**
- * Copyright (c) 2010-2020 Contributors to the openHAB project
+ * Copyright (c) 2020-2021 Contributors to the OpenSmartHouse project
+ * Copyright (c) 2010-2021 Contributors to the openHAB project
  *
  * See the NOTICE file(s) distributed with this work for additional
  * information.
@@ -107,7 +108,7 @@ public class ScriptModuleTypeProvider implements ModuleTypeProvider {
             parameterOptionsList.add(new ParameterOption(entry.getKey(), entry.getValue()));
         }
         final ConfigDescriptionParameter scriptType = ConfigDescriptionParameterBuilder.create("type", Type.TEXT)
-                .withRequired(true).withReadOnly(true).withMultiple(false).withLabel("Script Type")
+                .withRequired(true).withMultiple(false).withLabel("Script Type")
                 .withDescription("the scripting language used").withOptions(parameterOptionsList)
                 .withLimitToOptions(true).build();
         final ConfigDescriptionParameter script = ConfigDescriptionParameterBuilder.create("script", Type.TEXT)

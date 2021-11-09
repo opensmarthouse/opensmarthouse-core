@@ -1,5 +1,6 @@
 /**
- * Copyright (c) 2010-2020 Contributors to the openHAB project
+ * Copyright (c) 2020-2021 Contributors to the OpenSmartHouse project
+ * Copyright (c) 2010-2021 Contributors to the openHAB project
  *
  * See the NOTICE file(s) distributed with this work for additional
  * information.
@@ -18,10 +19,13 @@ import static org.openhab.core.automation.RulePredicates.hasPrefix;
 import java.io.IOException;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
+import java.time.ZonedDateTime;
+import java.time.temporal.ChronoUnit;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 import java.util.function.Predicate;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import javax.annotation.security.RolesAllowed;
@@ -48,6 +52,7 @@ import org.openhab.core.automation.Condition;
 import org.openhab.core.automation.ManagedRuleProvider;
 import org.openhab.core.automation.Module;
 import org.openhab.core.automation.Rule;
+import org.openhab.core.automation.RuleExecution;
 import org.openhab.core.automation.RuleManager;
 import org.openhab.core.automation.RuleRegistry;
 import org.openhab.core.automation.Trigger;
@@ -71,6 +76,7 @@ import org.openhab.core.io.rest.JSONResponse;
 import org.openhab.core.io.rest.RESTConstants;
 import org.openhab.core.io.rest.RESTResource;
 import org.openhab.core.io.rest.Stream2JSONInputStream;
+import org.openhab.core.library.types.DateTimeType;
 import org.osgi.service.component.annotations.Activate;
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Reference;
@@ -169,7 +175,7 @@ public class RuleResource implements RESTResource {
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
     @Operation(operationId = "createRule", summary = "Creates a rule.", responses = {
-            @ApiResponse(responseCode = "201", description = "Created", headers = @Header(name = "Location", description = "Newly created Rule")),
+            @ApiResponse(responseCode = "201", description = "Created", headers = @Header(name = "Location", description = "Newly created Rule", schema = @Schema(implementation = String.class))),
             @ApiResponse(responseCode = "409", description = "Creation of the rule is refused. Rule with the same UID already exists."),
             @ApiResponse(responseCode = "400", description = "Creation of the rule is refused. Missing required parameter.") })
     public Response create(@Parameter(description = "rule data", required = true) RuleDTO rule) throws IOException {
@@ -179,12 +185,20 @@ public class RuleResource implements RESTResource {
                     .header("Location", "rules/" + URLEncoder.encode(newRule.getUID(), StandardCharsets.UTF_8)).build();
         } catch (IllegalArgumentException e) {
             String errMessage = "Creation of the rule is refused: " + e.getMessage();
-            logger.warn("{}", errMessage);
+            logException(e, errMessage);
             return JSONResponse.createErrorResponse(Status.CONFLICT, errMessage);
         } catch (RuntimeException e) {
             String errMessage = "Creation of the rule is refused: " + e.getMessage();
-            logger.warn("{}", errMessage);
+            logException(e, errMessage);
             return JSONResponse.createErrorResponse(Status.BAD_REQUEST, errMessage);
+        }
+    }
+
+    private void logException(RuntimeException e, String errMessage) {
+        if (logger.isDebugEnabled()) {
+            logger.warn("{}", errMessage, e);
+        } else {
+            logger.warn("{}", errMessage);
         }
     }
 
@@ -207,7 +221,7 @@ public class RuleResource implements RESTResource {
     @Path("/{ruleUID}")
     @Produces(MediaType.APPLICATION_JSON)
     @Operation(operationId = "deleteRule", summary = "Removes an existing rule corresponding to the given UID.", responses = {
-            @ApiResponse(responseCode = "200", description = "OK", content = @Content(schema = @Schema(implementation = String.class))),
+            @ApiResponse(responseCode = "200", description = "OK"),
             @ApiResponse(responseCode = "404", description = "Rule corresponding to the given UID does not found.") })
     public Response remove(@PathParam("ruleUID") @Parameter(description = "ruleUID") String ruleUID) {
         Rule removedRule = ruleRegistry.remove(ruleUID);
@@ -330,6 +344,38 @@ public class RuleResource implements RESTResource {
         } else {
             return Response.status(Status.NOT_FOUND).build();
         }
+    }
+
+    @GET
+    @Path("/schedule/simulations")
+    @Produces(MediaType.APPLICATION_JSON)
+    @Operation(operationId = "getScheduleRuleSimulations", summary = "Simulates the executions of rules filtered by tag 'Schedule' within the given times.", responses = {
+            @ApiResponse(responseCode = "200", description = "OK", content = @Content(array = @ArraySchema(schema = @Schema(implementation = RuleExecution.class)))),
+            @ApiResponse(responseCode = "400", description = "The max. simulation duration of 180 days is exceeded.") })
+    public Response simulateRules(
+            @Parameter(description = "Start time of the simulated rule executions. Will default to the current time. ["
+                    + DateTimeType.DATE_PATTERN_WITH_TZ_AND_MS + "]") @QueryParam("from") @Nullable String from,
+            @Parameter(description = "End time of the simulated rule executions. Will default to 30 days after the start time. Must be less than 180 days after the given start time. ["
+                    + DateTimeType.DATE_PATTERN_WITH_TZ_AND_MS + "]") @QueryParam("until") @Nullable String until) {
+        final ZonedDateTime fromDate = from == null || from.isEmpty() ? ZonedDateTime.now() : parseTime(from);
+        final ZonedDateTime untilDate = until == null || until.isEmpty() ? fromDate.plusDays(31) : parseTime(until);
+
+        if (daysBetween(fromDate, untilDate) >= 180) {
+            return JSONResponse.createErrorResponse(Status.BAD_REQUEST,
+                    "Simulated time span must be smaller than 180 days.");
+        }
+
+        final Stream<RuleExecution> ruleExecutions = ruleManager.simulateRuleExecutions(fromDate, untilDate);
+        return Response.ok(ruleExecutions.collect(Collectors.toList())).build();
+    }
+
+    private static ZonedDateTime parseTime(String sTime) {
+        final DateTimeType dateTime = new DateTimeType(sTime);
+        return dateTime.getZonedDateTime();
+    }
+
+    private static long daysBetween(ZonedDateTime d1, ZonedDateTime d2) {
+        return ChronoUnit.DAYS.between(d1, d2);
     }
 
     @GET

@@ -1,5 +1,6 @@
 /**
- * Copyright (c) 2010-2020 Contributors to the openHAB project
+ * Copyright (c) 2020-2021 Contributors to the OpenSmartHouse project
+ * Copyright (c) 2010-2021 Contributors to the openHAB project
  *
  * See the NOTICE file(s) distributed with this work for additional
  * information.
@@ -13,13 +14,13 @@
 package org.openhab.core.magic.binding.handler;
 
 import static org.hamcrest.CoreMatchers.*;
+import static org.hamcrest.MatcherAssert.assertThat;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.verify;
 import static org.mockito.MockitoAnnotations.initMocks;
 
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.mockito.ArgumentCaptor;
 import org.mockito.Mock;
 import org.openhab.core.thing.Thing;
@@ -43,7 +44,7 @@ public class MagicDimmableLightHandlerTest {
     @Mock
     private Thing thing;
 
-    @Before
+    @BeforeEach
     public void setUp() {
         initMocks(this);
         handler = new MagicDimmableLightHandler(thing);
@@ -59,6 +60,6 @@ public class MagicDimmableLightHandlerTest {
         verify(callback).statusUpdated(eq(thing), statusInfoCaptor.capture());
 
         ThingStatusInfo thingStatusInfo = statusInfoCaptor.getValue();
-        Assert.assertThat(thingStatusInfo.getStatus(), is(equalTo(ThingStatus.ONLINE)));
+        assertThat(thingStatusInfo.getStatus(), is(equalTo(ThingStatus.ONLINE)));
     }
 }

@@ -1,5 +1,6 @@
 /**
- * Copyright (c) 2010-2020 Contributors to the openHAB project
+ * Copyright (c) 2020-2021 Contributors to the OpenSmartHouse project
+ * Copyright (c) 2010-2021 Contributors to the openHAB project
  *
  * See the NOTICE file(s) distributed with this work for additional
  * information.
@@ -38,7 +39,7 @@ import org.slf4j.LoggerFactory;
 @Component(immediate = true)
 public final class TypeParser {
 
-    private final static Logger logger = LoggerFactory.getLogger(TypeParser.class);
+    private static final Logger logger = LoggerFactory.getLogger(TypeParser.class);
     private @Nullable static TypeFactory typeRegistry;
 
     /**

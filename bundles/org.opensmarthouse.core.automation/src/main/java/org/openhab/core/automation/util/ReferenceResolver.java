@@ -1,5 +1,6 @@
 /**
- * Copyright (c) 2010-2020 Contributors to the openHAB project
+ * Copyright (c) 2020-2021 Contributors to the OpenSmartHouse project
+ * Copyright (c) 2010-2021 Contributors to the openHAB project
  *
  * See the NOTICE file(s) distributed with this work for additional
  * information.
@@ -367,7 +368,7 @@ public class ReferenceResolver {
             throws NoSuchFieldException, SecurityException {
         try {
             Field f = objClass.getDeclaredField(fieldName);
-            if (!f.isAccessible()) {
+            if (!f.canAccess(bean)) {
                 f.setAccessible(true);
             }
             return f.get(bean);

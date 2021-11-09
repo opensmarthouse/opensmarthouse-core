@@ -1,5 +1,6 @@
 /**
- * Copyright (c) 2010-2020 Contributors to the openHAB project
+ * Copyright (c) 2020-2021 Contributors to the OpenSmartHouse project
+ * Copyright (c) 2010-2021 Contributors to the openHAB project
  *
  * See the NOTICE file(s) distributed with this work for additional
  * information.
@@ -12,9 +13,14 @@
  */
 package org.openhab.core.library.types;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import java.text.DecimalFormatSymbols;
+import java.util.IllegalFormatConversionException;
 
 import org.junit.Test;
 
@@ -55,13 +61,7 @@ public class DecimalTypeTest {
         assertEquals("0x57", dt.format("%#x"));
 
         // A float value cannot be converted into hex.
-        dt = new DecimalType("87.5");
-        try {
-            dt.format("%x");
-            fail();
-        } catch (Exception e) {
-            // That's what we expect.
-        }
+        assertThrows(IllegalFormatConversionException.class, () -> new DecimalType("87.5").format("%x"));
 
         // An integer (with different representation) with int conversion.
         dt = new DecimalType("11.0");

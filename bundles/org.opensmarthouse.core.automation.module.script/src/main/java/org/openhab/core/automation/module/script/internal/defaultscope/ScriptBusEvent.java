@@ -1,5 +1,6 @@
 /**
- * Copyright (c) 2010-2020 Contributors to the openHAB project
+ * Copyright (c) 2020-2021 Contributors to the OpenSmartHouse project
+ * Copyright (c) 2010-2021 Contributors to the openHAB project
  *
  * See the NOTICE file(s) distributed with this work for additional
  * information.
@@ -91,7 +92,11 @@ public class ScriptBusEvent {
             try {
                 Item item = itemRegistry.getItem(itemName);
                 Command command = TypeParser.parseCommand(item.getAcceptedCommandTypes(), commandString);
-                eventPublisher.post(ItemEventFactory.createCommandEvent(itemName, command));
+                if (command != null) {
+                    eventPublisher.post(ItemEventFactory.createCommandEvent(itemName, command));
+                } else {
+                    LoggerFactory.getLogger(ScriptBusEvent.class).warn("Command '{}' cannot be parsed.", commandString);
+                }
             } catch (ItemNotFoundException e) {
                 LoggerFactory.getLogger(ScriptBusEvent.class).warn("Item '{}' does not exist.", itemName);
             }
@@ -151,7 +156,11 @@ public class ScriptBusEvent {
             try {
                 Item item = itemRegistry.getItem(itemName);
                 State state = TypeParser.parseState(item.getAcceptedDataTypes(), stateString);
-                eventPublisher.post(ItemEventFactory.createStateEvent(itemName, state));
+                if (state != null) {
+                    eventPublisher.post(ItemEventFactory.createStateEvent(itemName, state));
+                } else {
+                    LoggerFactory.getLogger(ScriptBusEvent.class).warn("State '{}' cannot be parsed.", stateString);
+                }
             } catch (ItemNotFoundException e) {
                 LoggerFactory.getLogger(ScriptBusEvent.class).warn("Item '{}' does not exist.", itemName);
             }

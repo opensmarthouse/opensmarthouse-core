@@ -1,5 +1,6 @@
 /**
- * Copyright (c) 2010-2020 Contributors to the openHAB project
+ * Copyright (c) 2020-2021 Contributors to the OpenSmartHouse project
+ * Copyright (c) 2010-2021 Contributors to the openHAB project
  *
  * See the NOTICE file(s) distributed with this work for additional
  * information.
@@ -12,11 +13,25 @@
  */
 package org.openhab.core.io.transport.mqtt;
 
-import static org.hamcrest.CoreMatchers.*;
-import static org.junit.Assert.*;
-import static org.mockito.ArgumentMatchers.*;
+import static org.hamcrest.CoreMatchers.equalTo;
+import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.junit.jupiter.api.Assertions.assertArrayEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.*;
+import static org.mockito.ArgumentMatchers.anyInt;
+import static org.mockito.ArgumentMatchers.eq;
+import static org.mockito.ArgumentMatchers.isNull;
+import static org.mockito.Mockito.doReturn;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.spy;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
 
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.CountDownLatch;
@@ -27,7 +42,7 @@ import java.util.concurrent.TimeoutException;
 
 import org.eclipse.jdt.annotation.NonNullByDefault;
 import org.eclipse.jdt.annotation.Nullable;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.openhab.core.io.transport.mqtt.internal.client.MqttAsyncClientWrapper;
 import org.openhab.core.io.transport.mqtt.reconnect.AbstractReconnectStrategy;
 import org.openhab.core.io.transport.mqtt.reconnect.PeriodicReconnectStrategy;
@@ -54,7 +69,7 @@ public class MqttBrokerConnectionTests extends JavaTest {
     @Test
     public void subscribeBeforeOnlineThenConnect()
             throws ConfigurationException, MqttException, InterruptedException, ExecutionException, TimeoutException {
-        MqttBrokerConnectionEx connection = new MqttBrokerConnectionEx("123.123.123.123", null, false,
+        MqttBrokerConnectionEx connection = new MqttBrokerConnectionEx("123.123.123.123", null, false, false,
                 "MqttBrokerConnectionTests");
 
         // Add a subscriber while still offline
@@ -75,7 +90,7 @@ public class MqttBrokerConnectionTests extends JavaTest {
     @Test
     public void subscribeToWildcardTopic()
             throws ConfigurationException, MqttException, InterruptedException, ExecutionException, TimeoutException {
-        MqttBrokerConnectionEx connection = new MqttBrokerConnectionEx("123.123.123.123", null, false,
+        MqttBrokerConnectionEx connection = new MqttBrokerConnectionEx("123.123.123.123", null, false, false,
                 "MqttBrokerConnectionTests");
 
         // Add a subscriber while still offline
@@ -106,7 +121,7 @@ public class MqttBrokerConnectionTests extends JavaTest {
     @Test
     public void subscriber()
             throws ConfigurationException, MqttException, InterruptedException, ExecutionException, TimeoutException {
-        MqttBrokerConnectionEx connection = new MqttBrokerConnectionEx("123.123.123.123", null, false,
+        MqttBrokerConnectionEx connection = new MqttBrokerConnectionEx("123.123.123.123", null, false, false,
                 "MqttBrokerConnectionTests");
 
         // Expect no subscribers
@@ -141,7 +156,7 @@ public class MqttBrokerConnectionTests extends JavaTest {
 
     @Test
     public void reconnectPolicyDefault() throws ConfigurationException, MqttException, InterruptedException {
-        MqttBrokerConnectionEx connection = new MqttBrokerConnectionEx("123.123.123.123", null, false,
+        MqttBrokerConnectionEx connection = new MqttBrokerConnectionEx("123.123.123.123", null, false, false,
                 "MqttBrokerConnectionTests");
 
         // Check if the default policy is set and that the broker within the policy is set.
@@ -154,7 +169,7 @@ public class MqttBrokerConnectionTests extends JavaTest {
     public void reconnectPolicy()
             throws ConfigurationException, MqttException, InterruptedException, ConfigurationException {
         MqttBrokerConnectionEx connection = spy(
-                new MqttBrokerConnectionEx("123.123.123.123", null, false, "MqttBrokerConnectionTests"));
+                new MqttBrokerConnectionEx("123.123.123.123", null, false, false, "MqttBrokerConnectionTests"));
         connection.setConnectionCallback(connection);
 
         // Check setter
@@ -187,7 +202,7 @@ public class MqttBrokerConnectionTests extends JavaTest {
     @Test
     public void timeoutWhenNotReachable() throws ConfigurationException, MqttException, InterruptedException {
         MqttBrokerConnectionEx connection = spy(
-                new MqttBrokerConnectionEx("10.0.10.10", null, false, "MqttBrokerConnectionTests"));
+                new MqttBrokerConnectionEx("10.0.10.10", null, false, false, "MqttBrokerConnectionTests"));
         connection.setConnectionCallback(connection);
 
         ScheduledThreadPoolExecutor s = new ScheduledThreadPoolExecutor(1);
@@ -214,14 +229,14 @@ public class MqttBrokerConnectionTests extends JavaTest {
         connection.start();
         assertNotNull(connection.timeoutFuture);
 
-        assertThat(latch.await(500, TimeUnit.MILLISECONDS), is(true));
+        assertThat(latch.await(5, TimeUnit.SECONDS), is(true));
     }
 
     @Test
     public void timeoutWhenNotReachableFuture()
             throws ConfigurationException, MqttException, InterruptedException, ExecutionException, TimeoutException {
         MqttBrokerConnectionEx connection = spy(
-                new MqttBrokerConnectionEx("10.0.10.10", null, false, "MqttBrokerConnectionTests"));
+                new MqttBrokerConnectionEx("10.0.10.10", null, false, false, "MqttBrokerConnectionTests"));
         connection.setConnectionCallback(connection);
 
         ScheduledThreadPoolExecutor s = new ScheduledThreadPoolExecutor(1);
@@ -237,13 +252,13 @@ public class MqttBrokerConnectionTests extends JavaTest {
         verify(connection.connectionCallback, times(0)).onDisconnected(any(MqttClientDisconnectedContext.class));
         assertNotNull(connection.timeoutFuture);
 
-        assertThat(future.get(70, TimeUnit.MILLISECONDS), is(false));
+        assertThat(future.get(5, TimeUnit.SECONDS), is(false));
     }
 
     @Test
     public void connectionObserver() throws ConfigurationException, MqttException {
         MqttBrokerConnectionEx connection = spy(
-                new MqttBrokerConnectionEx("123.123.123.123", null, false, "connectionObserver"));
+                new MqttBrokerConnectionEx("123.123.123.123", null, false, false, "connectionObserver"));
         connection.setConnectionCallback(connection);
 
         // Add an observer
@@ -274,7 +289,7 @@ public class MqttBrokerConnectionTests extends JavaTest {
 
     @Test
     public void lastWillAndTestamentTests() throws ConfigurationException {
-        MqttBrokerConnectionEx connection = new MqttBrokerConnectionEx("123.123.123.123", null, false,
+        MqttBrokerConnectionEx connection = new MqttBrokerConnectionEx("123.123.123.123", null, false, false,
                 "lastWillAndTestamentTests");
 
         assertNull(connection.getLastWill());
@@ -287,29 +302,31 @@ public class MqttBrokerConnectionTests extends JavaTest {
         assertArrayEquals(connection.getLastWill().getPayload(), b);
     }
 
-    @Test(expected = IllegalArgumentException.class)
+    @Test
     public void lastWillAndTestamentConstructorTests() {
-        new MqttWillAndTestament("", new byte[0], 0, false);
+        assertThrows(IllegalArgumentException.class, () -> new MqttWillAndTestament("", new byte[0], 0, false));
     }
 
-    @Test(expected = IllegalArgumentException.class)
+    @Test
     public void qosInvalid() throws ConfigurationException {
-        MqttBrokerConnectionEx connection = new MqttBrokerConnectionEx("123.123.123.123", null, false, "qosInvalid");
-        connection.setQos(10);
+        MqttBrokerConnectionEx connection = new MqttBrokerConnectionEx("123.123.123.123", null, false, false,
+                "qosInvalid");
+        assertThrows(IllegalArgumentException.class, () -> connection.setQos(10));
     }
 
     @Test
     public void setterGetterTests() {
-        MqttBrokerConnectionEx connection = new MqttBrokerConnectionEx("123.123.123.123", null, false,
+        MqttBrokerConnectionEx connection = new MqttBrokerConnectionEx("123.123.123.123", null, false, false,
                 "setterGetterTests");
-        assertEquals("URL getter", connection.getHost(), "123.123.123.123");
-        assertEquals("Name getter", connection.getPort(), 1883); // Check for non-secure port
-        assertFalse("Secure getter", connection.isSecure());
-        assertEquals("ClientID getter", "setterGetterTests", connection.getClientId());
+        assertEquals(connection.getHost(), "123.123.123.123", "URL getter");
+        assertEquals(connection.getPort(), 1883, "Name getter"); // Check for non-secure port
+        assertFalse(connection.isSecure(), "Secure getter");
+        assertFalse(connection.isHostnameValidated(), "HostnameValidated getter");
+        assertEquals("setterGetterTests", connection.getClientId(), "ClientID getter");
 
         connection.setCredentials("user@!", "password123@^");
-        assertEquals("User getter/setter", "user@!", connection.getUser());
-        assertEquals("Password getter/setter", "password123@^", connection.getPassword());
+        assertEquals("user@!", connection.getUser(), "User getter/setter");
+        assertEquals("password123@^", connection.getPassword(), "Password getter/setter");
 
         assertEquals(MqttBrokerConnection.DEFAULT_KEEPALIVE_INTERVAL, connection.getKeepAliveInterval());
         connection.setKeepAliveInterval(80);
@@ -332,7 +349,7 @@ public class MqttBrokerConnectionTests extends JavaTest {
     public void gracefulStop()
             throws ConfigurationException, MqttException, InterruptedException, ExecutionException, TimeoutException {
         MqttBrokerConnectionEx connection = spy(
-                new MqttBrokerConnectionEx("123.123.123.123", null, false, "MqttBrokerConnectionTests"));
+                new MqttBrokerConnectionEx("123.123.123.123", null, false, false, "MqttBrokerConnectionTests"));
 
         assertTrue(connection.start().get(200, TimeUnit.MILLISECONDS));
 

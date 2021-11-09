@@ -1,5 +1,6 @@
 /**
- * Copyright (c) 2010-2020 Contributors to the openHAB project
+ * Copyright (c) 2020-2021 Contributors to the OpenSmartHouse project
+ * Copyright (c) 2010-2021 Contributors to the openHAB project
  *
  * See the NOTICE file(s) distributed with this work for additional
  * information.
@@ -45,8 +46,9 @@ public class MqttBrokerConnectionEx extends MqttBrokerConnection {
     public boolean connectSuccess = true;
     public boolean connectTimeout = false;
 
-    public MqttBrokerConnectionEx(String host, @Nullable Integer port, boolean secure, String clientId) {
-        super(host, port, secure, clientId);
+    public MqttBrokerConnectionEx(String host, @Nullable Integer port, boolean secure, boolean hostnameValidated,
+            String clientId) {
+        super(host, port, secure, hostnameValidated, clientId);
     }
 
     public Map<String, Subscription> getSubscribers() {

@@ -1,5 +1,6 @@
 /**
- * Copyright (c) 2010-2020 Contributors to the openHAB project
+ * Copyright (c) 2020-2021 Contributors to the OpenSmartHouse project
+ * Copyright (c) 2010-2021 Contributors to the openHAB project
  *
  * See the NOTICE file(s) distributed with this work for additional
  * information.
@@ -17,10 +18,12 @@ import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
+import org.eclipse.jdt.annotation.NonNullByDefault;
 import org.openhab.core.config.core.ConfigDescription;
 import org.openhab.core.config.core.ConfigDescriptionParameter;
 import org.openhab.core.config.core.ConfigDescriptionParameterBuilder;
 import org.openhab.core.config.core.ConfigDescriptionParameterGroup;
+import org.openhab.core.config.core.ConfigDescriptionParameterGroupBuilder;
 import org.openhab.core.config.core.FilterCriteria;
 import org.openhab.core.config.core.ParameterDeviceProperty;
 import org.openhab.core.config.core.ParameterOption;
@@ -33,6 +36,7 @@ import org.openhab.core.config.core.ParameterOption;
  * @author Ana Dimova - converting ConfigDescriptionParameterDTO to ConfigDescriptionParameter
  * @author Chris Jackson - Added device configuration parameter
  */
+@NonNullByDefault
 public class ConfigDescriptionDTOMapper {
 
     /**
@@ -66,9 +70,23 @@ public class ConfigDescriptionDTOMapper {
                     .withPattern(parameter.pattern).withReadOnly(parameter.readOnly).withMultiple(parameter.multiple)
                     .withMultipleLimit(parameter.multipleLimit).withGroupName(parameter.groupName)
                     .withAdvanced(parameter.advanced).withVerify(parameter.verify)
-                    .withLimitToOptions(parameter.limitToOptions).withUnit(parameter.unitLabel)
+                    .withLimitToOptions(parameter.limitToOptions).withUnit(parameter.unit)
                     .withUnitLabel(parameter.unitLabel).withOptions(mapOptionsDTO(parameter.options))
                     .withFilterCriteria(mapFilterCriteriaDTO(parameter.filterCriteria)).build());
+        }
+        return result;
+    }
+
+    public static List<ConfigDescriptionParameterGroup> mapParameterGroupsDTO(
+            List<ConfigDescriptionParameterGroupDTO> parameterGroups) {
+        if (parameterGroups == null) {
+            return null;
+        }
+        final List<ConfigDescriptionParameterGroup> result = new ArrayList<>(parameterGroups.size());
+        for (ConfigDescriptionParameterGroupDTO parameterGroup : parameterGroups) {
+            result.add(ConfigDescriptionParameterGroupBuilder.create(parameterGroup.name)
+                    .withAdvanced(parameterGroup.advanced).withContext(parameterGroup.context)
+                    .withDescription(parameterGroup.description).withLabel(parameterGroup.label).build());
         }
         return result;
     }

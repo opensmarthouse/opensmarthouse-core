@@ -1,5 +1,6 @@
 /**
- * Copyright (c) 2010-2020 Contributors to the openHAB project
+ * Copyright (c) 2020-2021 Contributors to the OpenSmartHouse project
+ * Copyright (c) 2010-2021 Contributors to the openHAB project
  *
  * See the NOTICE file(s) distributed with this work for additional
  * information.
@@ -27,13 +28,13 @@ import org.openhab.core.items.ItemRegistry;
 import org.openhab.core.items.Metadata;
 import org.openhab.core.items.MetadataKey;
 import org.openhab.core.items.MetadataRegistry;
+import org.openhab.core.semantics.Equipment;
+import org.openhab.core.semantics.Location;
+import org.openhab.core.semantics.Point;
 import org.openhab.core.semantics.SemanticTags;
 import org.openhab.core.semantics.SemanticsPredicates;
 import org.openhab.core.semantics.SemanticsService;
-import org.openhab.core.semantics.model.Equipment;
-import org.openhab.core.semantics.model.Location;
-import org.openhab.core.semantics.model.Point;
-import org.openhab.core.semantics.model.Tag;
+import org.openhab.core.semantics.Tag;
 import org.osgi.service.component.annotations.Activate;
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Reference;

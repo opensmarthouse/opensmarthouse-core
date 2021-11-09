@@ -1,5 +1,6 @@
 /**
- * Copyright (c) 2010-2020 Contributors to the openHAB project
+ * Copyright (c) 2020-2021 Contributors to the OpenSmartHouse project
+ * Copyright (c) 2010-2021 Contributors to the openHAB project
  *
  * See the NOTICE file(s) distributed with this work for additional
  * information.
@@ -43,6 +44,7 @@ import org.openhab.core.automation.type.ModuleTypeRegistry;
 import org.openhab.core.automation.type.Output;
 import org.openhab.core.automation.type.TriggerType;
 import org.openhab.core.common.registry.ProviderChangeListener;
+import org.openhab.core.config.core.ConfigDescriptionParameter;
 import org.openhab.core.events.Event;
 import org.openhab.core.events.EventFilter;
 import org.openhab.core.events.EventPublisher;
@@ -101,20 +103,12 @@ public class AutomationIntegrationJsonTest extends JavaOSGiTest {
 
             @Override
             public Collection<Item> getAll() {
-                Set<Item> items = new HashSet<>();
-                items.add(new SwitchItem("myMotionItem"));
-                items.add(new SwitchItem("myPresenceItem"));
-                items.add(new SwitchItem("myLampItem"));
-                items.add(new SwitchItem("myMotionItem2"));
-                items.add(new SwitchItem("myPresenceItem2"));
-                items.add(new SwitchItem("myLampItem2"));
-                items.add(new SwitchItem("myMotionItem11"));
-                items.add(new SwitchItem("myLampItem11"));
-                items.add(new SwitchItem("myMotionItem3"));
-                items.add(new SwitchItem("templ_MotionItem"));
-                items.add(new SwitchItem("templ_LampItem"));
-
-                return items;
+                return Set.of(new SwitchItem("myMotionItem"), new SwitchItem("myPresenceItem"),
+                        new SwitchItem("myLampItem"), new SwitchItem("myMotionItem2"),
+                        new SwitchItem("myPresenceItem2"), new SwitchItem("myLampItem2"),
+                        new SwitchItem("myMotionItem11"), new SwitchItem("myLampItem11"),
+                        new SwitchItem("myMotionItem3"), new SwitchItem("templ_MotionItem"),
+                        new SwitchItem("templ_LampItem"));
             }
 
             @Override

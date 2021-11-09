@@ -1,5 +1,6 @@
 /**
- * Copyright (c) 2010-2020 Contributors to the openHAB project
+ * Copyright (c) 2020-2021 Contributors to the OpenSmartHouse project
+ * Copyright (c) 2010-2021 Contributors to the openHAB project
  *
  * See the NOTICE file(s) distributed with this work for additional
  * information.
@@ -24,12 +25,20 @@ import java.time.ZonedDateTime;
 import java.util.Arrays;
 import java.util.IllegalFormatConversionException;
 
+import java.text.DecimalFormat;
+import java.text.NumberFormat;
+import java.text.ParsePosition;
+
+import java.util.Locale;
+
 import javax.measure.Dimension;
 import javax.measure.IncommensurableException;
 import javax.measure.Quantity;
+import javax.measure.Quantity.Scale;
 import javax.measure.UnconvertibleException;
 import javax.measure.Unit;
 import javax.measure.UnitConverter;
+import javax.measure.format.MeasurementParseException;
 import javax.measure.quantity.Dimensionless;
 
 import org.eclipse.jdt.annotation.NonNullByDefault;
@@ -42,9 +51,11 @@ import org.openhab.core.types.util.UnitUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import tec.uom.se.AbstractUnit;
-import tec.uom.se.function.QuantityFunctions;
-import tec.uom.se.quantity.Quantities;
+import tech.units.indriya.AbstractUnit;
+import tech.units.indriya.format.NumberDelimiterQuantityFormat;
+import tech.units.indriya.format.SimpleUnitFormat;
+import tech.units.indriya.quantity.Quantities;
+import tech.uom.lib.common.function.QuantityFunctions;
 
 /**
  * The measure type extends DecimalType to handle physical unit measurement
@@ -57,9 +68,10 @@ import tec.uom.se.quantity.Quantities;
                                                                     // annotated.
 public class QuantityType<T extends Quantity<T>> extends NumberType
         implements State, Command, Comparable<QuantityType<T>> {
-    private final Logger logger = LoggerFactory.getLogger(QuantityType.class);
+    private final transient Logger logger = LoggerFactory.getLogger(QuantityType.class);
 
     private static final long serialVersionUID = 8828949721938234629L;
+    private static final char DOT_DECIMAL_SEPARATOR = '.';
     private static final BigDecimal HUNDRED = BigDecimal.valueOf(100);
 
     public static final QuantityType<Dimensionless> ZERO = new QuantityType<>(0, AbstractUnit.ONE);
@@ -73,13 +85,6 @@ public class QuantityType<T extends Quantity<T>> extends NumberType
 
     private final Quantity<T> quantity;
 
-    /*
-     * FIXME Not sure why we need this here.
-     * static {
-     * UnitInitializer.init();
-     * }
-     */
-
     /**
      * Creates a dimensionless {@link QuantityType} with scalar 0 and unit {@link AbstractUnit#ONE}.
      * A default constructor is needed by {@link org.openhab.core.internal.items.ItemUpdater#receiveUpdate})
@@ -91,17 +96,66 @@ public class QuantityType<T extends Quantity<T>> extends NumberType
 
     /**
      * Creates a new {@link QuantityType} with the given value. The value may contain a unit. The specific
-     * {@link Quantity} is obtained by {@link Quantities#getQuantity(CharSequence)}.
+     * {@link Quantity} is obtained by {@link NumberDelimiterQuantityFormat#parse(CharSequence)}.
+     * The English locale is used to determine (decimal/grouping) separator characters.
      *
      * @param value the non null value representing a quantity with an optional unit.
+     *
+     * @throws NumberFormatException when a quantity without a unit could not be parsed
+     * @throws IllegalArgumentException when a quantity with a unit could not be parsed
+     */
+    public QuantityType(String value) {
+        this(value, Locale.ENGLISH);
+    }
+
+    /**
+     * Creates a new {@link QuantityType} with the given value. The value may contain a unit. The specific
+     * {@link Quantity} is obtained by {@link NumberDelimiterQuantityFormat#parse(CharSequence)}.
+     *
+     * @param value the non null value representing a quantity with an optional unit.
+     * @param locale the locale used to determine (decimal/grouping) separator characters.
+     *
+     * @throws NumberFormatException when a quantity without a unit could not be parsed
+     * @throws IllegalArgumentException when a quantity with a unit could not be parsed
      */
     @SuppressWarnings("unchecked")
-    public QuantityType(String value) {
+    public QuantityType(String value, Locale locale) {
         String[] constituents = value.split(UNIT_PATTERN);
 
         // getQuantity needs a space between numeric value and unit
         String formatted = String.join(" ", constituents);
-        quantity = (Quantity<T>) Quantities.getQuantity(formatted);
+        if (!formatted.contains(" ")) {
+            DecimalFormat df = (DecimalFormat) NumberFormat.getInstance(locale);
+            df.setParseBigDecimal(true);
+            ParsePosition position = new ParsePosition(0);
+            BigDecimal parsedValue = (BigDecimal) df.parseObject(value, position);
+            if (parsedValue == null || position.getErrorIndex() != -1 || position.getIndex() < value.length()) {
+                throw new NumberFormatException("Invalid BigDecimal value: " + value);
+            }
+            quantity = (Quantity<T>) Quantities.getQuantity(parsedValue, AbstractUnit.ONE, Scale.RELATIVE);
+        } else {
+            SimpleUnitFormat unitFormat = SimpleUnitFormat.getInstance();
+            NumberDelimiterQuantityFormat quantityFormat = new NumberDelimiterQuantityFormat.Builder()
+                    .setNumberFormat(NumberFormat.getInstance(locale)).setUnitFormat(unitFormat)
+                    .setLocaleSensitive(true).build();
+            ParsePosition position = new ParsePosition(0);
+            try {
+                Quantity<T> absoluteQuantity = (Quantity<T>) quantityFormat.parse(formatted, position);
+                Unit<T> unit = absoluteQuantity.getUnit();
+                if (position.getErrorIndex() != -1 || (position.getIndex() < value.length())) {
+                    // The position is now at the end of the parsed number. Because it does not always fully
+                    // parse the whole number, an exception is thrown if the remaining string cannot be
+                    // parsed to a unit that equals the parsed unit.
+                    if (!unit.equals(unitFormat.parse(value.substring(position.getIndex()).trim()))) {
+                        throw new IllegalArgumentException("Invalid Quantity value: " + value);
+                    }
+                }
+                quantity = Quantities.getQuantity(absoluteQuantity.getValue(), absoluteQuantity.getUnit(),
+                        Scale.RELATIVE);
+            } catch (MeasurementParseException e) {
+                throw new IllegalArgumentException("Invalid Quantity value: " + value, e);
+            }
+        }
     }
 
     /**
@@ -115,7 +169,7 @@ public class QuantityType<T extends Quantity<T>> extends NumberType
     public QuantityType(Number value, Unit<T> unit) {
         // Avoid scientific notation for double
         BigDecimal bd = new BigDecimal(value.toString());
-        quantity = Quantities.getQuantity(bd, unit);
+        quantity = (Quantity<T>) Quantities.getQuantity(bd, unit, Scale.RELATIVE);
     }
 
     /**
@@ -143,6 +197,15 @@ public class QuantityType<T extends Quantity<T>> extends NumberType
         return toFullString();
     }
 
+    /**
+     * Static access to {@link QuantityType#QuantityType(String)}.
+     *
+     * @param value the non null value representing a quantity with an optional unit
+     * @return a new {@link QuantityType}
+     *
+     * @throws NumberFormatException when a quantity without a unit could not be parsed
+     * @throws IllegalArgumentException when a quantity with a unit could not be parsed
+     */
     public static QuantityType<? extends Quantity<?>> valueOf(String value) {
         return new QuantityType<>(value);
     }
@@ -160,7 +223,7 @@ public class QuantityType<T extends Quantity<T>> extends NumberType
             return false;
         }
         QuantityType<?> other = (QuantityType<?>) obj;
-        if (!quantity.getUnit().getDimension().equals(other.quantity.getUnit().getDimension())) {
+        if (!quantity.getUnit().isCompatible(other.quantity.getUnit())) {
             return false;
         } else if (compareTo((QuantityType<T>) other) != 0) {
             return false;
@@ -423,7 +486,7 @@ public class QuantityType<T extends Quantity<T>> extends NumberType
      * @return the negated value of this QuantityType.
      */
     public QuantityType<T> negate() {
-        return new QuantityType<>(quantity.multiply(-1));
+        return new QuantityType<>(quantity.negate());
     }
 
     /**

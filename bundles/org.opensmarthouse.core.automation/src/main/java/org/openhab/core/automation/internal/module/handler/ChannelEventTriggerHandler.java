@@ -1,5 +1,6 @@
 /**
- * Copyright (c) 2010-2020 Contributors to the openHAB project
+ * Copyright (c) 2020-2021 Contributors to the OpenSmartHouse project
+ * Copyright (c) 2010-2021 Contributors to the openHAB project
  *
  * See the NOTICE file(s) distributed with this work for additional
  * information.
@@ -25,6 +26,7 @@ import org.openhab.core.automation.handler.TriggerHandlerCallback;
 import org.openhab.core.events.Event;
 import org.openhab.core.events.EventFilter;
 import org.openhab.core.events.EventSubscriber;
+import org.openhab.core.thing.ChannelUID;
 import org.openhab.core.thing.events.ChannelTriggeredEvent;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.ServiceRegistration;
@@ -47,7 +49,7 @@ public class ChannelEventTriggerHandler extends BaseTriggerModuleHandler impleme
     private final Logger logger = LoggerFactory.getLogger(ChannelEventTriggerHandler.class);
 
     private final String eventOnChannel;
-    private final String channelUID;
+    private final ChannelUID channelUID;
     private final Set<String> types = new HashSet<>();
     private final BundleContext bundleContext;
 
@@ -58,7 +60,7 @@ public class ChannelEventTriggerHandler extends BaseTriggerModuleHandler impleme
         super(module);
 
         this.eventOnChannel = (String) module.getConfiguration().get(CFG_CHANNEL_EVENT);
-        this.channelUID = (String) module.getConfiguration().get(CFG_CHANNEL);
+        this.channelUID = new ChannelUID((String) module.getConfiguration().get(CFG_CHANNEL));
         this.bundleContext = bundleContext;
         this.types.add("ChannelTriggeredEvent");
 
@@ -88,7 +90,7 @@ public class ChannelEventTriggerHandler extends BaseTriggerModuleHandler impleme
         boolean eventMatches = false;
         if (event instanceof ChannelTriggeredEvent) {
             ChannelTriggeredEvent cte = (ChannelTriggeredEvent) event;
-            if (cte.getTopic().contains(this.channelUID)) {
+            if (cte.getChannel().equals(channelUID)) {
                 logger.trace("->FILTER: {}:{}", cte.getEvent(), eventOnChannel);
                 eventMatches = true;
                 if (eventOnChannel != null && !eventOnChannel.isEmpty() && !eventOnChannel.equals(cte.getEvent())) {

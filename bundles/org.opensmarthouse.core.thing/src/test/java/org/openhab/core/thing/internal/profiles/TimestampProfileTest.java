@@ -1,5 +1,6 @@
 /**
- * Copyright (c) 2010-2020 Contributors to the openHAB project
+ * Copyright (c) 2020-2021 Contributors to the OpenSmartHouse project
+ * Copyright (c) 2010-2021 Contributors to the openHAB project
  *
  * See the NOTICE file(s) distributed with this work for additional
  * information.
@@ -13,11 +14,14 @@
 package org.openhab.core.thing.internal.profiles;
 
 import static org.junit.Assert.assertTrue;
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
 
 import java.time.ZonedDateTime;
 import java.time.temporal.ChronoUnit;
 
+import org.eclipse.jdt.annotation.NonNullByDefault;
 import org.junit.Test;
 import org.mockito.ArgumentCaptor;
 import org.openhab.core.library.types.DateTimeType;
@@ -27,20 +31,20 @@ import org.openhab.core.thing.profiles.ProfileCallback;
 import org.openhab.core.types.State;
 
 /**
- * Tests for the system:timestamp-update profile
+ * Tests for {@link TimestampChangeProfile} and {@link TimestampUpdateProfile}.
  *
  * @author Gaël L'hopital - Initial contribution
  */
+@NonNullByDefault
 public class TimestampProfileTest extends JavaTest {
 
     @Test
-    public void testTimestampOnUpdate() {
+    public void testTimestampOnUpdateStateUpdateFromHandler() {
         ProfileCallback callback = mock(ProfileCallback.class);
         TimestampUpdateProfile timestampProfile = new TimestampUpdateProfile(callback);
 
-        State state = new DecimalType(23);
         ZonedDateTime now = ZonedDateTime.now();
-        timestampProfile.onStateUpdateFromItem(state);
+        timestampProfile.onStateUpdateFromHandler(new DecimalType(23));
 
         ArgumentCaptor<State> capture = ArgumentCaptor.forClass(State.class);
         verify(callback, times(1)).sendUpdate(capture.capture());
@@ -53,13 +57,14 @@ public class TimestampProfileTest extends JavaTest {
     }
 
     @Test
-    public void testTimestampOnChange() {
-        ProfileCallback callback = mock(ProfileCallback.class);
+    public void testTimestampOnChangeStateUpdateFromHandler() {
         ArgumentCaptor<State> capture = ArgumentCaptor.forClass(State.class);
+
+        ProfileCallback callback = mock(ProfileCallback.class);
         TimestampChangeProfile timestampProfile = new TimestampChangeProfile(callback);
 
         // No existing previous state saved, the callback is first called
-        timestampProfile.onStateUpdateFromItem(new DecimalType(23));
+        timestampProfile.onStateUpdateFromHandler(new DecimalType(23));
         verify(callback, times(1)).sendUpdate(capture.capture());
         State result = capture.getValue();
         DateTimeType changeResult = (DateTimeType) result;
@@ -67,11 +72,11 @@ public class TimestampProfileTest extends JavaTest {
         waitForAssert(() -> assertTrue(ZonedDateTime.now().isAfter(changeResult.getZonedDateTime())));
 
         // The state is unchanged, no additional call to the callback
-        timestampProfile.onStateUpdateFromItem(new DecimalType(23));
+        timestampProfile.onStateUpdateFromHandler(new DecimalType(23));
         verify(callback, times(1)).sendUpdate(capture.capture());
 
         // The state is changed, one additional call to the callback
-        timestampProfile.onStateUpdateFromItem(new DecimalType(24));
+        timestampProfile.onStateUpdateFromHandler(new DecimalType(24));
         verify(callback, times(2)).sendUpdate(capture.capture());
         result = capture.getValue();
         DateTimeType updatedResult = (DateTimeType) result;

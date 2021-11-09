@@ -1,5 +1,6 @@
 /**
- * Copyright (c) 2010-2020 Contributors to the openHAB project
+ * Copyright (c) 2020-2021 Contributors to the OpenSmartHouse project
+ * Copyright (c) 2010-2021 Contributors to the openHAB project
  *
  * See the NOTICE file(s) distributed with this work for additional
  * information.
@@ -20,7 +21,6 @@ import java.util.List;
 import java.util.Map;
 
 import org.eclipse.jdt.annotation.NonNullByDefault;
-import org.eclipse.jdt.annotation.Nullable;
 import org.openhab.core.events.EventPublisher;
 import org.openhab.core.io.console.Console;
 import org.openhab.core.io.console.extensions.AbstractConsoleCommandExtension;
@@ -107,7 +107,7 @@ public class ThingConsoleCommandExtension extends AbstractConsoleCommandExtensio
                     if (args.length == 3) {
                         triggerChannel(console, args[1], args[2]);
                     } else if (args.length == 2) {
-                        triggerChannel(console, args[1], null);
+                        triggerChannel(console, args[1], "");
                     } else {
                         console.println("Command '" + subCommand + "' needs arguments <channelUID> [<event>]");
                     }
@@ -130,7 +130,7 @@ public class ThingConsoleCommandExtension extends AbstractConsoleCommandExtensio
         }
     }
 
-    private void triggerChannel(Console console, String channelUid, @Nullable String event) {
+    private void triggerChannel(Console console, String channelUid, String event) {
         eventPublisher.post(ThingEventFactory.createTriggerEvent(event, new ChannelUID(channelUid)));
     }
 

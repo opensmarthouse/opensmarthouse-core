@@ -6,7 +6,7 @@
   <parent>
     <groupId>org.opensmarthouse.core</groupId>
     <artifactId>org.opensmarthouse.core.reactor</artifactId>
-    <version>0.9.3-SNAPSHOT</version>
+    <version>0.10.0-SNAPSHOT</version>
   </parent>
 
   <groupId>org.opensmarthouse.core.bundles</groupId>
@@ -95,6 +95,7 @@
     <module>org.opensmarthouse.core.io.transport.serial</module>
     <module>org.opensmarthouse.core.io.transport.serial.console</module>
     <module>org.opensmarthouse.core.io.transport.serial.javacomm</module>
+    <module>org.opensmarthouse.core.io.transport.serial.purejavacomm</module>
     <module>org.opensmarthouse.core.io.transport.serial.rxtx</module>
     <module>org.opensmarthouse.core.io.transport.serial.rxtx.rfc2217</module>
     <module>org.opensmarthouse.core.io.transport.upnp</module>

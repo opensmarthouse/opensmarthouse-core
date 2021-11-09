@@ -1,5 +1,6 @@
 /**
- * Copyright (c) 2010-2020 Contributors to the openHAB project
+ * Copyright (c) 2020-2021 Contributors to the OpenSmartHouse project
+ * Copyright (c) 2010-2021 Contributors to the openHAB project
  *
  * See the NOTICE file(s) distributed with this work for additional
  * information.
@@ -14,6 +15,7 @@ package org.openhab.core.voice.internal;
 
 import java.util.Locale;
 
+import org.eclipse.jdt.annotation.NonNullByDefault;
 import org.openhab.core.voice.Voice;
 
 /**
@@ -22,6 +24,7 @@ import org.openhab.core.voice.Voice;
  * @author Mihaela Memova - Initial contribution
  * @author Velin Yordanov - migrated from groovy to java
  */
+@NonNullByDefault
 public class VoiceStub implements Voice {
 
     private TTSServiceStub ttsService = new TTSServiceStub();

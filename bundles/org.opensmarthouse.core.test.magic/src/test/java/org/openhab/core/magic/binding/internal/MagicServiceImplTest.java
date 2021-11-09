@@ -1,5 +1,6 @@
 /**
- * Copyright (c) 2010-2020 Contributors to the openHAB project
+ * Copyright (c) 2020-2021 Contributors to the OpenSmartHouse project
+ * Copyright (c) 2010-2021 Contributors to the openHAB project
  *
  * See the NOTICE file(s) distributed with this work for additional
  * information.
@@ -12,14 +13,15 @@
  */
 package org.openhab.core.magic.binding.internal;
 
+import static org.hamcrest.MatcherAssert.*;
 import static org.hamcrest.collection.IsCollectionWithSize.hasSize;
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.*;
 
 import java.net.URI;
 import java.util.Collection;
 
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.openhab.core.config.core.ParameterOption;
 import org.openhab.core.magic.binding.MagicService;
 
@@ -34,7 +36,7 @@ public class MagicServiceImplTest {
 
     private MagicService magicService;
 
-    @Before
+    @BeforeEach
     public void setup() {
         magicService = new MagicServiceImpl();
     }

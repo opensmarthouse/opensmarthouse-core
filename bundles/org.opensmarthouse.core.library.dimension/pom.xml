@@ -5,7 +5,7 @@
   <parent>
     <groupId>org.opensmarthouse.core.bundles</groupId>
     <artifactId>org.opensmarthouse.core.reactor.bundles</artifactId>
-    <version>0.9.3-SNAPSHOT</version>
+    <version>0.10.0-SNAPSHOT</version>
   </parent>
 
   <artifactId>org.opensmarthouse.core.library.dimension</artifactId>
@@ -18,8 +18,8 @@
       <artifactId>org.eclipse.jdt.annotation</artifactId>
     </dependency>
     <dependency>
-      <groupId>tec.uom</groupId>
-      <artifactId>uom-se</artifactId>
+      <groupId>si.uom</groupId>
+      <artifactId>si-units</artifactId>
     </dependency>
   </dependencies>
 

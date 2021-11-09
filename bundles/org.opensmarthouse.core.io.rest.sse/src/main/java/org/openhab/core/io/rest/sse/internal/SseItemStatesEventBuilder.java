@@ -1,5 +1,6 @@
 /**
- * Copyright (c) 2010-2020 Contributors to the openHAB project
+ * Copyright (c) 2020-2021 Contributors to the OpenSmartHouse project
+ * Copyright (c) 2010-2021 Contributors to the openHAB project
  *
  * See the NOTICE file(s) distributed with this work for additional
  * information.
@@ -152,9 +153,10 @@ public class SseItemStatesEventBuilder {
                             try {
                                 displayState = state.format(pattern);
                             } catch (IllegalArgumentException e) {
-                                logger.warn("Exception while formatting value '{}' of item {} with format '{}': {}",
+                                logger.debug(
+                                        "Unable to format value '{}' of item {} with format '{}': {}, displaying raw state",
                                         state, item.getName(), pattern, e.getMessage());
-                                displayState = new String("Err");
+                                displayState = state.toString();
                             }
                         }
                     }

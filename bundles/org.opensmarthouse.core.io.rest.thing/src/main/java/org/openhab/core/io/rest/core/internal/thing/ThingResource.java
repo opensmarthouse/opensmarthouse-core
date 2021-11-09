@@ -1,5 +1,6 @@
 /**
- * Copyright (c) 2010-2020 Contributors to the openHAB project
+ * Copyright (c) 2020-2021 Contributors to the OpenSmartHouse project
+ * Copyright (c) 2010-2021 Contributors to the openHAB project
  *
  * See the NOTICE file(s) distributed with this work for additional
  * information.
@@ -54,6 +55,7 @@ import org.openhab.core.config.core.ConfigDescriptionRegistry;
 import org.openhab.core.config.core.ConfigUtil;
 import org.openhab.core.config.core.Configuration;
 import org.openhab.core.config.core.status.ConfigStatusInfo;
+import org.openhab.core.config.core.status.ConfigStatusMessage;
 import org.openhab.core.config.core.status.ConfigStatusService;
 import org.openhab.core.config.core.validation.ConfigValidationException;
 import org.openhab.core.io.rest.DTOMapper;
@@ -224,7 +226,7 @@ public class ThingResource implements RESTResource {
     @Consumes(MediaType.APPLICATION_JSON)
     @Operation(operationId = "createThingInRegistry", summary = "Creates a new thing and adds it to the registry.", security = {
             @SecurityRequirement(name = "oauth2", scopes = { "admin" }) }, responses = {
-                    @ApiResponse(responseCode = "201", description = "Created", content = @Content(schema = @Schema(implementation = String.class))),
+                    @ApiResponse(responseCode = "201", description = "Created", content = @Content(schema = @Schema(implementation = EnrichedThingDTO.class))),
                     @ApiResponse(responseCode = "400", description = "Thing uid does not match bridge uid."),
                     @ApiResponse(responseCode = "400", description = "A uid must be provided, if no binding can create a thing of this type."),
                     @ApiResponse(responseCode = "409", description = "A thing with the same uid already exists.") })
@@ -301,8 +303,9 @@ public class ThingResource implements RESTResource {
     @GET
     @RolesAllowed({ Role.ADMIN })
     @Produces(MediaType.APPLICATION_JSON)
-    @Operation(operationId = "getThings", summary = "Get all available things.", responses = {
-            @ApiResponse(responseCode = "200", description = "OK", content = @Content(array = @ArraySchema(schema = @Schema(implementation = EnrichedThingDTO.class), uniqueItems = true))) })
+    @Operation(operationId = "getThings", summary = "Get all available things.", security = {
+            @SecurityRequirement(name = "oauth2", scopes = { "admin" }) }, responses = {
+                    @ApiResponse(responseCode = "200", description = "OK", content = @Content(array = @ArraySchema(schema = @Schema(implementation = EnrichedThingDTO.class), uniqueItems = true))) })
     public Response getAll(
             @HeaderParam(HttpHeaders.ACCEPT_LANGUAGE) @Parameter(description = "language") @Nullable String language,
             @QueryParam("summary") @Parameter(description = "summary fields only") @Nullable Boolean summary) {
@@ -323,7 +326,7 @@ public class ThingResource implements RESTResource {
     @Produces(MediaType.APPLICATION_JSON)
     @Operation(operationId = "getThingById", summary = "Gets thing by UID.", security = {
             @SecurityRequirement(name = "oauth2", scopes = { "admin" }) }, responses = {
-                    @ApiResponse(responseCode = "200", description = "OK", content = @Content(schema = @Schema(implementation = ThingDTO.class))),
+                    @ApiResponse(responseCode = "200", description = "OK", content = @Content(schema = @Schema(implementation = EnrichedThingDTO.class))),
                     @ApiResponse(responseCode = "404", description = "Thing not found.") })
     public Response getByUID(
             @HeaderParam(HttpHeaders.ACCEPT_LANGUAGE) @Parameter(description = "language") @Nullable String language,
@@ -413,7 +416,7 @@ public class ThingResource implements RESTResource {
     @Consumes(MediaType.APPLICATION_JSON)
     @Operation(operationId = "updateThing", summary = "Updates a thing.", security = {
             @SecurityRequirement(name = "oauth2", scopes = { "admin" }) }, responses = {
-                    @ApiResponse(responseCode = "200", description = "OK", content = @Content(schema = @Schema(implementation = ThingDTO.class))),
+                    @ApiResponse(responseCode = "200", description = "OK", content = @Content(schema = @Schema(implementation = EnrichedThingDTO.class))),
                     @ApiResponse(responseCode = "404", description = "Thing not found."),
                     @ApiResponse(responseCode = "409", description = "Thing could not be updated as it is not editable.") })
     public Response update(
@@ -473,7 +476,7 @@ public class ThingResource implements RESTResource {
     @Consumes(MediaType.APPLICATION_JSON)
     @Operation(operationId = "updateThingConfig", summary = "Updates thing's configuration.", security = {
             @SecurityRequirement(name = "oauth2", scopes = { "admin" }) }, responses = {
-                    @ApiResponse(responseCode = "200", description = "OK", content = @Content(schema = @Schema(implementation = ThingDTO.class))),
+                    @ApiResponse(responseCode = "200", description = "OK", content = @Content(schema = @Schema(implementation = EnrichedThingDTO.class))),
                     @ApiResponse(responseCode = "400", description = "Configuration of the thing is not valid."),
                     @ApiResponse(responseCode = "404", description = "Thing not found"),
                     @ApiResponse(responseCode = "409", description = "Thing could not be updated as it is not editable.") })
@@ -527,7 +530,7 @@ public class ThingResource implements RESTResource {
     @Produces(MediaType.APPLICATION_JSON)
     @Operation(operationId = "getThingStatus", summary = "Gets thing status.", security = {
             @SecurityRequirement(name = "oauth2", scopes = { "admin" }) }, responses = {
-                    @ApiResponse(responseCode = "200", description = "OK", content = @Content(schema = @Schema(implementation = String.class))),
+                    @ApiResponse(responseCode = "200", description = "OK", content = @Content(schema = @Schema(implementation = ThingStatusInfo.class))),
                     @ApiResponse(responseCode = "404", description = "Thing not found.") })
     public Response getStatus(
             @HeaderParam(HttpHeaders.ACCEPT_LANGUAGE) @Parameter(description = "language") @Nullable String language,
@@ -552,7 +555,7 @@ public class ThingResource implements RESTResource {
     @Path("/{thingUID}/enable")
     @Operation(operationId = "enableThing", summary = "Sets the thing enabled status.", security = {
             @SecurityRequirement(name = "oauth2", scopes = { "admin" }) }, responses = {
-                    @ApiResponse(responseCode = "200", description = "OK", content = @Content(schema = @Schema(implementation = String.class))),
+                    @ApiResponse(responseCode = "200", description = "OK", content = @Content(schema = @Schema(implementation = EnrichedThingDTO.class))),
                     @ApiResponse(responseCode = "404", description = "Thing not found.") })
     public Response setEnabled(
             @HeaderParam(HttpHeaders.ACCEPT_LANGUAGE) @Parameter(description = "language") @Nullable String language,
@@ -610,7 +613,7 @@ public class ThingResource implements RESTResource {
     @Produces(MediaType.APPLICATION_JSON)
     @Operation(operationId = "getThingConfigStatus", summary = "Gets thing config status.", security = {
             @SecurityRequirement(name = "oauth2", scopes = { "admin" }) }, responses = {
-                    @ApiResponse(responseCode = "200", description = "OK", content = @Content(schema = @Schema(implementation = String.class))),
+                    @ApiResponse(responseCode = "200", description = "OK", content = @Content(array = @ArraySchema(schema = @Schema(implementation = ConfigStatusMessage.class)))),
                     @ApiResponse(responseCode = "404", description = "Thing not found.") })
     public Response getConfigStatus(
             @HeaderParam(HttpHeaders.ACCEPT_LANGUAGE) @Parameter(description = "language") String language,
@@ -675,7 +678,7 @@ public class ThingResource implements RESTResource {
     @Path("/{thingUID}/firmware/status")
     @Operation(operationId = "getThingFirmwareStatus", summary = "Gets thing's firmware status.", security = {
             @SecurityRequirement(name = "oauth2", scopes = { "admin" }) }, responses = {
-                    @ApiResponse(responseCode = "200", description = "OK"),
+                    @ApiResponse(responseCode = "200", description = "OK", content = @Content(schema = @Schema(implementation = FirmwareStatusDTO.class))),
                     @ApiResponse(responseCode = "204", description = "No firmware status provided by this Thing.") })
     public Response getFirmwareStatus(
             @HeaderParam(HttpHeaders.ACCEPT_LANGUAGE) @Parameter(description = "language") @Nullable String language,

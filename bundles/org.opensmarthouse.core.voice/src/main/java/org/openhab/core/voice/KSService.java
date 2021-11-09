@@ -1,5 +1,6 @@
 /**
- * Copyright (c) 2010-2020 Contributors to the openHAB project
+ * Copyright (c) 2020-2021 Contributors to the OpenSmartHouse project
+ * Copyright (c) 2010-2021 Contributors to the openHAB project
  *
  * See the NOTICE file(s) distributed with this work for additional
  * information.
@@ -15,6 +16,8 @@ package org.openhab.core.voice;
 import java.util.Locale;
 import java.util.Set;
 
+import org.eclipse.jdt.annotation.NonNullByDefault;
+import org.eclipse.jdt.annotation.Nullable;
 import org.openhab.core.audio.AudioFormat;
 import org.openhab.core.audio.AudioStream;
 
@@ -24,6 +27,7 @@ import org.openhab.core.audio.AudioStream;
  * @author Kelly Davis - Initial contribution
  * @author Kai Kreuzer - Refactored to use AudioStream
  */
+@NonNullByDefault
 public interface KSService {
 
     /**
@@ -39,7 +43,7 @@ public interface KSService {
      * @param locale the locale to provide the label for
      * @return a localized string to be used in UIs
      */
-    public String getLabel(Locale locale);
+    public String getLabel(@Nullable Locale locale);
 
     /**
      * Obtain the Locales available from this KSService

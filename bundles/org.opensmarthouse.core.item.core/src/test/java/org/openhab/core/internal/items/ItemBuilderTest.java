@@ -1,5 +1,6 @@
 /**
- * Copyright (c) 2010-2020 Contributors to the openHAB project
+ * Copyright (c) 2020-2021 Contributors to the OpenSmartHouse project
+ * Copyright (c) 2010-2021 Contributors to the openHAB project
  *
  * See the NOTICE file(s) distributed with this work for additional
  * information.
@@ -12,9 +13,7 @@
  */
 package org.openhab.core.internal.items;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNull;
-import static org.junit.Assert.assertSame;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.ArgumentMatchers.isNull;
@@ -27,8 +26,8 @@ import static org.mockito.MockitoAnnotations.initMocks;
 import java.util.Collections;
 import java.util.List;
 
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
 import org.openhab.core.items.ActiveItem;
 import org.openhab.core.items.GroupFunction;
@@ -48,7 +47,7 @@ public class ItemBuilderTest {
     private @Mock Item originalItem;
     private @Mock ItemFactory itemFactory;
 
-    @Before
+    @BeforeEach
     public void setup() {
         initMocks(this);
         itemBuilderFactory = new ItemBuilderFactoryImpl(itemFactory);
@@ -162,21 +161,23 @@ public class ItemBuilderTest {
         assertSame(baseItem, res.getBaseItem());
     }
 
-    @Test(expected = IllegalStateException.class)
+    @Test
     public void testNoFactory() {
         when(mockFactory.createItem(anyString(), anyString())).thenReturn(null);
-        itemBuilderFactory.newItemBuilder("String", "test").build();
+        assertThrows(IllegalStateException.class, () -> itemBuilderFactory.newItemBuilder("String", "test").build());
     }
 
-    @Test(expected = IllegalArgumentException.class)
+    @Test
     public void testFunctionOnNonGroupItem() {
         GroupFunction mockFunction = mock(GroupFunction.class);
-        itemBuilderFactory.newItemBuilder("String", "test").withGroupFunction(mockFunction);
+        assertThrows(IllegalArgumentException.class,
+            () -> itemBuilderFactory.newItemBuilder("String", "test").withGroupFunction(mockFunction));
     }
 
-    @Test(expected = IllegalArgumentException.class)
+    @Test
     public void testBaseItemOnNonGroupItem() {
         Item mockItem = mock(Item.class);
-        itemBuilderFactory.newItemBuilder("String", "test").withBaseItem(mockItem);
+        assertThrows(IllegalArgumentException.class,
+            () -> itemBuilderFactory.newItemBuilder("String", "test").withBaseItem(mockItem));
     }
 }

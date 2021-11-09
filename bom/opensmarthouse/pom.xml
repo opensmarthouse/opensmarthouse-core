@@ -6,7 +6,7 @@
   <parent>
     <groupId>org.opensmarthouse.core.bom</groupId>
     <artifactId>org.opensmarthouse.core.reactor.bom</artifactId>
-    <version>0.9.3-SNAPSHOT</version>
+    <version>0.10.0-SNAPSHOT</version>
   </parent>
 
   <artifactId>opensmarthouse</artifactId>
@@ -264,11 +264,6 @@
       </dependency>
       <dependency>
         <groupId>org.opensmarthouse.core.bundles</groupId>
-        <artifactId>org.opensmarthouse.core.io.transport.serial</artifactId>
-        <version>${project.version}</version>
-      </dependency>
-      <dependency>
-        <groupId>org.opensmarthouse.core.bundles</groupId>
         <artifactId>org.opensmarthouse.core.io.console.eclipse</artifactId>
         <version>${project.version}</version>
       </dependency>
@@ -394,7 +389,17 @@
       </dependency>
       <dependency>
         <groupId>org.opensmarthouse.core.bundles</groupId>
+        <artifactId>org.opensmarthouse.core.io.transport.serial</artifactId>
+        <version>${project.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.opensmarthouse.core.bundles</groupId>
         <artifactId>org.opensmarthouse.core.io.transport.serial.javacomm</artifactId>
+        <version>${project.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.opensmarthouse.core.bundles</groupId>
+        <artifactId>org.opensmarthouse.core.io.transport.serial.purejavacomm</artifactId>
         <version>${project.version}</version>
       </dependency>
       <dependency>

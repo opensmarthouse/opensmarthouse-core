@@ -1,5 +1,6 @@
 /**
- * Copyright (c) 2010-2020 Contributors to the openHAB project
+ * Copyright (c) 2020-2021 Contributors to the OpenSmartHouse project
+ * Copyright (c) 2010-2021 Contributors to the openHAB project
  *
  * See the NOTICE file(s) distributed with this work for additional
  * information.
@@ -134,9 +135,9 @@ public class ThingDescriptionReader extends XmlDocumentReader<List<?>> {
 
     @Override
     public void registerSecurity(XStream xstream) {
-        xstream.allowTypes(new Class[] { ThingDescriptionList.class, ThingTypeXmlResult.class,
+        xstream.allowTypes(new Class[] { ThingDescriptionList.class, ThingTypeXmlResult.class, BridgeTypeXmlResult.class,
                 ChannelTypeXmlResult.class, ChannelGroupTypeXmlResult.class, ChannelXmlResult.class,
-                StateDescription.class, CommandDescription.class, EventDescription.class, CommandDescription.class,
+                StateDescription.class, CommandDescription.class, EventDescription.class, CommandDescription.class, ConfigDescription.class,
                 ConfigDescriptionParameter.class, ConfigDescriptionParameterGroup.class, FilterCriteria.class,
                 NodeList.class, NodeValue.class, NodeAttributes.class, });
     }

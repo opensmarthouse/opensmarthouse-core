@@ -1,5 +1,6 @@
 /**
- * Copyright (c) 2010-2020 Contributors to the openHAB project
+ * Copyright (c) 2020-2021 Contributors to the OpenSmartHouse project
+ * Copyright (c) 2010-2021 Contributors to the openHAB project
  *
  * See the NOTICE file(s) distributed with this work for additional
  * information.
@@ -12,11 +13,14 @@
  */
 package org.openhab.core.voice;
 
+import org.eclipse.jdt.annotation.NonNullByDefault;
+
 /**
  * General purpose STT exception
  *
  * @author Kelly Davis - Initial contribution
  */
+@NonNullByDefault
 public class STTException extends Exception {
 
     private static final long serialVersionUID = 1L;

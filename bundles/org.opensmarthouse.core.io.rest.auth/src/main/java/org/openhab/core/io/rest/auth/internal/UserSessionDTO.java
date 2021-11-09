@@ -1,5 +1,6 @@
 /**
- * Copyright (c) 2010-2020 Contributors to the openHAB project
+ * Copyright (c) 2020-2021 Contributors to the OpenSmartHouse project
+ * Copyright (c) 2010-2021 Contributors to the openHAB project
  *
  * See the NOTICE file(s) distributed with this work for additional
  * information.
@@ -20,11 +21,11 @@ import java.util.Date;
  * @author Yannick Schaus - initial contribution
  */
 public class UserSessionDTO {
-    String sessionId;
-    Date createdTime;
-    Date lastRefreshTime;
-    String clientId;
-    String scope;
+    public String sessionId;
+    public Date createdTime;
+    public Date lastRefreshTime;
+    public String clientId;
+    public String scope;
 
     public UserSessionDTO(String sessionId, Date createdTime, Date lastRefreshTime, String clientId, String scope) {
         super();

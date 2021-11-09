@@ -1,5 +1,6 @@
 /**
- * Copyright (c) 2010-2020 Contributors to the openHAB project
+ * Copyright (c) 2020-2021 Contributors to the OpenSmartHouse project
+ * Copyright (c) 2010-2021 Contributors to the openHAB project
  *
  * See the NOTICE file(s) distributed with this work for additional
  * information.
@@ -186,7 +187,7 @@ public class ItemResource implements RESTResource {
     }
 
     private UriBuilder uriBuilder(final UriInfo uriInfo, final HttpHeaders httpHeaders) {
-        final UriBuilder uriBuilder = uriInfo.getAbsolutePathBuilder();
+        final UriBuilder uriBuilder = uriInfo.getBaseUriBuilder().path(PATH_ITEMS).path("{itemName}");
         respectForwarded(uriBuilder, httpHeaders);
         return uriBuilder;
     }
@@ -207,7 +208,6 @@ public class ItemResource implements RESTResource {
         final Set<String> namespaces = splitAndFilterNamespaces(namespaceSelector, locale);
 
         final UriBuilder uriBuilder = uriBuilder(uriInfo, httpHeaders);
-        uriBuilder.path("{itemName}");
 
         Stream<EnrichedItemDTO> itemStream = getItems(type, tags).stream() //
                 .map(item -> EnrichedItemDTOMapper.map(item, recursive, null, uriBuilder, locale)) //
@@ -220,7 +220,7 @@ public class ItemResource implements RESTResource {
     @GET
     @RolesAllowed({ Role.USER, Role.ADMIN })
     @Path("/{itemname: [a-zA-Z_0-9]+}")
-    @Produces({ MediaType.APPLICATION_JSON })
+    @Produces(MediaType.APPLICATION_JSON)
     @Operation(operationId = "getItemByName", summary = "Gets a single item.", responses = {
             @ApiResponse(responseCode = "200", description = "OK", content = @Content(schema = @Schema(implementation = EnrichedItemDTO.class))),
             @ApiResponse(responseCode = "404", description = "Item not found") })
@@ -574,7 +574,7 @@ public class ItemResource implements RESTResource {
     @Consumes(MediaType.APPLICATION_JSON)
     @Operation(operationId = "addOrUpdateItemInRegistry", summary = "Adds a new item to the registry or updates the existing item.", security = {
             @SecurityRequirement(name = "oauth2", scopes = { "admin" }) }, responses = {
-                    @ApiResponse(responseCode = "200", description = "OK", content = @Content(schema = @Schema(implementation = String.class))),
+                    @ApiResponse(responseCode = "200", description = "OK", content = @Content(schema = @Schema(implementation = EnrichedItemDTO.class))),
                     @ApiResponse(responseCode = "201", description = "Item created."),
                     @ApiResponse(responseCode = "400", description = "Payload invalid."),
                     @ApiResponse(responseCode = "404", description = "Item not found or name in path invalid."),

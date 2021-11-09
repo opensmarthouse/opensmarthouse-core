@@ -1,5 +1,6 @@
 /**
- * Copyright (c) 2010-2020 Contributors to the openHAB project
+ * Copyright (c) 2020-2021 Contributors to the OpenSmartHouse project
+ * Copyright (c) 2010-2021 Contributors to the openHAB project
  *
  * See the NOTICE file(s) distributed with this work for additional
  * information.
@@ -39,15 +40,17 @@ public class SayActionHandler extends BaseActionModuleHandler {
     private final VoiceManager voiceManager;
 
     private final String text;
-    private final String sink;
+    private final @Nullable String sink;
     private final @Nullable PercentType volume;
 
     public SayActionHandler(Action module, VoiceManager voiceManager) {
         super(module);
         this.voiceManager = voiceManager;
 
-        text = module.getConfiguration().get(PARAM_TEXT).toString();
-        sink = module.getConfiguration().get(PARAM_SINK).toString();
+        this.text = module.getConfiguration().get(PARAM_TEXT).toString();
+
+        Object sinkParam = module.getConfiguration().get(PARAM_SINK);
+        this.sink = sinkParam != null ? sinkParam.toString() : null;
 
         Object volumeParam = module.getConfiguration().get(PARAM_VOLUME);
         this.volume = volumeParam instanceof BigDecimal ? new PercentType((BigDecimal) volumeParam) : null;

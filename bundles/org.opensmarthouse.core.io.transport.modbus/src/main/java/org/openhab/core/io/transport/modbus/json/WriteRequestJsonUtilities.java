@@ -1,5 +1,6 @@
 /**
- * Copyright (c) 2010-2020 Contributors to the openHAB project
+ * Copyright (c) 2020-2021 Contributors to the OpenSmartHouse project
+ * Copyright (c) 2010-2021 Contributors to the openHAB project
  *
  * See the NOTICE file(s) distributed with this work for additional
  * information.
@@ -17,7 +18,6 @@ import java.util.Deque;
 import java.util.LinkedList;
 import java.util.concurrent.atomic.AtomicBoolean;
 
-import org.apache.commons.lang.NotImplementedException;
 import org.eclipse.jdt.annotation.NonNullByDefault;
 import org.eclipse.jdt.annotation.Nullable;
 import org.openhab.core.io.transport.modbus.BitArray;
@@ -63,10 +63,8 @@ public final class WriteRequestJsonUtilities {
      */
     public static final int DEFAULT_MAX_TRIES = 3;
 
-    private static final JsonParser PARSER = new JsonParser();
-
     private WriteRequestJsonUtilities() {
-        throw new NotImplementedException();
+        throw new UnsupportedOperationException();
     }
 
     /**
@@ -94,7 +92,7 @@ public final class WriteRequestJsonUtilities {
      * @see WriteRequestJsonUtilities.JSON_MAX_TRIES
      */
     public static Collection<ModbusWriteRequestBlueprint> fromJson(int unitId, String jsonString) {
-        JsonArray jsonArray = PARSER.parse(jsonString).getAsJsonArray();
+        JsonArray jsonArray = JsonParser.parseString(jsonString).getAsJsonArray();
         if (jsonArray.size() == 0) {
             return new LinkedList<>();
         }

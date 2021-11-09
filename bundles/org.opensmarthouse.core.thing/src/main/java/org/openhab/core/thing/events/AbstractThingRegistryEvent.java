@@ -1,5 +1,6 @@
 /**
- * Copyright (c) 2010-2020 Contributors to the openHAB project
+ * Copyright (c) 2020-2021 Contributors to the OpenSmartHouse project
+ * Copyright (c) 2010-2021 Contributors to the openHAB project
  *
  * See the NOTICE file(s) distributed with this work for additional
  * information.
@@ -12,6 +13,8 @@
  */
 package org.openhab.core.thing.events;
 
+import org.eclipse.jdt.annotation.NonNullByDefault;
+import org.eclipse.jdt.annotation.Nullable;
 import org.openhab.core.events.AbstractEvent;
 import org.openhab.core.thing.ThingRegistry;
 import org.openhab.core.thing.dto.ThingDTO;
@@ -22,6 +25,7 @@ import org.openhab.core.thing.dto.ThingDTO;
  *
  * @author Stefan Bußweiler - Initial contribution
  */
+@NonNullByDefault
 public abstract class AbstractThingRegistryEvent extends AbstractEvent {
 
     private final ThingDTO thing;
@@ -31,18 +35,18 @@ public abstract class AbstractThingRegistryEvent extends AbstractEvent {
      *
      * @param topic the topic
      * @param payload the payload
-     * @param source the source, can be null
-     * @param thing the thing
+     * @param source the source
+     * @param thing the thing data transfer object
      */
-    protected AbstractThingRegistryEvent(String topic, String payload, String source, ThingDTO thing) {
+    protected AbstractThingRegistryEvent(String topic, String payload, @Nullable String source, ThingDTO thing) {
         super(topic, payload, source);
         this.thing = thing;
     }
 
     /**
-     * Gets the thing.
-     * 
-     * @return the thing
+     * Gets the thing data transfer object.
+     *
+     * @return the thing data transfer object
      */
     public ThingDTO getThing() {
         return thing;

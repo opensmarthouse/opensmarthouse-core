@@ -1,5 +1,6 @@
 /**
- * Copyright (c) 2010-2020 Contributors to the openHAB project
+ * Copyright (c) 2020-2021 Contributors to the OpenSmartHouse project
+ * Copyright (c) 2010-2021 Contributors to the openHAB project
  *
  * See the NOTICE file(s) distributed with this work for additional
  * information.
@@ -13,6 +14,9 @@
 package org.openhab.core.io.transport.mqtt.internal.client;
 
 import java.util.concurrent.CompletableFuture;
+
+import javax.net.ssl.HostnameVerifier;
+import javax.net.ssl.SSLSession;
 
 import org.eclipse.jdt.annotation.NonNullByDefault;
 import org.eclipse.jdt.annotation.Nullable;
@@ -29,7 +33,7 @@ import com.hivemq.client.mqtt.datatypes.MqttQos;
  */
 
 @NonNullByDefault
-public abstract class MqttAsyncClientWrapper {
+public abstract class MqttAsyncClientWrapper implements HostnameVerifier {
     /**
      * connect this client
      *
@@ -88,13 +92,18 @@ public abstract class MqttAsyncClientWrapper {
     protected MqttQos getMqttQosFromInt(int qos) {
         switch (qos) {
             case 0:
-                return MqttQos.AT_LEAST_ONCE;
-            case 1:
                 return MqttQos.AT_MOST_ONCE;
+            case 1:
+                return MqttQos.AT_LEAST_ONCE;
             case 2:
                 return MqttQos.EXACTLY_ONCE;
             default:
                 throw new IllegalArgumentException("QoS needs to be 0, 1 or 2.");
         }
+    }
+
+    @Override
+    public boolean verify(@Nullable String hostname, @Nullable SSLSession sslSession) {
+        return true;
     }
 }

@@ -56,18 +56,22 @@ fi
 cp $1 $1.tmp
 
 # Patch specific classes that have moved package
+refactor $1 "bundles/org.openhab.core/src/main/java/org/openhab/core/internal/service/StateDescriptionServiceImpl.java"                        "bundles/org.opensmarthouse.core.type/src/main/java/org/openhab/core/types/internal/StateDescriptionServiceImpl.java"
+refactor $1 "bundles/org.openhab.core/src/test/java/org/openhab/core/internal/service/StateDescriptionServiceImplTest.java"                    "bundles/org.opensmarthouse.core.type/src/test/java/org/openhab/core/types/internal/StateDescriptionServiceImplTest.java"
+
 refactor $1 "bundles/org.openhab.core/src/main/java/org/openhab/core/internal/service/BundleResolverImpl.java"                                 "bundles/org.opensmarthouse.core.common/src/main/java/org/openhab/core/internal/common/osgi/BundleResolverImpl.java"
 
 refactor $1 "bundles/org.openhab.core/src/main/java/org/openhab/core/types/util/UnitUtils.java"                                                "bundles/org.opensmarthouse.core.library.unit/src/main/java/org/openhab/core/types/util/UnitUtils.java"
+refactor $1 "bundles/org.openhab.core/src/test/java/org/openhab/core/types/util/UnitUtilsTest.java"                                            "bundles/org.opensmarthouse.core.library.unit/src/test/java/org/openhab/core/types/util/UnitUtilsTest.java"
 
 refactor $1 "bundles/org.openhab.core/src/main/java/org/openhab/core/items/ManagedItemProvider.java"                                           "bundles/org.opensmarthouse.core.item.core/src/main/java/org/openhab/core/internal/items/StorageItemProvider.java" 
 
 refactor $1 "bundles/org.openhab.core/src/main/java/org/openhab/core/library/CoreItemFactory.java"                                             "bundles/org.opensmarthouse.core.item.core/src/main/java/org/openhab/core/internal/items/CoreItemFactory.java" 
 refactor $1 "bundles/org.openhab.core/src/test/java/org/openhab/core/library/CoreItemFactoryTest.java"                                         "bundles/org.opensmarthouse.core.item.core/src/test/java/org/openhab/core/internal/items/CoreItemFactoryTest.java"
 
-refactor $1 "bundles/org.openhab.core/src/main/java/org/openhab/core/library/types/ArithmeticGroupFunction.java"                               "bundles/org.opensmarthouse.core.item/src/main/java/org/openhab/core/items/ArithmeticGroupFunction.java"
-refactor $1 "bundles/org.openhab.core/src/main/java/org/openhab/core/library/types/DateTimeGroupFunction.java"                                 "bundles/org.opensmarthouse.core.item/src/main/java/org/openhab/core/items/DateTimeGroupFunction.java"
-refactor $1 "bundles/org.openhab.core/src/main/java/org/openhab/core/library/types/QuantityTypeArithmeticGroupFunction.java"                   "bundles/org.opensmarthouse.core.item/src/main/java/org/openhab/core/items/QuantityTypeArithmeticGroupFunction.java"
+refactor $1 "bundles/org.openhab.core/src/main/java/org/openhab/core/library/types/ArithmeticGroupFunction.java"                               "bundles/org.opensmarthouse.core.item.core/src/main/java/org/openhab/core/items/ArithmeticGroupFunction.java"
+refactor $1 "bundles/org.openhab.core/src/main/java/org/openhab/core/library/types/DateTimeGroupFunction.java"                                 "bundles/org.opensmarthouse.core.item.core/src/main/java/org/openhab/core/items/DateTimeGroupFunction.java"
+refactor $1 "bundles/org.openhab.core/src/main/java/org/openhab/core/library/types/QuantityTypeArithmeticGroupFunction.java"                   "bundles/org.opensmarthouse.core.item.cpore/src/main/java/org/openhab/core/items/QuantityTypeArithmeticGroupFunction.java"
 
 refactor $1 "bundles/org.openhab.core/src/test/java/org/openhab/core/library/types/ArithmeticGroupFunctionTest.java"                           "bundles/org.opensmarthouse.core.item.core/src/test/java/org/openhab/core/internal/items/function/ArithmeticGroupFunctionTest.java"
 refactor $1 "bundles/org.openhab.core/src/test/java/org/openhab/core/library/types/DateTimeGroupFunctionTest.java"                             "bundles/org.opensmarthouse.core.item.core/src/test/java/org/openhab/core/internal/items/function/DateTimeGroupFunctionTest.java"

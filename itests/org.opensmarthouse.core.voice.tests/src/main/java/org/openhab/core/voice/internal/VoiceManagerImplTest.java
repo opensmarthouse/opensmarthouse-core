@@ -1,5 +1,6 @@
 /**
- * Copyright (c) 2010-2020 Contributors to the openHAB project
+ * Copyright (c) 2020-2021 Contributors to the OpenSmartHouse project
+ * Copyright (c) 2010-2021 Contributors to the openHAB project
  *
  * See the NOTICE file(s) distributed with this work for additional
  * information.
@@ -385,5 +386,17 @@ public class VoiceManagerImplTest extends JavaOSGiTest {
         }
 
         assertTrue(isVoiceStubInTheOptions);
+    }
+
+    @Test
+    public void getPreferredVoiceOfAvailableTTSService() {
+        Voice voice = voiceManager.getPreferredVoice(ttsService.getAvailableVoices());
+        assertNotNull(voice);
+    }
+
+    @Test
+    public void getPreferredVoiceOfEmptySet() {
+        Voice voice = voiceManager.getPreferredVoice(Set.of());
+        assertNull(voice);
     }
 }

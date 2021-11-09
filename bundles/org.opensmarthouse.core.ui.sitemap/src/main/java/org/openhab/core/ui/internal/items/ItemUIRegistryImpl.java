@@ -1,5 +1,6 @@
 /**
- * Copyright (c) 2010-2020 Contributors to the openHAB project
+ * Copyright (c) 2020-2021 Contributors to the OpenSmartHouse project
+ * Copyright (c) 2010-2021 Contributors to the openHAB project
  *
  * See the NOTICE file(s) distributed with this work for additional
  * information.
@@ -15,11 +16,14 @@ package org.openhab.core.ui.internal.items;
 import java.time.DateTimeException;
 import java.time.ZonedDateTime;
 import java.time.temporal.ChronoUnit;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Set;
 import java.util.WeakHashMap;
 import java.util.regex.Matcher;
@@ -35,6 +39,7 @@ import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.jdt.annotation.NonNullByDefault;
 import org.eclipse.jdt.annotation.Nullable;
 import org.openhab.core.common.registry.RegistryChangeListener;
+import org.openhab.core.config.core.ConfigurableService;
 import org.openhab.core.items.GroupItem;
 import org.openhab.core.items.Item;
 import org.openhab.core.items.ItemNotFoundException;
@@ -86,8 +91,10 @@ import org.openhab.core.types.util.UnitUtils;
 import org.openhab.core.ui.internal.UIActivator;
 import org.openhab.core.ui.items.ItemUIProvider;
 import org.openhab.core.ui.items.ItemUIRegistry;
+import org.osgi.framework.Constants;
 import org.osgi.service.component.annotations.Activate;
 import org.osgi.service.component.annotations.Component;
+import org.osgi.service.component.annotations.Modified;
 import org.osgi.service.component.annotations.Reference;
 import org.osgi.service.component.annotations.ReferenceCardinality;
 import org.osgi.service.component.annotations.ReferencePolicy;
@@ -106,10 +113,12 @@ import org.slf4j.LoggerFactory;
  * @author Chris Jackson - change enum.name() to emum.toString()
  */
 @NonNullByDefault
-@Component
+@Component(immediate = true, configurationPid = "org.openhab.sitemap", //
+        property = Constants.SERVICE_PID + "=org.openhab.sitemap")
+@ConfigurableService(category = "system", label = "Sitemap", description_uri = ItemUIRegistryImpl.CONFIG_URI)
 public class ItemUIRegistryImpl implements ItemUIRegistry {
 
-    private final Logger logger = LoggerFactory.getLogger(ItemUIRegistryImpl.class);
+    protected static final String CONFIG_URI = "system:sitemap";
 
     /* the image location inside the installation folder */
     protected static final String IMAGE_LOCATION = "./webapps/images/";
@@ -123,11 +132,17 @@ public class ItemUIRegistryImpl implements ItemUIRegistry {
     private static final Pattern LABEL_PATTERN = Pattern.compile(".*?\\[.*? (.*?)\\]");
     private static final int MAX_BUTTONS = 4;
 
+    private static final String DEFAULT_SORTING = "NONE";
+
+    private final Logger logger = LoggerFactory.getLogger(ItemUIRegistryImpl.class);
+
     protected final Set<ItemUIProvider> itemUIProviders = new HashSet<>();
 
     private final ItemRegistry itemRegistry;
 
     private final Map<Widget, Widget> defaultWidgets = Collections.synchronizedMap(new WeakHashMap<>());
+
+    private String groupMembersSorting = DEFAULT_SORTING;
 
     @Activate
     public ItemUIRegistryImpl(@Reference ItemRegistry itemRegistry) {
@@ -141,6 +156,30 @@ public class ItemUIRegistryImpl implements ItemUIRegistry {
 
     public void removeItemUIProvider(ItemUIProvider itemUIProvider) {
         itemUIProviders.remove(itemUIProvider);
+    }
+
+    @Activate
+    protected void activate(Map<String, Object> config) {
+        applyConfig(config);
+    }
+
+    @Modified
+    protected void modified(@Nullable Map<String, Object> config) {
+        applyConfig(config);
+    }
+
+    /**
+     * Handle the initial or a changed configuration.
+     *
+     * @param config the configuration
+     */
+    private void applyConfig(@Nullable Map<String, Object> config) {
+        if (config != null) {
+            final String groupMembersSortingString = Objects.toString(config.get("groupMembersSorting"), null);
+            if (groupMembersSortingString != null) {
+                groupMembersSorting = groupMembersSortingString;
+            }
+        }
     }
 
     @Override
@@ -735,7 +774,34 @@ public class ItemUIRegistryImpl implements ItemUIRegistry {
                 Item item = getItem(itemName);
                 if (item instanceof GroupItem) {
                     GroupItem groupItem = (GroupItem) item;
-                    for (Item member : groupItem.getMembers()) {
+                    List<Item> members = new ArrayList<>(groupItem.getMembers());
+                    switch (groupMembersSorting) {
+                        case "LABEL":
+                            Collections.sort(members, new Comparator<Item>() {
+                                @Override
+                                public int compare(Item u1, Item u2) {
+                                    String u1Label = u1.getLabel();
+                                    String u2Label = u2.getLabel();
+                                    if (u1Label != null && u2Label != null) {
+                                        return u1Label.compareTo(u2Label);
+                                    } else {
+                                        return u1.getName().compareTo(u2.getName());
+                                    }
+                                }
+                            });
+                            break;
+                        case "NAME":
+                            Collections.sort(members, new Comparator<Item>() {
+                                @Override
+                                public int compare(Item u1, Item u2) {
+                                    return u1.getName().compareTo(u2.getName());
+                                }
+                            });
+                            break;
+                        default:
+                            break;
+                    }
+                    for (Item member : members) {
                         Widget widget = getDefaultWidget(member.getClass(), member.getName());
                         if (widget != null) {
                             widget.setItem(member.getName());
@@ -746,7 +812,8 @@ public class ItemUIRegistryImpl implements ItemUIRegistry {
                     logger.warn("Item '{}' is not a group.", item.getName());
                 }
             } else {
-                logger.warn("Group does not specify an associated item - ignoring it.");
+                logger.warn("Dynamic group with label '{}' does not specify an associated item - ignoring it.",
+                        group.getLabel());
             }
         } catch (ItemNotFoundException e) {
             logger.warn("Dynamic group with label '{}' will be ignored, because its item '{}' does not exist.",
@@ -1265,6 +1332,11 @@ public class ItemUIRegistryImpl implements ItemUIRegistry {
 
             // we require the item to define a dimension, otherwise no unit will be reported to the UIs.
             if (item instanceof NumberItem && ((NumberItem) item).getDimension() != null) {
+                if (w.getLabel() == null) {
+                    // if no Label was assigned to the Widget we fallback to the items unit
+                    return ((NumberItem) item).getUnitSymbol();
+                }
+
                 String unit = getUnitFromLabel(w.getLabel());
                 if (!UnitUtils.UNIT_PLACEHOLDER.equals(unit)) {
                     return unit;

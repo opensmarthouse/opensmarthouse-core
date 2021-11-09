@@ -1,5 +1,6 @@
 /**
- * Copyright (c) 2010-2020 Contributors to the openHAB project
+ * Copyright (c) 2020-2021 Contributors to the OpenSmartHouse project
+ * Copyright (c) 2010-2021 Contributors to the openHAB project
  *
  * See the NOTICE file(s) distributed with this work for additional
  * information.
@@ -36,10 +37,13 @@ import org.openhab.core.io.rest.JSONResponse;
 import org.openhab.core.io.rest.RESTConstants;
 import org.openhab.core.io.rest.RESTResource;
 import org.openhab.core.io.rest.Stream2JSONInputStream;
+import org.openhab.core.io.rest.core.link.EnrichedItemChannelLinkDTO;
+import org.openhab.core.io.rest.core.link.EnrichedItemChannelLinkDTOMapper;
 import org.openhab.core.thing.ChannelUID;
 import org.openhab.core.thing.link.AbstractLink;
 import org.openhab.core.thing.link.ItemChannelLink;
 import org.openhab.core.thing.link.ItemChannelLinkRegistry;
+import org.openhab.core.thing.link.ManagedItemChannelLinkProvider;
 import org.openhab.core.thing.link.dto.ItemChannelLinkDTO;
 import org.osgi.service.component.annotations.Activate;
 import org.osgi.service.component.annotations.Component;
@@ -86,20 +90,25 @@ public class ItemChannelLinkResource implements RESTResource {
     public static final String PATH_LINKS = "links";
 
     private final ItemChannelLinkRegistry itemChannelLinkRegistry;
+    private final ManagedItemChannelLinkProvider managedItemChannelLinkProvider;
 
     @Activate
-    public ItemChannelLinkResource(final @Reference ItemChannelLinkRegistry itemChannelLinkRegistry) {
+    public ItemChannelLinkResource(final @Reference ItemChannelLinkRegistry itemChannelLinkRegistry,
+            final @Reference ManagedItemChannelLinkProvider managedItemChannelLinkProvider) {
         this.itemChannelLinkRegistry = itemChannelLinkRegistry;
+        this.managedItemChannelLinkProvider = managedItemChannelLinkProvider;
     }
 
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     @Operation(operationId = "getItemLinks", summary = "Gets all available links.", responses = {
-            @ApiResponse(responseCode = "200", description = "OK", content = @Content(array = @ArraySchema(schema = @Schema(implementation = ItemChannelLinkDTO.class)))) })
+            @ApiResponse(responseCode = "200", description = "OK", content = @Content(array = @ArraySchema(schema = @Schema(implementation = EnrichedItemChannelLinkDTO.class)))) })
     public Response getAll(
             @QueryParam("channelUID") @Parameter(description = "filter by channel UID") @Nullable String channelUID,
             @QueryParam("itemName") @Parameter(description = "filter by item name") @Nullable String itemName) {
-        Stream<ItemChannelLinkDTO> linkStream = itemChannelLinkRegistry.getAll().stream().map(this::toBeans);
+        Stream<EnrichedItemChannelLinkDTO> linkStream = itemChannelLinkRegistry.stream()
+                .map(link -> EnrichedItemChannelLinkDTOMapper.map(link,
+                        isEditable(AbstractLink.getIDFor(link.getItemName(), link.getLinkedUID()))));
 
         if (channelUID != null) {
             linkStream = linkStream.filter(link -> channelUID.equals(link.channelUID));
@@ -114,17 +123,19 @@ public class ItemChannelLinkResource implements RESTResource {
     @GET
     @Path("/{itemName}/{channelUID}")
     @Operation(operationId = "getItemLink", summary = "Retrieves an individual link.", responses = {
-            @ApiResponse(responseCode = "200", description = "OK"),
+            @ApiResponse(responseCode = "200", description = "OK", content = @Content(schema = @Schema(implementation = EnrichedItemChannelLinkDTO.class))),
             @ApiResponse(responseCode = "404", description = "Content does not match the path") })
-    public Response getLink(@PathParam("itemName") @Parameter(description = "itemName") String itemName,
-            @PathParam("channelUID") @Parameter(description = "channelUID") String channelUid) {
-        List<ItemChannelLinkDTO> links = itemChannelLinkRegistry.getAll().stream()
+    public Response getLink(@PathParam("itemName") @Parameter(description = "item name") String itemName,
+            @PathParam("channelUID") @Parameter(description = "channel UID") String channelUid) {
+        List<EnrichedItemChannelLinkDTO> links = itemChannelLinkRegistry.stream()
                 .filter(link -> channelUid.equals(link.getLinkedUID().getAsString()))
-                .filter(link -> itemName.equals(link.getItemName())).map(this::toBeans).collect(Collectors.toList());
+                .filter(link -> itemName.equals(link.getItemName()))
+                .map(link -> EnrichedItemChannelLinkDTOMapper.map(link,
+                        isEditable(AbstractLink.getIDFor(link.getItemName(), link.getLinkedUID()))))
+                .collect(Collectors.toList());
 
-        if (links.size() == 1) {
-            ItemChannelLinkDTO link = links.get(0);
-            return JSONResponse.createResponse(Status.OK, link, null);
+        if (!links.isEmpty()) {
+            return JSONResponse.createResponse(Status.OK, links.get(0), null);
         }
         return JSONResponse.createErrorResponse(Status.NOT_FOUND,
                 "No link found for item '" + itemName + "' + and channelUID '" + channelUid + "'");
@@ -133,7 +144,7 @@ public class ItemChannelLinkResource implements RESTResource {
     @PUT
     @RolesAllowed({ Role.ADMIN })
     @Path("/{itemName}/{channelUID}")
-    @Operation(operationId = "linkItemToChannel", summary = "Links item to a channel.", security = {
+    @Operation(operationId = "linkItemToChannel", summary = "Links an item to a channel.", security = {
             @SecurityRequirement(name = "oauth2", scopes = { "admin" }) }, responses = {
                     @ApiResponse(responseCode = "200", description = "OK"),
                     @ApiResponse(responseCode = "400", description = "Content does not match the path"),
@@ -141,9 +152,15 @@ public class ItemChannelLinkResource implements RESTResource {
     public Response link(@PathParam("itemName") @Parameter(description = "itemName") String itemName,
             @PathParam("channelUID") @Parameter(description = "channelUID") String channelUid,
             @Parameter(description = "link data") @Nullable ItemChannelLinkDTO bean) {
+        ChannelUID uid;
+        try {
+            uid = new ChannelUID(channelUid);
+        } catch (IllegalArgumentException e) {
+            return Response.status(Status.BAD_REQUEST).build();
+        }
         ItemChannelLink link;
         if (bean == null) {
-            link = new ItemChannelLink(itemName, new ChannelUID(channelUid), new Configuration());
+            link = new ItemChannelLink(itemName, uid, new Configuration());
         } else {
             if (bean.channelUID != null && !bean.channelUID.equals(channelUid)) {
                 return Response.status(Status.BAD_REQUEST).build();
@@ -151,7 +168,7 @@ public class ItemChannelLinkResource implements RESTResource {
             if (bean.itemName != null && !bean.itemName.equals(itemName)) {
                 return Response.status(Status.BAD_REQUEST).build();
             }
-            link = new ItemChannelLink(itemName, new ChannelUID(channelUid), new Configuration(bean.configuration));
+            link = new ItemChannelLink(itemName, uid, new Configuration(bean.configuration));
         }
         if (itemChannelLinkRegistry.get(link.getUID()) == null) {
             itemChannelLinkRegistry.add(link);
@@ -167,29 +184,32 @@ public class ItemChannelLinkResource implements RESTResource {
     @DELETE
     @RolesAllowed({ Role.ADMIN })
     @Path("/{itemName}/{channelUID}")
-    @Operation(operationId = "unlinkItemFromChannel", summary = "Unlinks item from a channel.", security = {
+    @Operation(operationId = "unlinkItemFromChannel", summary = "Unlinks an item from a channel.", security = {
             @SecurityRequirement(name = "oauth2", scopes = { "admin" }) }, responses = {
                     @ApiResponse(responseCode = "200", description = "OK"),
                     @ApiResponse(responseCode = "404", description = "Link not found."),
                     @ApiResponse(responseCode = "405", description = "Link not editable.") })
     public Response unlink(@PathParam("itemName") @Parameter(description = "itemName") String itemName,
             @PathParam("channelUID") @Parameter(description = "channelUID") String channelUid) {
-        String linkId = AbstractLink.getIDFor(itemName, new ChannelUID(channelUid));
+        ChannelUID uid;
+        try {
+            uid = new ChannelUID(channelUid);
+        } catch (IllegalArgumentException e) {
+            return Response.status(Status.BAD_REQUEST).build();
+        }
+        String linkId = AbstractLink.getIDFor(itemName, uid);
         if (itemChannelLinkRegistry.get(linkId) == null) {
             String message = "Link " + linkId + " does not exist!";
             return JSONResponse.createResponse(Status.NOT_FOUND, null, message);
         }
-
         ItemChannelLink result = itemChannelLinkRegistry.remove(linkId);
-        if (result != null) {
-            return Response.ok(null, MediaType.TEXT_PLAIN).build();
-        } else {
-            return JSONResponse.createErrorResponse(Status.METHOD_NOT_ALLOWED, "Channel is read-only.");
+        if (result == null) {
+            return Response.status(Status.METHOD_NOT_ALLOWED).build();
         }
+        return Response.ok(null, MediaType.TEXT_PLAIN).build();
     }
 
-    private ItemChannelLinkDTO toBeans(ItemChannelLink link) {
-        return new ItemChannelLinkDTO(link.getItemName(), link.getLinkedUID().toString(),
-                link.getConfiguration().getProperties());
+    private boolean isEditable(String linkId) {
+        return managedItemChannelLinkProvider.get(linkId) != null;
     }
 }

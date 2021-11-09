@@ -1,5 +1,6 @@
 /**
- * Copyright (c) 2010-2020 Contributors to the openHAB project
+ * Copyright (c) 2020-2021 Contributors to the OpenSmartHouse project
+ * Copyright (c) 2010-2021 Contributors to the openHAB project
  *
  * See the NOTICE file(s) distributed with this work for additional
  * information.
@@ -41,6 +42,7 @@ import org.openhab.core.model.sitemap.SitemapProvider;
 import org.openhab.core.model.sitemap.sitemap.LinkableWidget;
 import org.openhab.core.model.sitemap.sitemap.Sitemap;
 import org.openhab.core.model.sitemap.sitemap.Widget;
+import org.openhab.core.thing.events.ChannelDescriptionChangedEvent;
 import org.openhab.core.ui.items.ItemUIRegistry;
 import org.osgi.service.component.annotations.Activate;
 import org.osgi.service.component.annotations.Component;
@@ -343,7 +345,7 @@ public class SitemapSubscriptionService implements ModelRepositoryChangeListener
 
     @Override
     public Set<String> getSubscribedEventTypes() {
-        return Set.of(ItemStatePredictedEvent.TYPE);
+        return Set.of(ItemStatePredictedEvent.TYPE, ChannelDescriptionChangedEvent.TYPE);
     }
 
     @Override
@@ -368,6 +370,13 @@ public class SitemapSubscriptionService implements ModelRepositoryChangeListener
                     pageChangeListener.changeStateTo(item, prediction.getPredictedState());
                 }
             }
+        } else if (event instanceof ChannelDescriptionChangedEvent) {
+            ChannelDescriptionChangedEvent channelDescriptionChangedEvent = (ChannelDescriptionChangedEvent) event;
+            channelDescriptionChangedEvent.getLinkedItemNames().forEach(itemName -> {
+                for (PageChangeListener pageChangeListener : pageChangeListeners.values()) {
+                    pageChangeListener.descriptionChanged(itemName);
+                }
+            });
         }
     }
 }

@@ -1,5 +1,6 @@
 /**
- * Copyright (c) 2010-2020 Contributors to the openHAB project
+ * Copyright (c) 2020-2021 Contributors to the OpenSmartHouse project
+ * Copyright (c) 2010-2021 Contributors to the openHAB project
  *
  * See the NOTICE file(s) distributed with this work for additional
  * information.
@@ -90,7 +91,8 @@ public class MqttServiceImpl implements MqttService {
             }
             String host = config.host;
             if (host != null && !host.isBlank()) {
-                connection = new MqttBrokerConnection(host, config.port, config.secure, config.clientID);
+                connection = new MqttBrokerConnection(host, config.port, config.secure, config.hostnameValidated,
+                        config.clientID);
                 brokerConnections.put(brokerID, connection);
             } else {
                 throw new ConfigurationException("host", "You need to provide a hostname/IP!");

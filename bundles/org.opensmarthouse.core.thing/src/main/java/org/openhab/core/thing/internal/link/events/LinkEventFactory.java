@@ -1,5 +1,6 @@
 /**
- * Copyright (c) 2010-2020 Contributors to the openHAB project
+ * Copyright (c) 2020-2021 Contributors to the OpenSmartHouse project
+ * Copyright (c) 2010-2021 Contributors to the openHAB project
  *
  * See the NOTICE file(s) distributed with this work for additional
  * information.
@@ -35,9 +36,9 @@ import org.osgi.service.component.annotations.Component;
 @Component(immediate = true, service = EventFactory.class)
 public class LinkEventFactory extends AbstractEventFactory {
 
-    private static final String LINK_ADDED_EVENT_TOPIC = "openhab/links/{linkID}/added";
+    public static final String LINK_ADDED_EVENT_TOPIC = "openhab/links/{linkID}/added";
 
-    private static final String LINK_REMOVED_EVENT_TOPIC = "openhab/links/{linkID}/removed";
+    public static final String LINK_REMOVED_EVENT_TOPIC = "openhab/links/{linkID}/removed";
 
     /**
      * Constructs a new LinkEventFactory.

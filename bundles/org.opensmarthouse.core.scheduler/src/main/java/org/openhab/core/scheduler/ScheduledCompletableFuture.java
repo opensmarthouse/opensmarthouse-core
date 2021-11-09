@@ -1,5 +1,6 @@
 /**
- * Copyright (c) 2010-2020 Contributors to the openHAB project
+ * Copyright (c) 2020-2021 Contributors to the OpenSmartHouse project
+ * Copyright (c) 2010-2021 Contributors to the openHAB project
  *
  * See the NOTICE file(s) distributed with this work for additional
  * information.
@@ -12,6 +13,7 @@
  */
 package org.openhab.core.scheduler;
 
+import java.time.ZonedDateTime;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ScheduledFuture;
 
@@ -29,4 +31,9 @@ public interface ScheduledCompletableFuture<T> extends ScheduledFuture<T> {
      * @return Returns the {@link CompletableFuture} associated with the scheduled job.
      */
     CompletableFuture<T> getPromise();
+
+    /**
+     * @return Returns the timestamp the jobs is scheduled to run at.
+     */
+    ZonedDateTime getScheduledTime();
 }

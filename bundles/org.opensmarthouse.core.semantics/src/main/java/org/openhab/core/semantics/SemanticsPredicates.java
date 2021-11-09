@@ -1,5 +1,6 @@
 /**
- * Copyright (c) 2010-2020 Contributors to the openHAB project
+ * Copyright (c) 2020-2021 Contributors to the OpenSmartHouse project
+ * Copyright (c) 2010-2021 Contributors to the openHAB project
  *
  * See the NOTICE file(s) distributed with this work for additional
  * information.
@@ -16,11 +17,6 @@ import java.util.function.Predicate;
 
 import org.eclipse.jdt.annotation.NonNullByDefault;
 import org.openhab.core.items.Item;
-import org.openhab.core.semantics.model.Equipment;
-import org.openhab.core.semantics.model.Location;
-import org.openhab.core.semantics.model.Point;
-import org.openhab.core.semantics.model.Property;
-import org.openhab.core.semantics.model.Tag;
 
 /**
  * This class provides predicates that allow filtering item streams with regards to their semantics.

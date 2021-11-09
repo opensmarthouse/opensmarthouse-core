@@ -1,5 +1,6 @@
 /**
- * Copyright (c) 2010-2020 Contributors to the openHAB project
+ * Copyright (c) 2020-2021 Contributors to the OpenSmartHouse project
+ * Copyright (c) 2010-2021 Contributors to the openHAB project
  *
  * See the NOTICE file(s) distributed with this work for additional
  * information.
@@ -37,13 +38,15 @@ import com.hivemq.client.mqtt.mqtt3.message.unsubscribe.Mqtt3Unsubscribe;
  * The {@link Mqtt3AsyncClientWrapper} provides the wrapper for Mqttv3 async clients
  *
  * @author Jan N. Klug - Initial contribution
+ * @author Mark Herwege - Added flag for hostname validation
  */
 @NonNullByDefault
 public class Mqtt3AsyncClientWrapper extends MqttAsyncClientWrapper {
     private final Mqtt3AsyncClient client;
 
     public Mqtt3AsyncClientWrapper(String host, int port, String clientId, Protocol protocol, boolean secure,
-            ConnectionCallback connectionCallback, @Nullable TrustManagerFactory trustManagerFactory) {
+            boolean hostnameValidated, ConnectionCallback connectionCallback,
+            @Nullable TrustManagerFactory trustManagerFactory) {
         Mqtt3ClientBuilder clientBuilder = Mqtt3Client.builder().serverHost(host).serverPort(port).identifier(clientId)
                 .addConnectedListener(connectionCallback).addDisconnectedListener(connectionCallback);
 
@@ -51,7 +54,13 @@ public class Mqtt3AsyncClientWrapper extends MqttAsyncClientWrapper {
             clientBuilder.webSocketWithDefaultConfig();
         }
         if (secure) {
-            clientBuilder.sslWithDefaultConfig().sslConfig().trustManagerFactory(trustManagerFactory).applySslConfig();
+            if (hostnameValidated) {
+                clientBuilder.sslWithDefaultConfig().sslConfig().trustManagerFactory(trustManagerFactory)
+                        .applySslConfig();
+            } else {
+                clientBuilder.sslWithDefaultConfig().sslConfig().trustManagerFactory(trustManagerFactory)
+                        .hostnameVerifier(this).applySslConfig();
+            }
         }
 
         client = clientBuilder.buildAsync();

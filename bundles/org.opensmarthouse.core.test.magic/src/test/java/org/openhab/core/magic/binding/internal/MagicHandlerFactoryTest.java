@@ -1,5 +1,6 @@
 /**
- * Copyright (c) 2010-2020 Contributors to the openHAB project
+ * Copyright (c) 2020-2021 Contributors to the OpenSmartHouse project
+ * Copyright (c) 2010-2021 Contributors to the openHAB project
  *
  * See the NOTICE file(s) distributed with this work for additional
  * information.
@@ -13,11 +14,12 @@
 package org.openhab.core.magic.binding.internal;
 
 import static org.hamcrest.CoreMatchers.*;
-import static org.junit.Assert.assertThat;
+import static org.hamcrest.MatcherAssert.assertThat;
 import static org.mockito.Mockito.*;
 
-import org.junit.Before;
-import org.junit.Test;
+import org.eclipse.jdt.annotation.NonNullByDefault;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.openhab.core.magic.binding.MagicBindingConstants;
 import org.openhab.core.magic.binding.handler.MagicColorLightHandler;
 import org.openhab.core.magic.binding.handler.MagicDimmableLightHandler;
@@ -30,15 +32,18 @@ import org.openhab.core.thing.ThingTypeUID;
  *
  * @author Henning Treu - Initial contribution
  */
+@NonNullByDefault
 public class MagicHandlerFactoryTest {
 
-    private MagicHandlerFactory factory;
+    private @NonNullByDefault({}) MagicHandlerFactory factory;
 
-    @Before
+    @BeforeEach
     public void setup() {
-        factory = new MagicHandlerFactory();
+        factory = new MagicHandlerFactory(mock(MagicDynamicCommandDescriptionProvider.class),
+                mock(MagicDynamicStateDescriptionProvider.class));
     }
 
+    
     @Test
     public void shoudlReturnNullForUnknownThingTypeUID() {
         Thing thing = mock(Thing.class);
