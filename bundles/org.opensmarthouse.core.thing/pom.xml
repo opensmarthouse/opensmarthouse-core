@@ -1,57 +1,55 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0"
-	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 
-	<modelVersion>4.0.0</modelVersion>
+  <modelVersion>4.0.0</modelVersion>
 
-	<parent>
-		<groupId>org.opensmarthouse.core.bundles</groupId>
-		<artifactId>org.opensmarthouse.core.reactor.bundles</artifactId>
-		<version>0.10.0-SNAPSHOT</version>
-	</parent>
+  <parent>
+    <groupId>org.opensmarthouse.core.bundles</groupId>
+    <artifactId>org.opensmarthouse.core.reactor.bundles</artifactId>
+    <version>0.10.0-SNAPSHOT</version>
+  </parent>
 
-	<artifactId>org.opensmarthouse.core.thing</artifactId>
+  <artifactId>org.opensmarthouse.core.thing</artifactId>
 
-	<name>OpenSmartHouse Core | Bundles | Thing</name>
+  <name>OpenSmartHouse Core | Bundles | Thing</name>
 
-	<dependencies>
-		<dependency>
-			<groupId>org.opensmarthouse.core.bundles</groupId>
-			<artifactId>org.opensmarthouse.core.type</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>org.opensmarthouse.core.bundles</groupId>
-			<artifactId>org.opensmarthouse.core.library.item</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>org.opensmarthouse.core.bundles</groupId>
-			<artifactId>org.opensmarthouse.core.event</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>org.opensmarthouse.core.bundles</groupId>
-			<artifactId>org.opensmarthouse.core.cache</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>org.opensmarthouse.core.bundles</groupId>
-			<artifactId>org.opensmarthouse.core.config</artifactId>
-		</dependency>
+  <dependencies>
+    <dependency>
+      <groupId>org.opensmarthouse.core.bundles</groupId>
+      <artifactId>org.opensmarthouse.core.type</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.opensmarthouse.core.bundles</groupId>
+      <artifactId>org.opensmarthouse.core.library.item</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.opensmarthouse.core.bundles</groupId>
+      <artifactId>org.opensmarthouse.core.event</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.opensmarthouse.core.bundles</groupId>
+      <artifactId>org.opensmarthouse.core.cache</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.opensmarthouse.core.bundles</groupId>
+      <artifactId>org.opensmarthouse.core.config</artifactId>
+    </dependency>
 
-		<dependency>
-			<groupId>si.uom</groupId>
-			<artifactId>si-units</artifactId>
-		</dependency>
+    <dependency>
+      <groupId>si.uom</groupId>
+      <artifactId>si-units</artifactId>
+    </dependency>
 
-		<dependency>
-			<groupId>org.opensmarthouse.core.bundles</groupId>
-			<artifactId>org.opensmarthouse.core.test</artifactId>
-			<scope>test</scope>
-		</dependency>
-		<dependency>
-			<groupId>org.osgi</groupId>
-			<artifactId>osgi.enroute.hamcrest.wrapper</artifactId>
-			<scope>test</scope>
-		</dependency>
-	</dependencies>
+    <dependency>
+      <groupId>org.opensmarthouse.core.bundles</groupId>
+      <artifactId>org.opensmarthouse.core.test</artifactId>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.osgi</groupId>
+      <artifactId>osgi.enroute.hamcrest.wrapper</artifactId>
+      <scope>test</scope>
+    </dependency>
+  </dependencies>
 
 </project>

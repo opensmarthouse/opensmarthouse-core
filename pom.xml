@@ -6,12 +6,12 @@
     <groupId>org.opensmarthouse</groupId>
     <artifactId>parent</artifactId>
     <version>0.10.0</version>
-    <relativePath />
+    <relativePath></relativePath>
   </parent>
 
   <groupId>org.opensmarthouse.core</groupId>
   <artifactId>org.opensmarthouse.core.reactor</artifactId>
-  <version>0.9.3-SNAPSHOT</version>
+  <version>0.10.0-SNAPSHOT</version>
 
   <packaging>pom</packaging>
 
@@ -67,10 +67,11 @@
     <release.repository-name>OpenSmartHouse Release (Sonatype)</release.repository-name>
     <release.repository-url>https://oss.sonatype.org/service/local/staging/deploy/maven2</release.repository-url>
 
-    <jackson.version>2.10.3</jackson.version>
-    <jetty.version>9.4.20.v20190813</jetty.version>
-    <pax.web.version>7.2.14</pax.web.version>
-    <swagger.version>2.1.0</swagger.version>
+    <jackson.version>2.12.3</jackson.version>
+    <snakeyaml.version>1.27</snakeyaml.version>
+    <jetty.version>9.4.43.v20210629</jetty.version>
+    <pax.web.version>7.3.19</pax.web.version>
+    <swagger.version>2.1.9</swagger.version>
     <netty.version>4.1.42.Final</netty.version>
 
     <gson.version>2.8.6</gson.version>
@@ -88,7 +89,7 @@
     <emf-ecore-xmi.version>2.16.0</emf-ecore-xmi.version>
     <emf-codegen.version>2.20.0</emf-codegen.version>
     <emf-mwe2.version>2.11.3</emf-mwe2.version>
-    <xtext.version>2.22.0</xtext.version>
+    <xtext.version>2.25.0</xtext.version>
 
     <spotless.version>2.0.3</spotless.version>
     <spotless.check.skip>true</spotless.check.skip>
@@ -234,7 +235,7 @@ Import-Package: \\
           <version>${bnd.version}</version>
           <configuration>
             <failOnChanges>false</failOnChanges>
-            <bndruns />
+            <bndruns></bndruns>
           </configuration>
           <executions>
             <execution>
@@ -503,7 +504,7 @@ Import-Package: \\
                     </goals>
                   </pluginExecutionFilter>
                   <action>
-                    <ignore />
+                    <ignore></ignore>
                   </action>
                 </pluginExecution>
                 <pluginExecution>
@@ -516,7 +517,7 @@ Import-Package: \\
                     </goals>
                   </pluginExecutionFilter>
                   <action>
-                    <ignore />
+                    <ignore></ignore>
                   </action>
                 </pluginExecution>
                 <pluginExecution>
@@ -530,7 +531,7 @@ Import-Package: \\
                     </goals>
                   </pluginExecutionFilter>
                   <action>
-                    <ignore />
+                    <ignore></ignore>
                   </action>
                 </pluginExecution>
                 <pluginExecution>
@@ -543,7 +544,7 @@ Import-Package: \\
                     </goals>
                   </pluginExecutionFilter>
                   <action>
-                    <ignore />
+                    <ignore></ignore>
                   </action>
                 </pluginExecution>
               </pluginExecutions>
@@ -606,11 +607,11 @@ Import-Package: \\
                 <file>openhab_codestyle.xml</file>
                 <version>4.13.0</version>
               </eclipse>
-              <removeUnusedImports />
+              <removeUnusedImports></removeUnusedImports>
               <importOrder>
                 <file>openhab.importorder</file>
               </importOrder>
-              <endWithNewline />
+              <endWithNewline></endWithNewline>
             </java>
             <formats>
               <format>
@@ -628,8 +629,8 @@ Import-Package: \\
                   </files>
                   <version>4.12.0</version>
                 </eclipseWtp>
-                <trimTrailingWhitespace />
-                <endWithNewline />
+                <trimTrailingWhitespace></trimTrailingWhitespace>
+                <endWithNewline></endWithNewline>
               </format>
               <format>
                 <!-- pom.xml -->
@@ -643,8 +644,8 @@ Import-Package: \\
                   </files>
                   <version>4.13.0</version>
                 </eclipseWtp>
-                <trimTrailingWhitespace />
-                <endWithNewline />
+                <trimTrailingWhitespace></trimTrailingWhitespace>
+                <endWithNewline></endWithNewline>
               </format>
             </formats>
           </configuration>

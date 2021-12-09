@@ -25,7 +25,7 @@
       <groupId>org.opensmarthouse.core.bundles</groupId>
       <artifactId>org.opensmarthouse.core.registry</artifactId>
     </dependency>
-    
+
     <dependency>
       <groupId>org.opensmarthouse.core.bundles</groupId>
       <artifactId>org.opensmarthouse.core.test</artifactId>
@@ -46,7 +46,7 @@
       <groupId>org.mockito</groupId>
       <artifactId>mockito-junit-jupiter</artifactId>
     </dependency>
-    
+
   </dependencies>
 
 </project>

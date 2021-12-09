@@ -22,7 +22,7 @@
       <groupId>org.opensmarthouse.core.bundles</groupId>
       <artifactId>org.opensmarthouse.core.automation.module.script</artifactId>
     </dependency>
- </dependencies>
+  </dependencies>
 
   <build>
     <sourceDirectory>src</sourceDirectory>
