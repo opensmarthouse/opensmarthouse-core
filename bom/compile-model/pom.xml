@@ -6,7 +6,7 @@
   <parent>
     <groupId>org.opensmarthouse.core.bom</groupId>
     <artifactId>org.opensmarthouse.core.reactor.bom</artifactId>
-    <version>0.10.0</version>
+    <version>0.10.1-SNAPSHOT</version>
   </parent>
 
   <artifactId>org.opensmarthouse.core.bom.compile-model</artifactId>
