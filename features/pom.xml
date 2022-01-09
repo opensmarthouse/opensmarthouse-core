@@ -6,7 +6,7 @@
   <parent>
     <groupId>org.opensmarthouse.core</groupId>
     <artifactId>org.opensmarthouse.core.reactor</artifactId>
-    <version>0.10.1</version>
+    <version>0.10.2-SNAPSHOT</version>
   </parent>
 
   <groupId>org.opensmarthouse.core.features</groupId>
@@ -18,10 +18,6 @@
   <modules>
     <module>karaf</module>
   </modules>
-
-  <scm>
-    <tag>org.opensmarthouse.core.reactor-0.10.1</tag>
-  </scm>
 
   <dependencyManagement>
     <!-- BOM, so features are built after bundles in parallel builds -->
