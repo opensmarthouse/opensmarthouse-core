@@ -11,10 +11,6 @@ if [ -z ${OSH_CONF} ]; then
     export OSH_CONF="${OSH_HOME}/config"
 fi
 
-if [ -z ${OSH_RUNTIME} ]; then
-    export OSH_RUNTIME="${OSH_HOME}/data"
-fi
-
 if [ -z ${OSH_USERDATA} ]; then
     export OSH_USERDATA="${OSH_HOME}/data"
 fi
