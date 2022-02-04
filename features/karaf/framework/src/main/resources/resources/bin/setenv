@@ -93,7 +93,6 @@ fi
 export JAVA_OPTS="${JAVA_OPTS}
   -Dopenhab.home=${OSH_HOME}
   -Dopenhab.conf=${OSH_CONF}
-  -Dopenhab.runtime=${OSH_RUNTIME}
   -Dopenhab.userdata=${OSH_USERDATA}
   -Dopenhab.logdir=${OSH_LOGDIR}
   -Djava.library.path=${OSH_USERDATA}/tmp/lib
