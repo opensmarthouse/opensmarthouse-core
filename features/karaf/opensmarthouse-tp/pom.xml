@@ -122,6 +122,16 @@
                   <replacement>feature-compat.xml</replacement>
                 </fileMapper>
               </fileMappers>
+              <parameters>
+                <parameter>
+                  <name>REPLACE</name>
+                  <value>opensmarthouse-tp</value>
+                </parameter>
+                <parameter>
+                  <name>REPLACEMENT</name>
+                  <value>openhab.tp</value>
+                </parameter>
+              </parameters>
             </transformationSet>
           </transformationSets>
         </configuration>

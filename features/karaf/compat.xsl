@@ -22,6 +22,9 @@
   -->
   <xsl:output method="xml" encoding="utf-8" indent="yes" />
 
+  <xsl:param name="REPLACE"  />
+  <xsl:param name="REPLACEMENT" />
+
   <xsl:template match="/">
     <xsl:copy>
       <xsl:apply-templates select="@*|node()"/>
@@ -45,8 +48,8 @@
       <xsl:attribute name="name">
         <xsl:call-template name="string-replace-all">
           <xsl:with-param name="text" select="attribute::name"/>
-          <xsl:with-param name="replace" select="'opensmarthouse-'"/>
-          <xsl:with-param name="by" select="'openhab-'"/>
+          <xsl:with-param name="replace" select="$REPLACE"/>
+          <xsl:with-param name="by" select="$REPLACEMENT"/>
         </xsl:call-template>
       </xsl:attribute>
       <xsl:element name="feature" namespace="{namespace-uri()}">
@@ -65,8 +68,7 @@
         <xsl:value-of select="substring-before($text,$replace)" />
         <xsl:value-of select="$by" />
         <xsl:call-template name="string-replace-all">
-          <xsl:with-param name="text"
-            select="substring-after($text,$replace)" />
+          <xsl:with-param name="text" select="substring-after($text,$replace)" />
           <xsl:with-param name="replace" select="$replace" />
           <xsl:with-param name="by" select="$by" />
         </xsl:call-template>
